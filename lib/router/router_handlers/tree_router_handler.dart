@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/ui/pages/tree_management/create_tree/create_tree_cubit.dart';
 import 'package:flutter_base/ui/pages/tree_management/create_tree/create_tree_page.dart';
+import 'package:flutter_base/ui/pages/tree_management/tree_detail/tree_detail_cubit.dart';
+import 'package:flutter_base/ui/pages/tree_management/tree_detail/tree_detail_page.dart';
 import 'package:flutter_base/ui/pages/tree_management/tree_listing/tree_listing_page.dart';
 import 'package:flutter_base/ui/pages/tree_management/update_tree/update_tree_cubit.dart';
 import 'package:flutter_base/ui/pages/tree_management/update_tree/update_tree_page.dart';

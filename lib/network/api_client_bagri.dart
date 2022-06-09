@@ -148,10 +148,10 @@ abstract class ApiClient {
   // Future<TreeDataEntity> getListTreeData();
 
   @DELETE("/trees/{tree_id}")
-  Future<List<TreeEntity>> deleteTree(@Header('accept') String? accept, @Header("Authorization") String? auth,@Path("tree_id") String? treeId);
+  Future<TreeDeleteResponse> deleteTree({@Path("tree_id") String? treeId});
 
   @POST("/trees")
-  Future<dynamic> createTree(@Header('accept') String accept, @Header("Authorization") String auth, @Body() Map<String, dynamic> body);
+  Future<dynamic> createTree(@Body() Map<String, dynamic> body);
 
   @PUT("/trees/{tree_id}")
   Future<dynamic> updateTree(
