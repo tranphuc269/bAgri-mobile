@@ -131,7 +131,7 @@ class _EmployeeUpdatingPageState extends State<EmployeeUpdatingPage> {
                               ? null
                               : (value) {
                                   _cubit
-                                      .changeManagerId(value!.manager_id ?? "");
+                                      .changeManagerId(value!.id ?? "");
                                 },
                         ),
                         SizedBox(height: 30),
@@ -205,6 +205,7 @@ class _EmployeeUpdatingPageState extends State<EmployeeUpdatingPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }

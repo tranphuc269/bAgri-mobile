@@ -86,43 +86,33 @@ class _GardenDetailPageState extends State<GardenDetailPage>
                       height: 10,
                     ),
                     Text(
-                      'Tên vườn: ${state.gardenData!.name}',
+                      'Tên vườn: ${state.gardenData!.gardenName}',
                       style: AppTextStyle.blackS16,
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     Text(
-                      'Diện tích: ${state.gardenData!.area} ha',
+                      "Diện tích: ${state.gardenData!.area} ${state.gardenData!.areaUnit}",
                       style: AppTextStyle.blackS16,
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     Text(
-                      'Người quản lý: ${state.gardenData!.manager!.name}',
+                      "Số lượng bầu: ${state.gardenData!.treePlaceQuantity} bầu",
+                      style: AppTextStyle.blackS16,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Người quản lý: ${state.gardenData!.manager} ',
                       style: AppTextStyle.blackS16,
                     ),
                     SizedBox(
                       height: 25,
                     ),
-                    Text(
-                      'Mùa vụ:',
-                      style: AppTextStyle.blackS18Bold,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: state.gardenData!.seasons!.length,
-                      shrinkWrap: true,
-                      primary: false,
-                      itemBuilder: (context, index) {
-                        return _seasonItemView(state.gardenData!.name,
-                            state.gardenData!.seasons![index]);
-                      },
-                    )
                   ],
                 ),
               ),
@@ -135,40 +125,6 @@ class _GardenDetailPageState extends State<GardenDetailPage>
     );
   }
 
-  Widget _seasonItemView(String? gardenName, SeasonWithGardenEntity data) {
-    String status = data.status ?? '';
-    String name = data.name ?? '';
-
-    var formatter = new DateFormat('dd/MM/yyyy');
-    String startDate = formatter.format(DateTime.parse(data.start_date!));
-    String endDate = formatter.format(DateTime.parse(data.end_date!));
-
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '$gardenName - $name (${status == 'done' ? "Đã hoàn thành" : "Đang tiến hành"})',
-            style: (status == 'done')
-                ? AppTextStyle.blueS16
-                : AppTextStyle.greenS16,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Text('Thời gian bắt đầu: ${startDate}'),
-          SizedBox(
-            height: 5,
-          ),
-          Text('Thời gian kết thúc: ${endDate}'),
-          SizedBox(
-            height: 15,
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   void dispose() {

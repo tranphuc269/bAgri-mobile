@@ -2,12 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/models/entities/token/login_model.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
+import 'package:retrofit/dio.dart';
 
 abstract class AuthRepository {
   //
   Future<void> removeToken();
 
-  Future<LoginResponseEntity> signIn(String username, String password);
+  Future<TokenEntity> signIn(String username, String password);
 
   Future<dynamic> authRegistty(String username, String password,
       String fullname, String phone);
@@ -18,11 +19,13 @@ abstract class AuthRepository {
   Future<dynamic> forgotPassword(String userName, String phone);
 
   Future<dynamic> getListAcounts();
+
+  Future <dynamic> setRole({String? accessToken, String? id, String? role});
 }
 
 class AuthRepositoryImpl extends AuthRepository {
   ApiClient? _apiClientBagri;
-
+  final accessToken = SharedPreferencesHelper.getToken().toString();
   AuthRepositoryImpl(ApiClient? client) {
     _apiClientBagri = client;
   }
@@ -34,7 +37,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<LoginResponseEntity> signIn(String username, String password) async {
+  Future<TokenEntity> signIn(String username, String password) async {
     final param = {
       'username': username,
       'password': password,
@@ -76,6 +79,15 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future getListAcounts()  async {
-    return _apiClientBagri!.getListAccounts("application/json", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhjYWU4ZmIzZjNkOWY4ZjNhZDgzNGYiLCJ1c2VybmFtZSI6ImR1Y25tIiwicm9sZSI6IlNVUEVSX0FETUlOIiwiaWF0IjoxNjUzNTQzODA5LCJleHAiOjE2NTQxNDg2MDl9.yjMCo25gm_WvJ1uRFZ37QCkfk9wpVndeWH7xyl3Be1Q");
+    return _apiClientBagri!.getListAccounts("application/json", "Bearer ${accessToken}");
   }
+
+  @override
+  Future setRole({String? id, String? role, String? accessToken}) async {
+    final param  = {
+      "role": role
+    };
+    return await _apiClientBagri!.setRoleAccount("application/json","Bearer ${accessToken}","application/json",id, param);
+  }
+
 }

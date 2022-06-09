@@ -35,14 +35,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    super.initState();
     final repository = RepositoryProvider.of<AuthRepository>(context);
     _cubit = BlocProvider.of<HomeCubit>(context);
     _appCubit = BlocProvider.of<AppCubit>(context);
-    _notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
+    //_notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
 
-    super.initState();
-    _appCubit!.getData();
-    _notificationCubit.getListNotification();
+
+    //_appCubit!.getData();
+    //_notificationCubit.getListNotification();
   }
 
   @override
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                     title: 'Quản lý vườn',
                     color: AppColors.green289768,
                     urlImage: AppImages.icGarden,
-                    ridirectPage: redirectGarden,
+                    ridirectPage: redirectZone,
                   ),
                   CategoryItem(
                     title: 'Quản lý mùa vụ',
@@ -102,6 +103,12 @@ class _HomePageState extends State<HomePage> {
                     urlImage: AppImages.icLabor,
                     ridirectPage: redirectEmployee,
                   ),
+                  GlobalData.instance.userEntity!.role == "SUPER_ADMIN" ? CategoryItem(
+                      title: "Quản lý tài khoản",
+                      color: AppColors.blueA5CAD2,
+                      urlImage: AppImages.icUser,
+                      ridirectPage: redirectManageAccount,
+                    ) : Container()
                 ],
               ),
             ),
@@ -252,8 +259,8 @@ class _HomePageState extends State<HomePage> {
     Application.router?.navigateTo(context, Routes.notificationManagement);
   }
 
-  void redirectGarden() {
-    Application.router?.navigateTo(context, Routes.gardenList);
+  void redirectZone() {
+    Application.router?.navigateTo(context, Routes.zoneList);
   }
 
   void redirectSeason() {
@@ -266,6 +273,9 @@ class _HomePageState extends State<HomePage> {
 
   void redirectEmployee() {
     Application.router?.navigateTo(context, Routes.employeeManagement);
+  }
+  void redirectManageAccount(){
+    Application.router?.navigateTo(context, Routes.manageAccount);
   }
 }
 
@@ -360,7 +370,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${_userInfo?.fullname ?? ""}',
+                      '${_userInfo?.name ?? ""}',
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                     ),
                     SizedBox(
@@ -373,7 +383,10 @@ class _MainDrawerState extends State<MainDrawer> {
                           style: TextStyle(color: Colors.black87, fontSize: 18),
                         ),
                         Text(
-                          '${_userInfo?.role == "ktv" ? "Kỹ Thuật Viên" : "Quản Lý Vườn"}',
+                          '${_userInfo?.role == "SUPER_ADMIN"? "Super Admin"
+                              : (_userInfo?.role == "ADMIN" ? "Admin"
+                              : (_userInfo?.role == "QLV" ? "Quản lý vườn"
+                              : "Kĩ thuật viên"))}',
                           style: TextStyle(color: AppColors.main, fontSize: 18),
                         ),
                       ],

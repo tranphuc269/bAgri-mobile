@@ -27,27 +27,33 @@ part 'user_entity.g.dart';
 class UserEntity {
   String? id;
   String? username;
-  String? fullname;
+  String? name;
   String? role;
+  String? phoneNumber;
+
 
   UserEntity({
     this.id,
     this.username,
-    this.fullname,
+    this.name,
     this.role,
+    this.phoneNumber,
+
   });
 
   UserEntity copyWith({
     String? id,
     String? username,
-    String? fullname,
+    String? name,
     String? role,
+    String? phoneNumber,
   }) {
     return UserEntity(
       id: id ?? this.id,
       username: username ?? this.username,
-      fullname: fullname ?? this.fullname,
+      name: name ?? this.name,
       role: role ?? this.role,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
     );
   }
 

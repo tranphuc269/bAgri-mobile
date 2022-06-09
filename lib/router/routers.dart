@@ -21,7 +21,8 @@ class Routes {
   static String registry = "/registry";
 
   static String home = "/home";
-
+  /// Zone
+  static String zoneList = "/zoneList";
   /// Garden
   static String gardenList = "/gardenList";
   static String gardenCreate = "/gardenCreate";
@@ -67,6 +68,10 @@ class Routes {
   ///Home
   static String main = "/main_page";
 
+  ///Account Management
+  static String manageAccount = '/manageAccount';
+
+
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = notHandler;
     // router.define(root, handler: splashHandler);
@@ -103,7 +108,11 @@ class Routes {
       handler: homeHandler,
       transitionType: TransitionType.fadeIn,
     );
-
+    /// Zone
+    router.define(
+        zoneList,
+        handler: zoneListHandler,
+        transitionType: TransitionType.fadeIn);
     /// Garden
     router.define(
       gardenList,
@@ -174,11 +183,7 @@ class Routes {
       handler: treeUpdateHandler,
       transitionType: TransitionType.fadeIn,
     );
-    router.define(
-      treeDetail,
-      handler: treeDetailHandler,
-      transitionType: TransitionType.fadeIn,
-    );
+    router.define(treeList, handler: treeListHandler, transitionType: TransitionType.fadeIn);
 
     /// Employee
     router.define(
@@ -252,5 +257,10 @@ class Routes {
       handler: gardenTaskHandler,
       transitionType: TransitionType.fadeIn,
     );
+    /// ManageAccount
+    router.define(
+      manageAccount,
+      handler: listAccountHandler,
+      transitionType: TransitionType.fadeIn,);
   }
 }

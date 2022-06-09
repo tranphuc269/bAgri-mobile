@@ -153,3 +153,57 @@ class ManagerEntity {
     );
   }
 }
+@JsonSerializable()
+class GardenDetailEntityResponse{
+  @JsonKey()
+  String? gardenId;
+  @JsonKey()
+  String? gardenName;
+  @JsonKey()
+  int? area;
+  @JsonKey()
+  String? areaUnit;
+  @JsonKey()
+  String? managerId;
+  @JsonKey()
+  String? manager;
+  @JsonKey()
+  int? treePlaceQuantity;
+  @JsonKey()
+  String? zoneId;
+  GardenDetailEntityResponse({
+    this.gardenId,
+    this.gardenName,
+    this.area,
+    this.areaUnit,
+    this.managerId,
+    this.manager,
+    this.treePlaceQuantity,
+    this.zoneId
+  });
+  GardenDetailEntityResponse copyWith({
+    String? gardenId,
+    String? gardenName,
+    int? area,
+    String? areaUnit,
+    String? manangerId,
+    String? manager,
+    int? treePlaceQuantity,
+    String? zoneId
+  }) {
+    return GardenDetailEntityResponse(
+      gardenId: gardenId ?? this.gardenId,
+      gardenName: gardenName ?? this.gardenName,
+      area: area ?? this.area,
+      areaUnit: areaUnit ?? this.areaUnit,
+      manager: manager ?? this.manager,
+      managerId: managerId ?? this.managerId,
+      treePlaceQuantity: treePlaceQuantity ?? this.treePlaceQuantity,
+      zoneId: zoneId ?? this.zoneId
+    );
+  }
+  factory GardenDetailEntityResponse.fromJson(Map<String, dynamic> json) =>
+      _$GardenDetailEntityResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$GardenDetailEntityResponseToJson(this);
+
+}

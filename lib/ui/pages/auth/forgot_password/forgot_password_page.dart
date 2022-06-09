@@ -149,6 +149,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }

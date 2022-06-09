@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   LoginCubit? _cubit;
-
+  bool _visiblePassword = false;
   @override
   void initState() {
     _cubit = BlocProvider.of<LoginCubit>(context);
@@ -126,17 +126,14 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             title: S.of(context).sign_up_btn,
             textStyle: AppTextStyle.whiteS16Bold,
-            onPressed: (){
-              _cubit!.getListAccount();
-            }
-            // isLoading
-            //     ? null
-            //     : () {
-            //         if (_formKey.currentState!.validate()) {
-            //           _cubit!.signIn(state.username.trim(), state.password);
-            //         }
-            //       },
-            // isLoading: isLoading,
+            onPressed:   isLoading
+                ? null
+                : () {
+              if (_formKey.currentState!.validate()) {
+                _cubit!.signIn(state.username.trim(), state.password);
+              }
+            },
+            isLoading: isLoading,
           ),
         );
       },
@@ -216,16 +213,28 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Stack(
           children: [
-            AppTextField(
+            AppPasswordField(
               autoValidateMode: AutovalidateMode.onUserInteraction,
               hintText: 'Nhập vào mật khẩu',
               keyboardType: TextInputType.visiblePassword,
-              obscureText: true,
+              obscureText: !_visiblePassword,
               controller: _passwordController,
+              suffixIcon: InkWell(
+                onTap: () {
+                  setState(() {
+                    _visiblePassword = !_visiblePassword;
+                  });
+                },
+                child: Icon(
+                  _visiblePassword
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: _visiblePassword ? AppColors.main : AppColors.grayIntro,
+                ),),
               validator: (value) {
                 if (Validator.validateNullOrEmpty(value!))
                   return "Chưa nhập mật khẩu";
@@ -236,6 +245,7 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ));
   }
+
 
   Widget _buildRoleOption() {
     return Container(

@@ -28,6 +28,7 @@ import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_delete_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_detail_response.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
+import 'package:flutter_base/models/entities/zone/zone_entity.dart';
 import 'package:flutter_base/models/params/farmer/create_farmer_param.dart';
 import 'package:flutter_base/models/params/season/create_season_param.dart';
 import 'package:flutter_base/models/response/object_response.dart';
@@ -39,7 +40,10 @@ part 'api_client_bagri.g.dart';
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
   @POST("/auth")
-  Future<LoginResponseEntity> authLogin(@Body() Map<String, dynamic> body);
+  Future<TokenEntity> authLogin(@Body() Map<String, dynamic> body);
+
+  @GET("/auth")
+  Future<UserEntity> getUserData(@Header('accept') String content, @Header("Authorization") String token);
 
   @POST("/accounts")
   Future<dynamic> authRegistty(@Body() Map<String, dynamic> body);
@@ -47,12 +51,45 @@ abstract class ApiClient {
   @GET("/accounts")
   Future<List<UserEntity>> getListAccounts(@Header('accept') String content, @Header("Authorization") String token);
 
+  @PUT("/accounts/{id}")
+  Future<dynamic> setRoleAccount(@Header('accept') String accept, @Header("Authorization") String auth,@Header("Content-Type")String content_type, @Path("id") String? id, @Body() Map<String, dynamic> body );
+
   @PUT("/change-password")
   Future<dynamic> changePassword(@Body() Map<String, dynamic> body);
 
   @POST("/reset-password")
   Future<dynamic> forgotPassword(@Body() Map<String, dynamic> body);
 
+/// Zone
+  @POST("/zones")
+  Future<dynamic> createZone(
+      @Header('accept') String accept,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
+
+  @GET("/zones")
+  Future<List<ZoneEntity>> getListZone(@Header('accept') String accept,
+      @Header("Authorization") String auth);
+  @PUT("/zones/{zone_id}")
+  Future<ZoneEntity> modifyZone(
+      @Header('accept') String accept,
+      @Header('Content-Type')String content_type,
+      @Path("zone_id") String? zoneId,
+      @Body() Map<String, dynamic> body);
+
+  @DELETE("/zones/{zone_id}")
+  Future<dynamic> deleteZone(
+      @Header('accept') String? accept,
+      @Header("Authorization") String? auth,
+      @Path("zone_id") String? zoneId);
+
+  @GET("/gardens?zone={zone_id}")
+  Future<List<GardenEntityResponseFromZoneId>> getListGardenByZone(
+      @Header('accept') String? accept,
+      @Header("Authorization") String? auth,
+      @Path("zone_id") String? zone_id);
+
+  /// Garden
   @GET("/gardens")
   Future<ObjectResponse<GardenListResponse>> getGardenData(
       @Body() Map<String, dynamic> body);
@@ -62,14 +99,18 @@ abstract class ApiClient {
       @Query('manager_id') String managerId);
 
   @POST("/gardens")
-  Future<dynamic> createGarden(@Body() Map<String, dynamic> body);
+  Future<dynamic> createGarden(
+      @Header("accept") String? accept,
+      @Header("Authorization") String? auth,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
 
   @GET("/gardens/{garden_id}")
-  Future<GardenDetailResponse> getGardenDataById(
-      {@Path("garden_id") String? gardenId});
+  Future<GardenDetailEntityResponse> getGardenDataById(
+      {@Header("accept") String? accept, @Header("Authorization") String? auth, @Path("garden_id") String? gardenId});
 
   @PUT("/gardens/{garden_id}")
-  Future<dynamic> updateGarden(
+  Future<dynamic> updateGarden(@Header("accept") String? accept, @Header("Authorization") String? auth, @Header("Content-Type") String? content_type,
       @Path("garden_id") String? gardenId, @Body() Map<String, dynamic> body);
 
   @DELETE("/gardens/{garden_id}")
@@ -101,13 +142,13 @@ abstract class ApiClient {
 
   /// Tree
   @GET("/trees")
-  Future<ListTreeResponse> getListTreeData(@Body() Map<String, dynamic> body);
+  Future<List<TreeEntity>> getListTreeData(@Body() Map<String, dynamic> body);
 
   @DELETE("/trees/{tree_id}")
-  Future<TreeDeleteResponse> deleteTree({@Path("tree_id") String? treeId});
+  Future<List<TreeEntity>> deleteTree(@Header('accept') String? accept, @Header("Authorization") String? auth,@Path("tree_id") String? treeId);
 
   @POST("/trees")
-  Future<dynamic> createTree(@Body() Map<String, dynamic> body);
+  Future<dynamic> createTree(@Header('accept') String accept, @Header("Authorization") String auth, @Body() Map<String, dynamic> body);
 
   @PUT("/trees/{tree_id}")
   Future<dynamic> updateTree(
@@ -210,6 +251,8 @@ abstract class ApiClient {
   ///Manager
   @GET("/managers")
   Future<ObjectResponse<ManagerListResponse>> getListManager();
+
+
 
   /// Upload File
   @POST("/files")

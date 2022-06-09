@@ -337,3 +337,87 @@ class AppLoginField extends StatelessWidget {
     );
   }
 }
+
+class AppPasswordField extends StatelessWidget {
+  final String labelText;
+  final String hintText;
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final FormFieldValidator<String>? validator;
+  final TextInputType keyboardType;
+  final FormFieldSetter<String>? onSaved;
+  final bool? isRequire;
+  final bool? enable;
+  final TextStyle? labelStyle;
+  final AutovalidateMode? autoValidateMode;
+  final String? initialValue;
+  final bool? obscureText;
+  final Widget? suffixIcon;
+  const AppPasswordField({
+    Key? key,
+    this.initialValue,
+    this.labelText = '',
+    this.hintText = '',
+    this.controller,
+    this.onChanged,
+    this.keyboardType = TextInputType.text,
+    this.autoValidateMode,
+    this.validator,
+    this.onSaved,
+    this.isRequire,
+    this.labelStyle,
+    this.enable,
+    this.obscureText = false,
+    this.suffixIcon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      obscureText: obscureText!,
+      obscuringCharacter: "*",
+      enabled: enable,
+      controller: controller,
+      decoration: InputDecoration(
+        suffixIcon: suffixIcon,
+        hintText: hintText,
+        contentPadding: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 13,
+          bottom: 13,
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: AppColors.redTextButton),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: AppColors.lineGray),
+        ),
+        disabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.main),
+            borderRadius: BorderRadius.circular(10)),
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.main),
+            borderRadius: BorderRadius.circular(10)),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.main),
+            borderRadius: BorderRadius.circular(10)),
+        // focusedErrorBorder: OutlineInputBorder(
+        //   // borderRadius: BorderRadius.circular(10),
+        //   borderSide: BorderSide(color: AppColors.lineGray),
+        // ),
+        hintStyle: AppTextStyle.greyS16,
+        isDense: true,
+      ),
+      initialValue: initialValue,
+      autovalidateMode: autoValidateMode,
+      validator: validator,
+      keyboardType: keyboardType,
+      onChanged: onChanged,
+      style: AppTextStyle.blackS16,
+      onSaved: onSaved,
+    );
+  }
+}

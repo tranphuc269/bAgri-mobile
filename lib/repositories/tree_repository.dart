@@ -1,3 +1,4 @@
+import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_delete_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_detail_response.dart';
@@ -6,11 +7,11 @@ import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class TreeRepository {
-  Future<ListTreeResponse> getListTreeData();
+  Future<List<TreeEntity>> getListTreeData();
 
-  Future<TreeDeleteResponse> deleteTree({String? treeId});
+  Future<List<TreeEntity>> deleteTree({String? treeId});
 
-  Future<dynamic> createTree({CreateTreeParam? param});
+  Future<dynamic> createTree({String? name});
 
   Future<dynamic> updateTree({String? treeId, CreateTreeParam? param});
 
@@ -19,27 +20,26 @@ abstract class TreeRepository {
 
 class TreeRepositoryImpl extends TreeRepository {
   ApiClient? _apiClient;
-
+  final accessToken = SharedPreferencesHelper.getToken().toString();
   TreeRepositoryImpl(ApiClient? client) {
     _apiClient = client;
   }
 
   @override
-  Future<ListTreeResponse> getListTreeData() async {
+  Future<List<TreeEntity>> getListTreeData() async {
     return await _apiClient!.getListTreeData({});
   }
 
-  Future<TreeDeleteResponse> deleteTree({String? treeId}) async {
-    return await _apiClient!.deleteTree(treeId: treeId);
+  Future<List<TreeEntity>> deleteTree({String? treeId}) async {
+    return await _apiClient!.deleteTree("application/json","Beaer ${accessToken}",treeId);
   }
 
-  Future<dynamic> createTree({CreateTreeParam? param}) {
+  Future<dynamic> createTree({String? name}) {
     final body = {
-      "name": param?.name ?? "",
-      "description": param?.description ?? "",
+      "name": name ?? "",
     };
 
-    return _apiClient!.createTree(body);
+    return _apiClient!.createTree("application/json","Beaer ${accessToken}", body);
   }
 
   Future<dynamic> updateTree({String? treeId, CreateTreeParam? param}) {

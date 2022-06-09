@@ -367,6 +367,7 @@ class _UpdateGardenTaskPageState extends State<UpdateGardenTaskPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }

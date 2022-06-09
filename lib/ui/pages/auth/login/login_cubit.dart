@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+    import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
@@ -43,7 +43,7 @@ class LoginCubit extends Cubit<LoginState> {
   void clearInformation() {
     emit(state.copyWith(username: "", password: ""));
   }
-  void signIn(String username, String password) async {
+  void  signIn(String username, String password) async {
     //validate
     if (username.isEmpty) {
       showMessageController.sink.add(SnackBarMessage(
@@ -59,27 +59,36 @@ class LoginCubit extends Cubit<LoginState> {
       ));
       return;
     }
-    emit(state.copyWith(LoginStatus: LoginStatusBagri.LOADING));
+    //emit(state.copyWith(LoginStatus: LoginStatusBagri.LOADING));
     try {
       final result = await repository!.signIn(username, password);
-      SharedPreferencesHelper.setToken(result.data!.token!);
-      GlobalData.instance.token = result.data?.token;
-
+      SharedPreferencesHelper.setToken(result.access_token!);
+      GlobalData.instance.token = result.access_token;
       emit(state.copyWith(LoginStatus: LoginStatusBagri.SUCCESS));
-      if (result.data?.token != null) {
+      if (result.access_token != null) {
         try {
-          final ObjectResponse<UserEntity> userRes =
-              await userRepository.getProfile();
-          if (userRes.data!.role == 'admin') {
+          final UserEntity userRes =
+              await userRepository.getProfile(SharedPreferencesHelper.getToken().toString());
+          print(userRes.role);
+          if(userRes.role == "NO_ROLE"){
+            showMessageController.sink.add(SnackBarMessage(
+              message: "Tài khoản chưa được cấp quyền, vui lòng liên hệ người quản lý",
+              type: SnackBarType.ERROR,
+            ));
+          } else if (userRes.role == 'SUPER_ADMIN') {
             navigatorController.sink.add(LoginNavigator.OPEN_HOME);
-          } else {
+          } else if (userRes.role == "ADMIN") {
+            // navigatorController.sink.add(LoginNavigator.OPEN_GARDEN);
+            navigatorController.sink.add(LoginNavigator.OPEN_HOME);
+          }else if (userRes.role == "QLV"){
             navigatorController.sink.add(LoginNavigator.OPEN_GARDEN);
-            // navigatorController.sink.add(LoginNavigator.OPEN_HOME);
+          }else{
+            navigatorController.sink.add(LoginNavigator.OPEN_HOME);
           }
-          SharedPreferencesHelper.setRole(userRes.data!.role ?? "");
-          GlobalData.instance.role = userRes.data!.role;
-          SharedPreferencesHelper.setUserInfo(userRes.data!);
-          GlobalData.instance.userEntity = userRes.data!;
+          SharedPreferencesHelper.setRole(userRes.role ?? "");
+          GlobalData.instance.role = userRes.role;
+          SharedPreferencesHelper.setUserInfo(userRes);
+          GlobalData.instance.userEntity = userRes;
         } catch (error) {
           logger.e(error);
           if (error is DioError) {
@@ -97,10 +106,12 @@ class LoginCubit extends Cubit<LoginState> {
       logger.e(error);
       if (error is DioError) {
         emit(state.copyWith(LoginStatus: LoginStatusBagri.FAILURE));
-        showMessageController.sink.add(SnackBarMessage(
-          message: error.response!.data['error']['message'],
+        if(error.response!.statusCode == 400){
+          showMessageController.sink.add(SnackBarMessage(
+          message: "Thông tin tài khoản mật khẩu không chính xác!",
           type: SnackBarType.ERROR,
-        ));
+        ));}
+
       }
     }
   }
@@ -115,13 +126,5 @@ class LoginCubit extends Cubit<LoginState> {
 
   void changeRole(RoleEntity? value) {
     emit(state.copyWith(role: value));
-  }
-  void getListAccount() async {
-    try{
-      final result = await repository?.getListAcounts();
-      print(result.data);
-    }catch(error){
-      throw error;
-    }
   }
 }

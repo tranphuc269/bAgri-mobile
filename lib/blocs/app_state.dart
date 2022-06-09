@@ -13,7 +13,7 @@ class AppState extends Equatable {
   List<TaskEntity>? tasks;
   final LoadStatus? taskStatus;
 
-  List<ManagerEntity>? managers;
+  List<UserEntity>? managers;
   final LoadStatus? getManagersStatus;
 
   List<FarmerEntity>? farmers;
@@ -66,7 +66,7 @@ class AppState extends Equatable {
     LoadStatus? getProcessStatus,
     List<TaskEntity>? tasks,
     LoadStatus? taskStatus,
-    List<ManagerEntity>? managers,
+    List<UserEntity>? managers,
     LoadStatus? getManagersStatus,
     UserEntity? user,
     LoadStatus? fetchUser,

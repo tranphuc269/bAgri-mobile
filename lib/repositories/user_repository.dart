@@ -4,9 +4,9 @@ import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class UserRepository {
-  Future<ObjectResponse<UserEntity>> getProfile();
+  Future<UserEntity> getProfile(String token);
 
-  Future<ObjectResponse<ManagerListResponse>> getListManager();
+  Future<List<UserEntity>> getListManager(String token);
 }
 
 class UserRepositoryImpl extends UserRepository {
@@ -17,12 +17,12 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<ObjectResponse<UserEntity>> getProfile() {
-    return _apiClient!.getProfile();
+  Future<UserEntity> getProfile(String token) {
+    return _apiClient!.getUserData("application/json", token);
   }
 
   @override
-  Future<ObjectResponse<ManagerListResponse>> getListManager() async {
-    return _apiClient!.getListManager();
+  Future<List<UserEntity>> getListManager(String token) async {
+    return _apiClient!.getListAccounts("application/json", token);
   }
 }

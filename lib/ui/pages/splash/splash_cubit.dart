@@ -37,7 +37,7 @@ class SplashCubit extends Cubit<SplashState> {
     if (token == null) {
       navigatorController.sink.add(SplashNavigator.OPEN_LOGIN);
     } else {
-      if (role == 'ktv') {
+      if (role == 'SUPER_ADMIN') {
         GlobalData.instance.token = token;
         GlobalData.instance.role = role;
         GlobalData.instance.userEntity = _userInfo;
