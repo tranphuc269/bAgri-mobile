@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_base/models/entities/user/user_entity.dart';
+import 'package:flutter_base/models/entities/zone/zone_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/models/params/garden/create_garden_params.dart';
+import 'package:flutter_base/repositories/auth_repository.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
 
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
@@ -32,18 +35,25 @@ class GardenCreateCubit extends Cubit<GardenCreateState> {
   void changeArea(String area) {
     emit(state.copyWith(area: area));
   }
-
-  void changeManagerId(String value) {
-    emit(state.copyWith(managerId: value));
+  void changeManagerUsername(String managerUsername){
+    emit(state.copyWith(managerUsername: managerUsername));
   }
 
-  void createGarden() async {
+
+  void changeManagerId(String value) {
+    emit(state.copyWith(managerUsername: value));
+  }
+
+  void createGarden(String areaUnit, String zoneName, String treePlaceQuantity) async {
     emit(state.copyWith(createGardenStatus: LoadStatus.LOADING));
     try {
       final param = CreateGardenParam(
         name: state.name,
-        area: state.area,
-        manager_id: state.managerId,
+        area: num.parse(state.area.toString()),
+        areaUnit: areaUnit,
+        treePlaceQuantity: num.parse(treePlaceQuantity),
+        managerUsername: state.managerUsername,
+        zoneName: zoneName
       );
       final response = await gardenRepository!.createGarden(param: param);
 
@@ -55,6 +65,28 @@ class GardenCreateCubit extends Cubit<GardenCreateState> {
     } catch (e) {
       logger.e(e);
       emit(state.copyWith(createGardenStatus: LoadStatus.FAILURE));
+      return;
+    }
+  }
+  Future <void> getListManager() async{
+    emit(state.copyWith(getListManagerStatus: LoadStatus.LOADING));
+    try {
+      final response = await gardenRepository!.getListAcounts();
+      List<UserEntity> managers = [];
+      response.forEach((element) {
+        if(element.role == "QLV"){
+          managers.add(element);
+          print(element.name);
+        }
+      });
+      if (response != null) {
+        emit(state.copyWith(getListManagerStatus: LoadStatus.SUCCESS, listManager: managers));
+      } else {
+        emit(state.copyWith(getListManagerStatus: LoadStatus.FAILURE));
+      }
+    } catch (e) {
+      logger.e(e);
+      emit(state.copyWith(getListManagerStatus: LoadStatus.FAILURE));
       return;
     }
   }

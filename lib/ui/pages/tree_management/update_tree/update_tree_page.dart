@@ -84,8 +84,6 @@ class _UpdateTreePageState extends State<UpdateTreePage> {
                       // TODO: implement listener
                       if (state.loadStatus == LoadStatus.SUCCESS) {
                         nameController.text = state.treeData!.name ?? "";
-                        descriptionController.text =
-                            state.treeData!.description ?? "";
                       }
                     },
                     builder: (context, state) {
@@ -195,6 +193,7 @@ class _UpdateTreePageState extends State<UpdateTreePage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }

@@ -33,12 +33,11 @@ class CreateTreeCubit extends Cubit<CreateTreeState> {
     emit(state.copyWith(description: description));
   }
 
-  void createTree() async {
+  void createTree(String name) async {
     emit(state.copyWith(createTreeStatus: LoadStatus.LOADING));
     try {
-      final param =
-          CreateTreeParam(name: state.name, description: state.description);
-      final response = await treeRepository!.createTree(param: param);
+
+      final response = await treeRepository!.createTree(name: name);
 
       if (response != null) {
         emit(state.copyWith(createTreeStatus: LoadStatus.SUCCESS));

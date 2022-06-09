@@ -6,6 +6,7 @@ class AppImages {
   static final icGarden = 'assets/images/ic_garden.png';
   static final icSeason = 'assets/images/ic_season.png';
   static final icLabor = 'assets/images/ic_labor.png';
+  static final icUser = 'assets/images/ic_user.png';
   static final icProcedure = 'assets/images/ic_procedure.png';
   static final icBackLeft = 'assets/images/ic_back_left.png';
   static final icNotificationBA = 'assets/images/ic_notification.png';
@@ -31,10 +32,12 @@ class AppImages {
   static final icAvatar = 'assets/images/ic_avatar.png';
   static final icImagePlaceholder = 'assets/images/ic_image_placeholder.png';
   static final icWarning = 'assets/images/ic_warning.png';
+  static final icGardenNoColor = 'assets/images/ic_garden_no_color.png';
 
   ///employee
   static final icEmployeeAvatar = 'assets/images/ic_employee_avatar.png';
-
+  ///zone
+  static final icZoneAvatar = 'assets/images/ic_garden_area.png';
   ///garden
   static final icCalendar = 'assets/images/ic_calendar.png';
   static final icImageDefault = 'assets/images/ic_image_default.png';

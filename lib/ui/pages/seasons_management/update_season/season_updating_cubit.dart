@@ -51,8 +51,8 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
     try {
       final ObjectResponse<SeasonDetailResponse> result =
           await seasonRepository.getSeasonById(seasonId);
-      result.data!.season!.garden!.garden_id = result.data!.season!.garden!.id;
-      result.data!.season!.tree!.tree_id = result.data!.season!.tree!.id;
+      //result.data!.season!.garden!.garden_id = result.data!.season!.garden!.id;
+      result.data!.season!.tree!.tree_id = result.data!.season!.tree!.tree_id;
       emit(state.copyWith(
           loadStatus: LoadStatus.SUCCESS,
           gardenEntity: result.data!.season!.garden,

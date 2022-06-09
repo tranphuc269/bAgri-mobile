@@ -58,7 +58,7 @@ dependencies:
   retrofit: ^2.0.1
   dio: ^4.0.0
   #Json
-  json_annotation: ^4.3.0
+  json_annotation: ^4.5.0
   #Shared_preferences
   shared_preferences: ^2.0.8
   #Hive
@@ -176,7 +176,6 @@ flutter:
     - assets/area/
     - assets/list_bank/
     - assets/images/
-    - assets/fake_data/
 
     # Common images
 

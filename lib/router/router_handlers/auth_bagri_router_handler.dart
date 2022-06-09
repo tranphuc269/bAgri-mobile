@@ -2,6 +2,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';
+import 'package:flutter_base/ui/pages/account_management/account_list/account_list_cubit.dart';
+import 'package:flutter_base/ui/pages/account_management/account_list/account_list_page.dart';
 import 'package:flutter_base/ui/pages/auth/change_password/change_password_cubit.dart';
 import 'package:flutter_base/ui/pages/auth/change_password/change_password_page.dart';
 import 'package:flutter_base/ui/pages/auth/forgot_password/forgot_password_cubit.dart';
@@ -61,5 +63,15 @@ Handler registryHandler = new Handler(
       return RegistryCubit(repository: repository);
     },
     child: RegistryPage(),
+  );
+});
+
+Handler listAccountHandler = new Handler(  handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+  return BlocProvider(
+    create: (context) {
+      final repository = RepositoryProvider.of<AuthRepository>(context);
+      return AccountListCubit(authRepository: repository);
+    },
+    child: AccountListPage(),
   );
 });

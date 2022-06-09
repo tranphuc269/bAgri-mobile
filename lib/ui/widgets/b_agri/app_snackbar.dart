@@ -3,10 +3,11 @@ import 'package:flutter_base/commons/app_colors.dart';
 
 class AppSnackBar extends SnackBar {
   final String message;
-  AppSnackBar({required this.message})
+  final String typeSnackBar;
+  AppSnackBar({required this.message, required this.typeSnackBar})
       : super(
           elevation: 0,
-          backgroundColor: AppColors.main,
+          backgroundColor: typeSnackBar == "error" ? AppColors.red : AppColors.main,
           behavior: SnackBarBehavior.floating,
           margin: EdgeInsets.symmetric(horizontal: 23, vertical: 10),
           padding: EdgeInsets.zero,

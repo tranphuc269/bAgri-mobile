@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_shadow.dart';
+
 import 'package:flutter_base/commons/app_text_styles.dart';
-import 'package:flutter_base/models/entities/garden/garden_entity.dart';
-import 'package:flutter_base/models/entities/manager/manager_entity.dart';
+
+import 'package:flutter_base/models/entities/user/user_entity.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppManagerPicker extends StatefulWidget {
@@ -13,17 +14,17 @@ class AppManagerPicker extends StatefulWidget {
   String? managerId;
   bool centerItem;
   TextStyle? textStyle;
-  ValueChanged<ManagerEntity?>? onChange;
+  ValueChanged<UserEntity?>? onChange;
   // FormFieldValidator<String>? validator;
   AppManagerPicker(
       {Key? key,
-      this.autoValidateMode,
-      this.textStyle,
-      this.hintText,
-      this.managerId,
-      this.onChange,
-      // this.validator,
-      this.centerItem = false})
+        this.autoValidateMode,
+        this.textStyle,
+        this.hintText,
+        this.managerId,
+        this.onChange,
+        // this.validator,
+        this.centerItem = false})
       : super(key: key);
 
   @override
@@ -31,13 +32,14 @@ class AppManagerPicker extends StatefulWidget {
 }
 
 class _AppManagerPickerState extends State<AppManagerPicker> {
-  late List<ManagerEntity> _managerList;
+  late List<UserEntity> _managerList;
   late AppCubit _appCubit;
-  ManagerEntity? value;
+  UserEntity? value;
 
   @override
   void initState() {
     _appCubit = BlocProvider.of<AppCubit>(context);
+    _appCubit.fetchListManager();
     _managerList = _appCubit.state.managers!;
     super.initState();
   }
@@ -46,7 +48,7 @@ class _AppManagerPickerState extends State<AppManagerPicker> {
   Widget build(BuildContext context) {
     if (widget.managerId != null) {
       value = _managerList
-          .firstWhere((element) => element.manager_id == widget.managerId);
+          .firstWhere((element) => element.id == widget.managerId);
     }
     return DropdownButtonFormField(
         value: value,
@@ -60,7 +62,7 @@ class _AppManagerPickerState extends State<AppManagerPicker> {
           hintText: widget.hintText ?? 'Chọn quản lý',
           hintStyle: AppTextStyle.greyS14,
           contentPadding:
-              EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 20),
+          EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 20),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: AppColors.lineGray),
@@ -77,11 +79,11 @@ class _AppManagerPickerState extends State<AppManagerPicker> {
         ),
         isExpanded: true,
         items: _managerList.map((value) {
-          return DropdownMenuItem<ManagerEntity>(
+          return DropdownMenuItem<UserEntity>(
             alignment: widget.centerItem
                 ? Alignment.center
                 : AlignmentDirectional.centerStart,
-            child: Text(value.fullname ?? ""),
+            child: Text(value.name ?? ""),
             value: value,
           );
         }).toList());
@@ -94,17 +96,17 @@ class AppCustomManagerPicker extends StatefulWidget {
   String? managerId;
   bool centerItem;
   TextStyle? textStyle;
-  ValueChanged<ManagerEntity?>? onChange;
+  ValueChanged<UserEntity?>? onChange;
   // FormFieldValidator<String>? validator;
   AppCustomManagerPicker(
       {Key? key,
-      this.autoValidateMode,
-      this.textStyle,
-      this.hintText,
-      this.managerId,
-      this.onChange,
-      // this.validator,
-      this.centerItem = false})
+        this.autoValidateMode,
+        this.textStyle,
+        this.hintText,
+        this.managerId,
+        this.onChange,
+        // this.validator,
+        this.centerItem = false})
       : super(key: key);
 
   @override
@@ -112,9 +114,9 @@ class AppCustomManagerPicker extends StatefulWidget {
 }
 
 class _AppCustomManagerPickerState extends State<AppCustomManagerPicker> {
-  late List<ManagerEntity> _managerList;
+  late List<UserEntity> _managerList;
   late AppCubit _appCubit;
-  ManagerEntity? value;
+  UserEntity? value;
 
   @override
   void initState() {
@@ -122,8 +124,8 @@ class _AppCustomManagerPickerState extends State<AppCustomManagerPicker> {
     _appCubit = BlocProvider.of<AppCubit>(context);
     _managerList.addAll(_appCubit.state.managers!);
 
-    ManagerEntity allManagerObject =
-        ManagerEntity(manager_id: "allManager", fullname: 'Tất cả');
+    UserEntity allManagerObject =
+    UserEntity(id: "allManager", name: 'Tất cả');
     _managerList.insertAll(0, [allManagerObject]);
 
     super.initState();
@@ -133,7 +135,7 @@ class _AppCustomManagerPickerState extends State<AppCustomManagerPicker> {
   Widget build(BuildContext context) {
     if (widget.managerId != null) {
       value = _managerList
-          .firstWhere((element) => element.manager_id == widget.managerId);
+          .firstWhere((element) => element.id == widget.managerId);
     }
     return DropdownButtonFormField(
         value: value,
@@ -147,7 +149,7 @@ class _AppCustomManagerPickerState extends State<AppCustomManagerPicker> {
           hintText: widget.hintText ?? 'Chọn quản lý',
           hintStyle: AppTextStyle.greyS14,
           contentPadding:
-              EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 20),
+          EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 20),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: AppColors.lineGray),
@@ -164,11 +166,11 @@ class _AppCustomManagerPickerState extends State<AppCustomManagerPicker> {
         ),
         isExpanded: true,
         items: _managerList.map((value) {
-          return DropdownMenuItem<ManagerEntity>(
+          return DropdownMenuItem<UserEntity>(
             alignment: widget.centerItem
                 ? Alignment.center
                 : AlignmentDirectional.centerStart,
-            child: Text(value.fullname ?? ""),
+            child: Text(value.name ?? ""),
             value: value,
           );
         }).toList());

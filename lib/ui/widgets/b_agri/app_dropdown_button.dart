@@ -7,6 +7,10 @@ import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/role/role_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
+import 'package:flutter_base/models/entities/user/user_entity.dart';
+import 'package:flutter_base/ui/pages/garden_management/garden_create/garden_create_cubit.dart';
+import 'package:flutter_base/ui/pages/garden_management/garden_list/garden_list_cubit.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppDropDownButton extends StatelessWidget {
@@ -16,6 +20,8 @@ class AppDropDownButton extends StatelessWidget {
   FormFieldValidator<String>? validator;
   AutovalidateMode? autoValidateMode;
   String? value;
+
+
 
   TextStyle? textStyle;
   AppDropDownButton({
@@ -338,15 +344,19 @@ class AppRolePicker extends StatefulWidget {
   TextStyle? textStyle;
   ValueChanged<RoleEntity?>? onChange;
   FormFieldValidator<RoleEntity>? validator;
+  VoidCallback? onPressConfirm;
+  VoidCallback? onPressCancle;
   AppRolePicker(
       {Key? key,
       this.autoValidateMode,
       this.textStyle,
       this.hintText,
-      this.value,
+      required this.value,
       this.onChange,
       this.validator,
-      this.centerItem = false})
+      this.centerItem = false,
+      this.onPressCancle,
+      this.onPressConfirm})
       : super(key: key);
 
   @override
@@ -359,10 +369,11 @@ class _AppRolePickerState extends State<AppRolePicker> {
   @override
   void initState() {
     _roleList = [
-      RoleEntity(role_id: "ktv", name: "Kỹ Thuật Viên"),
-      RoleEntity(role_id: "qlv", name: "Quản Lý Vườn")
+      RoleEntity(role_id: "KTV", name: "Kỹ Thuật Viên"),
+      RoleEntity(role_id: "QLV", name: "Quản Lý Vườn"),
+      RoleEntity(role_id: "SUPER_ADMIN", name: "Super Admin"),
+      RoleEntity(role_id: 'ADMIN', name: "Admin")
     ];
-
     super.initState();
   }
 
@@ -371,13 +382,128 @@ class _AppRolePickerState extends State<AppRolePicker> {
     return Stack(
       children: [
         Container(
-          height: 48,
+         // height: 48,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
         ),
+            DropdownButtonFormField(
+                validator: widget.validator,
+                value: widget.value,
+                autovalidateMode: widget.autoValidateMode,
+                style: widget.textStyle ?? AppTextStyle.blackS14SemiBold,
+                icon: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Icon(Icons.keyboard_arrow_down)),
+                onChanged: widget.onChange,
+                decoration: InputDecoration(
+                  hintText: widget.hintText ?? 'Chọn vai trò',
+                  hintStyle: AppTextStyle.greyS14,
+                  contentPadding:
+                  EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 20),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AppColors.redTextButton),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AppColors.lineGray),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.main),
+                      borderRadius: BorderRadius.circular(10)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.main),
+                      borderRadius: BorderRadius.circular(10)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.main),
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+                isExpanded: true,
+                items: _roleList.map((value) {
+                  return DropdownMenuItem<RoleEntity>(
+                    alignment: widget.centerItem
+                        ? Alignment.center
+                        : AlignmentDirectional.centerStart,
+                    child: Text(value.name ?? ""),
+                    value: value,
+                  );
+                }).toList()),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: <Widget>[
+            //     FlatButton(
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(16),
+            //         ),
+            //         color: AppColors.redButton,
+            //         onPressed: widget.onPressCancle,
+            //         child: Text("Hủy",
+            //             style: TextStyle(color: Colors.white, fontSize: 14))),
+            //     AppButton(
+            //         color: AppColors.main,
+            //         title: "Xác nhận",
+            //         onPressed: widget.onPressConfirm
+            //     )
+            //   ],
+            // )
+          ],
+        );
+  }
+}
+
+
+class AppManagerPicker extends StatefulWidget {
+  String? hintText;
+  AutovalidateMode? autoValidateMode;
+  UserEntity? value;
+  bool centerItem;
+  TextStyle? textStyle;
+  ValueChanged<UserEntity?>? onChange;
+  // FormFieldValidator<String>? validator;
+  AppManagerPicker(
+      {Key? key,
+        this.autoValidateMode,
+        this.textStyle,
+        this.hintText,
+        this.value,
+        this.onChange,
+        // this.validator,
+        this.centerItem = false})
+      : super(key: key);
+
+  @override
+  State<AppManagerPicker> createState() => _AppManagerPickerState();
+}
+
+class _AppManagerPickerState extends State<AppManagerPicker> {
+  late List<UserEntity> _managerList;
+  late  GardenCreateCubit _gardenCubit;
+  UserEntity? value;
+
+  @override
+  void initState() {
+    _gardenCubit = BlocProvider.of<GardenCreateCubit>(context);
+    _managerList = _gardenCubit.state.listManager!;
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_managerList != null) {
+      value = _managerList.first;
+    }
+    return Stack(
+      children: [
+        Container(
+          height: 48,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [AppShadow.appBoxShadow],
+              borderRadius: BorderRadius.circular(5)),
+        ),
         DropdownButtonFormField(
-            validator: widget.validator,
-            value: widget.value,
+            value: value,
             autovalidateMode: widget.autoValidateMode,
             style: widget.textStyle ?? AppTextStyle.blackS14SemiBold,
             icon: Padding(
@@ -385,31 +511,24 @@ class _AppRolePickerState extends State<AppRolePicker> {
                 child: Icon(Icons.keyboard_arrow_down)),
             onChanged: widget.onChange,
             decoration: InputDecoration(
-              hintText: widget.hintText ?? 'Chọn vai trò',
+              hintText: widget.hintText ?? 'Chọn quản lý vườn',
               hintStyle: AppTextStyle.greyS14,
               contentPadding:
-                  EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 20),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: AppColors.redTextButton),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: AppColors.lineGray),
-              ),
-              disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.main),
-                  borderRadius: BorderRadius.circular(10)),
+              EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 20),
               enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.main),
-                  borderRadius: BorderRadius.circular(10)),
+                  borderSide: BorderSide(color: AppColors.mainDarker),
+                  borderRadius: BorderRadius.circular(5)),
+              focusColor: AppColors.main,
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.main),
-                  borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(5)),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.main),
+                  borderRadius: BorderRadius.circular(5)),
             ),
             isExpanded: true,
-            items: _roleList.map((value) {
-              return DropdownMenuItem<RoleEntity>(
+            items: _managerList.map((value) {
+              return DropdownMenuItem<UserEntity>(
                 alignment: widget.centerItem
                     ? Alignment.center
                     : AlignmentDirectional.centerStart,
@@ -421,3 +540,4 @@ class _AppRolePickerState extends State<AppRolePicker> {
     );
   }
 }
+

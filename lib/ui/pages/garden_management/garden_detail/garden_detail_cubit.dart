@@ -29,16 +29,18 @@ class GardenDetailCubit extends Cubit<GardenDetailState> {
     try {
       final response =
           await gardenRepository!.getGardenDataById(gardenId: gardenId);
+      print(response);
       if (response != null) {
         emit(state.copyWith(
           getGardenStatus: LoadStatus.SUCCESS,
-          gardenData: response.data!.garden,
+          gardenData: response,
         ));
       } else {
         emit(state.copyWith(getGardenStatus: LoadStatus.FAILURE));
       }
     } catch (error) {
-      emit(state.copyWith(getGardenStatus: LoadStatus.FAILURE));
+      throw (error);
+      // emit(state.copyWith(getGardenStatus: LoadStatus.FAILURE));
     }
   }
 }

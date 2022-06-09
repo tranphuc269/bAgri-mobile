@@ -2,7 +2,7 @@ part of 'garden_detail_cubit.dart';
 
 class GardenDetailState extends Equatable {
   LoadStatus? getGardenStatus;
-  GardenItemEntity? gardenData;
+  GardenDetailEntityResponse? gardenData;
 
   GardenDetailState({
     this.getGardenStatus,
@@ -11,7 +11,7 @@ class GardenDetailState extends Equatable {
 
   GardenDetailState copyWith({
     LoadStatus? getGardenStatus,
-    GardenItemEntity? gardenData,
+    GardenDetailEntityResponse? gardenData,
   }) {
     return GardenDetailState(
       getGardenStatus: getGardenStatus ?? this.getGardenStatus,

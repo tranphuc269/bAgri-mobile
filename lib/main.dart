@@ -23,10 +23,14 @@ import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/repositories/upload_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';
 import 'package:flutter_base/repositories/weather_repository.dart';
+import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/router/navigation_observer.dart';
+import 'package:flutter_base/ui/pages/account_management/account_list/account_list_page.dart';
 import 'package:flutter_base/ui/pages/auth/register/register_page.dart';
+import 'package:flutter_base/ui/pages/garden_management/garden_create/garden_create_page.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
+import 'package:flutter_base/ui/pages/tree_management/tree_listing/tree_listing_page.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -176,6 +180,9 @@ class _MyAppState extends State<MyApp> {
         // RepositoryProvider<GlobalDataRepository>(create: (context) {
         //   return GlobalDataRepositoryImpl(_apiClient);
         // }),
+        RepositoryProvider<ZoneRepository>(create: (context) {
+          return  ZoneRepositoryImpl(_apiClient);
+        }),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -196,6 +203,8 @@ class _MyAppState extends State<MyApp> {
                 RepositoryProvider.of<FarmerRepository>(context);
             final _weatherRepository =
                 RepositoryProvider.of<WeatherRepository>(context);
+            final _zoneRepository =
+                RepositoryProvider.of<ZoneRepository>(context);
 
             return AppCubit(
               treeRepository: _treeRepository,
@@ -206,6 +215,8 @@ class _MyAppState extends State<MyApp> {
               userRepository: _userRepository,
               farmerRepository: _farmerRepository,
               weatherRepository: _weatherRepository,
+              zoneRepository: _zoneRepository,
+
             );
           }),
           BlocProvider<NavigationCubit>(create: (context) => _navigationCubit!),
@@ -238,6 +249,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
+      // home: TreeListPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

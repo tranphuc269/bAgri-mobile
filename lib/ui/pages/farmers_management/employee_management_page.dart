@@ -46,6 +46,7 @@ class _EmployeeManagementPageState extends State<EmployeeManagementPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }
@@ -85,10 +86,10 @@ class _EmployeeManagementPageState extends State<EmployeeManagementPage> {
                 managerId: "allManager",
                 onChange: (value) {
                   setState(() {
-                    managerId = value?.manager_id ?? "";
+                    managerId = value?.id ?? "";
                   });
                   _employeeManagementCubit
-                      .filterListFarmer(value?.manager_id ?? "");
+                      .filterListFarmer(value?.id ?? "");
                 },
               ),
               SizedBox(height: 15),

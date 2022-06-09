@@ -34,10 +34,17 @@ class RegistryCubit extends Cubit<RegistryState> {
       }
     } catch (error) {
       if (error is DioError) {
-        logger.e(error.response!.data['error']['message']);
-        emit(state.copyWith(
-            messageError: error.response!.data['error']['message'],
-            RegisterStatus: LoadStatus.FAILURE));
+        emit(state.copyWith(RegisterStatus: LoadStatus.FAILURE));
+        if(error.response!.statusCode == 400){
+          emit(state.copyWith(
+            messageError: "Tên đăng nhập đã được sử dụng!",
+            RegisterStatus: LoadStatus.FAILURE
+          ));
+        }
+        // logger.e(error.response!.data['error']['message']);
+        // emit(state.copyWith(
+        //     messageError: error.response!.data['error']['message'],
+        //     RegisterStatus: LoadStatus.FAILURE));
       }
     }
   }

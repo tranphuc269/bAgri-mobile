@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
+import 'package:flutter_base/repositories/zone_repository.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_create/garden_create_cubit.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_create/garden_create_page.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_detail/garden_detail.dart';
@@ -11,28 +12,38 @@ import 'package:flutter_base/ui/pages/garden_management/garden_list_by_qlv/garde
 import 'package:flutter_base/ui/pages/garden_management/garden_list_by_qlv/garden_list_by_qlv_cubit.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_update/garden_update.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_update/garden_update_cubit.dart';
+import 'package:flutter_base/ui/pages/garden_management/zone/zone_list_cubit.dart';
+import 'package:flutter_base/ui/pages/garden_management/zone/zone_list_page.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Handler gardenListHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      GardenListArgument args = context!.settings!.arguments as GardenListArgument;
   return BlocProvider(
     create: (context) {
       final gardenRepository = RepositoryProvider.of<GardenRepository>(context);
       return GardenListCubit(gardenRepository: gardenRepository);
     },
-    child: GardenListPage(),
+    child: GardenListPage(
+      zone_id: args.zone_id,
+      titleScreen: args.titleScreen,
+    ),
   );
 });
 
 Handler gardenCreateHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      GardenCreateArgument args = context!.settings!.arguments as GardenCreateArgument;
   return BlocProvider(
     create: (context) {
       final gardenRepository = RepositoryProvider.of<GardenRepository>(context);
       return GardenCreateCubit(gardenRepository: gardenRepository);
     },
-    child: CreateGardenPage(),
+    child: CreateGardenPage(
+      zone_id: args.zone_id,
+      zoneName: args.zoneName,
+    ),
   );
 });
 
@@ -62,9 +73,8 @@ Handler gardenUpdateHandler = new Handler(
       return GardenUpdateCubit(gardenRepository: gardenRepository);
     },
     child: UpdateGardenPage(
-      garden_id: args.garden_id,
-      name: args.name,
-      area: args.area,
+      garden_Id: args.garden_Id,
+      zoneName: args.zoneName,
     ),
   );
 });
@@ -79,3 +89,13 @@ Handler gardenListByQVLHandler = new Handler(
     child: GardenListByQVLPage(),
   );
 });
+Handler zoneListHandler = new Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return BlocProvider(
+        create: (context) {
+          final zoneRepository = RepositoryProvider.of<ZoneRepository>(context);
+          return ZoneListCubit(zoneRepository: zoneRepository);
+        },
+        child: ZoneListPage(),
+      );
+    });
