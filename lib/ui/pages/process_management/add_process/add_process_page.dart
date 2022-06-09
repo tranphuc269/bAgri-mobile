@@ -228,8 +228,7 @@ class _ProcessAddingPageState extends State<ProcessAddingPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: "success",
-      message: message,
+      message: message, typeSnackBar: '',
     ));
   }
 }
