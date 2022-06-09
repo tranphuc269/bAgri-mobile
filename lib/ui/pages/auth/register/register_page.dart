@@ -38,14 +38,12 @@ class _RegistryPageState extends State<RegistryPage> {
   bool isErrorMessage = false;
   RegistryCubit? _cubit;
   bool isFirst = false;
+  bool _visiblePassword = false;
 
   @override
   void initState() {
     _cubit = BlocProvider.of<RegistryCubit>(context);
-
     super.initState();
-
-
     _usernameController.addListener(() {
       _cubit!.usernameChange(_usernameController.text);
     });
@@ -266,12 +264,24 @@ class _RegistryPageState extends State<RegistryPage> {
         ),
         child: Stack(
           children: [
-            AppTextField(
+            AppPasswordField(
               autoValidateMode: AutovalidateMode.onUserInteraction,
               hintText: 'Nhập vào mật khẩu',
               keyboardType: TextInputType.visiblePassword,
-              obscureText: true,
+              obscureText: !_visiblePassword,
               controller: _passwordController,
+              suffixIcon: InkWell(
+                onTap: () {
+                  setState(() {
+                    _visiblePassword = !_visiblePassword;
+                  });
+                },
+                child: Icon(
+                  _visiblePassword
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: _visiblePassword ? AppColors.main : AppColors.grayIntro,
+                ),),
               validator: (value) {
                 if (Validator.validateNullOrEmpty(value!))
                   return "Chưa nhập mật khẩu";
@@ -322,6 +332,7 @@ class _RegistryPageState extends State<RegistryPage> {
   void showSnackBar(String message) async {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
     setState(() {

@@ -5,15 +5,17 @@ import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/main.dart';
+import 'package:flutter_base/models/entities/garden/garden_detail.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 
-import 'package:flutter_base/models/entities/garden/season_entity.dart';
-import 'package:flutter_base/models/entities/process/list_process.dart';
+import 'package:flutter_base/models/enums/load_status.dart';
 
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/auth/login/login_cubit.dart';
+import 'package:flutter_base/ui/pages/garden_management/garden_create/garden_create_page.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_detail/garden_detail.dart';
+
 import 'package:flutter_base/ui/pages/garden_management/garden_update/garden_update.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
@@ -23,13 +25,19 @@ import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 
 import 'package:flutter_base/ui/widgets/error_list_widget.dart';
-import 'package:flutter_base/utils/dialog_utils.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'garden_list_cubit.dart';
 
 class GardenListPage extends StatefulWidget {
+  final String? zone_id;
+  final String? titleScreen;
+  GardenDetailEntityResponse? gardenDetail;
+
+  GardenListPage({this.zone_id, this.titleScreen});
+
   @override
   _GardenListState createState() => _GardenListState();
 }
@@ -44,7 +52,7 @@ class _GardenListState extends State<GardenListPage> {
   void initState() {
     super.initState();
     _cubit = BlocProvider.of<GardenListCubit>(context);
-    _cubit!.fetchGardenList();
+    _cubit!.getListGardenByZone(widget.zone_id);
     _scrollController.addListener(_onScroll);
   }
 
@@ -58,7 +66,7 @@ class _GardenListState extends State<GardenListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: "Quản lý vườn",
+        title: widget.titleScreen!,
         context: context,
       ),
       body: Container(
@@ -77,7 +85,7 @@ class _GardenListState extends State<GardenListPage> {
                 onRefresh: _onRefreshData,
               );
             } else if (state.getGardenStatus == LoginStatusBagri.SUCCESS) {
-              return state.listGardenData!.length != 0
+              return state.listGarden!.length != 0
                   ? RefreshIndicator(
                       color: AppColors.main,
                       onRefresh: _onRefreshData,
@@ -85,19 +93,28 @@ class _GardenListState extends State<GardenListPage> {
                         padding: EdgeInsets.only(
                             left: 10, right: 10, top: 10, bottom: 25),
                         physics: AlwaysScrollableScrollPhysics(),
-                        itemCount: state.listGardenData!.length,
+                        itemCount: state.listGarden!.length,
                         shrinkWrap: true,
                         primary: false,
                         controller: _scrollController,
                         itemBuilder: (context, index) {
-                          GardenEntity garden = state.listGardenData![index];
+                          GardenEntityResponseFromZoneId garden =
+                              state.listGarden![index];
                           return _buildItem(
                               gardenName: garden.name ?? "",
                               gardenId: garden.garden_id ?? "",
+                              areaUnit: garden.areaUnit ?? "",
                               area: garden.area,
-                              process: garden.process,
-                              season: garden.season,
-                              onPressed: () {
+                              onPressed: () async {
+                                print(garden.garden_id);
+                                // await showDialog(
+                                //     context: context,
+                                //     builder: (context) =>  GardenDetailDialog(
+                                //       gardenId: garden.garden_id,
+                                //       onConfirm: () async {
+                                //         Navigator.pop(context, true);
+                                //       },
+                                //     ));
                                 Application.router!.navigateTo(
                                   appNavigatorKey.currentContext!,
                                   Routes.gardenDetail,
@@ -110,15 +127,16 @@ class _GardenListState extends State<GardenListPage> {
                                 );
                               },
                               onUpdate: () async {
+                                print(widget.titleScreen);
                                 bool isUpdate =
                                     await Application.router!.navigateTo(
                                   appNavigatorKey.currentContext!,
                                   Routes.gardenUpdate,
                                   routeSettings: RouteSettings(
                                     arguments: GardenUpdateArgument(
-                                      garden_id: garden.garden_id,
-                                      name: garden.name,
-                                      area: garden.area,
+                                      garden_Id: garden.garden_id,
+                                      gardenName: garden.name,
+                                      zoneName: widget.titleScreen
                                     ),
                                   ),
                                 );
@@ -129,7 +147,7 @@ class _GardenListState extends State<GardenListPage> {
                               onDelete: () async {
                                 bool isDelete = await showDialog(
                                     context: context,
-                                    builder: (context) => AppDeleteDialog(
+                                    builder: (context) =>  AppDeleteDialog(
                                           onConfirm: () async {
                                             await _cubit!
                                                 .deleteGarden(garden.garden_id);
@@ -148,14 +166,11 @@ class _GardenListState extends State<GardenListPage> {
                         },
                       ),
                     )
-                  : Expanded(
+                  : Container(
+                      width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: EmptyDataWidget(),
-                          ),
-                        ],
+                        children: [EmptyDataWidget()],
                       ),
                     );
             } else {
@@ -166,8 +181,13 @@ class _GardenListState extends State<GardenListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          bool isAdd = await Application.router
-              ?.navigateTo(context, Routes.gardenCreate);
+          bool isAdd =
+              await Application.router?.navigateTo(context, Routes.gardenCreate,
+                  routeSettings: RouteSettings(
+                      arguments: GardenCreateArgument(
+                    zone_id: widget.zone_id,
+                    zoneName: widget.titleScreen,
+                  )));
           if (isAdd) {
             _onRefreshData();
           }
@@ -184,16 +204,17 @@ class _GardenListState extends State<GardenListPage> {
   _buildItem(
       {required String gardenName,
       required String gardenId,
+
       int? area,
-      ProcessEntity? process,
-      SeasonEntity? season,
+      String? avatarUrl,
+      String? areaUnit,
       VoidCallback? onDelete,
       VoidCallback? onPressed,
       VoidCallback? onUpdate}) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: 60,
+        height: 80,
         decoration: BoxDecoration(
           color: AppColors.grayEC,
           borderRadius: BorderRadius.circular(10),
@@ -253,16 +274,27 @@ class _GardenListState extends State<GardenListPage> {
           ),
           child: Padding(
             padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
+                const EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 15),
             child: Row(
               children: [
+                Image.asset(avatarUrl ?? AppImages.icGardenNoColor),
+                SizedBox(width: 18),
                 Expanded(
-                  child: Text(
-                    '$gardenName',
-                    style: AppTextStyle.greyS16Bold,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Text(
+                        '$gardenName',
+                        style: AppTextStyle.greyS16Bold,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 5,),
+                      Text(
+                        "Diện tích: ${area} ${areaUnit}",
+                        style: AppTextStyle.greyS16,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ])),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   color: Colors.grey,
@@ -275,7 +307,6 @@ class _GardenListState extends State<GardenListPage> {
       ),
     );
   }
-
   Widget _buildEmptyList() {
     return ErrorListWidget(
       text: S.of(context).no_data_show,
@@ -291,12 +322,13 @@ class _GardenListState extends State<GardenListPage> {
   }
 
   Future<void> _onRefreshData() async {
-    _cubit!.fetchGardenList();
+    _cubit!.getListGardenByZone(widget.zone_id);
   }
 
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }
@@ -308,7 +340,14 @@ class _GardenListState extends State<GardenListPage> {
       // _cubit!.fetchNextGardenData();
     }
   }
-
   @override
   bool get wantKeepAlive => true;
+}
+
+class GardenListArgument {
+  String? zone_id;
+  String? titleScreen;
+  String? area;
+
+  GardenListArgument({this.zone_id, this.titleScreen, this.area});
 }

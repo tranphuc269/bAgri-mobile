@@ -148,7 +148,7 @@ class _CreateTreePageState extends State<CreateTreePage> {
                       title: 'Xác nhận',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          _cubit?.createTree();
+                         // _cubit?.createTree();
                         }
                       },
                       isLoading: isLoading,
@@ -170,6 +170,7 @@ class _CreateTreePageState extends State<CreateTreePage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }

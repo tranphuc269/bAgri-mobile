@@ -32,13 +32,10 @@ class LoginResponseEntity {
 @JsonSerializable()
 class TokenEntity {
   @JsonKey()
-  String? token;
-  @JsonKey()
-  String? user_id;
+  String? access_token;
 
   TokenEntity({
-    this.token,
-    this.user_id,
+    this.access_token,
   });
 
   TokenEntity copyWith({
@@ -46,8 +43,7 @@ class TokenEntity {
     String? user_id,
   }) {
     return TokenEntity(
-      token: token ?? this.token,
-      user_id: user_id ?? this.user_id,
+      access_token: access_token ?? this.access_token,
     );
   }
   factory TokenEntity.fromJson(Map<String, dynamic> json) =>

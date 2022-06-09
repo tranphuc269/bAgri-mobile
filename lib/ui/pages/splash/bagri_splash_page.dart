@@ -132,12 +132,12 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void showHome() {
-    Application.router?.navigateTo(context, Routes.home, replace: true);
+    Application.router?.navigateTo(context, Routes.zoneList, replace: true);
   }
 
   void showGardenManagementByQLV() {
     Application.router!
-        .navigateTo(context, Routes.gardenListByQVL, clearStack: true);
+        .navigateTo(context, Routes.tabProcess, clearStack: true);
   }
 
   void showLogin() {

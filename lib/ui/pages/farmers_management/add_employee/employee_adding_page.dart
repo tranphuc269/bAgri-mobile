@@ -9,7 +9,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_dropdown_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
-import 'package:flutter_base/ui/widgets/b_agri/drop_down_picker/app_manager_picker.dart';
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -112,7 +111,7 @@ class _EmployeeAddingPageState extends State<EmployeeAddingPage> {
                     SizedBox(height: 10),
                     AppManagerPicker(
                       onChange: (value) {
-                        _cubit.changeManagerId(value!.manager_id ?? "");
+                        _cubit.changeManagerId(value!.id ?? "");
                       },
                     ),
                   ],
@@ -183,6 +182,7 @@ class _EmployeeAddingPageState extends State<EmployeeAddingPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }

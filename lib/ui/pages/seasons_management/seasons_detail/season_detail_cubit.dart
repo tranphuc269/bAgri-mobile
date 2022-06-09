@@ -33,7 +33,7 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
     try {
       CreateSeasonParam param = CreateSeasonParam(
         name: state.season!.name,
-        garden_id: state.season!.garden!.id,
+       // garden_id: state.season!.garden!.id,
         process_id: state.season!.process!.process_id,
         tree_id: state.season!.tree!.tree_id,
         start_date: state.season!.start_date,

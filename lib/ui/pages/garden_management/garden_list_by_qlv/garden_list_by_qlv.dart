@@ -239,16 +239,15 @@ class _GardenListByQVLState extends State<GardenListByQVLPage> {
     String gardenId = data.garden_id ?? '';
     String name = data.name ?? '';
     int area = data.area ?? 0;
-    ProcessEntity? process = data.process;
-    SeasonEntity? season = data.season;
+
 
     return GestureDetector(
       onTap: () {
-        if (season!.season_id != null) {
-          _handleRouteGardenDetail(data);
-        } else {
-          showSnackBar('Hiện tại vườn chưa có mùa vụ');
-        }
+        // if (season!.season_id != null) {
+        //   _handleRouteGardenDetail(data);
+        // } else {
+        //   showSnackBar('Hiện tại vườn chưa có mùa vụ');
+        // }
       },
       child: Container(
           height: 60,
@@ -292,6 +291,7 @@ class _GardenListByQVLState extends State<GardenListByQVLPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
       message: message,
     ));
   }
@@ -304,8 +304,6 @@ class _GardenListByQVLState extends State<GardenListByQVLPage> {
         arguments: GardenTaskArgument(
           garden_id: garden.garden_id,
           name: garden.name,
-          process_id: garden.process?.process_id,
-          season_id: garden.season?.season_id,
         ),
       ),
     );

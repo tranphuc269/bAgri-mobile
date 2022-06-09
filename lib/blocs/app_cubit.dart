@@ -24,6 +24,7 @@ import 'package:flutter_base/repositories/task_repository.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';
 import 'package:flutter_base/repositories/weather_repository.dart';
+import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/utils/logger.dart';
 
@@ -38,6 +39,7 @@ class AppCubit extends Cubit<AppState> {
   UserRepository userRepository;
   FarmerRepository farmerRepository;
   WeatherRepository weatherRepository;
+  ZoneRepository zoneRepository;
   AppCubit({
     required this.treeRepository,
     required this.authRepository,
@@ -47,6 +49,7 @@ class AppCubit extends Cubit<AppState> {
     required this.userRepository,
     required this.farmerRepository,
     required this.weatherRepository,
+    required this.zoneRepository,
   }) : super(AppState());
 
   void getData() async {
@@ -71,22 +74,25 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  void fetchListManager() async {
+  Future<void> fetchListManager() async {
     emit(state.copyWith(getManagersStatus: LoadStatus.LOADING));
     try {
-      final response = await userRepository.getListManager();
+      final response = await authRepository.getListAcounts();
+      print(response);
       emit(state.copyWith(
           getManagersStatus: LoadStatus.SUCCESS,
-          managers: response.data!.managers));
+          managers: response));
     } catch (e) {
       emit(state.copyWith(getManagersStatus: LoadStatus.FAILURE));
     }
   }
 
+
   void fetchListTree() async {
     emit(state.copyWith(getTreeStatus: LoadStatus.LOADING));
     try {
       final response = await treeRepository.getListTreeData();
+      print(response);
       if (response != null) {
         emit(state.copyWith(
           getTreeStatus: LoadStatus.SUCCESS,

@@ -115,6 +115,8 @@ class AppColors {
   static const Color orangeE9703C = Color(0xFFE9703C);
   static const Color redD7443B = Color(0xFFD7443B);
 
+  static const Color blueA5CAD2 = Color(0xFFA5CAD2);
+
   ///Button
   static const Color blueSlideButton = Color(0xFF5F82DF);
   static const Color redSlideButton = Color(0xFFE4463C);
