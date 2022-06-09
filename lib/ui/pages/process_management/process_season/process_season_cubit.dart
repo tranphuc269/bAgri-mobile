@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_base/generated/l10n.dart';
+import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/process_detail.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
@@ -108,10 +109,10 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
         }
       }
 
-      final param = CreateProcessParam(
+      final param = ProcessEntity(
         name: state.name,
-        tree_ids: listTree,
-        stages: listStages,
+        trees: state.trees,
+        stages: state.stages,
       );
 
       final response = await processRepository!
@@ -131,14 +132,16 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
   Future<void> getProcessDetail(String processId) async {
     emit(state.copyWith(loadDetailStatus: LoadStatus.LOADING));
     try {
-      final ObjectResponse<ProcessDetailResponse> result =
+      final ProcessEntity result =
           await processRepository!.getProcessById(processId);
-
       emit(state.copyWith(
           loadDetailStatus: LoadStatus.SUCCESS,
-          name: result.data?.process?.name!,
-          trees: result.data?.process?.trees!,
-          stages: result.data?.process?.stages!));
+          // name: result./*data?.*/process?.name!,
+          name: result.name,
+          trees: result.trees,
+          stages: result.stages));
+          // trees: result.data?.process?.trees!,
+          // stages: result./*data?.process?.*/stages!));
     } catch (e) {
       emit(state.copyWith(loadDetailStatus: LoadStatus.FAILURE));
     }

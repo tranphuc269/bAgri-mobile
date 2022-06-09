@@ -46,10 +46,11 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
   Future<void> changeDuration(String processId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      ObjectResponse<ProcessDetailResponse> result =
-          await processRepository.getProcessById(processId);
+      // ObjectResponse<ProcessDetailResponse> result =
 
-      ProcessEntity processResult = result.data!.process!;
+
+      ProcessEntity processResult =/* result.data!.process!;*/
+      await processRepository.getProcessById(processId);
       int duration = 0;
       if (processResult.stages != null) {
         for (StageEntity stage in processResult.stages!) {

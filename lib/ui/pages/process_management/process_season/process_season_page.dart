@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
@@ -518,9 +517,9 @@ class _StepWidgetState extends State<StepWidget> {
             stepId: widget.step!.step_id,
             startDate: widget.step!.from_day!.toString(),
             endDate: widget.step!.to_day!.toString(),
-            actualDay: (widget.step!.actual_day) != null
-                ? widget.step!.actual_day.toString()
-                : "",
+            // actualDay: (widget.step!.actual_day) != null
+            //     ? widget.step!.actual_day.toString()
+            //     : "",
             onPressed: (name, startDate, endDate, stepId, actualDay) {
               String? id;
               if (stepId == null) {

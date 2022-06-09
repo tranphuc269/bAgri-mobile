@@ -1,37 +1,47 @@
-import 'package:json_annotation/json_annotation.dart';
 
-part 'list_tree_response.g.dart';
+// part 'list_tree_response.g.dart';
 
-@JsonSerializable()
-class ListTreeResponse {
-  @JsonKey()
-  String? status;
-  @JsonKey()
-  TreeDataEntity? data;
+// @JsonSerializable()
+// class ListTreeResponse {
+//   @JsonKey()
+//   String? status;
+//   @JsonKey()
+//   TreeDataEntity? data;
+//
+//   ListTreeResponse({
+//     this.status,
+//     this.data,
+//   });
+//
+//   ListTreeResponse copyWith({
+//     String? status,
+//     TreeDataEntity? data,
+//   }) {
+//     return ListTreeResponse(
+//       status: status ?? this.status,
+//       data: data ?? this.data,
+//     );
+//   }
 
-  ListTreeResponse({
-    this.status,
-    this.data,
-  });
+  // factory ListTreeResponse.fromJson(Map<String, dynamic> json) =>
+  //     _$ListTreeResponseFromJson(json);
+  // Map<String, dynamic> toJson() => _$ListTreeResponseToJson(this);
+  // factory ListTreeResponse.fromJson(Map<String, dynamic> json) =>
+  //     ListTreeResponse(
+  //       status: json['status'] as String?,
+  //       data: (json['data'] as List<dynamic>?)
+  //           ?.map((e) => TreeEntity.fromJson(e as Map<String, dynamic>))
+  //           .toList(),
+  //     );
+  //
+  // Map<String, dynamic> toJson() =>
+  //     <String, dynamic>{
+  //       'status': this.status,
+  //       'data': this.data!.map((e) => e.toJson()).toList(),
+  //     };
+// }
 
-  ListTreeResponse copyWith({
-    String? status,
-    TreeDataEntity? data,
-  }) {
-    return ListTreeResponse(
-      status: status ?? this.status,
-      data: data ?? this.data,
-    );
-  }
-
-  factory ListTreeResponse.fromJson(Map<String, dynamic> json) =>
-      _$ListTreeResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$ListTreeResponseToJson(this);
-}
-
-@JsonSerializable()
 class TreeDataEntity {
-  @JsonKey()
   List<TreeEntity>? trees;
 
   TreeDataEntity({
@@ -46,43 +56,55 @@ class TreeDataEntity {
     );
   }
 
-  factory TreeDataEntity.fromJson(Map<String, dynamic> json) =>
-      _$TreeDataEntityFromJson(json);
-  Map<String, dynamic> toJson() => _$TreeDataEntityToJson(this);
+  factory TreeDataEntity.fromJson(dynamic json){
+    List<TreeEntity> listTrees =[];
+    for(var item in json){
+      TreeEntity treeEntity = TreeEntity.fromJson(item);
+      listTrees.add(treeEntity);
+    }
+    return TreeDataEntity(trees: listTrees);
+  }
+  // Map<String, dynamic> toJson() => _$TreeDataEntityToJson(this);
+
+
 }
 
-@JsonSerializable()
-class TreeEntity {
-  String? id;
-  @JsonKey()
-  String? tree_id;
-  @JsonKey()
-  String? name;
-  @JsonKey()
-  String? description;
 
-  factory TreeEntity.fromJson(Map<String, dynamic> json) =>
-      _$TreeEntityFromJson(json);
-  Map<String, dynamic> toJson() => _$TreeEntityToJson(this);
+class TreeEntity {
+  int? id;
+  String? tree_id;
+  String? name;
+
+  factory TreeEntity.fromJson(Map<String, dynamic> json){
+    return TreeEntity(
+      id: json['__v'] as int?,
+      tree_id: json['_id'] as String?,
+      name: json['name'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() =>
+      <String, dynamic>{
+        '__v': this.id,
+        '_id': this.tree_id,
+        'name': this.name,
+      };
 
   TreeEntity({
     this.id,
     this.tree_id,
     this.name,
-    this.description,
   });
 
   TreeEntity copyWith({
-    String? id,
+    int? id,
     String? tree_id,
     String? name,
-    String? description,
   }) {
     return TreeEntity(
       id: id ?? this.id,
       tree_id: tree_id ?? this.tree_id,
       name: name ?? this.name,
-      description: description ?? this.description,
     );
   }
 }

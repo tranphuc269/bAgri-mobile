@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_base/configs/app_config.dart';
+import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/farmer/farmer.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/file/file_entity.dart';
@@ -38,6 +39,7 @@ part 'api_client_bagri.g.dart';
 @RestApi(baseUrl: AppConfig.baseUrl)
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
+
   @POST("/auth")
   Future<LoginResponseEntity> authLogin(@Body() Map<String, dynamic> body);
 
@@ -45,7 +47,8 @@ abstract class ApiClient {
   Future<dynamic> authRegistty(@Body() Map<String, dynamic> body);
 
   @GET("/accounts")
-  Future<List<UserEntity>> getListAccounts(@Header('accept') String content, @Header("Authorization") String token);
+  Future<List<UserEntity>> getListAccounts(
+      @Header('accept') String content, @Header("Authorization") String token);
 
   @PUT("/change-password")
   Future<dynamic> changePassword(@Body() Map<String, dynamic> body);
@@ -77,9 +80,9 @@ abstract class ApiClient {
       {@Path("garden_id") String? gardenId});
 
   /// Process
-  @GET("/processes")
-  Future<ListProcessResponse> getListProcessData(
-      @Body() Map<String, dynamic> body);
+  // @GET("/processes")
+  // Future<ProcessDataEntity> getListProcessData(
+  //     @Body() Map<String, dynamic> body);
 
   @DELETE("/processes/{process_id}")
   Future<ProcessDeleteResponse> deleteProcess(
@@ -93,15 +96,15 @@ abstract class ApiClient {
       @Path("process_id") String? processId, @Body() Map<String, dynamic> body);
 
   @GET("/processes/{process_id}")
-  Future<ObjectResponse<ProcessDetailResponse>> getProcessById(
+  Future<ProcessEntity> getProcessById(
       @Path('process_id') String processId);
 
   @GET("/processes_by_tree?tree_id={tree_id}")
-  Future<ListProcessResponse> getProcessOfTree(@Path("tree_id") String treeId);
+  Future<ProcessDataEntity> getProcessOfTree(@Path("tree_id") String treeId);
 
   /// Tree
-  @GET("/trees")
-  Future<ListTreeResponse> getListTreeData(@Body() Map<String, dynamic> body);
+  // @GET("/trees")
+  // Future<TreeDataEntity> getListTreeData();
 
   @DELETE("/trees/{tree_id}")
   Future<TreeDeleteResponse> deleteTree({@Path("tree_id") String? treeId});
@@ -218,4 +221,24 @@ abstract class ApiClient {
   @POST("/seasons/{season_id}/qr_code")
   Future<ObjectResponse<QREntity>> generateQRCode(
       @Path("season_id") String seasonId);
+}
+
+class AppApi {
+  static AppApi instance = AppApi();
+  Dio _dio = Dio();
+  Future<TreeDataEntity> getListTreeData() async {
+    final response = await _dio.get("${AppConfig.baseUrl}/trees",
+        options: Options(headers: {
+          'Authorization': 'Bearer ${GlobalData.instance.token}'
+        }));
+    return TreeDataEntity.fromJson(response.data);
+  }
+  Future<ProcessDataEntity> getListProcessData() async {
+    final response = await _dio.get("${AppConfig.baseUrl}/processes",
+        options: Options(headers: {
+          'Authorization': 'Bearer ${GlobalData.instance.token}'
+        }));
+    print(response.data);
+    return ProcessDataEntity.fromJson(response.data);
+  }
 }

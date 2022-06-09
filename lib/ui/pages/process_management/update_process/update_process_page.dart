@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
@@ -14,7 +13,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/multiple_tree_picker/app_tree_picker.dart';
 
-import 'package:flutter_base/utils/dialog_utils.dart';
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -87,7 +85,8 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                           listener: (context, state) {
                             if (state.loadDetailStatus == LoadStatus.SUCCESS) {
                               nameController = TextEditingController(
-                                  text: _cubit!.state.name);
+                                text: _cubit!.state.name,
+                              );
                             }
                             // TODO: implement listener
                           },
@@ -249,6 +248,7 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                 title: 'Xác nhận',
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    _cubit?.changeName(nameController.text);
                     _cubit?.updateProcess(widget.process_id);
                   }
                 },
@@ -525,6 +525,7 @@ class _StepWidgetState extends State<StepWidget> {
             stepId: widget.step!.step_id,
             startDate: widget.step!.from_day!.toString(),
             endDate: widget.step!.to_day!.toString(),
+            actualDay: widget.step!.actual_day,
             onPressed: (name, startDate, endDate, stepId) {
               String? id;
               if (stepId == null) {
@@ -535,8 +536,7 @@ class _StepWidgetState extends State<StepWidget> {
                 } else {
                   id = stepId;
                 }
-              }
-              StepEntity step = StepEntity(
+              }              StepEntity step = StepEntity(
                   name: name,
                   step_id: id,
                   from_day: int.parse(startDate),

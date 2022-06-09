@@ -36,7 +36,7 @@ class UpdateTreeCubit extends Cubit<UpdateTreeState> {
     emit(state.copyWith(updateTreeStatus: LoadStatus.LOADING));
     try {
       final param =
-          CreateTreeParam(name: state.name, description: state.description);
+          CreateTreeParam(name: state.name, /*description: state.description*/);
       print(param);
       final response =
           await treeRepository.updateTree(treeId: treeId, param: param);

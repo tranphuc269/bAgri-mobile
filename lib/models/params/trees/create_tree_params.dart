@@ -5,21 +5,21 @@ part 'create_tree_params.g.dart';
 class CreateTreeParam {
   @JsonKey()
   String? name;
-  @JsonKey()
-  String? description;
+  // @JsonKey()
+  // String? description;
 
   CreateTreeParam({
     this.name,
-    this.description,
+    // this.description,
   });
 
   CreateTreeParam copyWith({
     String? name,
-    String? description,
+    // String? description,
   }) {
     return CreateTreeParam(
       name: name ?? this.name,
-      description: description ?? this.description,
+      // description: description ?? this.description,
     );
   }
 

@@ -6,7 +6,7 @@ import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class TreeRepository {
-  Future<ListTreeResponse> getListTreeData();
+  Future<TreeDataEntity> getListTreeData();
 
   Future<TreeDeleteResponse> deleteTree({String? treeId});
 
@@ -25,8 +25,9 @@ class TreeRepositoryImpl extends TreeRepository {
   }
 
   @override
-  Future<ListTreeResponse> getListTreeData() async {
-    return await _apiClient!.getListTreeData({});
+  Future<TreeDataEntity> getListTreeData() async {
+    // return await _apiClient!.getListTreeData();
+    return await AppApi.instance.getListTreeData();
   }
 
   Future<TreeDeleteResponse> deleteTree({String? treeId}) async {
@@ -36,7 +37,6 @@ class TreeRepositoryImpl extends TreeRepository {
   Future<dynamic> createTree({CreateTreeParam? param}) {
     final body = {
       "name": param?.name ?? "",
-      "description": param?.description ?? "",
     };
 
     return _apiClient!.createTree(body);
@@ -45,7 +45,6 @@ class TreeRepositoryImpl extends TreeRepository {
   Future<dynamic> updateTree({String? treeId, CreateTreeParam? param}) {
     final body = {
       "name": param?.name ?? "",
-      "description": param?.description ?? "",
     };
     return _apiClient!.updateTree(treeId, body);
   }

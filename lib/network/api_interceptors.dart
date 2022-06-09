@@ -19,7 +19,7 @@ class ApiInterceptors extends InterceptorsWrapper {
         "\n\n--------------------------------------------------------------------------------------------------------");
     if (method == 'GET') {
       logger.log(
-          "✈️ REQUEST[$method] => PATH: $uri \n Token: ${options.headers}",
+          "✈️ REQUEST[$method] => PATH: $uri \n Token1: ${GlobalData.instance.token}",
           printFullText: true);
     } else {
       try {
@@ -43,7 +43,7 @@ class ApiInterceptors extends InterceptorsWrapper {
     final statusCode = response.statusCode;
     final uri = response.requestOptions.uri;
     final data = jsonEncode(response.data);
-    logger.log("✅ RESPONSE[$statusCode] => PATH: $uri\n DATA: $data");
+    logger.log("✅ RESPONSE[$statusCode] => PATH: $uri\n DATA: ${response.data.toString()}");
     //Handle section expired
     if (response.statusCode == 401) {
       GlobalEvent.instance.onTokenExpired.add(true);

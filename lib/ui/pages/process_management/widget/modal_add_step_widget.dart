@@ -14,7 +14,7 @@ class ModalAddStepWidget extends StatefulWidget {
     this.endDate,
     this.startDate,
     required this.onPressed,
-    this.onDelete,
+    this.onDelete, this.actualDay,
   }) : super(key: key);
   final void Function(
       String name, String startDate, String endDate, String stepId) onPressed;
@@ -23,6 +23,7 @@ class ModalAddStepWidget extends StatefulWidget {
   final String? stepId;
   final String? startDate;
   final String? endDate;
+  final int? actualDay;
   final VoidCallback? onDelete;
 
   @override
@@ -36,6 +37,7 @@ class _ModalAddStepWidgetState extends State<ModalAddStepWidget> {
   TextEditingController startDateController = TextEditingController(text: '');
   TextEditingController endDateController = TextEditingController(text: '');
   TextEditingController stepController = TextEditingController(text: '');
+  TextEditingController actualDayController = TextEditingController(text: '');
   late double heightResize = 0.5;
 
   @override
@@ -46,6 +48,9 @@ class _ModalAddStepWidgetState extends State<ModalAddStepWidget> {
     startDateController = TextEditingController(text: widget.startDate);
     endDateController = TextEditingController(text: widget.endDate);
     stepController = TextEditingController(text: widget.stepId);
+    if((widget.actualDay != null) || widget.actualDay != 0){
+      actualDayController = TextEditingController(text: widget.actualDay.toString());
+    }
   }
 
   @override
@@ -167,6 +172,20 @@ class _ModalAddStepWidgetState extends State<ModalAddStepWidget> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                    autoValidateMode: AutovalidateMode.onUserInteraction,
+                    hintText: 'Nhập số ngày thực hiện',
+                    controller: actualDayController,
+                    validator: (value) {
+                      if (Validator.validateNullOrEmpty(value!))
+                        return "Chưa nhập tên bước";
+                      else
+                        return null;
+                    },
                   ),
                   SizedBox(
                     height: 40,

@@ -90,7 +90,7 @@ class AppCubit extends Cubit<AppState> {
       if (response != null) {
         emit(state.copyWith(
           getTreeStatus: LoadStatus.SUCCESS,
-          trees: response.data!.trees,
+          trees: response.trees,
         ));
       } else {
         emit(state.copyWith(getTreeStatus: LoadStatus.FAILURE));
@@ -104,15 +104,18 @@ class AppCubit extends Cubit<AppState> {
   void fetchListProcess() async {
     emit(state.copyWith(getProcessStatus: LoadStatus.LOADING));
     try {
+      print("fetch List Process");
       final response = await processRepository.getListProcessData();
-      // if (response != null) {
+      print(response.processes);
+      if (response != null) {
       emit(state.copyWith(
         getProcessStatus: LoadStatus.SUCCESS,
-        processes: response.data!.processes,
+        processes: response/*.data!*/.processes,
       ));
-      // } else {
-      //   emit(state.copyWith(getProcessStatus: LoadStatus.FAILURE));
-      // }
+      print("finish fetch");
+      } else {
+        emit(state.copyWith(getProcessStatus: LoadStatus.FAILURE));
+      }
       emit(state.copyWith(getProcessStatus: LoadStatus.SUCCESS));
     } catch (error) {
       emit(state.copyWith(getProcessStatus: LoadStatus.FAILURE));

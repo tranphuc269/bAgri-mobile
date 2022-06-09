@@ -35,7 +35,7 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
         name: state.season!.name,
         garden_id: state.season!.garden!.id,
         process_id: state.season!.process!.process_id,
-        tree_id: state.season!.tree!.id,
+        tree_id: state.season!.tree!.tree_id,
         start_date: state.season!.start_date,
         end_date: state.season!.end_date,
         status: "done",

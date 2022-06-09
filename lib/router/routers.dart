@@ -169,16 +169,16 @@ class Routes {
       handler: treeCreateHandler,
       transitionType: TransitionType.fadeIn,
     );
-    router.define(
-      treeUpdate,
-      handler: treeUpdateHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      treeDetail,
-      handler: treeDetailHandler,
-      transitionType: TransitionType.fadeIn,
-    );
+    // router.define(
+    //   treeUpdate,
+    //   handler: treeUpdateHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   treeDetail,
+    //   handler: treeDetailHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
 
     /// Employee
     router.define(

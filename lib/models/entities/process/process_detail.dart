@@ -1,6 +1,3 @@
-import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
-import 'package:flutter_base/models/entities/process/stage_entity.dart';
-import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'list_process.dart';

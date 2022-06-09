@@ -122,34 +122,34 @@ class _TreeListPageState extends State<TreeListPage>
                       return _buildItem(
                         name: name,
                         onPressed: () {
-                          Application.router!.navigateTo(
-                            appNavigatorKey.currentContext!,
-                            Routes.treeDetail,
-                            routeSettings: RouteSettings(
-                              arguments: TreeDetailArgument(
-                                tree_id: tree.tree_id,
-                                name: tree.name,
-                                description: tree.description,
-                              ),
-                            ),
-                          );
+                          // Application.router!.navigateTo(
+                          //   appNavigatorKey.currentContext!,
+                          //   Routes.treeDetail,
+                          //   routeSettings: RouteSettings(
+                          //     arguments: TreeDetailArgument(
+                          //       tree_id: tree.tree_id,
+                          //       name: tree.name,
+                          //       // description: tree.description,
+                          //     ),
+                          //   ),
+                          // );
                         },
-                        onUpdate: () async {
-                          bool isUpdate = await Application.router!.navigateTo(
-                            appNavigatorKey.currentContext!,
-                            Routes.treeUpdate,
-                            routeSettings: RouteSettings(
-                              arguments: TreeUpdateArgument(
-                                tree_id: tree.tree_id,
-                                name: tree.name,
-                                description: tree.description,
-                              ),
-                            ),
-                          );
-                          if (isUpdate) {
-                            _onRefreshData();
-                          }
-                        },
+                        // onUpdate: () async {
+                        //   bool isUpdate = await Application.router!.navigateTo(
+                        //     appNavigatorKey.currentContext!,
+                        //     Routes.treeUpdate,
+                        //     routeSettings: RouteSettings(
+                        //       arguments: TreeUpdateArgument(
+                        //         tree_id: tree.tree_id,
+                        //         name: tree.name,
+                        //         // description: tree.description,
+                        //       ),
+                        //     ),
+                        //   );
+                        //   if (isUpdate) {
+                        //     _onRefreshData();
+                        //   }
+                        // },
                         onDelete: () async {
                           bool isDelete = await showDialog(
                               context: context,
@@ -203,29 +203,29 @@ class _TreeListPageState extends State<TreeListPage>
             extentRatio: 1 / 3,
             motion: BehindMotion(),
             children: [
-              CustomSlidableAction(
-                  backgroundColor: AppColors.blueSlideButton,
-                  foregroundColor: Colors.white,
-                  onPressed: (BuildContext context) {
-                    onUpdate?.call();
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: Image.asset(AppImages.icSlideEdit),
-                      ),
-                      SizedBox(height: 4),
-                      FittedBox(
-                        child: Text(
-                          'Sửa',
-                          style: AppTextStyle.whiteS16,
-                        ),
-                      )
-                    ],
-                  )),
+              // CustomSlidableAction(
+              //     backgroundColor: AppColors.blueSlideButton,
+              //     foregroundColor: Colors.white,
+              //     onPressed: (BuildContext context) {
+              //       onUpdate?.call();
+              //     },
+              //     child: Column(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         SizedBox(
+              //           height: 20,
+              //           width: 20,
+              //           child: Image.asset(AppImages.icSlideEdit),
+              //         ),
+              //         SizedBox(height: 4),
+              //         FittedBox(
+              //           child: Text(
+              //             'Sửa',
+              //             style: AppTextStyle.whiteS16,
+              //           ),
+              //         )
+              //       ],
+              //     )),
               CustomSlidable(
                   backgroundColor: AppColors.redSlideButton,
                   foregroundColor: Colors.white,

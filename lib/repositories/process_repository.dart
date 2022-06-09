@@ -6,18 +6,18 @@ import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class ProcessRepository {
-  Future<ListProcessResponse> getListProcessData();
+  Future<ProcessDataEntity> getListProcessData();
 
   Future<ProcessDeleteResponse> deleteProcess({String? processId});
 
-  Future<dynamic> createProcess({CreateProcessParam? param});
+  Future<dynamic> createProcess({ProcessEntity? param});
 
-  Future<dynamic> updateProcess({String? processId, CreateProcessParam? param});
+  Future<dynamic> updateProcess({String? processId, ProcessEntity? param});
 
-  Future<ObjectResponse<ProcessDetailResponse>> getProcessById(
+  Future<ProcessEntity> getProcessById(
       String processId);
 
-  Future<ListProcessResponse> getProcessOfTree(String treeId);
+  Future<ProcessDataEntity> getProcessOfTree(String treeId);
 }
 
 class ProcessRepositoryImpl extends ProcessRepository {
@@ -28,42 +28,43 @@ class ProcessRepositoryImpl extends ProcessRepository {
   }
 
   @override
-  Future<ListProcessResponse> getListProcessData() async {
-    return await _apiClient!.getListProcessData({});
+  Future<ProcessDataEntity> getListProcessData() async {
+    // return await _apiClient!.getListProcessData({});
+    return await AppApi.instance.getListProcessData();
   }
 
   Future<ProcessDeleteResponse> deleteProcess({String? processId}) async {
     return await _apiClient!.deleteProcess(processId: processId);
   }
 
-  Future<dynamic> createProcess({CreateProcessParam? param}) {
-    final body = {
-      "name": param?.name ?? "",
-      "tree_ids": param?.tree_ids ?? [],
-      "stages": param?.stages ?? [],
-    };
+  Future<dynamic> createProcess({ProcessEntity? param}) {
+    // final body = {
+    //   "name": param?.name ?? "",
+    //   "tree_ids": param?.tree_ids ?? [],
+    //   "stages": param?.stages ?? [],
+    // };
 
-    return _apiClient!.createProcess(body);
+    return _apiClient!.createProcess(param!.toJson());
   }
 
   Future<dynamic> updateProcess(
-      {String? processId, CreateProcessParam? param}) {
+      {String? processId, ProcessEntity? param}) {
     final body = {
-      "name": param?.name ?? "",
-      "tree_ids": param?.tree_ids ?? [],
-      "stages": param?.stages ?? [],
+      'name': param?.name,
+      'trees': param?.trees!.map((e) => e.toJson()).toList(),
+      'phases': param?.stages!.map((e) => e.toJson()).toList(),
     };
     return _apiClient!.updateProcess(processId, body);
   }
 
   @override
-  Future<ObjectResponse<ProcessDetailResponse>> getProcessById(
+  Future<ProcessEntity> getProcessById(
       String processId) async {
     return await _apiClient!.getProcessById(processId);
   }
 
   @override
-  Future<ListProcessResponse> getProcessOfTree(String treeId) async {
+  Future<ProcessDataEntity> getProcessOfTree(String treeId) async {
     return await _apiClient!.getProcessOfTree(treeId);
   }
 }

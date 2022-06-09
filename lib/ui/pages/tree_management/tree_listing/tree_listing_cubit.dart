@@ -1,11 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/generated/l10n.dart';
-import 'package:flutter_base/models/entities/garden/garden_entity.dart';
-import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 
@@ -33,7 +30,7 @@ class TreeListCubit extends Cubit<TreeListState> {
       if (response != null) {
         emit(state.copyWith(
           getTreeStatus: LoadStatus.SUCCESS,
-          listData: response.data!.trees,
+          listData: response.trees,
         ));
       } else {
         emit(state.copyWith(getTreeStatus: LoadStatus.FAILURE));

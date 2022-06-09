@@ -54,14 +54,14 @@ class _CareProcessDetailState extends State<CareProcessDetail> {
         for (int j = 0; j < stage.steps!.length; j++) {
           StepEntity step = stage.steps![j];
           // config day have task
-          step.startDay = timeRange;
-          if (step.actual_day != null) {
-            timeRange += (step.actual_day! - 1);
-          } else {
-            timeRange += (step.from_day! - 1);
-          }
-          step.endDay = timeRange;
-          timeRange += 1;
+          // step.startDay = timeRange;
+          // if (step.actual_day != null) {
+          //   timeRange += (step.actual_day! - 1);
+          // } else {
+          //   timeRange += (step.from_day! - 1);
+          // }
+          // step.endDay = timeRange;
+          // timeRange += 1;
           graphHeight += 30;
           //
           if (step.actual_day != null) {
@@ -150,46 +150,46 @@ class _CareProcessDetailState extends State<CareProcessDetail> {
                                     return Column(
                                       children: [
                                         Container(height: 30),
-                                        ...List.generate(
-                                            stage.steps?.length ?? 0,
-                                            (stepIndex) {
-                                          StepEntity step =
-                                              stage.steps![stepIndex];
-                                          int start = step.startDay!;
-                                          int end = step.endDay!;
-                                          if (index >= start && index <= end)
-                                            return Container(
-                                              height: 30,
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                height: 15,
-                                                decoration: BoxDecoration(
-                                                    color: _getTitleColor(
-                                                        stageIndex),
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topLeft: Radius.circular(
-                                                          index == start
-                                                              ? 8
-                                                              : 0),
-                                                      bottomLeft:
-                                                          Radius.circular(
-                                                              index == start
-                                                                  ? 8
-                                                                  : 0),
-                                                      topRight: Radius.circular(
-                                                          index == end ? 8 : 0),
-                                                      bottomRight:
-                                                          Radius.circular(
-                                                              index == end
-                                                                  ? 8
-                                                                  : 0),
-                                                    )),
-                                              ),
-                                            );
-                                          else
-                                            return SizedBox(height: 30);
-                                        })
+                                        // ...List.generate(
+                                        //     stage.steps?.length ?? 0,
+                                        //     (stepIndex) {
+                                        //   StepEntity step =
+                                        //       stage.steps![stepIndex];
+                                          // int start = step.startDay!;
+                                          // int end = step.endDay!;
+                                          // if (index >= start && index <= end)
+                                          //   return Container(
+                                          //     height: 30,
+                                          //     alignment: Alignment.center,
+                                          //     child: Container(
+                                          //       height: 15,
+                                          //       decoration: BoxDecoration(
+                                          //           color: _getTitleColor(
+                                          //               stageIndex),
+                                          //           borderRadius:
+                                          //               BorderRadius.only(
+                                          //             topLeft: Radius.circular(
+                                          //                 index == start
+                                          //                     ? 8
+                                          //                     : 0),
+                                          //             bottomLeft:
+                                          //                 Radius.circular(
+                                          //                     index == start
+                                          //                         ? 8
+                                          //                         : 0),
+                                          //             topRight: Radius.circular(
+                                          //                 index == end ? 8 : 0),
+                                          //             bottomRight:
+                                          //                 Radius.circular(
+                                          //                     index == end
+                                          //                         ? 8
+                                          //                         : 0),
+                                          //           )),
+                                          //     ),
+                                          //   );
+                                          // else
+                                          //   return SizedBox(height: 30);
+                                        // })
                                       ],
                                     );
                                   })

@@ -20,7 +20,7 @@ class CreateTreePage extends StatefulWidget {
 class _CreateTreePageState extends State<CreateTreePage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
-  late TextEditingController descriptionController;
+  // late TextEditingController descriptionController;
   CreateTreeCubit? _cubit;
 
   @override
@@ -29,16 +29,16 @@ class _CreateTreePageState extends State<CreateTreePage> {
     super.initState();
 
     nameController = TextEditingController();
-    descriptionController = TextEditingController();
+    // descriptionController = TextEditingController();
 
     _cubit = BlocProvider.of<CreateTreeCubit>(context);
     //Set initial cubit
     nameController.addListener(() {
       _cubit!.changeName(nameController.text);
     });
-    descriptionController.addListener(() {
-      _cubit!.changeDescription(descriptionController.text);
-    });
+    // descriptionController.addListener(() {
+    //   _cubit!.changeDescription(descriptionController.text);
+    // });
   }
 
   @override
@@ -47,7 +47,7 @@ class _CreateTreePageState extends State<CreateTreePage> {
     super.dispose();
     _cubit!.close();
     nameController.dispose();
-    descriptionController.dispose();
+    // descriptionController.dispose();
   }
 
   @override
@@ -88,16 +88,16 @@ class _CreateTreePageState extends State<CreateTreePage> {
                         },
                       ),
                       SizedBox(height: 20),
-                      Text(
-                        'Mô tả',
-                        style: AppTextStyle.greyS14,
-                      ),
-                      SizedBox(height: 10),
-                      AppTextAreaField(
-                        hintText: '',
-                        maxLines: 8,
-                        controller: descriptionController,
-                      ),
+                      // Text(
+                      //   'Mô tả',
+                      //   style: AppTextStyle.greyS14,
+                      // ),
+                      // SizedBox(height: 10),
+                      // AppTextAreaField(
+                      //   hintText: '',
+                      //   maxLines: 8,
+                      //   controller: descriptionController,
+                      // ),
                     ],
                   ),
                 ),

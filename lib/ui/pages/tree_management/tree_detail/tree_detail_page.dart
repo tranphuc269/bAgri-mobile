@@ -36,8 +36,8 @@ class _TreeDetailPageState extends State<TreeDetailPage> {
     super.initState();
     _cubit = BlocProvider.of<TreeDetailCubit>(context);
     _cubit!.getTreeDetail(widget.tree_id!);
-    nameController = TextEditingController(text: '');
-    descriptionController = TextEditingController(text: '');
+    nameController = TextEditingController(text: widget.name);
+    // descriptionController = TextEditingController(text: '');
   }
 
   @override
@@ -71,8 +71,8 @@ class _TreeDetailPageState extends State<TreeDetailPage> {
                     if (state.loadStatus == LoadStatus.SUCCESS) {
                       nameController =
                           TextEditingController(text: state.treeData!.name);
-                      descriptionController = TextEditingController(
-                          text: state.treeData!.description);
+                      // descriptionController = TextEditingController(
+                      //     text: state.treeData!.description);
                     }
                   },
                   builder: (context, state) {
@@ -92,17 +92,17 @@ class _TreeDetailPageState extends State<TreeDetailPage> {
                             enable: false,
                           ),
                           SizedBox(height: 20),
-                          Text(
-                            'Mô tả',
-                            style: AppTextStyle.greyS14,
-                          ),
-                          SizedBox(height: 10),
-                          AppTextAreaField(
-                            hintText: '',
-                            maxLines: 8,
-                            enable: false,
-                            controller: descriptionController,
-                          ),
+                          // Text(
+                          //   'Mô tả',
+                          //   style: AppTextStyle.greyS14,
+                          // ),
+                          // SizedBox(height: 10),
+                          // AppTextAreaField(
+                          //   hintText: '',
+                          //   maxLines: 8,
+                          //   enable: false,
+                          //   controller: descriptionController,
+                          // ),
                         ],
                       ),
                     );
@@ -136,29 +136,29 @@ class _TreeDetailPageState extends State<TreeDetailPage> {
               ),
             ),
             SizedBox(width: 40),
-            Expanded(
-              child: AppButton(
-                width: 100,
-                color: AppColors.main,
-                title: 'Sửa',
-                onPressed: () async {
-                  bool isUpdate = await Application.router!.navigateTo(
-                    appNavigatorKey.currentContext!,
-                    Routes.treeUpdate,
-                    routeSettings: RouteSettings(
-                      arguments: TreeUpdateArgument(
-                        tree_id: widget.tree_id,
-                        name: widget.name,
-                        description: widget.description,
-                      ),
-                    ),
-                  );
-                  if (isUpdate) {
-                    _refreshData();
-                  }
-                },
-              ),
-            ),
+            // Expanded(
+            //   child: AppButton(
+            //     width: 100,
+            //     color: AppColors.main,
+            //     title: 'Sửa',
+            //     onPressed: () async {
+            //       bool isUpdate = await Application.router!.navigateTo(
+            //         appNavigatorKey.currentContext!,
+            //         Routes.treeUpdate,
+            //         routeSettings: RouteSettings(
+            //           arguments: TreeUpdateArgument(
+            //             tree_id: widget.tree_id,
+            //             name: widget.name,
+            //             // description: widget.description,
+            //           ),
+            //         ),
+            //       );
+            //       if (isUpdate) {
+            //         _refreshData();
+            //       }
+            //     },
+            //   ),
+            // ),
           ],
         ),
         SizedBox(height: 90),
@@ -174,11 +174,11 @@ class _TreeDetailPageState extends State<TreeDetailPage> {
 class TreeDetailArgument {
   String? tree_id;
   String? name;
-  String? description;
+  // String? description;
 
   TreeDetailArgument({
     this.tree_id,
     this.name,
-    this.description,
+    // this.description,
   });
 }

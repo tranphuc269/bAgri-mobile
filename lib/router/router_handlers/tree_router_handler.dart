@@ -20,21 +20,21 @@ Handler treeCreateHandler = new Handler(
   );
 });
 
-Handler treeUpdateHandler = new Handler(
-    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  TreeUpdateArgument args = context!.settings!.arguments as TreeUpdateArgument;
-  return BlocProvider(
-    create: (context) {
-      final treeRepository = RepositoryProvider.of<TreeRepository>(context);
-      return UpdateTreeCubit(treeRepository: treeRepository);
-    },
-    child: UpdateTreePage(
-      tree_id: args.tree_id,
-      name: args.name,
-      description: args.description,
-    ),
-  );
-});
+// Handler treeUpdateHandler = new Handler(
+//     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+//   TreeUpdateArgument args = context!.settings!.arguments as TreeUpdateArgument;
+//   return BlocProvider(
+//     create: (context) {
+//       final treeRepository = RepositoryProvider.of<TreeRepository>(context);
+//       return UpdateTreeCubit(treeRepository: treeRepository);
+//     },
+//     child: UpdateTreePage(
+//       tree_id: args.tree_id,
+//       name: args.name,
+//       description: args.description,
+//     ),
+//   );
+// });
 
 Handler treeDetailHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
@@ -47,7 +47,7 @@ Handler treeDetailHandler = new Handler(
     child: TreeDetailPage(
       tree_id: args.tree_id,
       name: args.name,
-      description: args.description,
+      // description: args.description,
     ),
   );
 });
