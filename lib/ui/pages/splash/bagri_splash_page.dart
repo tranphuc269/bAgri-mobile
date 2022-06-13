@@ -137,7 +137,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void showGardenManagementByQLV() {
     Application.router!
-        .navigateTo(context, Routes.tabProcess, clearStack: true);
+        .navigateTo(context, Routes.home, clearStack: true);
   }
 
   void showLogin() {

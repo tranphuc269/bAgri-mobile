@@ -4,15 +4,12 @@ import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 
-import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_floating_action_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/shims/dart_ui.dart';
 
-import '../../app_button.dart';
 import '../../app_circular_progress_indicator.dart';
 
 class AppGardenPickerPage extends StatefulWidget {
@@ -31,9 +28,21 @@ class _AppGardenPickerPageState extends State<AppGardenPickerPage> {
   @override
   void initState() {
     _cubit = BlocProvider.of<AppCubit>(context);
-    super.initState();
     _cubit.fetchListGarden();
+    super.initState();
   }
+
+  // @override
+  // void didChangeDependencies() async{
+  //   // TODO: implement didChangeDependencies
+  //   await  _cubit.fetchListGarden();
+  //   print("khi");
+  //   setState(() {
+  //
+  //   });
+  //   super.didChangeDependencies();
+  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +68,8 @@ class _AppGardenPickerPageState extends State<AppGardenPickerPage> {
         return prev.getGardenStatus != current.getGardenStatus;
       },
       builder: (context, state) {
+        // _cubit.fetchListGarden();
+        print(state.gardens?.first.name);
         if (state.getGardenStatus == LoadStatus.LOADING) {
           return Center(
             child: AppCircularProgressIndicator(),

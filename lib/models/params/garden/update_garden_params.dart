@@ -30,6 +30,7 @@ class UpdateGardenParam {
     return UpdateGardenParam(
         name: name ?? this.name,
         area: area ?? this.area,
+        areaUnit: areaUnit ?? this.areaUnit,
         managerUsername: managerUsername ?? this.managerUsername,
         treePlaceQuantity: treePlaceQuantity ?? this.treePlaceQuantity,
         zoneName: zoneName ?? this.zoneName

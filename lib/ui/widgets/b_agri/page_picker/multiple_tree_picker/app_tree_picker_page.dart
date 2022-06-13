@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
 import 'package:flutter_base/commons/app_colors.dart';
+import 'package:flutter_base/commons/app_images.dart';
 
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_floating_action_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../app_button.dart';
@@ -89,7 +89,6 @@ class _AppTreePickerPageState extends State<AppTreePickerPage> {
             primary: false,
             separatorBuilder: (context, index) {
               return Container(
-                height: 1,
                 color: Colors.grey.withOpacity(0.3),
                 margin: EdgeInsets.symmetric(horizontal: 10),
               );
@@ -106,18 +105,22 @@ class _AppTreePickerPageState extends State<AppTreePickerPage> {
                 }
               }
 
-              return ItemWidget(
-                  title: title,
-                  isSelected: isSelected,
-                  onTap: (value) {
-                    if (value) {
-                      selectedTree.add(tree);
-                    } else {
-                      selectedTree.remove(tree);
-                    }
-                  });
+              return Padding(
+                padding: const EdgeInsets.all(4),
+                child: ItemWidget(
+                    title: title,
+                    isSelected: isSelected,
+                    onTap: (value) {
+                      if (value) {
+                        selectedTree.add(tree);
+                      } else {
+                        selectedTree.remove(tree);
+                      }
+                    }),
+              );
             },
           );
+
         }
       },
     );
@@ -157,10 +160,17 @@ class _ItemWidgetState extends State<ItemWidget> {
         });
       },
       child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          // color: Colors.grey,
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.all(Radius.circular(15))
+        ),
+        height: 80,
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Row(
           children: [
+            Image.asset(AppImages.icTreeAvatar),
+            SizedBox(width: 18,),
             Expanded(
               flex: 8,
               child: Text(
@@ -175,6 +185,7 @@ class _ItemWidgetState extends State<ItemWidget> {
               maintainState: true,
               child: Icon(
                 Icons.check,
+                size: 30,
                 color: AppColors.main,
               ),
             )

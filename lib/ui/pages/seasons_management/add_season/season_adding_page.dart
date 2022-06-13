@@ -7,7 +7,6 @@ import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/seasons_management/add_season/season_adding_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_dropdown_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/garden_picker/app_garden_picker.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/process_picker/app_process_picker.dart';
@@ -25,6 +24,7 @@ class SeasonAddingPage extends StatefulWidget {
 class _SeasonAddingPageState extends State<SeasonAddingPage> {
   late SeasonAddingCubit _cubit;
   late TextEditingController nameController;
+  late TextEditingController treeQuantityController;
   late SingleTreePickerController treeController;
   late ProcessPickerController processController;
   late GardenPickerController gardenController;
@@ -36,6 +36,7 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
     treeController = SingleTreePickerController();
     processController = ProcessPickerController();
     gardenController = GardenPickerController();
+    treeQuantityController = TextEditingController();
     super.initState();
     nameController.addListener(() {
       _cubit.changeSeasonName(nameController.text);
@@ -63,6 +64,7 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
     treeController.dispose();
     processController.dispose();
     gardenController.dispose();
+    treeQuantityController.dispose();
   }
 
   @override
@@ -128,6 +130,17 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                   },
                 ),
                 SizedBox(height: 20),
+                Text(
+                  'Số lượng bầu',
+                  style: AppTextStyle.greyS18,
+                ),
+                SizedBox(height: 10),
+                AppTextField(
+                  keyboardType: TextInputType.number,
+                  controller: treeQuantityController,
+                  hintText: 'Nhập vào số lượng bầu',
+                ),
+                SizedBox(height: 20),
                 BlocBuilder<SeasonAddingCubit, SeasonAddingState>(
                   buildWhen: (prev, current) =>
                       prev.startTime != current.startTime ||
@@ -143,7 +156,7 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                             ),
                             SizedBox(width: 15),
                             Text(
-                              state.startTime ?? "dd/mm/yyyy",
+                              state.startTime ?? "yyyy/mm/dd",
                               style: AppTextStyle.blackS16.copyWith(
                                   decoration: TextDecoration.underline),
                             ),
@@ -157,7 +170,7 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                                     builder: (context, child) {
                                       return _buildCalendarTheme(child);
                                     },
-                                    fieldHintText: 'dd/mm/yyyy',
+                                    fieldHintText: "yyyy/mm/dd",
                                     initialDate: state.startTime != null
                                         ? Util.DateUtils.fromString(
                                             state.startTime!,
@@ -192,12 +205,47 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                             ),
                             SizedBox(width: 15),
                             Text(
-                              state.endTime ?? "dd/mm/yyyy",
+                              state.endTime ?? "yyyy/mm/dd",
                               style: AppTextStyle.blackS16.copyWith(
                                   decoration: TextDecoration.underline),
                             ),
+                            SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () async {
+                                final result = await showDatePicker(
+                                    context: context,
+                                    locale: Locale('vi'),
+                                    initialEntryMode: DatePickerEntryMode.input,
+                                    builder: (context, child) {
+                                      return _buildCalendarTheme(child);
+                                    },
+                                    fieldHintText: "yyyy/mm/dd",
+                                    initialDate: state.endTime != null
+                                        ? Util.DateUtils.fromString(
+                                        state.endTime!,
+                                        format:
+                                        AppConfig.dateDisplayFormat)!
+                                        : DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(2024));
+                                if (result != null) {
+                                  _cubit.changeEndTime(
+                                    Util.DateUtils.toDateString(result),
+                                  );
+                                }
+                              },
+                              child: SizedBox(
+                                height: 26,
+                                width: 26,
+                                child: Image.asset(
+                                  AppImages.icCalendar,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
+
                       ],
                     );
                   },
@@ -226,7 +274,7 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                                 : false,
                             title: 'Xác nhận',
                             onPressed: () async {
-                              await _cubit.createSeason();
+                              await _cubit.createSeason(int.parse(treeQuantityController.text));
 
                               Navigator.of(context).pop(true);
                             },

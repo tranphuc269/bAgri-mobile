@@ -32,21 +32,31 @@ class GardenListResponse {
 
 @JsonSerializable()
 class GardenEntity {
-  @JsonKey()
+  @JsonKey(name: "_id")
   String? garden_id;
   @JsonKey()
   String? name;
   @JsonKey()
   int? area;
   @JsonKey()
-  UserEntity? manager;
+  String? manager;
   @JsonKey()
   int? treePlaceQuantity;
   ZoneEntity? zone;
 
 
   factory GardenEntity.fromJson(Map<String, dynamic> json) =>
-      _$GardenEntityFromJson(json);
+      // _$GardenEntityFromJson(json);
+  GardenEntity(
+    garden_id: json['_id'] as String?,
+    name: json['name'] as String?,
+    area: json['area'] as int?,
+    manager: json['manager'] as String?,
+    treePlaceQuantity: json['treePlaceQuantity'] as int?,
+    zone: json['zone'] == null
+        ? null
+        : ZoneEntity.fromJson(json['zone'] as Map<String, dynamic>),
+  );
   Map<String, dynamic> toJson() => _$GardenEntityToJson(this);
 
   GardenEntity({
@@ -63,7 +73,7 @@ class GardenEntity {
     String? garden_id,
     String? name,
     int? area,
-    UserEntity? manager,
+    String? manager,
     int? treePlaceQuantity,
     ZoneEntity? zone
 
@@ -75,16 +85,13 @@ class GardenEntity {
       manager: manager?? manager,
       treePlaceQuantity: treePlaceQuantity ?? this.treePlaceQuantity,
       zone: zone ?? this.zone
-
-
-
     );
   }
 }
 
 @JsonSerializable()
 class GardenEntityResponseFromZoneId {
-  @JsonKey()
+  @JsonKey(name: "_id")
   String? garden_id;
   @JsonKey()
   String? name;
@@ -100,8 +107,21 @@ class GardenEntityResponseFromZoneId {
 
 
   factory GardenEntityResponseFromZoneId.fromJson(Map<String, dynamic> json) =>
-      _$GardenEntityResponseFromZoneIdFromJson(json);
+      // _$GardenEntityResponseFromZoneIdFromJson(json);
 
+ /* GardenEntityResponseFromZoneId _$GardenEntityResponseFromZoneIdFromJson(
+      Map<String, dynamic> json) =>*/
+      GardenEntityResponseFromZoneId(
+        garden_id: json['_id'] as String?,
+        name: json['name'] as String?,
+        area: json['area'] as int?,
+        areaUnit: json['areaUnit'] as String?,
+        managerId: json['manager'] as String?,
+        treePlaceQuantity: json['treePlaceQuantity'] as int?,
+        zone: json['zone'] == null
+            ? null
+            : ZoneEntity.fromJson(json['zone'] as Map<String, dynamic>),
+      );
   Map<String, dynamic> toJson() =>
       _$GardenEntityResponseFromZoneIdToJson(this);
 

@@ -9,9 +9,18 @@ class ZoneEntity {
   String? zone_id;
   String? name;
 
-  factory ZoneEntity.fromJson(Map<String, dynamic> json) =>
-      _$ZoneEntityFromJson(json);
-  Map<String, dynamic> toJson() => _$ZoneEntityToJson(this);
+
+  factory ZoneEntity.fromJson(Map<String, dynamic> json) => ZoneEntity(
+    zone_id: json['_id'] as String?,
+    name: json['name'] as String?,
+  );
+
+  Map<String, dynamic> toJson() =>
+      <String, dynamic>{
+        '_id': this.zone_id,
+        'name': this.name,
+      };
+
 
   ZoneEntity({
     this.zone_id,

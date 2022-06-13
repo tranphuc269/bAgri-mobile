@@ -23,18 +23,19 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
       {required this.seasonRepository, required this.processRepository})
       : super(SeasonAddingState());
 
-  Future<void> createSeason() async {
+  Future<void> createSeason(int treeQuantity) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      CreateSeasonParam param = CreateSeasonParam(
+      SeasonEntity param = SeasonEntity(
           name: state.seasonName,
-          garden_id: state.gardenEntity!.garden_id,
-          process_id: state.processEntity!.process_id,
-          tree_id: state.treeEntity!.tree_id,
-          start_date: state.startTime?.replaceAll('/', '-'),
-          end_date: state.endTime?.replaceAll('/', '-'),
-          status: "");
-      ObjectResponse<SeasonCreateResponse> result =
+          gardenId: state.gardenEntity!.garden_id,
+          process: state.processEntity!,
+          tree: state.treeEntity!,
+          start_date: state.startTime?.replaceAll('/', '-') ,
+          end_date: state.endTime?.replaceAll('/', '-') ,
+          treeQuantity: treeQuantity
+          );
+      var result =
           await seasonRepository.createSeason(param);
 
       emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
@@ -99,17 +100,31 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
   }
 
   void changeStartTime(String startTime) {
-    DateTime startDateTime = Util.DateUtils.fromString(startTime,
-        format: AppConfig.dateDisplayFormat)!;
+    // DateTime startDateTime = Util.DateUtils.fromString(startTime,
+    //     format: AppConfig.dateDisplayFormat)!;
+    emit(state.copyWith(startTime: startTime));
+    // String? endTime;
+    // if (state.duration != null) {
+    //   DateTime endDateTime =
+    //       startDateTime.add(Duration(days: state.duration ?? 0));
+    //   endTime = Util.DateUtils.toDateString(endDateTime);
+    // }
 
-    String? endTime;
-    if (state.duration != null) {
-      DateTime endDateTime =
-          startDateTime.add(Duration(days: state.duration ?? 0));
-      endTime = Util.DateUtils.toDateString(endDateTime);
-    }
+    // print(endTime ?? "null endtime in change startTime");
+    // emit(state.copyWith(startTime: startTime, endTime: endTime));
+  }
+  void changeEndTime(String endTime) {
+    // DateTime endDateTime = Util.DateUtils.fromString(endTime,
+    //     format: AppConfig.dateDisplayFormat)!;
+    emit(state.copyWith(endTime: endTime));
+    // String? endTime;
+    // if (state.duration != null) {
+    //   DateTime endDateTime =
+    //       startDateTime.add(Duration(days: state.duration ?? 0));
+    //   endTime = Util.DateUtils.toDateString(endDateTime);
+    // }
 
-    print(endTime ?? "null endtime in change startTime");
-    emit(state.copyWith(startTime: startTime, endTime: endTime));
+    // print(endTime ?? "null endtime in change startTime");
+    // emit(state.copyWith(startTime: startTime, endTime: endTime));
   }
 }

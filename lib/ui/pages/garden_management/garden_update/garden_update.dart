@@ -33,7 +33,7 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
 
 
   AreaUnit areaUnit = AreaUnit.m2;
-
+  String unit = "m2";
   var nameController = TextEditingController(text: "");
   var areaController = TextEditingController(text: "");
   var treePlaceQuantityControler = TextEditingController(text: "");
@@ -108,6 +108,7 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
           if (state.getListManagerStatus == LoadStatus.SUCCESS && state.getGardenDataStatus == LoadStatus.SUCCESS) {
             // nameController.text = state.gardenData!.gardenName ?? "";
             // areaController.text = state.gardenData!.area.toString();
+            unit = _cubit!.state.gardenData!.areaUnit!;
             nameController = TextEditingController(text: _cubit!.state.gardenData!.gardenName);
             areaController = TextEditingController(text: (_cubit!.state.gardenData!.area).toString());
             treePlaceQuantityControler = TextEditingController(text: (_cubit!.state.gardenData!.treePlaceQuantity).toString());
@@ -283,6 +284,8 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
         onChanged: (value) {
           _defaultValue = value == "m²" ? "m2" : "Hecta";
           print(_defaultValue);
+          _cubit!.changeAreaUnit(_defaultValue);
+          unit = _defaultValue;
         },
       )
     );
@@ -389,9 +392,10 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
                       _cubit!.changeManagerUsername(_managerValue!.username.toString());
                       _cubit!.changeArea(areaController.text);
                       _cubit!.changeTreePlaceQuantity(treePlaceQuantityControler.text);
-                      _cubit!.changeAreaUnit(areaUnit.name);
+                      _cubit!.changeAreaUnit(unit);
                       _cubit!.updateGarden(
                           widget.garden_Id,
+                          unit,
                           areaController.text,
                           treePlaceQuantityControler.text,
                           widget.zoneName.toString()
@@ -446,8 +450,15 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
                 child: AppGreenButton(
                   title: 'Xác nhận',
                   onPressed: () {
+                    _cubit!.changeName(nameController.text);
+                    _cubit!.changeArea(areaController.text);
+                    _cubit!.changeManagerUsername(_managerValue!.username.toString());
+                    _cubit!.changeArea(areaController.text);
+                    _cubit!.changeTreePlaceQuantity(treePlaceQuantityControler.text);
+                    _cubit!.changeAreaUnit(unit);
                     _cubit!.updateGarden(
                         widget.garden_Id,
+                        unit,
                         areaController.text,
                         treePlaceQuantityControler.text,
                         widget.zoneName.toString()

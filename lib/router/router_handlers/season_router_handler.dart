@@ -21,7 +21,7 @@ Handler seasonManagementHandler = new Handler(
           RepositoryProvider.of<SeasonRepository>(context);
       return SeasonManagementCubit(seasonRepository: seasonRepository);
     },
-    child: SeasonTabPage(),
+    child: SeasonListPage(),
   );
 });
 

@@ -173,15 +173,15 @@ class _ProcessListPageState extends State<ProcessListPage>
                     ),
                   ),
                 )
-              : Expanded(
-                  child: Column(
+              : /*Expanded(
+                  child:*/ Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
                         child: EmptyDataWidget(),
                       ),
                     ],
-                  ),
+                  // ),
                 );
         } else {
           return Container();

@@ -37,10 +37,11 @@ class GardenListCubit extends Cubit<GardenListState> {
     emit(state.copyWith(getGardenStatus: LoginStatusBagri.LOADING));
     try {
       final response = await gardenRepository!.getGardenData();
+      print("Garden" + (response.first.name ?? ""));
       if (response != null) {
         emit(state.copyWith(
           getGardenStatus: LoginStatusBagri.SUCCESS,
-          listGardenData: response.data!.gardens,
+          listGardenData: response/*.data!.gardens*/,
         ));
       } else {
         emit(state.copyWith(getGardenStatus: LoginStatusBagri.FAILURE));

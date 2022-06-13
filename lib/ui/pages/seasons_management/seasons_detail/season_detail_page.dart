@@ -87,14 +87,14 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     return Scaffold(
       appBar: AppBarWidget(
         context: context,
-        title:
-            "${widget.thisSeason.garden?.name ?? ""} - ${widget.thisSeason.name ?? ""}",
+        title:"",
+            // "${widget.thisSeason.garden?.name ?? ""} - ${widget.thisSeason.name ?? ""}",
         rightActions: [
           BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
             builder: (context, state) {
-              if (state.season?.status != 'done') {
-                return SizedBox();
-              }
+              // if (state.season?.status != 'done') {
+              //   return SizedBox();
+              // }
               return AppButton(
                 color: AppColors.main,
                 height: 40,
@@ -197,9 +197,9 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                   ),
                                 ),
                                 SizedBox(width: 10),
-                                (state.season!.status == "done")
-                                    ? SizedBox()
-                                    : GestureDetector(
+                                // (state.season!.status == "done")
+                                  /*  ? SizedBox()
+                                    :*/ GestureDetector(
                                         onTap: () async {
                                           bool isUpdate = await Application
                                               .router!
@@ -263,9 +263,9 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      (state.season!.status == "done")
+/*                      (state.season!.status == "done")
                           ? SizedBox()
-                          : AppButton(
+                          :*/ AppButton(
                               color: Color(0xFF01A560),
                               title: 'Kết thúc mùa vụ',
                               height: 40,

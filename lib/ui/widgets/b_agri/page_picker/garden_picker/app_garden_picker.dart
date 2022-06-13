@@ -3,7 +3,6 @@ import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 
-import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 
 import 'app_garden_picker_page.dart';
 

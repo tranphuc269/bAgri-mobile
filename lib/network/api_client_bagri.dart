@@ -94,8 +94,7 @@ abstract class ApiClient {
 
   /// Garden
   @GET("/gardens")
-  Future<ObjectResponse<GardenListResponse>> getGardenData(
-      @Body() Map<String, dynamic> body);
+  Future<List<GardenEntity>> getGardenData();
 
   @GET("/gardens")
   Future<ObjectResponse<GardenListResponse>> getGardensByManagerId(
@@ -202,8 +201,8 @@ abstract class ApiClient {
       @Path('seasonId') String seasonId);
 
   @POST("/seasons")
-  Future<ObjectResponse<SeasonCreateResponse>> createSeason(
-      @Body() CreateSeasonParam param);
+  Future<dynamic> createSeason(
+      @Body() Map<String, dynamic> body);
 
   @DELETE("/seasons/{season_id}")
   Future<TreeDeleteResponse> deleteSeason(@Path("season_id") String seasonId);
@@ -281,7 +280,6 @@ class AppApi {
         options: Options(headers: {
           'Authorization': 'Bearer ${GlobalData.instance.token}'
         }));
-    print(response.data);
     return ProcessDataEntity.fromJson(response.data);
   }
 }
