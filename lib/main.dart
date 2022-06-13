@@ -30,6 +30,8 @@ import 'package:flutter_base/ui/pages/account_management/account_list/account_li
 import 'package:flutter_base/ui/pages/auth/register/register_page.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_create/garden_create_page.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
+import 'package:flutter_base/ui/pages/storage_management/material_list/list_material_page.dart';
+import 'package:flutter_base/ui/pages/storage_management/tab_storage_manage.dart';
 import 'package:flutter_base/ui/pages/tree_management/tree_listing/tree_listing_page.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -248,8 +250,8 @@ class _MyAppState extends State<MyApp> {
       //đã sửa hardcode
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
-      initialRoute: Routes.root,
-      // home: TreeListPage(),
+      initialRoute: Routes.homeGardenManager,
+      // home: StorageTabPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

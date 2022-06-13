@@ -33,6 +33,7 @@ class AppImages {
   static final icImagePlaceholder = 'assets/images/ic_image_placeholder.png';
   static final icWarning = 'assets/images/ic_warning.png';
   static final icGardenNoColor = 'assets/images/ic_garden_no_color.png';
+  static final icStorage = 'assets/images/ic_storage.png';
 
   ///employee
   static final icEmployeeAvatar = 'assets/images/ic_employee_avatar.png';
@@ -55,4 +56,10 @@ class AppImages {
 
   ///ic no data
   static final icNoData = 'assets/images/ic_no_data.png';
+  /// ic storage
+  static final icTools = 'assets/images/ic_tools.png';
+  static final icSupplise = 'assets/images/ic_pesticide.png';
+
+  /// ic garden manager
+  static final icWorks = 'assets/images/ic_work.png';
 }

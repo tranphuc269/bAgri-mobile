@@ -17,19 +17,19 @@ import 'package:flutter_base/utils/dialog_utils.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'home_cubit.dart';
+import 'home_garden_manager_cubit.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage();
+class HomeGardenManagerPage extends StatefulWidget {
+  HomeGardenManagerPage();
 
   @override
   State<StatefulWidget> createState() {
-    return _HomePageState();
+    return _HomeGardenManagerPageState();
   }
 }
 
-class _HomePageState extends State<HomePage> {
-  HomeCubit? _cubit;
+class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
+  HomeGardenManagerCubit? _cubit;
   AppCubit? _appCubit;
   late NotificationManagementCubit _notificationCubit;
 
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     final repository = RepositoryProvider.of<AuthRepository>(context);
-    _cubit = BlocProvider.of<HomeCubit>(context);
+    _cubit = BlocProvider.of<HomeGardenManagerCubit>(context);
     _appCubit = BlocProvider.of<AppCubit>(context);
     //_notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
 
@@ -98,17 +98,11 @@ class _HomePageState extends State<HomePage> {
                     ridirectPage: redirectProcess,
                   ),
                   CategoryItem(
-                    title: 'Quản lý kho',
-                    color: AppColors.orangeE9703C,
-                    urlImage: AppImages.icStorage,
-                    ridirectPage: redirectEmployee,
-                  ),
-                  GlobalData.instance.userEntity!.role == "SUPER_ADMIN" ? CategoryItem(
-                      title: "Quản lý tài khoản",
+                      title: "Quản lý công việc",
                       color: AppColors.blueA5CAD2,
-                      urlImage: AppImages.icUser,
+                      urlImage: AppImages.icWorks,
                       ridirectPage: redirectManageAccount,
-                    ) : Container()
+                    )
                 ],
               ),
             ),
