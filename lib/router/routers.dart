@@ -82,6 +82,7 @@ class Routes {
 
   ///Task
   static String tabTask = '/tabTask';
+  static String addContractTask = '/addContractTask';
 
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = notHandler;
@@ -294,5 +295,9 @@ class Routes {
         tabTask,
         handler: tabTaskHandler,
         transitionType: TransitionType.fadeIn);
+    router.define(
+        addContractTask,
+        handler: handler,
+        transitionType: TransitionType.fadeIn)
   }
 }

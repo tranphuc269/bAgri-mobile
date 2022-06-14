@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/ui/pages/task/contract_task_management/contract_tasks_list_page.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_list/contract_tasks_list_page.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_tasks_list_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 

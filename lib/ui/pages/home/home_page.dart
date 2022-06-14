@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     _appCubit = BlocProvider.of<AppCubit>(context);
     //_notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
 
-    //_appCubit!.getData();
+    _appCubit!.getData();
     //_notificationCubit.getListNotification();
   }
 
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                       title: 'Công việc hằng ngày',
                       color: AppColors.green94B,
                       urlImage: AppImages.icDialyWork,
-                      ridirectPage: redirectContractWorkList),
+                      ridirectPage: redirectTabTask),
                   if (GlobalData.instance.userEntity!.role != "GARDEN_MANAGER")
                     CategoryItem(
                         title: 'Quản lý công việc khoán',
@@ -286,6 +286,9 @@ class _HomePageState extends State<HomePage> {
 
   void redirectContractWorkList() {
     Application.router?.navigateTo(context, Routes.contractWorkList);
+  }
+  void redirectTabTask(){
+    Application.router?.navigateTo(context, Routes.tabTask);
   }
 }
 
