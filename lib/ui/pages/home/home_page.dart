@@ -96,21 +96,21 @@ class _HomePageState extends State<HomePage> {
                     urlImage: AppImages.icProcedure,
                     ridirectPage: redirectProcess,
                   ),
-                 CategoryItem(
-                          title: 'Công việc hằng ngày',
-                          color: AppColors.orangeE9703C,
-                          urlImage: AppImages.icWorks,
-                          ridirectPage: redirectContractWorkList),
-                  if (GlobalData.instance.userEntity!.role != "GARDEN_MANAGER")
                   CategoryItem(
-                          title: 'Quản lý công việc khoán',
-                          color: AppColors.orangeE9703C,
-                          urlImage: AppImages.icWorks,
-                          ridirectPage: redirectContractWorkList),
+                      title: 'Công việc hằng ngày',
+                      color: AppColors.green94B,
+                      urlImage: AppImages.icDialyWork,
+                      ridirectPage: redirectContractWorkList),
+                  if (GlobalData.instance.userEntity!.role != "GARDEN_MANAGER")
+                    CategoryItem(
+                        title: 'Quản lý công việc khoán',
+                        color: Color(0xFFA2CDCD),
+                        urlImage: AppImages.icWorks,
+                        ridirectPage: redirectContractWorkList),
                   if (GlobalData.instance.userEntity!.role == "SUPER_ADMIN")
                     CategoryItem(
                       title: "Quản lý tài khoản",
-                      color: AppColors.blueA5CAD2,
+                      color: Color(0xFFD57E7E),
                       urlImage: AppImages.icUser,
                       ridirectPage: redirectManageAccount,
                     )
