@@ -318,7 +318,7 @@ class CategoryItem extends StatelessWidget {
         alignment: Alignment.center,
         child: Row(
           children: [
-            SizedBox(width: 40),
+            SizedBox(width: 10),
             Image.asset(
               urlImage!,
               height: 36,
