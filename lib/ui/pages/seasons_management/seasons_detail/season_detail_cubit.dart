@@ -19,11 +19,11 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
   Future<void> getSeasonDetail(String seasonId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      ObjectResponse<SeasonDetailResponse> result =
+      SeasonEntity result =
           await seasonRepository.getSeasonById(seasonId);
 
       emit(state.copyWith(
-          loadStatus: LoadStatus.SUCCESS, season: result.data!.season!));
+          loadStatus: LoadStatus.SUCCESS, season: result/*.data!.season!*/));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
     }
@@ -31,16 +31,15 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
 
   Future<bool> updateSeason(String seasonId) async {
     try {
-      CreateSeasonParam param = CreateSeasonParam(
+      SeasonEntity param = SeasonEntity(
         name: state.season!.name,
        // garden_id: state.season!.garden!.id,
-        process_id: state.season!.process!.process_id,
-        tree_id: state.season!.tree!.tree_id,
+        process: state.season!.process!,
+        tree: state.season!.tree!,
         start_date: state.season!.start_date,
         end_date: state.season!.end_date,
-        status: "done",
       );
-      ObjectResponse<SeasonUpdateResponse> result =
+      SeasonEntity result =
           await seasonRepository.updateSeason(seasonId, param);
       return true;
     } catch (e) {

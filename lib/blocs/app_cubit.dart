@@ -1,16 +1,11 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/global/global_data.dart';
-import 'package:flutter_base/helper/load_json_helper.dart';
 import 'package:flutter_base/models/entities/farmer/farmer.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
-import 'package:flutter_base/models/entities/manager/manager_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
@@ -25,8 +20,6 @@ import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';
 import 'package:flutter_base/repositories/weather_repository.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
-
-import 'package:flutter_base/utils/logger.dart';
 
 part 'app_state.dart';
 
@@ -115,7 +108,7 @@ class AppCubit extends Cubit<AppState> {
       if (response != null) {
       emit(state.copyWith(
         getProcessStatus: LoadStatus.SUCCESS,
-        processes: response/*.data!*/.processes,
+        processes: response.processes,
       ));
       } else {
         emit(state.copyWith(getProcessStatus: LoadStatus.FAILURE));

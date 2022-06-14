@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
-import 'package:flutter_base/commons/app_shadow.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/main.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
@@ -20,7 +19,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_circular_progress_indicator.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_confirmed_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_floating_action_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;

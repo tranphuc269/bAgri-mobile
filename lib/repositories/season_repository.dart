@@ -12,15 +12,15 @@ import 'package:flutter_base/network/api_client_bagri.dart';
 abstract class SeasonRepository {
   Future<List<SeasonEntity>> getListSeasonData();
 
-  Future<ObjectResponse<SeasonDetailResponse>> getSeasonById(String seasonId);
+  Future<SeasonEntity> getSeasonById(String seasonId);
 
   Future createSeason(
       SeasonEntity param);
 
   Future<TreeDeleteResponse> deleteSeason(String seasonId);
 
-  Future<ObjectResponse<SeasonUpdateResponse>> updateSeason(
-      String seasonId, CreateSeasonParam param);
+  Future<SeasonEntity> updateSeason(
+      String seasonId, SeasonEntity param);
 
   Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
       String seasonId, String date);
@@ -47,7 +47,7 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future<ObjectResponse<SeasonDetailResponse>> getSeasonById(
+  Future<SeasonEntity> getSeasonById(
       String seasonId) async {
     return await _apiClientBagri!.getSeasonById(seasonId);
   }
@@ -64,9 +64,9 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future<ObjectResponse<SeasonUpdateResponse>> updateSeason(
-      String seasonId, CreateSeasonParam param) async {
-    return await _apiClientBagri!.updateSeason(seasonId, param);
+  Future<SeasonEntity> updateSeason(
+      String seasonId, SeasonEntity param) async {
+    return await _apiClientBagri!.updateSeason(seasonId, param.toJson());
   }
 
   @override

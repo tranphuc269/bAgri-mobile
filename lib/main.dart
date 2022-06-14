@@ -27,10 +27,9 @@ import 'package:flutter_base/repositories/weather_repository.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/router/navigation_observer.dart';
-import 'package:flutter_base/ui/pages/contract_work_management/contract_work_list/contract_work_list_page.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
+
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_add/contract_task_add_page.dart';
-import 'package:flutter_base/ui/pages/task/tab_tasks_manage.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -255,8 +254,8 @@ class _MyAppState extends State<MyApp> {
       //đã sửa hardcode
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
-     // initialRoute: Routes.root,
-      home:  AddContractTaskPage(),
+     initialRoute: Routes.root,
+      // home:  AddContractTaskPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],
