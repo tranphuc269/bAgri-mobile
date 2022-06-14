@@ -97,12 +97,19 @@ class _HomePageState extends State<HomePage> {
                     urlImage: AppImages.icProcedure,
                     ridirectPage: redirectProcess,
                   ),
-                  CategoryItem(
-                    title: 'Quản lý nhân công',
+                  GlobalData.instance.userEntity!.role == "GARDEN_MANAGER" ? CategoryItem(
+                    title: 'Công việc hằng ngày',
                     color: AppColors.orangeE9703C,
-                    urlImage: AppImages.icLabor,
-                    ridirectPage: redirectEmployee,
+                    urlImage: AppImages.icWorks,
+                    ridirectPage: redirectContractWorkList
+                  ):
+                  CategoryItem(
+                      title: 'Quản lý công việc khoán',
+                      color: AppColors.orangeE9703C,
+                      urlImage: AppImages.icWorks,
+                      ridirectPage: redirectContractWorkList
                   ),
+
                   GlobalData.instance.userEntity!.role == "SUPER_ADMIN" ? CategoryItem(
                       title: "Quản lý tài khoản",
                       color: AppColors.blueA5CAD2,
@@ -277,6 +284,9 @@ class _HomePageState extends State<HomePage> {
   void redirectManageAccount(){
     Application.router?.navigateTo(context, Routes.manageAccount);
   }
+  void redirectContractWorkList(){
+    Application.router?.navigateTo(context, Routes.contractWorkList);
+  }
 }
 
 class CategoryItem extends StatelessWidget {
@@ -385,7 +395,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Text(
                           '${_userInfo?.role == "SUPER_ADMIN"? "Super Admin"
                               : (_userInfo?.role == "ADMIN" ? "Admin"
-                              : (_userInfo?.role == "QLV" ? "Quản lý vườn"
+                              : (_userInfo?.role == "GARDEN_MANAGER" ? "Quản lý vườn"
                               : "Kĩ thuật viên"))}',
                           style: TextStyle(color: AppColors.main, fontSize: 18),
                         ),

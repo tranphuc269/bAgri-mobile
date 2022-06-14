@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/ui/pages/storage_management/material_list/list_material_page.dart';
-import 'package:flutter_base/ui/pages/storage_management/tool_list/list_tool_page.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/contract_tasks_list_page.dart';
+import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_tasks_list_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 
-class StorageTabPage extends StatefulWidget{
+class TaskTabPage extends StatefulWidget{
 
   @override
-  _StorageTabPageState createState() => _StorageTabPageState();
+  _TaskTabPageState createState() => _TaskTabPageState();
 }
 
-class _StorageTabPageState extends State<StorageTabPage>
+class _TaskTabPageState extends State<TaskTabPage>
     with SingleTickerProviderStateMixin {
   late TabController _controller;
 
@@ -32,7 +32,7 @@ class _StorageTabPageState extends State<StorageTabPage>
   Widget build(BuildContext context) {
    return Scaffold(
      appBar: AppBarWidget(
-       title: "Quản lý kho",
+       title: "Công việc đang thực hiện",
        context: context,
      ),
      body: Container(
@@ -49,7 +49,7 @@ class _StorageTabPageState extends State<StorageTabPage>
                    Expanded(
                      child: TabItem(
                        controller: _controller,
-                       title: 'Danh sách vật tư',
+                       title: 'Công khoán ',
                        index: 0,
                      ),
                    ),
@@ -57,7 +57,7 @@ class _StorageTabPageState extends State<StorageTabPage>
                    Expanded(
                      child: TabItem(
                        controller: _controller,
-                       title: 'Danh sách dụng cụ',
+                       title: 'Công nhật',
                        index: 1,
                      ),
                    ),
@@ -69,8 +69,8 @@ class _StorageTabPageState extends State<StorageTabPage>
                child: TabBarView(
                  controller: _controller,
                  children: [
-                   TabListMaterial(),
-                   TabListTool(),
+                   TabListContractTask(),
+                   TabListTemporaryTask(),
                  ],
                ),
              ),

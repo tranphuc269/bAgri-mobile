@@ -254,6 +254,16 @@ abstract class ApiClient {
   @GET("/managers")
   Future<ObjectResponse<ManagerListResponse>> getListManager();
 
+  ///Contract Work
+  @GET("/works")
+  Future<dynamic> getListContractWork(@Header("accept") String? accept, @Header("Authorization") String? auth);
+  @POST("/works")
+  Future<dynamic> createContractWork(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
+
 
 
   /// Upload File

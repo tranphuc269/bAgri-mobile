@@ -101,7 +101,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
                       title: "Quản lý công việc",
                       color: AppColors.blueA5CAD2,
                       urlImage: AppImages.icWorks,
-                      ridirectPage: redirectManageAccount,
+                      ridirectPage: redirectTabTask,
                     )
                 ],
               ),
@@ -268,8 +268,8 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
   void redirectEmployee() {
     Application.router?.navigateTo(context, Routes.employeeManagement);
   }
-  void redirectManageAccount(){
-    Application.router?.navigateTo(context, Routes.manageAccount);
+  void redirectTabTask(){
+    Application.router?.navigateTo(context, Routes.tabTask);
   }
 }
 

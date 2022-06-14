@@ -46,7 +46,6 @@ class GardenListCubit extends Cubit<GardenListState> {
       } else {
         emit(state.copyWith(getGardenStatus: LoginStatusBagri.FAILURE));
       }
-      emit(state.copyWith(getGardenStatus: LoginStatusBagri.SUCCESS));
     } catch (error) {
       emit(state.copyWith(getGardenStatus: LoginStatusBagri.FAILURE));
     }

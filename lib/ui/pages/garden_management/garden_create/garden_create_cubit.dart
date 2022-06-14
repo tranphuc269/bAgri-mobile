@@ -74,7 +74,7 @@ class GardenCreateCubit extends Cubit<GardenCreateState> {
       final response = await gardenRepository!.getListAcounts();
       List<UserEntity> managers = [];
       response.forEach((element) {
-        if(element.role == "QLV"){
+        if(element.role == "GARDEN_MANAGER"){
           managers.add(element);
           print(element.name);
         }

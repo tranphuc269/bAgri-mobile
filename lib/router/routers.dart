@@ -1,11 +1,14 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter_base/router/router_handlers/auth_bagri_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/contract_work_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/employee_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/garden_manager_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/garden_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/home_bagri_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/notification_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/season_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/process_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/task_manage_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/task_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/tree_router_handler.dart';
 
@@ -71,6 +74,14 @@ class Routes {
   ///Account Management
   static String manageAccount = '/manageAccount';
 
+  ///Garden Manager
+  static String homeGardenManager = '/homeGardenManager';
+
+  ///Contract Work
+  static String contractWorkList = '/contractWorkList';
+
+  ///Task
+  static String tabTask = '/tabTask';
 
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = notHandler;
@@ -266,5 +277,22 @@ class Routes {
       manageAccount,
       handler: listAccountHandler,
       transitionType: TransitionType.fadeIn,);
+
+    /// homeGardenManager
+    router.define(
+      homeGardenManager,
+      handler: homeGardenManagerHandler,
+      transitionType: TransitionType.fadeIn,);
+    /// contractWorkList
+    router.define(
+      contractWorkList,
+      handler: contractWorkListHandler,
+      transitionType: TransitionType.fadeIn);
+
+    ///New task manage
+    router.define(
+        tabTask,
+        handler: tabTaskHandler,
+        transitionType: TransitionType.fadeIn);
   }
 }

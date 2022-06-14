@@ -12,6 +12,7 @@ import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/network/api_weather.dart';
 
 import 'package:flutter_base/repositories/auth_repository.dart';
+import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 import 'package:flutter_base/repositories/farmer_repository.dart';
 
 import 'package:flutter_base/repositories/garden_repository.dart';
@@ -26,7 +27,9 @@ import 'package:flutter_base/repositories/weather_repository.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/router/navigation_observer.dart';
+import 'package:flutter_base/ui/pages/contract_work_management/contract_work_list/contract_work_list_page.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
+import 'package:flutter_base/ui/pages/task/tab_tasks_manage.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -179,6 +182,10 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<ZoneRepository>(create: (context) {
           return  ZoneRepositoryImpl(_apiClient);
         }),
+        RepositoryProvider<ContractWorkRepositoy>(create: (context) {
+          return  ContractWorkRepositoryImpl(_apiClient);
+        }),
+
       ],
       child: MultiBlocProvider(
         providers: [
@@ -201,6 +208,8 @@ class _MyAppState extends State<MyApp> {
                 RepositoryProvider.of<WeatherRepository>(context);
             final _zoneRepository =
                 RepositoryProvider.of<ZoneRepository>(context);
+            final _contractWorkRepository =
+                RepositoryProvider.of<ContractWorkRepositoy>(context);
 
             return AppCubit(
               treeRepository: _treeRepository,
@@ -212,6 +221,7 @@ class _MyAppState extends State<MyApp> {
               farmerRepository: _farmerRepository,
               weatherRepository: _weatherRepository,
               zoneRepository: _zoneRepository,
+
 
             );
           }),
@@ -245,7 +255,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
-      // home: TreeListPage(),
+      // home:  TaskTabPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

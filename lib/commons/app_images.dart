@@ -55,4 +55,7 @@ class AppImages {
 
   ///ic no data
   static final icNoData = 'assets/images/ic_no_data.png';
+
+  /// ic garden manager
+  static final icWorks = 'assets/images/ic_work.png';
 }

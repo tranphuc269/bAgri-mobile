@@ -8,15 +8,15 @@ import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class TabListTool extends StatelessWidget {
-  const TabListTool({Key? key}) : super(key: key);
+class TabListTemporaryTask extends StatelessWidget {
+  const TabListTemporaryTask({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialListPage();
+    return TemporaryTaskListPage();
   }
 }
-class MaterialListPage extends StatefulWidget {
+class TemporaryTaskListPage extends StatefulWidget {
 
   @override
   _ToolListState createState() => _ToolListState();
@@ -24,7 +24,7 @@ class MaterialListPage extends StatefulWidget {
 
 }
 
-class _ToolListState extends State<MaterialListPage> {
+class _ToolListState extends State<TemporaryTaskListPage> {
   bool selectTools = false;
   bool selectSupplies = true;
 
@@ -128,7 +128,7 @@ class _ToolListState extends State<MaterialListPage> {
             const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
             child: Row(
               children: [
-                Image.asset(avatarUrl ?? AppImages.icTools),
+                Image.asset(avatarUrl ?? AppImages.icGarden),
                 SizedBox(width: 18),
                 Expanded(
                     child: Column(
