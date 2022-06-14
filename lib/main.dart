@@ -255,8 +255,8 @@ class _MyAppState extends State<MyApp> {
       //đã sửa hardcode
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
-     // initialRoute: Routes.root,
-      home:  AddContractTaskPage(),
+     initialRoute: Routes.root,
+     //  home: TaskTabPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

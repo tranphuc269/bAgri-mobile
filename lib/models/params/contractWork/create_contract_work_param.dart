@@ -9,14 +9,14 @@ class CreateContractWorkParam {
   @JsonKey()
   String? unit;
   @JsonKey()
-  String? unitPrice;
+  num? unitPrice;
 
   String? phone;
 
   factory CreateContractWorkParam.fromJson(Map<String, dynamic> json) => CreateContractWorkParam(
     title: json['title'] as String?,
     unit: json['unit'] as String?,
-    unitPrice: json['unitPrice'] as String
+    unitPrice: json['unitPrice'] as num
   );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -35,7 +35,7 @@ class CreateContractWorkParam {
   CreateContractWorkParam copyWith({
     String? title,
     String? unit,
-    String? unitPrice,
+    num? unitPrice,
   }) {
     return CreateContractWorkParam(
       title: title ?? this.title,

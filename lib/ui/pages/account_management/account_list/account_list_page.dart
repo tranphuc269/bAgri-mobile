@@ -112,14 +112,11 @@ class _AccountListState extends State<AccountListPage> {
                           },
                         ),
                       )
-                    : Expanded(
+                    : Container(
+                        width: double.infinity,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: EmptyDataWidget(),
-                            ),
-                          ],
+                          children: [EmptyDataWidget()],
                         ),
                       );
               } else {

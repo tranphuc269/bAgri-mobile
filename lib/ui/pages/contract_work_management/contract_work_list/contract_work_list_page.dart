@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/entities/garden/garden_detail.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/contract_work_management/contract_work_list/contract_work_list_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_base/utils/validators.dart';
@@ -17,7 +20,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
-enum Unit{Cong, Dong}
+enum Unit { Cong, Dong }
+
 class ContractWorkListPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ContractWorkListState();
@@ -27,18 +31,34 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final formatCurrency = new NumberFormat.currency(locale: 'vi');
+  ContractWorkListCubit? _cubit;
+
   Unit unit = Unit.Dong;
   String _unitValue = "Đồng/bầu";
 
   final _unitPriceController = TextEditingController(text: '');
   final _contentController = TextEditingController(text: '');
 
-  ContractWorkListCubit? _cubit;
+  var _contentModifyController = TextEditingController(text: '');
+  var _unitPriceModifyController = TextEditingController(text: '');
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     _cubit = BlocProvider.of<ContractWorkListCubit>(context);
     _cubit!.fetchContractWorkList();
+
+    //set initial cubit
+    _cubit!.changeTitle(_contentController.text);
+    _cubit!.changeUnitPrice(_unitPriceController.text);
+
+    _contentController.addListener(() {
+      _cubit!.changeTitle(_contentController.text);
+    });
+    _unitPriceController.addListener(() {
+      _cubit!.changeUnitPrice(_unitPriceController.text);
+    });
   }
 
   @override
@@ -50,75 +70,81 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
         context: context,
       ),
       body: Container(
-        child: BlocBuilder<ContractWorkListCubit,ContractWorkListState>(
+        child: BlocBuilder<ContractWorkListCubit, ContractWorkListState>(
           bloc: _cubit,
           buildWhen: (previous, current) =>
-          previous.getListWorkStatus != current.getListWorkStatus,
+              previous.getListWorkStatus != current.getListWorkStatus,
           builder: (context, state) {
             if (state.getListWorkStatus == LoadStatus.LOADING) {
               return Center(
                   child: CircularProgressIndicator(
-                    color: AppColors.main,
-                  ));
-            } else if (state.getListWorkStatus ==
-                LoadStatus.FAILURE) {
+                color: AppColors.main,
+              ));
+            } else if (state.getListWorkStatus == LoadStatus.FAILURE) {
               return AppErrorListWidget(
                 onRefresh: _onRefreshData,
               );
-            } else if (state.getListWorkStatus ==
-                LoadStatus.SUCCESS) {
-              return Container(
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [EmptyDataWidget()],
-                ),
-              );
-              //   state.listUserData!.length != 0
-              //     ? RefreshIndicator(
-              //   color: AppColors.main,
-              //   onRefresh: _onRefreshData,
-              //   child: ListView.separated(
-              //     padding: EdgeInsets.only(
-              //         left: 10, right: 10, top: 10, bottom: 25),
-              //     physics: AlwaysScrollableScrollPhysics(),
-              //     itemCount: state.listUserData!.length,
-              //     shrinkWrap: true,
-              //     primary: false,
-              //     controller: _scrollController,
-              //     itemBuilder: (context, index) {
-              //       UserEntity user = state.listUserData![index];
-              //       return _buildItem(
-              //         name: user.name ?? "",
-              //         role: user.role ?? "",
-              //         phoneNumber: user.phoneNumber ?? "",
-              //
-              //         onPressed: () async {
-              //           showDialog(
-              //               context: context,
-              //               builder: (context) => _dialog(
-              //                 user: user,
-              //                 // role: user.role ?? "",
-              //                 id: user.id ?? "",
-              //               ));
-              //         },
-              //       );
-              //     },
-              //     separatorBuilder: (context, index) {
-              //       return SizedBox(height: 10);
-              //     },
-              //   ),
-              // )
-              //     : Expanded(
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Center(
-              //         child: EmptyDataWidget(),
-              //       ),
-              //     ],
-              //   ),
-              // );
+            } else if (state.getListWorkStatus == LoadStatus.SUCCESS) {
+              return state.listContractWork!.length != 0
+                  ? RefreshIndicator(
+                      color: AppColors.main,
+                      onRefresh: _onRefreshData,
+                      child: ListView.separated(
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, top: 10, bottom: 25),
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemCount: state.listContractWork!.length,
+                        shrinkWrap: true,
+                        primary: false,
+                        controller: _scrollController,
+                        itemBuilder: (context, index) {
+                          ContractWorkEntity contractWork =
+                              state.listContractWork![index];
+                          return _buildItem(
+                              title: contractWork.title ?? "",
+                              unit: contractWork.unit ?? "",
+                              unitPrice: contractWork.unitPrice.toString(),
+                              onUpdate: () async {
+                                bool isModify = await showDialog(
+                                    context: context,
+                                    builder: (context) => _dialogModify(
+                                        contractWork: contractWork));
+
+                                if (isModify) {
+                                  _onRefreshData();
+                                  showSnackBar(
+                                      'Thay đổi thông tin thành công!');
+                                }
+                              },
+                              onDelete: () async {
+                                bool isDelete = await showDialog(
+                                    context: context,
+                                    builder: (context) => AppDeleteDialog(
+                                          onConfirm: () async {
+                                            await _cubit!.deleteContractWork(
+                                                contractWork.id);
+                                            Navigator.pop(context, true);
+                                          },
+                                        ));
+
+                                if (isDelete) {
+                                  _onRefreshData();
+                                  showSnackBar('Xóa công việc thành công!');
+                                }
+                              });
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(height: 10);
+                        },
+                      ),
+                    )
+                  : Container(
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [EmptyDataWidget()],
+                      ),
+                    );
             } else {
               return Container();
             }
@@ -128,16 +154,19 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       floatingActionButton: FloatingActionButton(
         heroTag: "btn2",
         onPressed: () async {
-          _cubit!.createContractWork();
-          // showDialog(
-          //     context: context,
-          //     builder: (context) =>
-          //         _dialogCreate(title: Text("Thêm công việc khoán")));
+          // _cubit!.createContractWork();
+          bool isAdd = await showDialog(
+              context: context,
+              builder: (context) =>
+                  _dialogCreate(title: Text("Thêm công việc khoán")));
           // bool isAdd = await Application.router
           //     ?.navigateTo(context, Routes.treeCreate);
-          // if (isAdd) {
-          //   _onRefreshData();
-          // }
+          if (isAdd) {
+            _onRefreshData();
+            showSnackBar('Tạo công việc thành công!');
+          } else {
+            showSnackBar('Đã có lỗi xảy ra!');
+          }
         },
         backgroundColor: AppColors.main,
         child: Icon(
@@ -152,7 +181,9 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       {required String title,
       required String unit,
       required String unitPrice,
-      VoidCallback? onPressed}) {
+      VoidCallback? onPressed,
+      VoidCallback? onUpdate,
+      VoidCallback? onDelete}) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -170,7 +201,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
                   backgroundColor: AppColors.blueSlideButton,
                   foregroundColor: Colors.white,
                   onPressed: (BuildContext context) {
-                    // onUpdate?.call();
+                    onUpdate?.call();
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -193,7 +224,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
                   backgroundColor: AppColors.redSlideButton,
                   foregroundColor: Colors.white,
                   onPressed: (BuildContext context) {
-                    // onDelete?.call();
+                    onDelete?.call();
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -243,7 +274,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
                             ),
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.35,
+                            width: MediaQuery.of(context).size.width * 0.3,
                             child: Text(
                               'Đơn vị: ${unit}',
                               style: AppTextStyle.greyS14,
@@ -273,80 +304,78 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
   }) {
     return StatefulBuilder(builder: (context, setState) {
       return AlertDialog(
-          title: title,
-          content: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Container(
-              constraints: BoxConstraints(
-                maxHeight: double.infinity,
-              ),
-              // width: MediaQuery.of(context).size.width +20,
-              child: Form(
+        title: title,
+        content: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: double.infinity,
+            ),
+            // width: MediaQuery.of(context).size.width +20,
+            child: Form(
                 key: _formKey,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildTextLabel("Nội dung:"),
-                        _buildContentInput(),
-                        _buildTextLabel("Đơn giá:"),
-                        _buildUnitPriceInput(),
-                        _buildTextLabel("Đơn vị:"),
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            unselectedWidgetColor: AppColors.main
-                          ),
-                          child:Row(
-                            children: [
-                              Flexible(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTextLabel("Nội dung:"),
+                      _buildContentInput(_contentController),
+                      _buildTextLabel("Đơn giá:"),
+                      _buildUnitPriceInput(_unitPriceController),
+                      _buildTextLabel("Đơn vị:"),
+                      Theme(
+                        data: Theme.of(context)
+                            .copyWith(unselectedWidgetColor: AppColors.main),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              child: RadioListTile(
+                                activeColor: AppColors.main,
+                                title: Text("Đồng/bầu",
+                                    style: AppTextStyle.greyS16Bold),
+                                value: Unit.Dong,
+                                groupValue: unit,
+                                onChanged: (value) {
+                                  setState(() {
+                                    unit = value as Unit;
+                                    handleUnitChange("Đồng/bầu");
+                                    print(_unitValue);
+                                  });
+                                },
+                              ),
+                            ),
+                            Flexible(
                                 flex: 1,
                                 child: RadioListTile(
                                   activeColor: AppColors.main,
-                                  title: Text("Đồng/bầu", style: AppTextStyle.greyS16Bold),
-                                  value: Unit.Dong,
+                                  title: Text("Công",
+                                      style: AppTextStyle.greyS16Bold),
+                                  value: Unit.Cong,
                                   groupValue: unit,
-                                  onChanged: (value){
+                                  onChanged: (value) {
                                     setState(() {
                                       unit = value as Unit;
-                                      handleUnitChange("Đồng/bầu");
+                                      handleUnitChange("Công");
                                       print(_unitValue);
                                     });
                                   },
-                                ),
-                              ),
-                              Flexible(
-                                flex: 1,
-                                  child: RadioListTile(
-                                    activeColor: AppColors.main,
-                                    title: Text("Công", style: AppTextStyle.greyS16Bold),
-                                    value: Unit.Cong,
-                                    groupValue: unit,
-                                    onChanged:(value){
-                                      setState(() {
-                                        unit = value as Unit;
-                                        handleUnitChange("Công");
-                                        print(_unitValue);
-                                      });
-                                    },
-                                  )
-                              ),
-                            ],
-                          ) ,
-                        )
-
-                      ])
-              ),
-            ),
+                                )),
+                          ],
+                        ),
+                      )
+                    ])),
           ),
+        ),
         actions: [
           TextButton(
-              onPressed:(){
+              onPressed: () {
                 Navigator.of(context).pop();
                 _contentController.clear();
                 _unitPriceController.clear();
               },
               child: Text("Hủy", style: AppTextStyle.redS16)),
           TextButton(
-              onPressed:(){
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   // await _cubit!.createZone(_nameZoneController.text);
                   // if(state.createZoneStatus == LoadStatus.FAILURE){
@@ -354,10 +383,121 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
                   // } else{
                   //   Navigator.pop(context, true);
                   // }
-                  print("hello");
+                  await _cubit!.createContractWork(_unitValue);
+                  if (_cubit!.state.createContractWorkStatus ==
+                      LoadStatus.SUCCESS) {
+                    Navigator.pop(context, true);
+                  } else {
+                    Navigator.pop(context, false);
+                  }
                 }
               },
-              child: Text("Thêm", style: AppTextStyle.greenS16,))
+              child: Text(
+                "Thêm",
+                style: AppTextStyle.greenS16,
+              ))
+        ],
+      );
+    });
+  }
+
+  Widget _dialogModify({
+    ContractWorkEntity? contractWork,
+    Text? title,
+  }) {
+    _contentModifyController = TextEditingController(text: contractWork!.title);
+    _unitPriceModifyController =
+        TextEditingController(text: contractWork.unitPrice.toString());
+    String? unitResponse = contractWork.unit;
+    Unit unitModify = contractWork.unit == "Công" ? Unit.Cong : Unit.Dong;
+    return StatefulBuilder(builder: (context, setState) {
+      return AlertDialog(
+        title: title,
+        content: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: double.infinity,
+            ),
+            // width: MediaQuery.of(context).size.width +20,
+            child: Form(
+                key: _formKey,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTextLabel("Nội dung:"),
+                      _buildContentInput(_contentModifyController),
+                      _buildTextLabel("Đơn giá:"),
+                      _buildUnitPriceInput(_unitPriceModifyController),
+                      _buildTextLabel("Đơn vị:"),
+                      Theme(
+                        data: Theme.of(context)
+                            .copyWith(unselectedWidgetColor: AppColors.main),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              child: RadioListTile(
+                                activeColor: AppColors.main,
+                                title: Text("Đồng/bầu",
+                                    style: AppTextStyle.greyS16Bold),
+                                value: Unit.Dong,
+                                groupValue: unitModify,
+                                onChanged: (value) {
+                                  setState(() {
+                                    unitModify = value as Unit;
+                                    unitResponse = "Đồng/bầu";
+                                  });
+                                },
+                              ),
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: RadioListTile(
+                                  activeColor: AppColors.main,
+                                  title: Text("Công",
+                                      style: AppTextStyle.greyS16Bold),
+                                  value: Unit.Cong,
+                                  groupValue: unitModify,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      unitModify = value as Unit;
+                                      unitResponse = "Công";
+                                    });
+                                  },
+                                )),
+                          ],
+                        ),
+                      )
+                    ])),
+          ),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Hủy", style: AppTextStyle.redS16)),
+          TextButton(
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  await _cubit!.modifyContractWork(
+                      contractWork.id,
+                      _contentModifyController.text,
+                      unitResponse,
+                      _unitPriceModifyController.text);
+                  if (_cubit!.state.modifyContractWorKStatus ==
+                      LoadStatus.SUCCESS) {
+                    Navigator.pop(context, true);
+                  } else {
+                    Navigator.pop(context, false);
+                  }
+                }
+              },
+              child: Text(
+                "Thay đổi",
+                style: AppTextStyle.greenS16,
+              ))
         ],
       );
     });
@@ -377,7 +517,8 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       ),
     );
   }
-  Widget _buildContentInput() {
+
+  Widget _buildContentInput(TextEditingController? controller) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
       decoration: BoxDecoration(
@@ -386,7 +527,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       child: AppTextField(
         autoValidateMode: AutovalidateMode.onUserInteraction,
         hintText: "Nhập vào tên công việc",
-        controller: _contentController,
+        controller: controller,
         validator: (value) {
           if (Validator.validateNullOrEmpty(value!))
             return "Chưa nhập tên công việc";
@@ -396,7 +537,8 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       ),
     );
   }
-  Widget _buildUnitPriceInput() {
+
+  Widget _buildUnitPriceInput(TextEditingController controller) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
       decoration: BoxDecoration(
@@ -405,7 +547,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       child: AppTextField(
         autoValidateMode: AutovalidateMode.onUserInteraction,
         hintText: "Nhập vào đơn giá",
-        controller: _unitPriceController,
+        controller: controller,
         keyboardType: TextInputType.number,
         validator: (value) {
           if (Validator.validateNullOrEmpty(value!))
@@ -416,40 +558,20 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       ),
     );
   }
-  Widget _buildConfirmCreateButton() {
-    // return BlocBuilder<ContractWorkListCubit, ContractWorkListState>(
-    //   bloc: _cubit,
-    //   buildWhen: (prev, current) {
-    //     return (prev.getListWorkStatus != current.getListWorkStatus);
-    //   },
-    //   builder: (context, state) {
-    return Container(
-      height: 40,
-      child: AppButton(
-        color: AppColors.main,
-        title: "Thêm",
-        textStyle: AppTextStyle.whiteS16Bold,
-        onPressed: () async {
-          // if (_formKey.currentState!.validate()) {
-          //   await _cubit!.createZone(_nameZoneController.text);
-          //   if(state.createZoneStatus == LoadStatus.FAILURE){
-          //     Navigator.pop(context, false);
-          //   } else{
-          //     Navigator.pop(context, true);
-          //   }
-          //}
-        },
-      ),
-    );
-    //   },
-    // );
+
+  void showSnackBar(String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
+      message: message,
+    ));
   }
 
   Future<void> _onRefreshData() async {
-    // _cubit!.fetchAccountList();
-    print("refreshData");
+    _cubit!.fetchContractWorkList();
   }
-  void handleUnitChange(String value){
+
+  void handleUnitChange(String value) {
     setState(() {
       _unitValue = value;
     });

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/entities/farmer/farmer.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/file/file_entity.dart';
@@ -256,14 +257,20 @@ abstract class ApiClient {
 
   ///Contract Work
   @GET("/works")
-  Future<dynamic> getListContractWork(@Header("accept") String? accept, @Header("Authorization") String? auth);
+  Future<List<ContractWorkEntity>> getListContractWork(@Header("accept") String? accept, @Header("Authorization") String? auth);
   @POST("/works")
   Future<dynamic> createContractWork(
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
       @Header('Content-Type')String content_type,
       @Body() Map<String, dynamic> body);
-
+  @DELETE("/works/{work_id}")
+  Future <dynamic> deleteContractWork (
+      @Header("accept") String? accept,
+      @Header("Authorization") String? auth,
+      @Path("work_id") String? workId,);
+  @PUT("/works/{work_id}")
+  Future <dynamic> modifyContractWork(@Header('accept') String accept,@Header("Authorization") String? auth,@Header('Content-Type')String content_type,@Path("work_id") String? workId,@Body() Map<String, dynamic> body);
 
 
   /// Upload File

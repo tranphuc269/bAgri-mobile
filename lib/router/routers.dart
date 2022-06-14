@@ -297,7 +297,7 @@ class Routes {
         transitionType: TransitionType.fadeIn);
     router.define(
         addContractTask,
-        handler: handler,
-        transitionType: TransitionType.fadeIn)
+        handler: addContractTaskHandler,
+        transitionType: TransitionType.fadeIn);
   }
 }
