@@ -390,8 +390,11 @@ import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
+import 'package:flutter_base/router/application.dart';
+import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/seasons_management/season_management_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -405,6 +408,13 @@ class SeasonListPage extends StatefulWidget {
 
 class _SeasonListPageState extends State<SeasonListPage> {
   SeasonManagementCubit? _cubit;
+
+  @override
+  void initState() {
+    _cubit = BlocProvider.of<SeasonManagementCubit>(context);
+    _cubit?.getListSeason();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -424,10 +434,36 @@ class _SeasonListPageState extends State<SeasonListPage> {
           },
         ),
       ),
-      // floatingActionButton: ,
+      floatingActionButton: FloatingActionButton(
+        heroTag: "btn2",
+        onPressed: () async {
+          bool isAdd = await Application.router!
+              .navigateTo(context, Routes.seasonAdding);
+
+          if (isAdd) {
+            refreshData();
+            if(_cubit?.state.loadStatus == LoadStatus.SUCCESS)
+            showSnackBar('Thêm mới mùa vụ thành công!');
+          }
+        },
+        backgroundColor: AppColors.main,
+        child: Icon(
+          Icons.add,
+          size: 40,
+        ),
+      ),
     );
   }
-
+    Future<void> refreshData() async {
+    await _cubit?.getListSeason();
+    }
+  void showSnackBar(String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
+      message: message,
+    ));
+  }
   _buildItem(
       {
       required String seasonName,

@@ -41,7 +41,6 @@ class _HomePageState extends State<HomePage> {
     _appCubit = BlocProvider.of<AppCubit>(context);
     //_notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
 
-
     //_appCubit!.getData();
     //_notificationCubit.getListNotification();
   }
@@ -97,25 +96,24 @@ class _HomePageState extends State<HomePage> {
                     urlImage: AppImages.icProcedure,
                     ridirectPage: redirectProcess,
                   ),
-                  GlobalData.instance.userEntity!.role == "GARDEN_MANAGER" ? CategoryItem(
-                    title: 'Công việc hằng ngày',
-                    color: AppColors.orangeE9703C,
-                    urlImage: AppImages.icWorks,
-                    ridirectPage: redirectContractWorkList
-                  ):
+                 CategoryItem(
+                          title: 'Công việc hằng ngày',
+                          color: AppColors.orangeE9703C,
+                          urlImage: AppImages.icWorks,
+                          ridirectPage: redirectContractWorkList),
+                  if (GlobalData.instance.userEntity!.role != "GARDEN_MANAGER")
                   CategoryItem(
-                      title: 'Quản lý công việc khoán',
-                      color: AppColors.orangeE9703C,
-                      urlImage: AppImages.icWorks,
-                      ridirectPage: redirectContractWorkList
-                  ),
-
-                  GlobalData.instance.userEntity!.role == "SUPER_ADMIN" ? CategoryItem(
+                          title: 'Quản lý công việc khoán',
+                          color: AppColors.orangeE9703C,
+                          urlImage: AppImages.icWorks,
+                          ridirectPage: redirectContractWorkList),
+                  if (GlobalData.instance.userEntity!.role == "SUPER_ADMIN")
+                    CategoryItem(
                       title: "Quản lý tài khoản",
                       color: AppColors.blueA5CAD2,
                       urlImage: AppImages.icUser,
                       ridirectPage: redirectManageAccount,
-                    ) : Container()
+                    )
                 ],
               ),
             ),
@@ -281,10 +279,12 @@ class _HomePageState extends State<HomePage> {
   void redirectEmployee() {
     Application.router?.navigateTo(context, Routes.employeeManagement);
   }
-  void redirectManageAccount(){
+
+  void redirectManageAccount() {
     Application.router?.navigateTo(context, Routes.manageAccount);
   }
-  void redirectContractWorkList(){
+
+  void redirectContractWorkList() {
     Application.router?.navigateTo(context, Routes.contractWorkList);
   }
 }
@@ -348,6 +348,7 @@ class MainDrawer extends StatefulWidget {
 class _MainDrawerState extends State<MainDrawer> {
   AppCubit? _appCubit;
   UserEntity? _userInfo;
+
   @override
   void initState() {
     super.initState();
@@ -393,10 +394,7 @@ class _MainDrawerState extends State<MainDrawer> {
                           style: TextStyle(color: Colors.black87, fontSize: 18),
                         ),
                         Text(
-                          '${_userInfo?.role == "SUPER_ADMIN"? "Super Admin"
-                              : (_userInfo?.role == "ADMIN" ? "Kỹ thuật viên"
-                              : (_userInfo?.role == "GARDEN_MANAGER" ? "Quản lý vườn"
-                              : "Kế toán"))}',
+                          '${_userInfo?.role == "SUPER_ADMIN" ? "Super Admin" : (_userInfo?.role == "ADMIN" ? "Kỹ thuật viên" : (_userInfo?.role == "GARDEN_MANAGER" ? "Quản lý vườn" : "Kế toán"))}',
                           style: TextStyle(color: AppColors.main, fontSize: 18),
                         ),
                       ],

@@ -219,7 +219,7 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                                     builder: (context, child) {
                                       return _buildCalendarTheme(child);
                                     },
-                                    fieldHintText: "yyyy/mm/dd",
+                                    fieldHintText: "yyyy-MM-dd",
                                     initialDate: state.endTime != null
                                         ? Util.DateUtils.fromString(
                                         state.endTime!,

@@ -10,7 +10,7 @@ import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class SeasonRepository {
-  Future<ObjectResponse<SeasonListResponse>> getListSeasonData(String status);
+  Future<List<SeasonEntity>> getListSeasonData();
 
   Future<ObjectResponse<SeasonDetailResponse>> getSeasonById(String seasonId);
 
@@ -42,9 +42,8 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future<ObjectResponse<SeasonListResponse>> getListSeasonData(
-      String status) async {
-    return await _apiClientBagri!.getListSeasonData(status);
+  Future<List<SeasonEntity>> getListSeasonData() async {
+    return await _apiClientBagri!.getListSeasonData();
   }
 
   @override
