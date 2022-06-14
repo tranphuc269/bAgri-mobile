@@ -39,8 +39,8 @@ class _SplashPageState extends State<SplashPage> {
     _navigationSubscription = _cubit.navigatorController.stream.listen((event) {
       Future.delayed(const Duration(seconds: 2), () {
         switch (event) {
-          case SplashNavigator.OPEN_GARDEN_QLV:
-            showGardenManagementByQLV();
+          case SplashNavigator.OPEN_ACCOUNT:
+            showStorageByAccount();
             break;
           case SplashNavigator.OPEN_HOME:
             showHome();
@@ -135,9 +135,9 @@ class _SplashPageState extends State<SplashPage> {
     Application.router?.navigateTo(context, Routes.home, replace: true);
   }
 
-  void showGardenManagementByQLV() {
+  void showStorageByAccount() {
     Application.router!
-        .navigateTo(context, Routes.home, clearStack: true);
+        .navigateTo(context, Routes.homeGardenManager, clearStack: true);
   }
 
   void showLogin() {

@@ -394,9 +394,9 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                         Text(
                           '${_userInfo?.role == "SUPER_ADMIN"? "Super Admin"
-                              : (_userInfo?.role == "ADMIN" ? "Admin"
+                              : (_userInfo?.role == "ADMIN" ? "Kỹ thuật viên"
                               : (_userInfo?.role == "GARDEN_MANAGER" ? "Quản lý vườn"
-                              : "Kĩ thuật viên"))}',
+                              : "Kế toán"))}',
                           style: TextStyle(color: AppColors.main, fontSize: 18),
                         ),
                       ],
