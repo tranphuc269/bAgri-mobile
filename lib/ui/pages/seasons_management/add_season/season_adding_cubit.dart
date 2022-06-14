@@ -31,8 +31,8 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
           gardenId: state.gardenEntity!.garden_id,
           process: state.processEntity!,
           tree: state.treeEntity!,
-          start_date: state.startTime?.replaceAll('/', '-') ,
-          end_date: state.endTime?.replaceAll('/', '-') ,
+          start_date: state.startTime ,
+          end_date: state.endTime ,
           treeQuantity: treeQuantity
           );
       var result =

@@ -193,8 +193,8 @@ abstract class ApiClient {
 
   /// Season
   @GET("/seasons")
-  Future<ObjectResponse<SeasonListResponse>> getListSeasonData(
-      @Query('status') String status);
+  Future<List<SeasonEntity>> getListSeasonData(
+      );
 
   @GET("/seasons/{seasonId}")
   Future<ObjectResponse<SeasonDetailResponse>> getSeasonById(

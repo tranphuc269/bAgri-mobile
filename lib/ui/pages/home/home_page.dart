@@ -97,12 +97,6 @@ class _HomePageState extends State<HomePage> {
                     urlImage: AppImages.icProcedure,
                     ridirectPage: redirectProcess,
                   ),
-                  CategoryItem(
-                    title: 'Quản lý nhân công',
-                    color: AppColors.orangeE9703C,
-                    urlImage: AppImages.icLabor,
-                    ridirectPage: redirectEmployee,
-                  ),
                   GlobalData.instance.userEntity!.role == "SUPER_ADMIN" ? CategoryItem(
                       title: "Quản lý tài khoản",
                       color: AppColors.blueA5CAD2,
