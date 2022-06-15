@@ -506,9 +506,7 @@ class _SeasonListPageState extends State<SeasonListPage> {
                                 appNavigatorKey.currentContext!,
                                 Routes.seasonDetail,
                                 routeSettings: RouteSettings(
-                                  arguments: SeasonDetailPage(
-                                    thisSeason: seasonEntity,
-                                  ),
+                                  arguments: seasonEntity,
                                 ),
                               );
                             },
@@ -647,12 +645,17 @@ class _SeasonListPageState extends State<SeasonListPage> {
                 const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
             child: Row(
               children: [
-                Padding(padding: EdgeInsets.all(8), child: Image.asset(AppImages.icCropNoColor, width: 10, height: 10,),),
+                SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: Image.asset(
+                      AppImages.icCropNoColor
+                    )),
+                SizedBox(width: 15),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       Text(
                         '$seasonName',
                         style: AppTextStyle.greyS16Bold,

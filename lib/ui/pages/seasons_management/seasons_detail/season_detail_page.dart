@@ -48,85 +48,85 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     _cubit.getSeasonDetail(widget.thisSeason.seasonId ?? "");
   }
 
-  String currentDayInProcess(String startDay) {
-    DateTime startDateTime =
-        Util.DateUtils.fromStringFormatStrikeThrough(startDay)!;
-    Duration different = DateTime.now().difference(startDateTime);
-    different = different + Duration(days: 1);
-    return "${different.inDays}";
-  }
+  // String currentDayInProcess(String startDay) {
+  //   DateTime startDateTime =
+  //       Util.DateUtils.fromStringFormatStrikeThrough(startDay)!;
+  //   Duration different = DateTime.now().difference(startDateTime);
+  //   different = different + Duration(days: 1);
+  //   return "${different.inDays}";
+  // }
 
-  String currentStageInProcess(ProcessEntity process) {
-    int currentStage = 0;
-    if (process.stages != null) {
-      stageLoop:
-      for (int i = 0; i < process.stages!.length; i++) {
-        StageEntity thisStage = process.stages![i];
-        if (thisStage.steps != null) {
-          stepLoop:
-          for (int j = 0; j < thisStage.steps!.length; j++) {
-            StepEntity thisStep = thisStage.steps![j];
-            if (thisStep.actual_day != null) {
-              currentStage = i;
-              continue;
-            } else {
-              break stageLoop;
-            }
-          }
-        }
-      }
-    }
-    currentStage += 1;
-    return '$currentStage';
-  }
+  // String currentStageInProcess(ProcessEntity process) {
+  //   int currentStage = 0;
+  //   if (process.stages != null) {
+  //     stageLoop:
+  //     for (int i = 0; i < process.stages!.length; i++) {
+  //       StageEntity thisStage = process.stages![i];
+  //       if (thisStage.steps != null) {
+  //         stepLoop:
+  //         for (int j = 0; j < thisStage.steps!.length; j++) {
+  //           StepEntity thisStep = thisStage.steps![j];
+  //           if (thisStep.actual_day != null) {
+  //             currentStage = i;
+  //             continue;
+  //           } else {
+  //             break stageLoop;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   currentStage += 1;
+  //   return '$currentStage';
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         context: context,
-        title:"",
+        title:"${widget.thisSeason.name}",
             // "${widget.thisSeason.garden?.name ?? ""} - ${widget.thisSeason.name ?? ""}",
-        rightActions: [
-          BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
-            builder: (context, state) {
-              // if (state.season?.status != 'done') {
-              //   return SizedBox();
-              // }
-              return AppButton(
-                color: AppColors.main,
-                height: 40,
-                child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: Image.asset(
-                      AppImages.icQRCode,
-                      fit: BoxFit.fill,
-                    )),
-                onPressed: () async {
-                  bool isConfirmed =
-                      await _cubit.generateQRCode(state.season?.seasonId ?? "");
-                  if (isConfirmed) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => BlocProvider.value(
-                              value: _cubit,
-                              child: QRCodeWidget(
-                                data: state.season!.seasonId!,
-                                nameSeason: state.season!.name!,
-                                linkQR: state.linkQR,
-                                linkUrl: state.linkUrl,
-                              ),
-                            ));
-                  } else {
-                    showSnackBar('Có lỗi xảy ra');
-                  }
-                },
-              );
-            },
+        // rightActions: [
+        //   BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
+        //     builder: (context, state) {
+        //       // if (state.season?.status != 'done') {
+        //       //   return SizedBox();
+        //       // }
+        //       return AppButton(
+        //         color: AppColors.main,
+        //         height: 40,
+        //         child: SizedBox(
+        //             height: 20,
+        //             width: 20,
+        //             child: Image.asset(
+        //               AppImages.icQRCode,
+        //               fit: BoxFit.fill,
+        //             )),
+        //         onPressed: () async {
+        //           bool isConfirmed =
+        //               await _cubit.generateQRCode(state.season?.seasonId ?? "");
+        //           if (isConfirmed) {
+        //             showDialog(
+        //                 context: context,
+        //                 builder: (BuildContext context) => BlocProvider.value(
+        //                       value: _cubit,
+        //                       child: QRCodeWidget(
+        //                         data: state.season!.seasonId!,
+        //                         nameSeason: state.season!.name!,
+        //                         linkQR: state.linkQR,
+        //                         linkUrl: state.linkUrl,
+        //                       ),
+        //                     ));
+        //           } else {
+        //             showSnackBar('Có lỗi xảy ra');
+        //           }
+        //         },
+        //       );
+        //     },
           ),
-        ],
-      ),
+        // ],
+      // ),
       body: SafeArea(
         child: BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
           builder: (context, state) {
@@ -170,15 +170,15 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                               style: AppTextStyle.greyS16,
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              'Ngày chăm sóc: ${currentDayInProcess(state.season!.start_date!)}',
-                              style: AppTextStyle.greyS16,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'Giai đoạn ${currentStageInProcess(state.season!.process!)}',
-                              style: AppTextStyle.greyS16,
-                            ),
+                            // Text(
+                            //   'Ngày chăm sóc: ${currentDayInProcess(state.season!.start_date!)}',
+                            //   style: AppTextStyle.greyS16,
+                            // ),
+                            // SizedBox(height: 10),
+                            // Text(
+                            //   'Giai đoạn ${currentStageInProcess(state.season!.process!)}',
+                            //   style: AppTextStyle.greyS16,
+                            // ),
                             SizedBox(height: 20),
                             Text(
                               'Quá trình chăm sóc:',
@@ -334,4 +334,5 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
       message: message,
     ));
   }
+
 }

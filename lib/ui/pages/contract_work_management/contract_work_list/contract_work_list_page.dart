@@ -5,7 +5,10 @@ import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/entities/garden/garden_detail.dart';
+import 'package:flutter_base/models/entities/task/work.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
+import 'package:flutter_base/router/application.dart';
+import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/contract_work_management/contract_work_list/contract_work_list_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
@@ -576,4 +579,136 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       _unitValue = value;
     });
   }
+// void Test(){
+//   showGeneralDialog(
+//       context: context,
+//       barrierDismissible: true,
+//       barrierLabel: MaterialLocalizations.of(context)
+//           .modalBarrierDismissLabel,
+//       barrierColor: Colors.black45,
+//       transitionDuration: const Duration(milliseconds: 200),
+//       pageBuilder: (BuildContext buildContext,
+//           Animation animation,
+//           Animation secondaryAnimation) {
+//         return Center(
+//             child: Container(
+//               padding: EdgeInsets.all(7),
+//               height: 400,
+//               child: Card(
+//                 shape: RoundedRectangleBorder(
+//                     borderRadius:
+//                     BorderRadius.circular(20.0)),
+//                 child: Stack(
+//                   clipBehavior: Clip.none, children: <Widget>[
+//                     Form(
+//                       child: Column(
+//                         mainAxisSize: MainAxisSize.min,
+//                         children: <Widget>[
+//                           Container(
+//                             height: 60,
+//                             width: MediaQuery.of(context).size.width,
+//                             child: Center(child: Text("Thêm công việc khoán", style:TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontSize: 20, fontStyle: FontStyle.italic, fontFamily: "Helvetica"))),
+//                           ),
+//                           Padding(
+//                             padding: EdgeInsets.zero,
+//                             child: Container(
+//                                 child: SingleChildScrollView(
+//                                   physics: ClampingScrollPhysics(),
+//                                   child: Container(
+//                                     child: Form(
+//                                         key: _formKey,
+//                                         child: Column(
+//                                           mainAxisSize: MainAxisSize.min,
+//                                             crossAxisAlignment: CrossAxisAlignment.start,
+//                                             children: [
+//                                               _buildTextLabel("Nội dung:"),
+//                                               _buildContentInput(),
+//                                               _buildTextLabel("Đơn giá:"),
+//                                               _buildUnitPriceInput(),
+//                                               _buildTextLabel("Đơn vị:"),
+//                                               Theme(
+//                                                 data: Theme.of(context).copyWith(
+//                                                     unselectedWidgetColor: AppColors.main
+//                                                 ),
+//                                                 child:Row(
+//                                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                                                   children: [
+//                                                     Flexible(
+//                                                       flex: 1,
+//                                                       child: RadioListTile(
+//                                                         activeColor: AppColors.main,
+//                                                         title: Text("Đồng/bầu", style: AppTextStyle.greyS16Bold),
+//                                                         value: Unit.Dong,
+//                                                         groupValue: unit,
+//                                                         onChanged: (value){
+//                                                           setState(() {
+//                                                             unit = value as Unit;
+//                                                             handleUnitChange("Đồng/bầu");
+//                                                             print(_unitValue);
+//                                                           });
+//                                                         },
+//                                                       ),
+//                                                     ),
+//                                                     Flexible(
+//                                                         flex: 1,
+//                                                         child: RadioListTile(
+//                                                           activeColor: AppColors.main,
+//                                                           title: Text("Công", style: AppTextStyle.greyS16Bold),
+//                                                           value: Unit.Cong,
+//                                                           groupValue: unit,
+//                                                           onChanged:(value){
+//                                                             setState(() {
+//                                                               unit = value as Unit;
+//                                                               handleUnitChange("Công");
+//                                                               print(_unitValue);
+//                                                             });
+//                                                           },
+//                                                         )
+//                                                     ),
+//                                                   ],
+//                                                 ) ,
+//                                               )
+//
+//                                             ])
+//                                     ),
+//                                   ),
+//                                 )
+//                             ),
+//                           ),
+//                           Container(
+//                             padding: const EdgeInsets.all(10.0),
+//                                 child: Row(
+//                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                                   children: [
+//                                     Expanded(
+//                                       child: AppButton(
+//                                         color: AppColors.redButton,
+//                                         title: 'Hủy bỏ',
+//                                         onPressed: (){
+//                                           Navigator.pop(context);
+//                                         },
+//                                       ),
+//                                     ),
+//                                     SizedBox(width: 20),
+//                                     Expanded(
+//                                       child: AppButton(
+//                                         color: AppColors.main,
+//                                         title: 'Xác nhận',
+//                                         onPressed: () {}
+//                                       ),
+//                                     ),
+//                                   ],
+//                             ),
+//                           )
+//                         ],
+//                       ),
+//                     ),
+//                   ],
+//         ),
+//               ),
+//             ),
+//           );
+//       });
+// }
+
 }
