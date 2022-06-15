@@ -8,6 +8,7 @@ import 'package:flutter_base/router/router_handlers/home_bagri_router_handler.da
 import 'package:flutter_base/router/router_handlers/notification_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/season_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/process_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/storage_manager_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/task_manage_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/task_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/tree_router_handler.dart';
@@ -83,6 +84,9 @@ class Routes {
   ///Task
   static String tabTask = '/tabTask';
   static String addContractTask = '/addContractTask';
+
+  ///Storage
+  static String manageStorage = '/manageStorage';
 
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = notHandler;
@@ -299,5 +303,8 @@ class Routes {
         addContractTask,
         handler: addContractTaskHandler,
         transitionType: TransitionType.fadeIn);
+    
+    ///manage Storage
+    router.define(manageStorage, handler: storageManagementHandler, transitionType: TransitionType.fadeIn);
   }
 }

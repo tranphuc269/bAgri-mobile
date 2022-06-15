@@ -1,3 +1,4 @@
+import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'temporary_task.g.dart';
@@ -46,18 +47,21 @@ class DailyTask {
   String? title;
   int? fee;
   int? workerQuantity;
+  List<Material>? material;
+
 
   DailyTask(
-      {this.title, this.dailyTaskId, this.date, this.fee, this.workerQuantity});
+      {this.title, this.dailyTaskId, this.date, this.fee, this.workerQuantity, this.material});
 
   DailyTask copyWith(
       {String? dailyTaskId,
       String? date,
       String? title,
       int? fee,
-      int? workerQuantity}) {
+      int? workerQuantity,
+      List<Material>? material}) {
     return DailyTask(
-        date: date, title: title, fee: fee, workerQuantity: workerQuantity);
+        date: date, title: title, fee: fee, workerQuantity: workerQuantity, material: material);
   }
   factory DailyTask.fromJson(Map<String, dynamic> json) => _$DailyTaskFromJson(json);
   Map<String, dynamic> toJson() => _$DailyTaskToJson(this);

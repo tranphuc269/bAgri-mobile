@@ -36,6 +36,8 @@ class AppImages {
   static final icWarning = 'assets/images/ic_warning.png';
   static final icGardenNoColor = 'assets/images/ic_garden_no_color.png';
   static final icDialyWork = 'assets/images/ic_dialy_work.png';
+  static final icStorage = 'assets/images/ic_storage.png';
+  static final icMaterial = 'assets/images/ic_fertilizer_2.png';
 
   ///employee
   static final icEmployeeAvatar = 'assets/images/ic_employee_avatar.png';

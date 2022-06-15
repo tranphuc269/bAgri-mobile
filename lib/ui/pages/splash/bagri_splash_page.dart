@@ -137,7 +137,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void showStorageByAccount() {
     Application.router!
-        .navigateTo(context, Routes.homeGardenManager, clearStack: true);
+        .navigateTo(context, Routes.home, clearStack: true);
   }
 
   void showLogin() {

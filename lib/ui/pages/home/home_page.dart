@@ -121,8 +121,8 @@ class _HomePageState extends State<HomePage> {
                     CategoryItem(
                       title: "Quản lý kho",
                       color: Color(0xFF9FB4FF),
-                      urlImage: AppImages.icUser,
-                      ridirectPage: redirectManageAccount,
+                      urlImage: AppImages.icStorage,
+                      ridirectPage: redirectManageStorage,
                     )
                 ],
               ),
@@ -292,6 +292,10 @@ class _HomePageState extends State<HomePage> {
 
   void redirectManageAccount() {
     Application.router?.navigateTo(context, Routes.manageAccount);
+  }
+
+  void redirectManageStorage() {
+    Application.router?.navigateTo(context, Routes.manageStorage);
   }
 
   void redirectContractWorkList() {

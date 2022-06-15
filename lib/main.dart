@@ -27,10 +27,7 @@ import 'package:flutter_base/repositories/weather_repository.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/router/navigation_observer.dart';
-import 'package:flutter_base/ui/pages/contract_work_management/contract_work_list/contract_work_list_page.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
-import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_add/contract_task_add_page.dart';
-import 'package:flutter_base/ui/pages/task/tab_tasks_manage.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -76,8 +73,6 @@ class _MyAppState extends State<MyApp> {
   OverlaySupportEntry? _overlaySupportEntry;
   bool networkEnabled = true;
   NavigationCubit? _navigationCubit;
-
-  // late DynamicConfigCubit _dynamicConfigCubit;
 
   @override
   void initState() {
@@ -248,6 +243,7 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitUp,
     ]);
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       navigatorKey: appNavigatorKey,
       title: AppConfig.appName,
       //đã sửa hardcode
