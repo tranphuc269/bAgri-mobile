@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
     //_notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
 
     _appCubit!.getData();
-    //_notificationCubit.getListNotification();
+    // _notificationCubit.getListNotification();
   }
 
   @override
@@ -78,24 +78,27 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CategoryItem(
-                    title: 'Quản lý vườn',
-                    color: AppColors.green289768,
-                    urlImage: AppImages.icGarden,
-                    ridirectPage: redirectZone,
-                  ),
-                  CategoryItem(
-                    title: 'Quản lý mùa vụ',
-                    color: AppColors.brown975D28,
-                    urlImage: AppImages.icSeason,
-                    ridirectPage: redirectSeason,
-                  ),
-                  CategoryItem(
-                    title: 'Quản lý quy trình',
-                    color: AppColors.blue4493DB,
-                    urlImage: AppImages.icProcedure,
-                    ridirectPage: redirectProcess,
-                  ),
+                  if(GlobalData.instance.userEntity!.role != "ACCOUNTANT") ...[
+                    CategoryItem(
+                      title: 'Quản lý vườn',
+                      color: AppColors.green289768,
+                      urlImage: AppImages.icGarden,
+                      ridirectPage: redirectZone,
+                    ),
+                    CategoryItem(
+                      title: 'Quản lý mùa vụ',
+                      color: AppColors.brown975D28,
+                      urlImage: AppImages.icSeason,
+                      ridirectPage: redirectSeason,
+                    ),
+                    if (GlobalData.instance.userEntity!.role != "GARDEN_MANAGER")
+                    CategoryItem(
+                      title: 'Quản lý quy trình',
+                      color: AppColors.blue4493DB,
+                      urlImage: AppImages.icProcedure,
+                      ridirectPage: redirectProcess,
+                    ),
+                  ],
                   CategoryItem(
                       title: 'Công việc hằng ngày',
                       color: AppColors.green94B,
@@ -111,6 +114,13 @@ class _HomePageState extends State<HomePage> {
                     CategoryItem(
                       title: "Quản lý tài khoản",
                       color: Color(0xFFD57E7E),
+                      urlImage: AppImages.icUser,
+                      ridirectPage: redirectManageAccount,
+                    ),
+                  if(GlobalData.instance.userEntity!.role == "ACCOUNTANT")
+                    CategoryItem(
+                      title: "Quản lý kho",
+                      color: Color(0xFF9FB4FF),
                       urlImage: AppImages.icUser,
                       ridirectPage: redirectManageAccount,
                     )

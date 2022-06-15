@@ -3,6 +3,8 @@ class AppImages {
   static final icBAgri = 'assets/images/logo_bagri.png';
   static final icMenuFold = 'assets/images/ic_menufold.png';
   static final icCloudBA = 'assets/images/ic_cloud.png';
+  static final icCrop = 'assets/images/ic_crop.png';
+  static final icCropNoColor = 'assets/images/ic_crop_no_color.png';
   static final icGarden = 'assets/images/ic_garden.png';
   static final icSeason = 'assets/images/ic_season.png';
   static final icLabor = 'assets/images/ic_labor.png';
