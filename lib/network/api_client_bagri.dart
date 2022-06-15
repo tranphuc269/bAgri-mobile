@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/entities/farmer/farmer.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/file/file_entity.dart';
@@ -122,6 +123,10 @@ abstract class ApiClient {
       {@Path("garden_id") String? gardenId});
 
   /// Process
+  // @GET("/processes")
+  // Future<ProcessDataEntity> getListProcessData(
+  //     @Body() Map<String, dynamic> body);
+
   @DELETE("/processes/{process_id}")
   Future<ProcessDeleteResponse> deleteProcess(
       {@Path("process_id") String? processId});
@@ -141,6 +146,9 @@ abstract class ApiClient {
   Future<ProcessDataEntity> getProcessOfTree(@Path("tree_id") String treeId);
 
   /// Tree
+  // @GET("/trees")
+  // Future<TreeDataEntity> getListTreeData();
+
   @DELETE("/trees/{tree_id}")
   Future<TreeDeleteResponse> deleteTree({@Path("tree_id") String? treeId});
 
@@ -204,7 +212,7 @@ abstract class ApiClient {
 
   @PUT("/seasons/{season_id}")
   Future<SeasonEntity> updateSeason(
-      @Path("season_id") String seasonId, @Body() Map<String, dynamic> body);
+      @Path("season_id") String seasonId, @Body() Map<String, dynamic> param);
 
   @GET("/tasks")
   Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
@@ -251,16 +259,21 @@ abstract class ApiClient {
 
   ///Contract Work
   @GET("/works")
-  Future<dynamic> getListContractWork(@Header("accept") String? accept, @Header("Authorization") String? auth);
+  Future<List<ContractWorkEntity>> getListContractWork(@Header("accept") String? accept, @Header("Authorization") String? auth);
   @POST("/works")
   Future<dynamic> createContractWork(
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
       @Header('Content-Type')String content_type,
       @Body() Map<String, dynamic> body);
+  @DELETE("/works/{work_id}")
+  Future <dynamic> deleteContractWork (
+      @Header("accept") String? accept,
+      @Header("Authorization") String? auth,
+      @Path("work_id") String? workId,);
+  @PUT("/works/{work_id}")
+  Future <dynamic> modifyContractWork(@Header('accept') String accept,@Header("Authorization") String? auth,@Header('Content-Type')String content_type,@Path("work_id") String? workId,@Body() Map<String, dynamic> body);
 
-  @GET("/works")
-  Future<List<Work>> getListWork();
 
   /// Upload File
   @POST("/files")

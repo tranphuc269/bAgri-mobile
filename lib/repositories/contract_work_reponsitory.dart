@@ -8,9 +8,9 @@ import 'package:flutter_base/network/api_client_bagri.dart';
 abstract class ContractWorkRepositoy{
 
   Future<dynamic> getListContractWorks();
-  Future<List<Work>> getListWork();
   Future<dynamic> createContractWork({CreateContractWorkParam? param});
-
+  Future<dynamic> deleteContractWork({String? workId});
+  Future<dynamic> modifyContractWork({String? workId, CreateContractWorkParam? param });
 }
 
 class ContractWorkRepositoryImpl extends ContractWorkRepositoy{
@@ -25,7 +25,7 @@ class ContractWorkRepositoryImpl extends ContractWorkRepositoy{
    return _apiClientBagri!.getListContractWork("application/json","Bearer ${accessToken}");
   }
 
-  Future createContractWork({CreateContractWorkParam? param}){
+  Future <void>createContractWork({CreateContractWorkParam? param}){
     final body = {
       'title': param?.title ?? "",
       "unit" : param?.unit ?? "",
@@ -33,9 +33,17 @@ class ContractWorkRepositoryImpl extends ContractWorkRepositoy{
     };
     return _apiClientBagri!.createContractWork("application/json", "Bearer ${accessToken}", "application/json", body);
   }
+  Future <void> deleteContractWork({String? workId})  {
+    return _apiClientBagri!.deleteContractWork("application/json", "Bearer ${accessToken}", workId);
+  }
 
-  Future<List<Work>> getListWork() async{
-    return await _apiClientBagri!.getListWork();
-}
+  Future <void> modifyContractWork({String? workId, CreateContractWorkParam? param}){
+    final body = {
+      'title': param?.title ?? "",
+      "unit" : param?.unit ?? "",
+      "unitPrice": param?.unitPrice ?? ""
+    };
+    return _apiClientBagri!.modifyContractWork("application/json", "Bearer ${accessToken}", "application/json", workId, body);
+  }
 
 }
