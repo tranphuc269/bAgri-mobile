@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_base/models/entities/task/work.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/models/params/contractWork/create_contract_work_param.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
@@ -17,10 +18,10 @@ class ContractWorkListCubit extends Cubit<ContractWorkListState> {
   void fetchContractWorkList() async {
     emit(state.copyWith(getListWorkStatus: LoadStatus.LOADING));
     try {
-      final response = await contractWorkRepositoy!.getListContractWorks();
+      final response = await contractWorkRepositoy!.getListWork();
       print(response);
       if (response != null) {
-        emit(state.copyWith(getListWorkStatus: LoadStatus.SUCCESS));
+        emit(state.copyWith(getListWorkStatus: LoadStatus.SUCCESS, listWork: response));
       } else {
         emit(state.copyWith(getListWorkStatus: LoadStatus.FAILURE));
       }

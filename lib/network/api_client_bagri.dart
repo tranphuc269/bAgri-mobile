@@ -24,6 +24,8 @@ import 'package:flutter_base/models/entities/season/season_task_detail_entity.da
 import 'package:flutter_base/models/entities/season/season_task_entity.dart';
 import 'package:flutter_base/models/entities/season/season_update_entity.dart';
 import 'package:flutter_base/models/entities/task/task.dart';
+import 'package:flutter_base/models/entities/task/temporary_task.dart';
+import 'package:flutter_base/models/entities/task/work.dart';
 import 'package:flutter_base/models/entities/token/login_model.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_delete_response.dart';
@@ -257,7 +259,8 @@ abstract class ApiClient {
       @Header('Content-Type')String content_type,
       @Body() Map<String, dynamic> body);
 
-
+  @GET("/works")
+  Future<List<Work>> getListWork();
 
   /// Upload File
   @POST("/files")
@@ -266,6 +269,13 @@ abstract class ApiClient {
   @POST("/seasons/{season_id}/qr_code")
   Future<ObjectResponse<QREntity>> generateQRCode(
       @Path("season_id") String seasonId);
+
+  //temporary task
+  @GET("/temporary-tasks")
+  Future<List<TemporaryTask>> getListTemporaryTasks();
+
+  @POST("/temporary-tasks")
+  Future<dynamic> createTemporaryTask(@Body() Map<String, dynamic> body);
 }
 
 class AppApi {
