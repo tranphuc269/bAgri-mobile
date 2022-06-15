@@ -198,7 +198,7 @@ abstract class ApiClient {
       );
 
   @GET("/seasons/{seasonId}")
-  Future<ObjectResponse<SeasonDetailResponse>> getSeasonById(
+  Future<SeasonEntity> getSeasonById(
       @Path('seasonId') String seasonId);
 
   @POST("/seasons")
@@ -209,8 +209,8 @@ abstract class ApiClient {
   Future<TreeDeleteResponse> deleteSeason(@Path("season_id") String seasonId);
 
   @PUT("/seasons/{season_id}")
-  Future<ObjectResponse<SeasonUpdateResponse>> updateSeason(
-      @Path("season_id") String seasonId, @Body() CreateSeasonParam param);
+  Future<SeasonEntity> updateSeason(
+      @Path("season_id") String seasonId, @Body() Map<String, dynamic> param);
 
   @GET("/tasks")
   Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
