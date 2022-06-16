@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
@@ -46,9 +47,12 @@ class ContractWorkListCubit extends Cubit<ContractWorkListState> {
       } else {
         emit(state.copyWith(createContractWorkStatus: LoadStatus.FAILURE));
       }
-    } catch (e) {
-      emit(state.copyWith(createContractWorkStatus: LoadStatus.FAILURE));
-      throw e;
+    } catch (error) {
+      if (error is DioError) {
+        emit(state.copyWith(createContractWorkStatus: LoadStatus.FAILURE));
+        print(error);
+      }
+
     }
   }
   Future <void> deleteContractWork(String? workId) async{

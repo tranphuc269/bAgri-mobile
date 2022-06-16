@@ -122,7 +122,7 @@ class GardenUpdateCubit extends Cubit<GardenUpdateState> {
       final response = await gardenRepository!.getListAcounts();
       List<UserEntity> managers = [];
       response.forEach((element) {
-        if(element.role == "QLV"){
+        if(element.role == "GARDEN_MANAGER"){
           managers.add(element);
           print(element.name);
         }
