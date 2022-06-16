@@ -4,6 +4,7 @@ part of 'contract_work_list_cubit.dart';
 class ContractWorkListState extends Equatable{
 
   LoadStatus? getListWorkStatus;
+  // List<Work>? listWork;
   LoadStatus? createContractWorkStatus;
   LoadStatus? deleteContractWorkStatus;
   LoadStatus? modifyContractWorKStatus;
@@ -22,6 +23,7 @@ class ContractWorkListState extends Equatable{
     List<ContractWorkEntity>? listContractWork
   }) {
     return ContractWorkListState(
+      // listWork: listWork ?? this.listWork,
       getListWorkStatus: getListWorkStatus ?? this.getListWorkStatus,
       createContractWorkStatus: createContractWorkStatus ?? this.createContractWorkStatus,
       deleteContractWorkStatus: deleteContractWorkStatus ?? this.deleteContractWorkStatus,

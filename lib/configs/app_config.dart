@@ -4,7 +4,7 @@ class AppConfig {
   static const String appName = 'B-Agri';
 
   // // STAGING
-  // static const baseUrl = "http://139.59.192.86:8080/v1"; //Stagging
+  // static const baseUrl = "https://a205-222-252-10-226.ap.ngrok.io"; //Stagging
 
   static const baseUrl = "http://167.71.196.194:7000";
   static const weatherUrl = "https://api.openweathermap.org/data/2.5";

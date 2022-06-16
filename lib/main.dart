@@ -76,6 +76,7 @@ class _MyAppState extends State<MyApp> {
   OverlaySupportEntry? _overlaySupportEntry;
   bool networkEnabled = true;
   NavigationCubit? _navigationCubit;
+
   // late DynamicConfigCubit _dynamicConfigCubit;
 
   @override
@@ -175,18 +176,17 @@ class _MyAppState extends State<MyApp> {
           return WeatherRepositoryImpl(_apiWeather);
         }),
         RepositoryProvider<UploadRepository>(create: (context) {
-          return  UploadRepositoryImpl(_apiClient);
+          return UploadRepositoryImpl(_apiClient);
         }),
         // RepositoryProvider<GlobalDataRepository>(create: (context) {
         //   return GlobalDataRepositoryImpl(_apiClient);
         // }),
         RepositoryProvider<ZoneRepository>(create: (context) {
-          return  ZoneRepositoryImpl(_apiClient);
+          return ZoneRepositoryImpl(_apiClient);
         }),
         RepositoryProvider<ContractWorkRepositoy>(create: (context) {
-          return  ContractWorkRepositoryImpl(_apiClient);
+          return ContractWorkRepositoryImpl(_apiClient);
         }),
-
       ],
       child: MultiBlocProvider(
         providers: [
@@ -222,8 +222,6 @@ class _MyAppState extends State<MyApp> {
               farmerRepository: _farmerRepository,
               weatherRepository: _weatherRepository,
               zoneRepository: _zoneRepository,
-
-
             );
           }),
           BlocProvider<NavigationCubit>(create: (context) => _navigationCubit!),
@@ -255,8 +253,8 @@ class _MyAppState extends State<MyApp> {
       //đã sửa hardcode
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
-     initialRoute: Routes.root,
-     //  home: TaskTabPage(),
+      initialRoute: Routes.root,
+      //  home:  AddContractTaskPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],
