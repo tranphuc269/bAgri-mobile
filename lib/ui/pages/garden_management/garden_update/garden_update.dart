@@ -292,8 +292,9 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
 
   }
   Widget _buildSelectManager() {
-    var index = _cubit!.state.listManager!.indexWhere((element) => element.id == _cubit!.state.gardenData!.managerId);
-    UserEntity? defaultValue = _cubit!.state.listManager![index] as UserEntity;
+   var index = _cubit!.state.listManager!.indexWhere((element) => element.id == _cubit!.state.gardenData!.managerId);
+    UserEntity? defaultValue = _cubit!.state.listManager![index];
+
     _managerValue = defaultValue;
     return DropdownButtonFormField(
               style: AppTextStyle.blackS16,
@@ -373,7 +374,8 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
                   child: AppRedButton(
                       title: 'Hủy bỏ',
                       onPressed: () async {
-                        Navigator.pop(context);
+
+                       Navigator.pop(context);
                       })),
               SizedBox(
                 width: 30,

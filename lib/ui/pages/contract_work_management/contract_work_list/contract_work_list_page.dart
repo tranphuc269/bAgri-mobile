@@ -108,16 +108,17 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
                               unit: contractWork.unit ?? "",
                               unitPrice: contractWork.unitPrice.toString(),
                               onUpdate: () async {
-                                bool isModify = await showDialog(
-                                    context: context,
-                                    builder: (context) => _dialogModify(
-                                        contractWork: contractWork));
-
-                                if (isModify) {
-                                  _onRefreshData();
-                                  showSnackBar(
-                                      'Thay đổi thông tin thành công!');
-                                }
+                                // bool isModify = await showDialog(
+                                //     context: context,
+                                //     builder: (context) => _dialogModify(
+                                //         contractWork: contractWork));
+                                //
+                                // if (isModify) {
+                                //   _onRefreshData();
+                                //   showSnackBar(
+                                //       'Thay đổi thông tin thành công!');
+                                // }
+                                showModifyDialog(contractWork: contractWork);
                               },
                               onDelete: () async {
                                 bool isDelete = await showDialog(
@@ -156,20 +157,8 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: "btn2",
-        onPressed: () async {
-          // _cubit!.createContractWork();
-          bool isAdd = await showDialog(
-              context: context,
-              builder: (context) =>
-                  _dialogCreate(title: Text("Thêm công việc khoán")));
-          // bool isAdd = await Application.router
-          //     ?.navigateTo(context, Routes.treeCreate);
-          if (isAdd) {
-            _onRefreshData();
-            showSnackBar('Tạo công việc thành công!');
-          } else {
-            showSnackBar('Đã có lỗi xảy ra!');
-          }
+        onPressed: () {
+          showCreateDialog();
         },
         backgroundColor: AppColors.main,
         child: Icon(
@@ -300,108 +289,6 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
         ),
       ),
     );
-  }
-
-  Widget _dialogCreate({
-    Text? title,
-  }) {
-    return StatefulBuilder(builder: (context, setState) {
-      return AlertDialog(
-        title: title,
-        content: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Container(
-            constraints: BoxConstraints(
-              maxHeight: double.infinity,
-            ),
-            // width: MediaQuery.of(context).size.width +20,
-            child: Form(
-                key: _formKey,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildTextLabel("Nội dung:"),
-                      _buildContentInput(_contentController),
-                      _buildTextLabel("Đơn giá:"),
-                      _buildUnitPriceInput(_unitPriceController),
-                      _buildTextLabel("Đơn vị:"),
-                      Theme(
-                        data: Theme.of(context)
-                            .copyWith(unselectedWidgetColor: AppColors.main),
-                        child: Row(
-                          children: [
-                            Flexible(
-                              flex: 1,
-                              child: RadioListTile(
-                                activeColor: AppColors.main,
-                                title: Text("Đồng/bầu",
-                                    style: AppTextStyle.greyS16Bold),
-                                value: Unit.Dong,
-                                groupValue: unit,
-                                onChanged: (value) {
-                                  setState(() {
-                                    unit = value as Unit;
-                                    handleUnitChange("Đồng/bầu");
-                                    print(_unitValue);
-                                  });
-                                },
-                              ),
-                            ),
-                            Flexible(
-                                flex: 1,
-                                child: RadioListTile(
-                                  activeColor: AppColors.main,
-                                  title: Text("Công",
-                                      style: AppTextStyle.greyS16Bold),
-                                  value: Unit.Cong,
-                                  groupValue: unit,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      unit = value as Unit;
-                                      handleUnitChange("Công");
-                                      print(_unitValue);
-                                    });
-                                  },
-                                )),
-                          ],
-                        ),
-                      )
-                    ])),
-          ),
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _contentController.clear();
-                _unitPriceController.clear();
-              },
-              child: Text("Hủy", style: AppTextStyle.redS16)),
-          TextButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  // await _cubit!.createZone(_nameZoneController.text);
-                  // if(state.createZoneStatus == LoadStatus.FAILURE){
-                  //   Navigator.pop(context, false);
-                  // } else{
-                  //   Navigator.pop(context, true);
-                  // }
-                  await _cubit!.createContractWork(_unitValue);
-                  if (_cubit!.state.createContractWorkStatus ==
-                      LoadStatus.SUCCESS) {
-                    Navigator.pop(context, true);
-                  } else {
-                    Navigator.pop(context, false);
-                  }
-                }
-              },
-              child: Text(
-                "Thêm",
-                style: AppTextStyle.greenS16,
-              ))
-        ],
-      );
-    });
   }
 
   Widget _dialogModify({
@@ -562,12 +449,331 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
     );
   }
 
+  void showCreateDialog(){
+  showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+
+      barrierLabel: MaterialLocalizations.of(context)
+          .modalBarrierDismissLabel,
+      barrierColor: Colors.black45,
+      transitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (BuildContext buildContext,
+          Animation animation,
+          Animation secondaryAnimation) {
+        return  StatefulBuilder(
+        builder:(context, setState){
+          return Center(
+            child: Container(
+              padding: EdgeInsets.all(7),
+              height: 430,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(20.0)),
+                child: Stack(
+                  clipBehavior: Clip.none, children: <Widget>[
+                    Form(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(child: Text("Thêm công việc khoán", style:TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontSize: 20, fontStyle: FontStyle.italic, fontFamily: "Helvetica"))),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                                child: SingleChildScrollView(
+                                  physics: ClampingScrollPhysics(),
+                                  child: Container(
+                                    child: Form(
+                                        key: _formKey,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              _buildTextLabel("Nội dung:"),
+                                              _buildContentInput(_contentController),
+                                              _buildTextLabel("Đơn giá:"),
+                                              _buildUnitPriceInput(_unitPriceController),
+                                              _buildTextLabel("Đơn vị:"),
+                                              Theme(
+                                                data: Theme.of(context).copyWith(
+                                                    unselectedWidgetColor: AppColors.main
+                                                ),
+                                                child:Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    Flexible(
+                                                      flex: 1,
+                                                      child: RadioListTile(
+                                                        activeColor: AppColors.main,
+                                                        title: Text("Đồng/bầu", style: AppTextStyle.greyS16Bold),
+                                                        value: Unit.Dong,
+                                                        groupValue: unit,
+                                                        onChanged: (value){
+                                                          setState(() {
+                                                            unit = value as Unit;
+                                                            handleUnitChange("Đồng/bầu");
+                                                            print(_unitValue);
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Flexible(
+                                                        flex: 1,
+                                                        child: RadioListTile(
+                                                          activeColor: AppColors.main,
+                                                          title: Text("Công", style: AppTextStyle.greyS16Bold),
+                                                          value: Unit.Cong,
+                                                          groupValue: unit,
+                                                          onChanged:(value){
+                                                            setState(() {
+                                                              unit = value as Unit;
+                                                              handleUnitChange("Công");
+                                                              print(_unitValue);
+                                                            });
+                                                          },
+                                                        )
+                                                    ),
+                                                  ],
+                                                ) ,
+                                              )
+
+                                            ])
+                                    ),
+                                  ),
+                                )
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      child: AppButton(
+                                        color: AppColors.redButton,
+                                        title: 'Hủy bỏ',
+                                        onPressed: (){
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                      child: AppButton(
+                                        color: AppColors.main,
+                                        title: 'Xác nhận',
+                                        onPressed: () async {
+                                          if (_formKey.currentState!.validate()) {
+
+                                            await _cubit!.createContractWork(_unitValue);
+                                          if (_cubit!.state.createContractWorkStatus ==
+                                          LoadStatus.SUCCESS) {
+                                          Navigator.pop(context, true);
+                                          showSnackBar("Tạo công việc thành công");
+                                          _onRefreshData();
+                                          _contentController.clear();
+                                          _unitPriceController.clear();
+                                          } else {
+                                          Navigator.pop(context, false);
+                                          showErrorSnackBar("Công việc đã tồn tại");
+                                          }
+                                        }
+
+                                        }
+                                      ),
+                                    ),
+                                  ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+        ),
+              ),
+            ),
+          );});
+      });
+}
+  void showModifyDialog({
+    ContractWorkEntity? contractWork,
+    Text? title,
+  }){
+    _contentModifyController = TextEditingController(text: contractWork!.title);
+    _unitPriceModifyController =
+        TextEditingController(text: contractWork.unitPrice.toString());
+    String? unitResponse = contractWork.unit;
+    Unit unitModify = contractWork.unit == "Công" ? Unit.Cong : Unit.Dong;
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+
+        barrierLabel: MaterialLocalizations.of(context)
+            .modalBarrierDismissLabel,
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (BuildContext buildContext,
+            Animation animation,
+            Animation secondaryAnimation) {
+          return  StatefulBuilder(
+              builder:(context, setState){
+                return Center(
+                  child: Container(
+                    padding: EdgeInsets.all(7),
+                    height: 430,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.circular(20.0)),
+                      child: Stack(
+                        clipBehavior: Clip.none, children: <Widget>[
+                        Form(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Container(
+                                height: 60,
+                                width: MediaQuery.of(context).size.width,
+                                child: Center(child: Text("Thay đổi thông tin", style:TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontSize: 20, fontStyle: FontStyle.italic, fontFamily: "Helvetica"))),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.zero,
+                                child: Container(
+                                    child: SingleChildScrollView(
+                                      physics: ClampingScrollPhysics(),
+                                      child: Container(
+                                        child: Form(
+                                            key: _formKey,
+                                            child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  _buildTextLabel("Nội dung:"),
+                                                  _buildContentInput(_contentModifyController),
+                                                  _buildTextLabel("Đơn giá:"),
+                                                  _buildUnitPriceInput(_unitPriceModifyController),
+                                                  _buildTextLabel("Đơn vị:"),
+                                                  Theme(
+                                                    data: Theme.of(context).copyWith(
+                                                        unselectedWidgetColor: AppColors.main
+                                                    ),
+                                                    child:Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      children: [
+                                                        Flexible(
+                                                          flex: 1,
+                                                          child: RadioListTile(
+                                                            activeColor: AppColors.main,
+                                                            title: Text("Đồng/bầu", style: AppTextStyle.greyS16Bold),
+                                                            value: Unit.Dong,
+                                                            groupValue: unitModify,
+                                                            onChanged: (value){
+                                                              setState(() {
+                                                                unitModify = value as Unit;
+                                                                unitResponse = "Đồng/bầu";
+                                                              });
+                                                            },
+                                                          ),
+                                                        ),
+                                                        Flexible(
+                                                            flex: 1,
+                                                            child: RadioListTile(
+                                                              activeColor: AppColors.main,
+                                                              title: Text("Công", style: AppTextStyle.greyS16Bold),
+                                                              value: Unit.Cong,
+                                                              groupValue: unitModify,
+                                                              onChanged:(value){
+                                                                setState(() {
+                                                                  unitModify = value as Unit;
+                                                                  unitResponse = "Công";
+                                                                });
+                                                              },
+                                                            )
+                                                        ),
+                                                      ],
+                                                    ) ,
+                                                  )
+
+                                                ])
+                                        ),
+                                      ),
+                                    )
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      child: AppButton(
+                                        color: AppColors.redButton,
+                                        title: 'Hủy bỏ',
+                                        onPressed: (){
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                      child: AppButton(
+                                          color: AppColors.main,
+                                          title: 'Xác nhận',
+                                          onPressed: () async {
+                                            if (_formKey.currentState!.validate()) {
+                                              await _cubit!.modifyContractWork(
+                                                  contractWork.id,
+                                                  _contentModifyController.text,
+                                                  unitResponse,
+                                                  _unitPriceModifyController.text);
+                                              if (_cubit!.state.modifyContractWorKStatus ==
+                                                  LoadStatus.SUCCESS) {
+                                                Navigator.pop(context, true);
+                                                _onRefreshData();
+                                                showSnackBar("Thay đổi thông tin thành công");
+                                                _contentModifyController.clear();
+                                                _unitPriceModifyController.clear();
+                                              } else {
+                                                Navigator.pop(context, false);
+                                                showErrorSnackBar("Thông tin đã trùng");
+                                              }
+                                            }
+
+                                          }
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                      ),
+                    ),
+                  ),
+                );});
+        });
+  }
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
       typeSnackBar: "success",
       message: message,
     ));
+  }
+  void showErrorSnackBar(String message){
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "error",
+      message: message,
+    ));
+
   }
 
   Future<void> _onRefreshData() async {

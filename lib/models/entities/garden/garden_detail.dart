@@ -2,32 +2,32 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'garden_detail.g.dart';
 
-@JsonSerializable()
-class GardenDetailResponse {
-  @JsonKey()
-  String? status;
-  @JsonKey()
-  GardenDetailEntity? data;
-
-  GardenDetailResponse({
-    this.status,
-    this.data,
-  });
-
-  GardenDetailResponse copyWith({
-    String? status,
-    GardenDetailEntity? data,
-  }) {
-    return GardenDetailResponse(
-      status: status ?? this.status,
-      data: data ?? this.data,
-    );
-  }
-
-  factory GardenDetailResponse.fromJson(Map<String, dynamic> json) =>
-      _$GardenDetailResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$GardenDetailResponseToJson(this);
-}
+// @JsonSerializable()
+// class GardenDetailResponse {
+//   @JsonKey()
+//   String? status;
+//   @JsonKey()
+//   GardenDetailEntity? data;
+//
+//   GardenDetailResponse({
+//     this.status,
+//     this.data,
+//   });
+//
+//   GardenDetailResponse copyWith({
+//     String? status,
+//     GardenDetailEntity? data,
+//   }) {
+//     return GardenDetailResponse(
+//       status: status ?? this.status,
+//       data: data ?? this.data,
+//     );
+//   }
+//
+//   factory GardenDetailResponse.fromJson(Map<String, dynamic> json) =>
+//       _$GardenDetailResponseFromJson(json);
+//   Map<String, dynamic> toJson() => _$GardenDetailResponseToJson(this);
+// }
 
 @JsonSerializable()
 class GardenDetailEntity {

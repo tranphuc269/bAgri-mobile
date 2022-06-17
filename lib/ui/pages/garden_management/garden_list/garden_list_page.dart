@@ -128,6 +128,8 @@ class _GardenListState extends State<GardenListPage> {
                               },
                               onUpdate: () async {
                                 print(widget.titleScreen);
+                                print(garden.garden_id);
+
                                 bool isUpdate =
                                     await Application.router!.navigateTo(
                                   appNavigatorKey.currentContext!,
