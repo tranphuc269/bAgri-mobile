@@ -76,9 +76,9 @@ class SeasonEntity {
   String? gardenId;
   ProcessEntity? process;
   TreeEntity? tree;
-  @JsonKey(name: 'from')
+  @JsonKey(name: 'start')
   String? start_date;
-  @JsonKey(name: 'to')
+  @JsonKey(name: 'end')
   String? end_date;
   int? treeQuantity;
 

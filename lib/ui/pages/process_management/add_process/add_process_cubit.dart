@@ -70,6 +70,15 @@ class AddProcessCubit extends Cubit<AddProcessState> {
         stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
   }
 
+  void editStage(int indexStages, String name, String description){
+    List<StageEntity> stages = state.stages!;
+    stages[indexStages].name = name;
+    stages[indexStages].description = description;
+    List<StageEntity> newList = stages;
+    emit(state.copyWith(
+        stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
+  }
+
   void createStep(int index, StepEntity value) {
     List<StageEntity> stages = state.stages!;
     if (stages[index].steps == null) {

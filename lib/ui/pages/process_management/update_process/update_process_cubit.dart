@@ -40,6 +40,15 @@ class UpdateProcessCubit extends Cubit<UpdateProcessState> {
         updateProcessStatus: LoadStatus.FORMAT_EXTENSION_FILE));
   }
 
+  void editStage(int indexStages, String name, String description){
+    List<StageEntity> stages = state.stages!;
+    stages[indexStages].name = name;
+    stages[indexStages].description = description;
+    List<StageEntity> newList = stages;
+    emit(state.copyWith(
+        stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
+  }
+
   void removeList(int index) {
     emit(state.copyWith(updateProcessStatus: LoadStatus.LOADING_MORE));
     List<StageEntity> stages = state.stages!;

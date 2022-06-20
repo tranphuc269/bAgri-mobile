@@ -47,7 +47,7 @@ class StepEntity extends Equatable {
 
   @override
   List<Object?> get props =>
-      [step_id, from_day, to_day, name, /*stage_id,*/ actual_day, description];
+      [step_id, from_day, to_day, name,  actual_day, description];
 
   StepEntity({
     this.step_id,

@@ -12,7 +12,6 @@ import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/entities/weather/weather_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
-import 'package:flutter_base/repositories/farmer_repository.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/task_repository.dart';
@@ -30,7 +29,7 @@ class AppCubit extends Cubit<AppState> {
   AuthRepository authRepository;
   TaskRepository taskRepository;
   UserRepository userRepository;
-  FarmerRepository farmerRepository;
+  // FarmerRepository farmerRepository;
   WeatherRepository weatherRepository;
   ZoneRepository zoneRepository;
   AppCubit({
@@ -40,7 +39,7 @@ class AppCubit extends Cubit<AppState> {
     required this.gardenRepository,
     required this.taskRepository,
     required this.userRepository,
-    required this.farmerRepository,
+    // required this.farmerRepository,
     required this.weatherRepository,
     required this.zoneRepository,
   }) : super(AppState());
@@ -52,7 +51,7 @@ class AppCubit extends Cubit<AppState> {
     fetchListTree();
     fetchListTask();
     fetchListManager();
-    getListFarmerByManager();
+    // getListFarmerByManager();
     getWeather();
   }
 
@@ -123,10 +122,12 @@ class AppCubit extends Cubit<AppState> {
     emit(state.copyWith(getGardenStatus: LoadStatus.LOADING));
     try {
       final response = await gardenRepository.getGardenData();
+      List<GardenEntity> list = [];
+      list = response.where((element) => element.zone != null).toList();
       if (response != null) {
       emit(state.copyWith(
         getGardenStatus: LoadStatus.SUCCESS,
-        gardens: response/*.data!*//*.gardens*/,
+        gardens: list/*.data!*//*.gardens*/,
       ));
       } else {
         emit(state.copyWith(getGardenStatus: LoadStatus.FAILURE));
@@ -142,17 +143,17 @@ class AppCubit extends Cubit<AppState> {
     GlobalData.instance.token = null;
   }
 
-  void getListFarmerByManager() async {
-    emit(state.copyWith(farmerStatus: LoadStatus.LOADING));
-    try {
-      final FarmerList result = await farmerRepository
-          .getListFarmerByManager(GlobalData.instance.userEntity!.id);
-      emit(state.copyWith(
-          farmers: result.data!.farmers, farmerStatus: LoadStatus.SUCCESS));
-    } catch (e) {
-      emit(state.copyWith(farmerStatus: LoadStatus.FAILURE));
-    }
-  }
+  // void getListFarmerByManager() async {
+  //   emit(state.copyWith(farmerStatus: LoadStatus.LOADING));
+  //   try {
+  //     final FarmerList result = await farmerRepository
+  //         .getListFarmerByManager(GlobalData.instance.userEntity!.id);
+  //     emit(state.copyWith(
+  //         farmers: result.data!.farmers, farmerStatus: LoadStatus.SUCCESS));
+  //   } catch (e) {
+  //     emit(state.copyWith(farmerStatus: LoadStatus.FAILURE));
+  //   }
+  // }
 
   void getWeather() async {
     String? longitude = await SharedPreferencesHelper.getLongitude();

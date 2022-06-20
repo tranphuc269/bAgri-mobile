@@ -94,7 +94,7 @@ class _AccountListState extends State<AccountListPage> {
                             UserEntity user = state.listUserData![index];
                             return _buildItem(
                               name: user.name ?? "",
-                              role: user.role ?? "",
+                              role: user.role == "SUPER_ADMIN" ? "Super Admin" : (user.role == "ADMIN" ? "Kỹ thuật viên" : (user.role == "GARDEN_MANAGER" ? "Quản lý vườn" : (user.role == "ACCOUNTANT" ? "Kế toán" : "NULL"))),
                               phoneNumber: user.phoneNumber ?? "",
                               onPressed: () async {
                                 showDialog(

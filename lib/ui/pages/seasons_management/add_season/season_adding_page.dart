@@ -140,7 +140,7 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                   controller: treeQuantityController,
                   hintText: 'Nhập vào số lượng bầu',
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
                 BlocBuilder<SeasonAddingCubit, SeasonAddingState>(
                   buildWhen: (prev, current) =>
                       prev.startTime != current.startTime ||
@@ -196,56 +196,56 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 15),
-                        Row(
-                          children: [
-                            Text(
-                              'Ngày kết thúc (dự kiến):',
-                              style: AppTextStyle.greyS18,
-                            ),
-                            SizedBox(width: 15),
-                            Text(
-                              state.endTime ?? "yyyy/mm/dd",
-                              style: AppTextStyle.blackS16.copyWith(
-                                  decoration: TextDecoration.underline),
-                            ),
-                            SizedBox(width: 10),
-                            GestureDetector(
-                              onTap: () async {
-                                final result = await showDatePicker(
-                                    context: context,
-                                    locale: Locale('vi'),
-                                    initialEntryMode: DatePickerEntryMode.input,
-                                    builder: (context, child) {
-                                      return _buildCalendarTheme(child);
-                                    },
-                                    fieldHintText: "yyyy-MM-dd",
-                                    initialDate: state.endTime != null
-                                        ? Util.DateUtils.fromString(
-                                        state.endTime!,
-                                        format:
-                                        AppConfig.dateDisplayFormat)!
-                                        : DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2024));
-                                if (result != null) {
-                                  _cubit.changeEndTime(
-                                    Util.DateUtils.toDateString(result),
-                                  );
-                                }
-                              },
-                              child: SizedBox(
-                                height: 26,
-                                width: 26,
-                                child: Image.asset(
-                                  AppImages.icCalendar,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
+                        // SizedBox(height: 15),
+                //         Row(
+                //           children: [
+                //             Text(
+                //               'Ngày kết thúc (dự kiến):',
+                //               style: AppTextStyle.greyS18,
+                //             ),
+                //             SizedBox(width: 15),
+                //             Text(
+                //               state.endTime ?? "yyyy/mm/dd",
+                //               style: AppTextStyle.blackS16.copyWith(
+                //                   decoration: TextDecoration.underline),
+                //             ),
+                //             SizedBox(width: 10),
+                //             GestureDetector(
+                //               onTap: () async {
+                //                 final result = await showDatePicker(
+                //                     context: context,
+                //                     locale: Locale('vi'),
+                //                     initialEntryMode: DatePickerEntryMode.input,
+                //                     builder: (context, child) {
+                //                       return _buildCalendarTheme(child);
+                //                     },
+                //                     fieldHintText: "yyyy-MM-dd",
+                //                     initialDate: state.endTime != null
+                //                         ? Util.DateUtils.fromString(
+                //                         state.endTime!,
+                //                         format:
+                //                         AppConfig.dateDisplayFormat)!
+                //                         : DateTime.now(),
+                //                     firstDate: DateTime.now(),
+                //                     lastDate: DateTime(2024));
+                //                 if (result != null) {
+                //                   _cubit.changeEndTime(
+                //                     Util.DateUtils.toDateString(result),
+                //                   );
+                //                 }
+                //               },
+                //               child: SizedBox(
+                //                 height: 26,
+                //                 width: 26,
+                //                 child: Image.asset(
+                //                   AppImages.icCalendar,
+                //                   fit: BoxFit.fill,
+                //                 ),
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //
                       ],
                     );
                   },

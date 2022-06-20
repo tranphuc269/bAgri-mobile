@@ -28,8 +28,6 @@ class StageEntity extends Equatable {
         stage_id: json["_id"],
         description: json["description"],
         name: json["name"],
-        aboutFrom: json["aboutFrom"],
-        aboutTo: json["aboutTo"],
         steps: list
     );
     return stageEntity;
@@ -37,8 +35,6 @@ class StageEntity extends Equatable {
   Map<String, dynamic> toJson() => <String, dynamic>{
         '_id': this.stage_id,
         'name': this.name,
-        'aboutTo': this.aboutTo,
-        'aboutFrom': this.aboutFrom,
         'description': this.description,
         'steps': this.steps!.map((e) => e.toJson()).toList()
       };

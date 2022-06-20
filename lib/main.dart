@@ -13,7 +13,6 @@ import 'package:flutter_base/network/api_weather.dart';
 
 import 'package:flutter_base/repositories/auth_repository.dart';
 import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
-import 'package:flutter_base/repositories/farmer_repository.dart';
 
 import 'package:flutter_base/repositories/garden_repository.dart';
 import 'package:flutter_base/repositories/notification_repository.dart';
@@ -152,9 +151,6 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<TreeRepository>(create: (context) {
           return TreeRepositoryImpl(_apiClient);
         }),
-        RepositoryProvider<FarmerRepository>(create: (context) {
-          return FarmerRepositoryImpl(_apiClient);
-        }),
         RepositoryProvider<NotificationRepository>(create: (context) {
           return NotificationRepositoryImpl(_apiClient);
         }),
@@ -198,8 +194,6 @@ class _MyAppState extends State<MyApp> {
                 RepositoryProvider.of<TaskRepository>(context);
             final _userRepository =
                 RepositoryProvider.of<UserRepository>(context);
-            final _farmerRepository =
-                RepositoryProvider.of<FarmerRepository>(context);
             final _weatherRepository =
                 RepositoryProvider.of<WeatherRepository>(context);
             final _zoneRepository =
@@ -214,7 +208,6 @@ class _MyAppState extends State<MyApp> {
               taskRepository: _taskRepository,
               processRepository: _processRepository,
               userRepository: _userRepository,
-              farmerRepository: _farmerRepository,
               weatherRepository: _weatherRepository,
               zoneRepository: _zoneRepository,
             );

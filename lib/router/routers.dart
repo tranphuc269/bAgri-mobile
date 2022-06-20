@@ -206,26 +206,26 @@ class Routes {
     // );
 
     /// Employee
-    router.define(
-      employeeManagement,
-      handler: employeeManagementHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      employeeAdding,
-      handler: employeeAddingHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      employeeUpdating,
-      handler: employeeUpdatingHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      employeeDetail,
-      handler: employeeDetailHandler,
-      transitionType: TransitionType.fadeIn,
-    );
+    // router.define(
+    //   employeeManagement,
+    //   handler: employeeManagementHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   employeeAdding,
+    //   handler: employeeAddingHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   employeeUpdating,
+    //   handler: employeeUpdatingHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   employeeDetail,
+    //   handler: employeeDetailHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
 
     /// Season
     router.define(

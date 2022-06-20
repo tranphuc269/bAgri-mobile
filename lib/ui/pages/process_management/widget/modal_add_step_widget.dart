@@ -54,6 +54,15 @@ class _ModalAddStepWidgetState extends State<ModalAddStepWidget> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    stepController.dispose();
+    endDateController.dispose();
+    startDateController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     FocusScopeNode currentScope = FocusScope.of(context);
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
@@ -173,20 +182,20 @@ class _ModalAddStepWidgetState extends State<ModalAddStepWidget> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  AppTextField(
-                    autoValidateMode: AutovalidateMode.onUserInteraction,
-                    hintText: 'Nhập số ngày thực hiện',
-                    controller: actualDayController,
-                    validator: (value) {
-                      if (Validator.validateNullOrEmpty(value!))
-                        return "Chưa nhập tên bước";
-                      else
-                        return null;
-                    },
-                  ),
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  // AppTextField(
+                  //   autoValidateMode: AutovalidateMode.onUserInteraction,
+                  //   hintText: 'Nhập số ngày thực hiện',
+                  //   controller: actualDayController,
+                  //   validator: (value) {
+                  //     if (Validator.validateNullOrEmpty(value!))
+                  //       return "Chưa nhập tên bước";
+                  //     else
+                  //       return null;
+                  //   },
+                  // ),
                   SizedBox(
                     height: 40,
                   ),

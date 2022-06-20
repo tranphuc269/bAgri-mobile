@@ -163,28 +163,28 @@ abstract class ApiClient {
   Future<ObjectResponse<TreeDetailResponse>> getTreeById(
       @Path('tree_id') String treeId);
 
-  /// Employee/Farmer
-  @GET("/farmers")
-  Future<FarmerList> getListFarmerData();
-
-  @GET("/farmers")
-  Future<FarmerList> getListFarmerByManager(
-      @Query('manager_id') String managerId);
-
-  @GET("/farmers/{farmerId}")
-  Future<ObjectResponse<FarmerDetailResponse>> getFarmerById(
-      @Path('farmerId') String farmerId);
-
-  @DELETE("/farmers/{farmerId}")
-  Future<TreeDeleteResponse> deleteFarmer(@Path("farmerId") String farmerId);
-
-  @POST("/farmers")
-  Future<ObjectResponse<FarmerCreateResponse>> createFarmer(
-      @Body() CreateFarmerParam param);
-
-  @PUT("/farmers/{farmer_id}")
-  Future<ObjectResponse<FarmerUpdateResponse>> updateFarmer(
-      @Path("farmer_id") String farmerId, @Body() CreateFarmerParam param);
+  // /// Employee/Farmer
+  // @GET("/farmers")
+  // Future<FarmerList> getListFarmerData();
+  //
+  // @GET("/farmers")
+  // Future<FarmerList> getListFarmerByManager(
+  //     @Query('manager_id') String managerId);
+  //
+  // @GET("/farmers/{farmerId}")
+  // Future<ObjectResponse<FarmerDetailResponse>> getFarmerById(
+  //     @Path('farmerId') String farmerId);
+  //
+  // @DELETE("/farmers/{farmerId}")
+  // Future<TreeDeleteResponse> deleteFarmer(@Path("farmerId") String farmerId);
+  //
+  // @POST("/farmers")
+  // Future<ObjectResponse<FarmerCreateResponse>> createFarmer(
+  //     @Body() CreateFarmerParam param);
+  //
+  // @PUT("/farmers/{farmer_id}")
+  // Future<ObjectResponse<FarmerUpdateResponse>> updateFarmer(
+  //     @Path("farmer_id") String farmerId, @Body() CreateFarmerParam param);
 
   /// Notification
   @GET("/notifications")

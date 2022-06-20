@@ -32,17 +32,6 @@ class _AppGardenPickerPageState extends State<AppGardenPickerPage> {
     super.initState();
   }
 
-  // @override
-  // void didChangeDependencies() async{
-  //   // TODO: implement didChangeDependencies
-  //   await  _cubit.fetchListGarden();
-  //   print("khi");
-  //   setState(() {
-  //
-  //   });
-  //   super.didChangeDependencies();
-  // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +57,6 @@ class _AppGardenPickerPageState extends State<AppGardenPickerPage> {
         return prev.getGardenStatus != current.getGardenStatus;
       },
       builder: (context, state) {
-        // _cubit.fetchListGarden();
-        print(state.gardens?.first.name);
         if (state.getGardenStatus == LoadStatus.LOADING) {
           return Center(
             child: AppCircularProgressIndicator(),
