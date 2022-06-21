@@ -57,6 +57,7 @@ class _TreeListPageState extends State<TreeListPage>
 
   @override
   void dispose() {
+    _scrollController.dispose();
     super.dispose();
   }
 

@@ -13,6 +13,9 @@ class AppState extends Equatable {
   List<TaskEntity>? tasks;
   final LoadStatus? taskStatus;
 
+  List<Material>? listMaterials;
+  final LoadStatus? getMaterialsStatus;
+
   List<UserEntity>? managers;
   final LoadStatus? getManagersStatus;
 
@@ -38,24 +41,27 @@ class AppState extends Equatable {
         this.farmerStatus,
         this.weather,
         this.weatherStatus,
+        this.getMaterialsStatus,
+        this.listMaterials
       ];
 
-  AppState({
-    this.trees,
-    this.getTreeStatus,
-    this.gardens,
-    this.getGardenStatus,
-    this.processes,
-    this.getProcessStatus,
-    this.tasks,
-    this.taskStatus,
-    this.managers,
-    this.getManagersStatus,
-    this.farmers,
-    this.farmerStatus,
-    this.weather,
-    this.weatherStatus,
-  });
+  AppState(
+      {this.trees,
+      this.getTreeStatus,
+      this.gardens,
+      this.getGardenStatus,
+      this.processes,
+      this.getProcessStatus,
+      this.tasks,
+      this.taskStatus,
+      this.managers,
+      this.getManagersStatus,
+      this.farmers,
+      this.farmerStatus,
+      this.weather,
+      this.weatherStatus,
+      this.listMaterials,
+      this.getMaterialsStatus});
 
   AppState copyWith({
     List<TreeEntity>? trees,
@@ -74,22 +80,25 @@ class AppState extends Equatable {
     LoadStatus? farmerStatus,
     WeatherResponse? weather,
     LoadStatus? weatherStatus,
+    List<Material>? listMaterials,
+    LoadStatus? getMaterialsStatus,
   }) {
     return AppState(
-      trees: trees ?? this.trees,
-      getTreeStatus: getTreeStatus ?? this.getTreeStatus,
-      gardens: gardens ?? this.gardens,
-      getGardenStatus: getGardenStatus ?? this.getGardenStatus,
-      processes: processes ?? this.processes,
-      getProcessStatus: getProcessStatus ?? this.getProcessStatus,
-      tasks: tasks ?? this.tasks,
-      taskStatus: taskStatus ?? this.taskStatus,
-      managers: managers ?? this.managers,
-      getManagersStatus: getManagersStatus ?? this.getManagersStatus,
-      farmers: farmers ?? this.farmers,
-      farmerStatus: farmerStatus ?? this.farmerStatus,
-      weather: weather ?? this.weather,
-      weatherStatus: weatherStatus ?? this.weatherStatus,
-    );
+        trees: trees ?? this.trees,
+        getTreeStatus: getTreeStatus ?? this.getTreeStatus,
+        gardens: gardens ?? this.gardens,
+        getGardenStatus: getGardenStatus ?? this.getGardenStatus,
+        processes: processes ?? this.processes,
+        getProcessStatus: getProcessStatus ?? this.getProcessStatus,
+        tasks: tasks ?? this.tasks,
+        taskStatus: taskStatus ?? this.taskStatus,
+        managers: managers ?? this.managers,
+        getManagersStatus: getManagersStatus ?? this.getManagersStatus,
+        farmers: farmers ?? this.farmers,
+        farmerStatus: farmerStatus ?? this.farmerStatus,
+        weather: weather ?? this.weather,
+        weatherStatus: weatherStatus ?? this.weatherStatus,
+        listMaterials: listMaterials ?? this.listMaterials,
+        getMaterialsStatus: getMaterialsStatus ?? this.getMaterialsStatus);
   }
 }

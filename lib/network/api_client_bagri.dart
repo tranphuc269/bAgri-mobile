@@ -13,6 +13,7 @@ import 'package:flutter_base/models/entities/garden_task/garden_task_detail.dart
 import 'package:flutter_base/models/entities/garden_task/task_delete_entity.dart';
 import 'package:flutter_base/models/entities/manager/manager_entity.dart';
 import 'package:flutter_base/models/entities/garden_task/garden_task.dart';
+import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/notification/notification.dart';
 import 'package:flutter_base/models/entities/notification/notification_detail.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
@@ -283,12 +284,26 @@ abstract class ApiClient {
   Future<ObjectResponse<QREntity>> generateQRCode(
       @Path("season_id") String seasonId);
 
-  //temporary task
+  ///temporary task
   @GET("/temporary-tasks")
   Future<List<TemporaryTask>> getListTemporaryTasks();
 
   @POST("/temporary-tasks")
   Future<dynamic> createTemporaryTask(@Body() Map<String, dynamic> body);
+
+  ///material
+  @GET("/materials")
+  Future<List<Material>> getListMaterials();
+
+  @POST("/materials")
+  Future<dynamic> createMaterial(@Body() Map<String, dynamic> body);
+
+  @PUT("/materials/{material_id}")
+  Future<dynamic> updateMaterial(@Body() Map<String, dynamic> body, @Path("material_id") String? materialId);
+
+  @DELETE("/materials/{material_id}")
+  Future<dynamic> deleteMaterial(@Path("material_id") String? materialId);
+
 }
 
 class AppApi {
