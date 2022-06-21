@@ -25,8 +25,10 @@ class Routes {
   static String registry = "/registry";
 
   static String home = "/home";
+
   /// Zone
   static String zoneList = "/zoneList";
+
   /// Garden
   static String gardenList = "/gardenList";
   static String gardenCreate = "/gardenCreate";
@@ -87,6 +89,8 @@ class Routes {
 
   ///Storage
   static String manageStorage = '/manageStorage';
+  static String addMaterial = '/addMaterial';
+  static String updateMaterial = '/updateMaterial';
 
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = notHandler;
@@ -124,11 +128,11 @@ class Routes {
       handler: homeHandler,
       transitionType: TransitionType.fadeIn,
     );
+
     /// Zone
-    router.define(
-        zoneList,
-        handler: zoneListHandler,
-        transitionType: TransitionType.fadeIn);
+    router.define(zoneList,
+        handler: zoneListHandler, transitionType: TransitionType.fadeIn);
+
     /// Garden
     router.define(
       gardenList,
@@ -277,34 +281,36 @@ class Routes {
       handler: gardenTaskHandler,
       transitionType: TransitionType.fadeIn,
     );
+
     /// ManageAccount
     router.define(
       manageAccount,
       handler: listAccountHandler,
-      transitionType: TransitionType.fadeIn,);
+      transitionType: TransitionType.fadeIn,
+    );
 
     /// homeGardenManager
     router.define(
       homeGardenManager,
       handler: homeGardenManagerHandler,
-      transitionType: TransitionType.fadeIn,);
+      transitionType: TransitionType.fadeIn,
+    );
+
     /// contractWorkList
-    router.define(
-      contractWorkList,
-      handler: contractWorkListHandler,
-      transitionType: TransitionType.fadeIn);
+    router.define(contractWorkList,
+        handler: contractWorkListHandler,
+        transitionType: TransitionType.fadeIn);
 
     ///New task manage
-    router.define(
-        tabTask,
-        handler: tabTaskHandler,
-        transitionType: TransitionType.fadeIn);
-    router.define(
-        addContractTask,
-        handler: addContractTaskHandler,
-        transitionType: TransitionType.fadeIn);
-    
+    router.define(tabTask,
+        handler: tabTaskHandler, transitionType: TransitionType.fadeIn);
+    router.define(addContractTask,
+        handler: addContractTaskHandler, transitionType: TransitionType.fadeIn);
+
     ///manage Storage
-    router.define(manageStorage, handler: storageManagementHandler, transitionType: TransitionType.fadeIn);
+    router.define(manageStorage,
+        handler: storageManagementHandler,
+        transitionType: TransitionType.fadeIn);
+    router.define(addMaterial, handler: addMaterialHandler, transitionType: TransitionType.fadeIn);
   }
 }

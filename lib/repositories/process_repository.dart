@@ -38,12 +38,6 @@ class ProcessRepositoryImpl extends ProcessRepository {
   }
 
   Future<dynamic> createProcess({ProcessEntity? param}) {
-    // final body = {
-    //   "name": param?.name ?? "",
-    //   "tree_ids": param?.tree_ids ?? [],
-    //   "stages": param?.stages ?? [],
-    // };
-
     return _apiClient!.createProcess(param!.toJson());
   }
 

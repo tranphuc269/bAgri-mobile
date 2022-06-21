@@ -8,12 +8,12 @@ class Material{
   String? materialId;
   String? unit;
   int? unitPrice;
-  String? title;
+  String? name;
   int? quantity;
 
   Material({
     this.unit,
-    this.title,
+    this.name,
     this.unitPrice,
     this.materialId,
     this.quantity
@@ -22,14 +22,14 @@ class Material{
   Material copyWith({
     String? materialId,
     String? unit,
-    String? title,
+    String? name,
     int? unitPrice,
     int? quantity
   }) {
     return Material(
         materialId: materialId ?? this.materialId,
         unit: unit ?? this.unit,
-        title: title ?? this.title,
+        name: name ?? this.name,
         unitPrice: unitPrice ?? this.unitPrice,
       quantity: quantity ?? this.quantity
     );
