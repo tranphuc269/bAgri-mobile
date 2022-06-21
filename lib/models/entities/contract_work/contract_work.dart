@@ -38,4 +38,5 @@ class ContractWorkEntity{
     factory ContractWorkEntity.fromJson(Map<String, dynamic> json) =>
         _$ContractWorkEntityFromJson(json);
     Map<String, dynamic> toJson() => _$ContractWorkEntityToJson(this);
+
 }

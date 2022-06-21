@@ -2,54 +2,81 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/configs/app_config.dart';
+import 'package:flutter_base/ui/pages/contract_work_management/contract_work_list/contract_work_list_cubit.dart';
+import 'package:flutter_base/ui/pages/seasons_management/add_season/season_adding_cubit.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_add/contract_task_add_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/garden_picker/app_garden_picker.dart';
+import 'package:flutter_base/ui/widgets/b_agri/page_picker/process_picker/app_process_picker.dart';
+import 'package:flutter_base/ui/widgets/b_agri/page_picker/work_picker/app_work_picker.dart';
 import 'package:flutter_base/utils/validators.dart';
+import 'package:flutter_base/utils/date_utils.dart' as Util;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class AddContractTaskPage extends StatefulWidget {
+  const AddContractTaskPage({Key? key}) : super(key: key);
   @override
   _AddContractTaskState createState() => _AddContractTaskState();
 }
 
 class _AddContractTaskState extends State<AddContractTaskPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  //late ContractTaskAddingCubit _cubit;
 
   final taskNameController = TextEditingController(text: "");
   late GardenPickerController gardenController;
+  late WorkPickerController workPickerController;
+  late ProcessPickerController processController;
   final _formKey = GlobalKey<FormState>();
+
+  DateTime selectedDate = DateTime.now();
+  var initialValue = "";
 
   @override
   void initState() {
+    //_cubit = BlocProvider.of<ContractTaskAddingCubit>(context);
     gardenController = GardenPickerController();
+    workPickerController = WorkPickerController();
+
+    // gardenController.addListener(() {
+    //   _cubit.changeGarden(gardenController.gardenEntity!);
+    // });
+    // workPickerController.addListener(() {
+    //   _cubit.change
+    // });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      key: _scaffoldKey,
-      appBar: AppBarWidget(
-        title: 'Thêm công việc hằng ngày',
-        context: context,
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildInput(),
-            _buildButton(),
-            SizedBox(height: 30,)
-          ],
+        resizeToAvoidBottomInset: true,
+        key: _scaffoldKey,
+        appBar: AppBarWidget(
+          title: 'Thêm công việc hằng ngày',
+          context: context,
         ),
-      )
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildInput(),
+              _buildButton(),
+              SizedBox(height: 30,)
+            ],
+          ),
+        )
 
     );
     Container(
       child: Text("Add ContractTaskPage"),
     );
   }
+
   Widget _buildInput() {
     return Expanded(
       child: Scrollbar(
@@ -62,11 +89,10 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
               children: [
                 SizedBox(height: 20.15),
                 _buildTextLabel("Công việc: "),
-                _buildNameTaskInput(),
+                _buildWorkPicker(),
                 SizedBox(height: 3),
                 _buildTextLabel("Chọn vườn:"),
                 _buildGardenPicker(),
-
                 SizedBox(height: 3),
                 _buildTextLabel("Số bầu cây: "),
                 _buildTreeQuantity(),
@@ -84,37 +110,37 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
   }
 
   Widget _buildButton() {
-        return Container(
-          height: 40,
-          width: double.infinity,
-          margin: EdgeInsets.only(top: 25),
-          padding: EdgeInsets.symmetric(horizontal: 28),
-          child: Row(
-            children: [
-                    Expanded(
-                      child: AppButton(
-                        color: AppColors.redButton,
-                        title: 'Hủy bỏ',
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 25),
-                    Expanded(
-                      child: AppButton(
-                        color: AppColors.main,
-                        title: 'Xác nhận',
-                        onPressed: () async {
-                          Navigator.of(context).pop(true);
-                        },
-                      ),
-                    )
-            ],
-          )
+    return Container(
+        height: 40,
+        width: double.infinity,
+        margin: EdgeInsets.only(top: 25),
+        padding: EdgeInsets.symmetric(horizontal: 28),
+        child: Row(
+          children: [
+            Expanded(
+              child: AppButton(
+                color: AppColors.redButton,
+                title: 'Hủy bỏ',
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+            ),
+            SizedBox(width: 25),
+            Expanded(
+              child: AppButton(
+                color: AppColors.main,
+                title: 'Xác nhận',
+                onPressed: () async {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            )
+          ],
+        )
 
-        );
-      }
+    );
+  }
 
   Widget _buildTextLabel(String text) {
     return Container(
@@ -124,7 +150,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
         text: TextSpan(children: [
           TextSpan(
             text: text,
-            style: AppTextStyle.blackS12,
+            style: AppTextStyle.blackS16,
           ),
         ]),
       ),
@@ -149,31 +175,48 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
       ),
     );
   }
-  Widget _buildTreeQuantity(){
+
+  Widget _buildTreeQuantity() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child:  AppTextField(
-        hintText: "Nhập số lượng bầu cây",
-        keyboardType: TextInputType.number,
-      ),
-    );
+            margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+            child: AppTextField(
+              hintText: "Nhập số lượng bầu cây",
+              keyboardType: TextInputType.number,
+             // initialValue: ,
+            ),
+          );
   }
-  Widget _buildGardenPicker(){
+
+  Widget _buildGardenPicker() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
       ),
-      child:  AppPageGardenPicker(
+      child: AppPageGardenPicker(
         controller: gardenController,
         onChanged: (value) {},
       ),
     );
   }
-  Widget _buildDatePicker(){
+
+  Widget _buildWorkPicker() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      child: AppPageWorkPicker(
+        controller: workPickerController,
+        onChanged: (value) {},
+      ),
+    );
+  }
+
+  Widget _buildDatePicker() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
       decoration: BoxDecoration(
@@ -182,11 +225,11 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
       child: Row(children: [
         Text(
           'Ngày bắt đầu:',
-          style: AppTextStyle.greyS18,
+          style: AppTextStyle.greyS16,
         ),
         SizedBox(width: 15),
         Text(
-          "yyyy/mm/dd",
+          "${selectedDate.toLocal()}".split(' ')[0],
           style: AppTextStyle.blackS16
               .copyWith(decoration: TextDecoration.underline),
         ),
@@ -204,6 +247,13 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 initialDate: DateTime.now(),
                 firstDate: DateTime.now(),
                 lastDate: DateTime(2024));
+            if(result != null){
+              setState(() {
+                changeDate(result);
+              });
+              // print(result);
+              // // changeDate(result);
+            }
           },
           child: SizedBox(
             height: 26,
@@ -224,6 +274,9 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
       label,
       style: AppTextStyle.greyS18,
     );
+  }
+  void changeDate(DateTime value){
+    selectedDate = value;
   }
 
   Theme _buildCalendarTheme(Widget? child) {

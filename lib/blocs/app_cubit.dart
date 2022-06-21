@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/entities/farmer/farmer.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/entities/weather/weather_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
+import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/task_repository.dart';
@@ -32,6 +34,7 @@ class AppCubit extends Cubit<AppState> {
   // FarmerRepository farmerRepository;
   WeatherRepository weatherRepository;
   ZoneRepository zoneRepository;
+  ContractWorkRepositoy contractWorkRepositoy;
   AppCubit({
     required this.treeRepository,
     required this.authRepository,
@@ -42,6 +45,7 @@ class AppCubit extends Cubit<AppState> {
     // required this.farmerRepository,
     required this.weatherRepository,
     required this.zoneRepository,
+    required this.contractWorkRepositoy
   }) : super(AppState());
 
   void getData() async {
@@ -172,6 +176,21 @@ class AppCubit extends Cubit<AppState> {
       emit(state.copyWith(weatherStatus: LoadStatus.FAILURE));
     }
   }
+
+  Future <void> fetchListContractWork() async {
+    emit(state.copyWith(contractWorkStatus:  LoadStatus.LOADING));
+    try{
+      final response = await contractWorkRepositoy.getListContractWorks();
+      if(response != null){
+        emit(state.copyWith(contractWorkStatus: LoadStatus.SUCCESS, contractWorks: response));
+      }else{
+        emit(state.copyWith(weatherStatus: LoadStatus.FAILURE));
+      }
+    }
+    catch (e) {
+      emit(state.copyWith(weatherStatus: LoadStatus.FAILURE));
+    }
+}
 
   // void getProfile() async {
   //   emit(state.copyWith(fetchUser: LoadStatus.LOADING));

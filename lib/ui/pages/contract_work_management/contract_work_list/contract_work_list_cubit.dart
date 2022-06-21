@@ -92,4 +92,5 @@ class ContractWorkListCubit extends Cubit<ContractWorkListState> {
   void changeUnitPrice(String unitPrice){
     emit(state.copyWith(unitPrice: unitPrice));
   }
+
 }

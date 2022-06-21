@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
-import 'package:flutter_base/models/entities/garden/garden_entity.dart';
+import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 
 
-import 'app_garden_picker_page.dart';
 
-class GardenPickerController extends ValueNotifier<GardenEntity?> {
-  GardenPickerController({GardenEntity? gardenEntity}) : super(gardenEntity);
+import 'app_work_picker_page.dart';
 
-  GardenEntity? get gardenEntity => value;
+class WorkPickerController extends ValueNotifier<ContractWorkEntity?> {
+  WorkPickerController({ContractWorkEntity? contractWorkEntity}) : super(ContractWorkEntity());
 
-  set gardenEntity(GardenEntity? gardenValue) {
-    value = gardenValue;
+  ContractWorkEntity? get contractWorkEntity => value;
+
+  set contractWorkEntity(ContractWorkEntity? contractWorkValue) {
+    value = contractWorkValue;
     notifyListeners();
   }
 }
 
-class AppPageGardenPicker extends StatelessWidget {
-  final GardenPickerController controller;
-  final ValueChanged<GardenEntity?>? onChanged;
+class AppPageWorkPicker extends StatelessWidget {
+  final WorkPickerController controller;
+  final ValueChanged<ContractWorkEntity?>? onChanged;
 
   final bool enabled;
 
-  AppPageGardenPicker({
+  AppPageWorkPicker({
     required this.controller,
     this.onChanged,
     this.enabled = true,
@@ -33,14 +34,14 @@ class AppPageGardenPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: controller,
-      builder: (context, GardenEntity? gardenEntity, child) {
-        String text = gardenEntity?.name ?? "";
+      builder: (context, ContractWorkEntity? contractWorkEntity, child) {
+        String text = contractWorkEntity?.title ?? "";
 
         return GestureDetector(
           onTap: enabled
               ? () {
-                  _showMyProjectPicker(context: context);
-                }
+            _showMyProjectPicker(context: context);
+          }
               : null,
           child: Stack(
             children: [
@@ -54,12 +55,12 @@ class AppPageGardenPicker extends StatelessWidget {
                 enabled: false,
                 controller: TextEditingController(text: text),
                 decoration: InputDecoration(
-                  hintText: 'Chọn vườn',
+                  hintText: 'Chọn công việc khoán',
                   suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: Icon(Icons.keyboard_arrow_down)),
                   suffixIconConstraints:
-                      BoxConstraints(maxHeight: 32, maxWidth: 32),
+                  BoxConstraints(maxHeight: 32, maxWidth: 32),
                   contentPadding: const EdgeInsets.only(
                     left: 20,
                     right: 15,
@@ -104,15 +105,14 @@ class AppPageGardenPicker extends StatelessWidget {
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return AppGardenPickerPage(
-            selectedGardenId: controller.gardenEntity?.garden_id ?? "",
-
+          return AppContractWorkPickerPage(
+            selectedContractWork: controller.contractWorkEntity?.id?? "",
           );
         },
       ),
     );
-    if (result is GardenEntity) {
-      controller.gardenEntity = result;
+    if (result is ContractWorkEntity) {
+      controller.contractWorkEntity = result;
       onChanged?.call(result);
     }
   }

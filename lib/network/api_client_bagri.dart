@@ -273,6 +273,13 @@ abstract class ApiClient {
       @Path("work_id") String? workId,);
   @PUT("/works/{work_id}")
   Future <dynamic> modifyContractWork(@Header('accept') String accept,@Header("Authorization") String? auth,@Header('Content-Type')String content_type,@Path("work_id") String? workId,@Body() Map<String, dynamic> body);
+/// Create Contract task
+  @POST("/contract-tasks")
+  Future <dynamic> createContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
 
 
   /// Upload File

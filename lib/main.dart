@@ -27,7 +27,6 @@ import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/router/navigation_observer.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -201,6 +200,8 @@ class _MyAppState extends State<MyApp> {
             final _contractWorkRepository =
                 RepositoryProvider.of<ContractWorkRepositoy>(context);
 
+
+
             return AppCubit(
               treeRepository: _treeRepository,
               authRepository: _authRepository,
@@ -210,6 +211,7 @@ class _MyAppState extends State<MyApp> {
               userRepository: _userRepository,
               weatherRepository: _weatherRepository,
               zoneRepository: _zoneRepository,
+              contractWorkRepositoy: _contractWorkRepository
             );
           }),
           BlocProvider<NavigationCubit>(create: (context) => _navigationCubit!),
@@ -243,7 +245,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
-      //  home:  AddContractTaskPage(),
+       //home: AppWorkPickerPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

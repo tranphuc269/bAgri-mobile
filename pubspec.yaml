@@ -149,6 +149,9 @@ dependencies:
   flutter_html: ^2.2.0
   location_web: ^3.1.1
 
+  #animated search bar
+  anim_search_bar: ^2.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
