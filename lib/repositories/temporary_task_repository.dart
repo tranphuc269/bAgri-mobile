@@ -3,6 +3,7 @@ import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class TemporaryTaskRepository {
   Future<List<TemporaryTask>> getListTemporaryTask();
+  Future<dynamic> deleteTemporaryTask(String id);
 }
 
 class TemporaryTaskRepositoryImpl extends TemporaryTaskRepository {
@@ -16,4 +17,10 @@ class TemporaryTaskRepositoryImpl extends TemporaryTaskRepository {
   Future<List<TemporaryTask>> getListTemporaryTask() {
     return _apiClientBagri!.getListTemporaryTasks();
   }
+
+  @override
+  Future deleteTemporaryTask(String id) {
+    return _apiClientBagri!.deleteTemporaryTask(id);
+  }
+
 }

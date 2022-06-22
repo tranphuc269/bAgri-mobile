@@ -298,6 +298,12 @@ abstract class ApiClient {
   @POST("/temporary-tasks")
   Future<dynamic> createTemporaryTask(@Body() Map<String, dynamic> body);
 
+  @PUT("/temporary-tasks/{temporary_task_id}")
+  Future<dynamic> updateTemporaryTask(@Body() Map<String, dynamic> body, @Path('temporary_task_id') String? temporaryTaskId);
+
+  @DELETE("//temporary-tasks/{temporary_task_id}")
+  Future<dynamic> deleteTemporaryTask(@Path('temporary_task_id') String? id);
+
   ///material
   @GET("/materials")
   Future<List<Material>> getListMaterials();

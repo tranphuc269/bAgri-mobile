@@ -2,47 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/models/enums/load_status.dart';
+import 'package:flutter_base/repositories/temporary_task_repository.dart';
+import 'package:flutter_base/router/application.dart';
+import 'package:flutter_base/router/routers.dart';
+import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_list_cubit.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../../../../main.dart';
 
 class TabListTemporaryTask extends StatelessWidget {
   const TabListTemporaryTask({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TemporaryTaskListPage();
+    return BlocProvider(
+      create: (context) {
+        final temporaryTaskRepository =
+            RepositoryProvider.of<TemporaryTaskRepository>(context);
+        return TemporaryTaskListCubit(
+            temporaryTaskRepository: temporaryTaskRepository);
+      },
+      child: TemporaryTaskListPage(),
+    );
   }
 }
+
 class TemporaryTaskListPage extends StatefulWidget {
-
   @override
-  _ToolListState createState() => _ToolListState();
-
-
+  _TemporaryTaskListPageState createState() => _TemporaryTaskListPageState();
 }
 
-class _ToolListState extends State<TemporaryTaskListPage> {
+class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   bool selectTools = false;
   bool selectSupplies = true;
+  TemporaryTaskListCubit? _cubit;
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _cubit = BlocProvider.of<TemporaryTaskListCubit>(context);
+    _cubit!.getListTemporaryTasks();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-             Padding(
-               padding: EdgeInsets.only(
-                   left: 10, right: 10, top: 10, bottom: 25),
-               child:_buildItem(name: "Dụng cụ: Cuốc") ,
-             )
-
-            ],
-          ),
-        ),
+        body: SafeArea(child: _buildBody()),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.main,
           onPressed: () {},
@@ -53,12 +66,113 @@ class _ToolListState extends State<TemporaryTaskListPage> {
         ));
   }
 
+  void showSnackBar(String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
+      message: message,
+    ));
+  }
 
-  Widget _buildItem({required String name,
-    String? avatarUrl,
-    VoidCallback? onDelete,
-    VoidCallback? onPressed,
-    VoidCallback? onUpdate}) {
+  Widget _buildBody() {
+    return BlocBuilder<TemporaryTaskListCubit, TemporaryTaskListState>(
+      bloc: _cubit,
+      buildWhen: (previous, current) =>
+          previous.loadStatus != current.loadStatus,
+      builder: (context, state) {
+        if (state.loadStatus == LoadStatus.LOADING) {
+          return Center(
+              child: CircularProgressIndicator(
+            color: AppColors.main,
+          ));
+        } else if (state.loadStatus == LoadStatus.FAILURE) {
+          return AppErrorListWidget(onRefresh: _onRefreshData);
+        } else if (state.loadStatus == LoadStatus.SUCCESS) {
+          return state.temporaryTaskList!.length != 0
+              ? RefreshIndicator(
+                  color: AppColors.main,
+                  onRefresh: _onRefreshData,
+                  child: ListView.separated(
+                    padding: EdgeInsets.only(
+                        left: 10, right: 10, top: 10, bottom: 25),
+                    physics: AlwaysScrollableScrollPhysics(),
+                    itemCount: state.temporaryTaskList!.length,
+                    shrinkWrap: true,
+                    primary: false,
+                    controller: _scrollController,
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: 15);
+                    },
+                    itemBuilder: (context, index) {
+                      String? name =
+                          state.temporaryTaskList![index].title ?? "";
+                      var material = state.temporaryTaskList![index];
+                      return _buildItem(
+                        name: name,
+                        onPressed: (){
+
+                        },
+                        // onUpdate: () async {
+                        //   bool isUpdate = await Application.router!.navigateTo(
+                        //     appNavigatorKey.currentContext!,
+                        //     Routes.updateTemporaryList,
+                        //     routeSettings: RouteSettings(
+                        //         arguments: state.listMaterials![index].materialId
+                        //     ),
+                        //   );
+                        //   if (isUpdate) {
+                        //     _onRefreshData();
+                        //   }
+                        // },
+                        onDelete: () async {
+                          bool isDelete = await showDialog(
+                              context: context,
+                              builder: (context) => AppDeleteDialog(
+                                    onConfirm: () async {
+                                      await _cubit?.deleteTemporaryTask(state.temporaryTaskList![index].temporaryTaskId!);
+                                      // await _cubit!.deleteTemporary(state
+                                      //     .listMaterials![index].materialId!);
+                                      Navigator.pop(context, true);
+                                    },
+                                  ));
+
+                          if (isDelete) {
+                            await _onRefreshData();
+                            showSnackBar('Xóa công việc thành công!');
+                          }
+                        },
+                      );
+                    },
+                  ),
+                )
+              : /* Expanded(
+                  child:*/
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: EmptyDataWidget(),
+                    ),
+                  ],
+                  /*  ),*/
+                );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  Future<void> _onRefreshData() async {
+    _cubit!.getListTemporaryTasks();
+  }
+
+  Widget _buildItem(
+      {required String name,
+      String? avatarUrl,
+      VoidCallback? onDelete,
+      VoidCallback? onPressed,
+      VoidCallback? onUpdate}) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -122,28 +236,30 @@ class _ToolListState extends State<TemporaryTaskListPage> {
           ),
           child: Padding(
             padding:
-            const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
+                const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
             child: Row(
               children: [
                 Image.asset(avatarUrl ?? AppImages.icGarden),
                 SizedBox(width: 18),
                 Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name,
-                          style: TextStyle(
-                              color: Color(0xFF5C5C5C),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 5,),
-                        Text("Số lượng: 20 cái", style: AppTextStyle.blackS14,)
-                      ],
-                    )
-                ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                          color: Color(0xFF5C5C5C),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Text("Số lượng: 20 cái", style: AppTextStyle.blackS14,)
+                  ],
+                )),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   color: Colors.grey,

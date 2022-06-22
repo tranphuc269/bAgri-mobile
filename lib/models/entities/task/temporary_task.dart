@@ -1,4 +1,4 @@
-import 'package:flutter_base/models/entities/material/material.dart';
+import 'package:flutter_base/models/entities/material/material_task.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'temporary_task.g.dart';
@@ -47,7 +47,7 @@ class DailyTask {
   String? title;
   int? fee;
   int? workerQuantity;
-  List<Material>? material;
+  List<MaterialTask>? material;
 
 
   DailyTask(
@@ -59,7 +59,7 @@ class DailyTask {
       String? title,
       int? fee,
       int? workerQuantity,
-      List<Material>? material}) {
+      List<MaterialTask>? material}) {
     return DailyTask(
         date: date, title: title, fee: fee, workerQuantity: workerQuantity, material: material);
   }

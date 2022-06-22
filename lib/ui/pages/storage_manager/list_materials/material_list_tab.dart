@@ -14,6 +14,7 @@ import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../main.dart';
 
@@ -37,6 +38,7 @@ class _MaterialListPageState extends State<MaterialListPage> {
   StorageManagementCubit? _cubit;
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
+  final formatCurrency = new NumberFormat.currency(locale: 'vi');
 
   @override
   void initState() {
@@ -73,7 +75,7 @@ class _MaterialListPageState extends State<MaterialListPage> {
           // ),
         ),
         floatingActionButton: FloatingActionButton(
-          heroTag: "btn2",
+          heroTag: "btn3",
           backgroundColor: AppColors.main,
           onPressed: () async {
             bool isAdd = await Application.router!
@@ -280,11 +282,11 @@ class _MaterialListPageState extends State<MaterialListPage> {
                       children: [
                         Container(
                           // width: MediaQuery.of(context).size.width * 0.2,
-                          child: Text("Số lượng: ${quantity.toString()}",
+                          child: Text("Số lượng: ${quantity.toString()} ${unit}",
                               overflow: TextOverflow.ellipsis),
                         ),
                         Container(
-                          child: Text("Giá: ${unitPrice.toString()} ${unit}", overflow: TextOverflow.ellipsis),
+                          child: Text("Đơn giá: ${formatCurrency.format(unitPrice)}/${unit}", overflow: TextOverflow.ellipsis),
                         ),
                         SizedBox(width: 5)
                       ],

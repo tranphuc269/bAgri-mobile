@@ -1,4 +1,3 @@
-import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:json_annotation/json_annotation.dart';

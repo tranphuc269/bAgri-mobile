@@ -92,6 +92,8 @@ class Routes {
   static String addMaterial = '/addMaterial';
   static String updateMaterial = '/updateMaterial';
 
+
+
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = notHandler;
     // router.define(root, handler: splashHandler);
@@ -304,8 +306,9 @@ class Routes {
     ///New task manage
     router.define(tabTask,
         handler: tabTaskHandler, transitionType: TransitionType.fadeIn);
-    router.define(addContractTask,
-        handler: addContractTaskHandler, transitionType: TransitionType.fadeIn);
+    // router.define(addContractTask,
+    //     handler: addContractTaskHandler, transitionType: TransitionType.fadeIn);
+
 
     ///manage Storage
     router.define(manageStorage,
