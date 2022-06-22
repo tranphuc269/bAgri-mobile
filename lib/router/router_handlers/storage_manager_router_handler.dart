@@ -5,6 +5,8 @@ import 'package:flutter_base/ui/pages/storage_manager/add_material/add_material_
 import 'package:flutter_base/ui/pages/storage_manager/add_material/add_material_page.dart';
 import 'package:flutter_base/ui/pages/storage_manager/list_materials/storage_management_cubit.dart';
 import 'package:flutter_base/ui/pages/storage_manager/list_materials/storage_manager_page.dart';
+import 'package:flutter_base/ui/pages/storage_manager/update_material/update_material_cubit.dart';
+import 'package:flutter_base/ui/pages/storage_manager/update_material/update_material_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Handler storageManagementHandler = new Handler(
@@ -25,4 +27,16 @@ Handler addMaterialHandler = new Handler(
         return AddMaterialCubit(materialRepository: materialRepository);
       },
       child: AddMaterialPage());
+});
+Handler updateMaterialHandler = new Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      String materialId = context!.settings!.arguments as String;
+  return BlocProvider(
+    create: (context) {
+      MaterialRepository materialRepository = RepositoryProvider.of(context);
+      return UpdateMaterialCubit(materialRepository: materialRepository);
+    },
+    child:
+        UpdateMaterialPage(materialId: materialId)
+  );
 });

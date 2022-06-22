@@ -142,7 +142,6 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                                       },
                                     ),
                                     SizedBox(height: 20),
-
                                   ],
                                 ),
                               ),
@@ -185,6 +184,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                   SizedBox(width: 30),
                   Expanded(
                     child: AppButton(
+                      isEnabled: state.buttonEnabled,
                       width: 100,
                       color: AppColors.main,
                       title: 'Xác nhận',

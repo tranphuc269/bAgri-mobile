@@ -15,7 +15,6 @@ import 'package:flutter_base/ui/widgets/b_agri/page_picker/process_picker/app_pr
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/tree_picker/app_single_tree_picker.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:screenshot/screenshot.dart';
 
 class SeasonUpdatingPage extends StatefulWidget {
   String seasonId;

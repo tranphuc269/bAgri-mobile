@@ -41,6 +41,18 @@ class AddMaterialState extends Equatable {
     );
   }
 
+  bool get buttonEnabled {
+    if (name == null ||
+        unit == null ||
+        unitPrice == null ||
+        quantity == null)
+      return false;
+    else if (name!.isEmpty)
+      return false;
+    else
+      return true;
+  }
+
   @override
   List<Object?> get props => [
         this.material,

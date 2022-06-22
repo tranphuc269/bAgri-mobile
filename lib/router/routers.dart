@@ -311,6 +311,7 @@ class Routes {
     router.define(manageStorage,
         handler: storageManagementHandler,
         transitionType: TransitionType.fadeIn);
+    router.define(updateMaterial, handler: updateMaterialHandler, transitionType: TransitionType.fadeIn);
     router.define(addMaterial, handler: addMaterialHandler, transitionType: TransitionType.fadeIn);
   }
 }

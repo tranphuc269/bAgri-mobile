@@ -302,6 +302,9 @@ abstract class ApiClient {
   @GET("/materials")
   Future<List<Material>> getListMaterials();
 
+  @GET("/materials/{material_id}")
+  Future<Material> getMaterialById(@Path("material_id") String? materialId);
+
   @POST("/materials")
   Future<dynamic> createMaterial(@Body() Map<String, dynamic> body);
 
