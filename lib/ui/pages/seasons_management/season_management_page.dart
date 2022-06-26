@@ -449,7 +449,7 @@ class _SeasonListPageState extends State<SeasonListPage> {
 
           if (isAdd) {
             refreshData();
-            if (_cubit?.state.loadStatus == LoadStatus.SUCCESS)
+            // if (_cubit?.state.loadStatus == LoadStatus.SUCCESS)
               showSnackBar('Thêm mới mùa vụ thành công!');
           }
         },
@@ -498,9 +498,9 @@ class _SeasonListPageState extends State<SeasonListPage> {
                       itemBuilder: (context, index) {
                         SeasonEntity seasonEntity = state.seasonList![index];
                         return _buildItem(
-                            gardenName: "",
+
                             seasonName: seasonEntity.name ?? "",
-                            processName: seasonEntity.process?.name ?? "",
+                            treeName: seasonEntity.tree!.name ?? "",
                             onPressed: () {
                               Application.router!.navigateTo(
                                 appNavigatorKey.currentContext!,
@@ -574,8 +574,7 @@ class _SeasonListPageState extends State<SeasonListPage> {
 
   _buildItem(
       {required String seasonName,
-      required String processName,
-      required String gardenName,
+      required String treeName,
       VoidCallback? onDelete,
       VoidCallback? onPressed,
       VoidCallback? onUpdate}) {
@@ -663,7 +662,7 @@ class _SeasonListPageState extends State<SeasonListPage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'Quy trình: $processName',
+                        'Cây trồng: $treeName',
                         style: AppTextStyle.greyS14,
                         overflow: TextOverflow.ellipsis,
                       ),

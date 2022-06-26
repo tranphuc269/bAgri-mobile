@@ -1,8 +1,5 @@
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/process_delete.dart';
-import 'package:flutter_base/models/entities/process/process_detail.dart';
-import 'package:flutter_base/models/params/process/create_process_params.dart';
-import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class ProcessRepository {

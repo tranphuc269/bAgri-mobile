@@ -22,14 +22,14 @@ class SeasonStepCubit extends Cubit<SeasonStepState> {
   Future<void> getListSeasonSteps(String seasonId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      final result = await seasonRepository!.getListSeasonSteps(seasonId);
+      // final result = await seasonRepository!.getListSeasonSteps(seasonId);
 
-      emit(
-        state.copyWith(
-          loadStatus: LoadStatus.SUCCESS,
-          steps: result.data!.steps,
-        ),
-      );
+      // emit(
+      //   state.copyWith(
+      //     loadStatus: LoadStatus.SUCCESS,
+      //     steps: result.data!.steps,
+      //   ),
+      // );
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
     }

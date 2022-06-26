@@ -275,7 +275,6 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                             title: 'Xác nhận',
                             onPressed: () async {
                               await _cubit.createSeason(int.parse(treeQuantityController.text));
-
                               Navigator.of(context).pop(true);
                             },
                           ),
