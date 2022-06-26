@@ -6,7 +6,6 @@ abstract class MaterialRepository{
   Future<dynamic> createMaterial(Material material);
   Future<dynamic> deleteMaterial (String? materialId);
   Future<dynamic> updateMaterial (String? materialId, Map<String, dynamic> body);
-  Future<Material> getMaterialById(String? materialId);
 }
 
 class MaterialRepositoryImpl extends MaterialRepository{
@@ -34,11 +33,6 @@ class MaterialRepositoryImpl extends MaterialRepository{
   @override
   Future updateMaterial(String? materialId, Map<String, dynamic> body) async{
     return await apiClientBagri!.updateMaterial(body, materialId);
-  }
-
-  @override
-  Future<Material> getMaterialById(String? materialId) async{
-    return await apiClientBagri!.getMaterialById(materialId);
   }
 
 }

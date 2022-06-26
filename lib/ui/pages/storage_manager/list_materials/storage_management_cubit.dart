@@ -13,6 +13,7 @@ class StorageManagementCubit extends Cubit<StorageManagementState> {
 
   StorageManagementCubit({
     this.materialRepository,
+    storageManagement,
   }) : super(StorageManagementState());
 
   final showMessageController = PublishSubject<SnackBarMessage>();

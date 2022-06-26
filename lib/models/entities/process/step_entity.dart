@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-// part 'step_entity.g.dart';
+part 'step_entity.g.dart';
 
 // @JsonSerializable()
 class StepEntity extends Equatable {
@@ -74,7 +74,7 @@ class StepEntity extends Equatable {
     return StepEntity(
         step_id: step_id ?? this.step_id,
         from_day: from_day ?? this.from_day,
-        to_day: to_day ?? this.to_day,
+         to_day: to_day ?? this.to_day,
         name: name ?? this.name,
         // stage_id: stage_id ?? this.stage_id,
         actual_day: actual_day ?? this.actual_day,
@@ -82,6 +82,59 @@ class StepEntity extends Equatable {
         // endDay: endDay ?? this.endDay,
         description: description ?? this.description);
   }
+}
 
+@JsonSerializable()
+class StepEntityResponseByDay{
+  String? season;
+  num? treeQuantity;
+  String? garden;
+  DateTime? start;
+  DateTime? end;
+  String? tree;
+  String? name;
+  num? aboutFrom;
+  num? aboutTo;
+  String? description;
+
+  factory StepEntityResponseByDay.fromJson(Map<String, dynamic> json) =>
+      _$StepEntityResponseByDayFromJson(json);
+  Map<String, dynamic> toJson() => _$StepEntityResponseByDayToJson(this);
+
+  StepEntityResponseByDay({
+    this.season,
+    this.treeQuantity,
+    this.garden,
+    this.start,
+    this.end,
+    this.tree,
+    this.name,
+    this.aboutFrom,
+    this.aboutTo,
+    this.description});
+
+  StepEntityResponseByDay copyWith({
+    String? season,
+    num? treeQuantity,
+    String? garden,
+    DateTime? start,
+    DateTime? end,
+    String? tree,
+    String? name,
+    num? aboutFrom,
+    num? aboutTo,
+    String? description,
+  }){
+    return StepEntityResponseByDay(
+        season: season ?? this.season,
+        treeQuantity: treeQuantity ?? this.treeQuantity,
+        garden: garden ?? this.garden,
+        start: start ?? this.start,
+        tree:  tree ?? this.tree,
+        aboutFrom: aboutFrom ?? aboutFrom,
+        aboutTo: aboutTo ?? aboutTo,
+        description: description ?? this.description
+    );
+  }
 
 }

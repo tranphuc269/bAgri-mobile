@@ -4,11 +4,10 @@ import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 
 
-
 import 'app_work_picker_page.dart';
 
 class WorkPickerController extends ValueNotifier<ContractWorkEntity?> {
-  WorkPickerController({ContractWorkEntity? contractWorkEntity}) : super(ContractWorkEntity());
+  WorkPickerController({ContractWorkEntity? contractWorkEntity}) : super(contractWorkEntity);
 
   ContractWorkEntity? get contractWorkEntity => value;
 

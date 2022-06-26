@@ -13,6 +13,7 @@ import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/network/api_weather.dart';
 
 import 'package:flutter_base/repositories/auth_repository.dart';
+import 'package:flutter_base/repositories/contract_task_responsitory.dart';
 import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 
 import 'package:flutter_base/repositories/garden_repository.dart';
@@ -30,6 +31,7 @@ import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/router/navigation_observer.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -183,6 +185,9 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<ContractWorkRepositoy>(create: (context) {
           return ContractWorkRepositoryImpl(_apiClient);
         }),
+        RepositoryProvider<ContractTaskRepository>(create: (context) {
+          return ContractTaskRepositoryImpl(_apiClient);
+        }),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -205,11 +210,12 @@ class _MyAppState extends State<MyApp> {
                 RepositoryProvider.of<ZoneRepository>(context);
             final _contractWorkRepository =
                 RepositoryProvider.of<ContractWorkRepositoy>(context);
+            final _contractTaskRepository =
+                RepositoryProvider.of<ContractTaskRepository>(context);
             final _temporaryTaskRepository =
                 RepositoryProvider.of<TemporaryTaskRepository>(context);
             final _materialRepository =
                 RepositoryProvider.of<MaterialRepository>(context);
-
 
 
             return AppCubit(
@@ -257,7 +263,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
-       //home: AppWorkPickerPage(),
+      // home: ContractTaskDetailPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

@@ -107,21 +107,21 @@ class GardenEntityResponseFromZoneId {
 
 
   factory GardenEntityResponseFromZoneId.fromJson(Map<String, dynamic> json) =>
-      // _$GardenEntityResponseFromZoneIdFromJson(json);
+      _$GardenEntityResponseFromZoneIdFromJson(json);
 
  /* GardenEntityResponseFromZoneId _$GardenEntityResponseFromZoneIdFromJson(
       Map<String, dynamic> json) =>*/
-      GardenEntityResponseFromZoneId(
-        garden_id: json['_id'] as String?,
-        name: json['name'] as String?,
-        area: json['area'] as int?,
-        areaUnit: json['areaUnit'] as String?,
-        managerId: json['manager'] as String?,
-        treePlaceQuantity: json['treePlaceQuantity'] as int?,
-        zone: json['zone'] == null
-            ? null
-            : ZoneEntity.fromJson(json['zone'] as Map<String, dynamic>),
-      );
+  //     GardenEntityResponseFromZoneId(
+  //       garden_id: json['_id'] as String?,
+  //       name: json['name'] as String?,
+  //       area: json['area'] as int?,
+  //       areaUnit: json['areaUnit'] as String?,
+  //       managerId: json['manager'] as String?,
+  //       treePlaceQuantity: json['treePlaceQuantity'] as int?,
+  //       zone: json['zone'] == null
+  //           ? null
+  //           : ZoneEntity.fromJson(json['zone'] as Map<String, dynamic>),
+  //     );
   Map<String, dynamic> toJson() =>
       _$GardenEntityResponseFromZoneIdToJson(this);
 

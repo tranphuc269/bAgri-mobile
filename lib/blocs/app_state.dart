@@ -27,6 +27,7 @@ class AppState extends Equatable {
   WeatherResponse? weather;
   final LoadStatus? weatherStatus;
 
+
   @override
   List<Object?> get props => [
         this.trees,
@@ -110,6 +111,7 @@ class AppState extends Equatable {
       weatherStatus: weatherStatus ?? this.weatherStatus,
       listMaterials: listMaterials ?? this.listMaterials,
       getMaterialsStatus: getMaterialsStatus ?? this.getMaterialsStatus
+
     );
   }
 }

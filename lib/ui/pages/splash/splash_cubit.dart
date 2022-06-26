@@ -15,6 +15,7 @@ enum SplashNavigator {
   OPEN_HOME,
   OPEN_LOGIN,
   OPEN_ACCOUNT,
+  OPEN_GARDEN_MANAGER_HOME,
   OPEN_LOAD_DATA_FAILURE,
 }
 
@@ -42,6 +43,11 @@ class SplashCubit extends Cubit<SplashState> {
         GlobalData.instance.role = role;
         GlobalData.instance.userEntity = _userInfo;
         navigatorController.sink.add(SplashNavigator.OPEN_ACCOUNT);
+      } else if(role == "GARDEN_MANAGER"){
+        GlobalData.instance.token = token;
+        GlobalData.instance.role = role;
+        GlobalData.instance.userEntity = _userInfo;
+        navigatorController.sink.add(SplashNavigator.OPEN_GARDEN_MANAGER_HOME);
       } else {
         GlobalData.instance.token = token;
         GlobalData.instance.role = role;

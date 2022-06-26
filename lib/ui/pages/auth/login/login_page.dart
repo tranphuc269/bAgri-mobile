@@ -72,8 +72,8 @@ class _LoginPageState extends State<LoginPage> {
         case LoginNavigator.OPEN_HOME:
           showHome();
           break;
-        case LoginNavigator.OPEN_GARDEN:
-          showGardenManagementByQLV();
+        case LoginNavigator.OPEN_GARDEN_MANAGER_HOME:
+          showGardenManagementHome();
           break;
       }
     });
@@ -335,13 +335,13 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void showGardenManagementByQLV() {
+  void showGardenManagementHome() {
     final canPop = Navigator.of(context).canPop();
     if (canPop) {
       Application.router!.pop(context);
     } else {
       Application.router!
-          .navigateTo(context, Routes.gardenListByQVL, clearStack: true);
+          .navigateTo(context, Routes.homeGardenManager, clearStack: true);
     }
   }
 
