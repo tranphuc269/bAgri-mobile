@@ -1,4 +1,4 @@
-    import 'package:bloc/bloc.dart';
+import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
@@ -20,7 +20,7 @@ part 'login_state.dart';
 
 enum LoginNavigator {
   OPEN_HOME,
-  OPEN_GARDEN,
+  OPEN_GARDEN_MANAGER_HOME
 }
 
 class LoginCubit extends Cubit<LoginState> {
@@ -80,8 +80,8 @@ class LoginCubit extends Cubit<LoginState> {
           } else if (userRes.role == "ADMIN") {
             // navigatorController.sink.add(LoginNavigator.OPEN_GARDEN);
             navigatorController.sink.add(LoginNavigator.OPEN_HOME);
-          }else if (userRes.role == "QLV"){
-            navigatorController.sink.add(LoginNavigator.OPEN_GARDEN);
+          }else if (userRes.role == "GARDEN_MANAGER"){
+            navigatorController.sink.add(LoginNavigator.OPEN_GARDEN_MANAGER_HOME);
           }else{
             navigatorController.sink.add(LoginNavigator.OPEN_HOME);
           }

@@ -167,6 +167,7 @@ class AppTextAreaField extends StatelessWidget {
   final String? initialValue;
   final int? maxLines;
   final bool? enable;
+  final TextInputAction? textInputAction;
 
   const AppTextAreaField({
     Key? key,
@@ -183,6 +184,7 @@ class AppTextAreaField extends StatelessWidget {
     this.isRequire,
     this.labelStyle,
     this.enable,
+    this.textInputAction,
   }) : super(key: key);
 
   @override
@@ -236,6 +238,7 @@ class AppTextAreaField extends StatelessWidget {
               onChanged: onChanged,
               style: AppTextStyle.blackS14,
               onSaved: onSaved,
+              textInputAction: textInputAction,
             ),
           ],
         ),

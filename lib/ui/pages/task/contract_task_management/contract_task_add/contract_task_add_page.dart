@@ -1,10 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
-import 'package:flutter_base/configs/app_config.dart';
-import 'package:flutter_base/ui/pages/contract_work_management/contract_work_list/contract_work_list_cubit.dart';
-import 'package:flutter_base/ui/pages/seasons_management/add_season/season_adding_cubit.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_add/contract_task_add_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
@@ -19,18 +17,18 @@ import 'package:intl/intl.dart';
 
 class AddContractTaskPage extends StatefulWidget {
   const AddContractTaskPage({Key? key}) : super(key: key);
+
   @override
   _AddContractTaskState createState() => _AddContractTaskState();
 }
 
 class _AddContractTaskState extends State<AddContractTaskPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  //late ContractTaskAddingCubit _cubit;
+  late ContractTaskAddingCubit _cubit;
 
-  final taskNameController = TextEditingController(text: "");
+  final treeQuantityController = TextEditingController(text: "");
   late GardenPickerController gardenController;
   late WorkPickerController workPickerController;
-  late ProcessPickerController processController;
   final _formKey = GlobalKey<FormState>();
 
   DateTime selectedDate = DateTime.now();
@@ -38,18 +36,23 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
 
   @override
   void initState() {
-    //_cubit = BlocProvider.of<ContractTaskAddingCubit>(context);
+    _cubit = BlocProvider.of<ContractTaskAddingCubit>(context);
     gardenController = GardenPickerController();
     workPickerController = WorkPickerController();
-
-    // gardenController.addListener(() {
-    //   _cubit.changeGarden(gardenController.gardenEntity!);
-    // });
-    // workPickerController.addListener(() {
-    //   _cubit.change
-    // });
-
     super.initState();
+    gardenController.addListener(() {
+      _cubit.changeGarden(gardenController.gardenEntity!);
+    });
+    workPickerController.addListener(() {
+      _cubit.changeWork(workPickerController.contractWorkEntity!);
+    });
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    gardenController.dispose();
+    workPickerController.dispose();
+    treeQuantityController.dispose();
   }
 
   @override
@@ -72,9 +75,6 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
         )
 
     );
-    Container(
-      child: Text("Add ContractTaskPage"),
-    );
   }
 
   Widget _buildInput() {
@@ -96,8 +96,8 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 SizedBox(height: 3),
                 _buildTextLabel("Số bầu cây: "),
                 _buildTreeQuantity(),
-                SizedBox(height: 3,),
-                _buildDatePicker(),
+                // SizedBox(height: 3,),
+                // _buildDatePicker(),
                 // _buildTextLabel('Vai trò'),
                 // // _buildRoleOption(),
                 // SizedBox(height: 5),
@@ -132,7 +132,8 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 color: AppColors.main,
                 title: 'Xác nhận',
                 onPressed: () async {
-                  Navigator.of(context).pop(true);
+                  _cubit.createContractTask(treeQuantityController.text);
+                 Navigator.of(context).pop(true);
                 },
               ),
             )
@@ -185,6 +186,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
             child: AppTextField(
               hintText: "Nhập số lượng bầu cây",
               keyboardType: TextInputType.number,
+              controller: treeQuantityController,
              // initialValue: ,
             ),
           );
@@ -216,57 +218,57 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
     );
   }
 
-  Widget _buildDatePicker() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child: Row(children: [
-        Text(
-          'Ngày bắt đầu:',
-          style: AppTextStyle.greyS16,
-        ),
-        SizedBox(width: 15),
-        Text(
-          "${selectedDate.toLocal()}".split(' ')[0],
-          style: AppTextStyle.blackS16
-              .copyWith(decoration: TextDecoration.underline),
-        ),
-        SizedBox(width: 10),
-        GestureDetector(
-          onTap: () async {
-            final result = await showDatePicker(
-                context: context,
-                locale: Locale('vi'),
-                initialEntryMode: DatePickerEntryMode.input,
-                builder: (context, child) {
-                  return _buildCalendarTheme(child);
-                },
-                fieldHintText: "yyyy/mm/dd",
-                initialDate: DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2024));
-            if(result != null){
-              setState(() {
-                changeDate(result);
-              });
-              // print(result);
-              // // changeDate(result);
-            }
-          },
-          child: SizedBox(
-            height: 26,
-            width: 26,
-            child: Image.asset(
-              AppImages.icCalendar,
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-      ]),
-    );
-  }
+  // Widget _buildDatePicker() {
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(25.0),
+  //     ),
+  //     child: Row(children: [
+  //       Text(
+  //         'Ngày bắt đầu:',
+  //         style: AppTextStyle.greyS16,
+  //       ),
+  //       SizedBox(width: 15),
+  //       Text(
+  //         "${selectedDate.toLocal()}".split(' ')[0],
+  //         style: AppTextStyle.blackS16
+  //             .copyWith(decoration: TextDecoration.underline),
+  //       ),
+  //       SizedBox(width: 10),
+  //       GestureDetector(
+  //         onTap: () async {
+  //           final result = await showDatePicker(
+  //               context: context,
+  //               locale: Locale('vi'),
+  //               initialEntryMode: DatePickerEntryMode.input,
+  //               builder: (context, child) {
+  //                 return _buildCalendarTheme(child);
+  //               },
+  //               fieldHintText: "yyyy/mm/dd",
+  //               initialDate: DateTime.now(),
+  //               firstDate: DateTime.now(),
+  //               lastDate: DateTime(2024));
+  //           if(result != null){
+  //             setState(() {
+  //               changeDate(result);
+  //             });
+  //             // print(result);
+  //             // // changeDate(result);
+  //           }
+  //         },
+  //         child: SizedBox(
+  //           height: 26,
+  //           width: 26,
+  //           child: Image.asset(
+  //             AppImages.icCalendar,
+  //             fit: BoxFit.fill,
+  //           ),
+  //         ),
+  //       ),
+  //     ]),
+  //   );
+  // }
 
 
   Widget _buildLabelText(String label) {

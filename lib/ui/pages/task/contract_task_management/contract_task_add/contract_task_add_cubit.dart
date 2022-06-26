@@ -1,40 +1,27 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
-import 'package:flutter_base/models/entities/process/process_detail.dart';
-import 'package:flutter_base/models/entities/process/stage_entity.dart';
-import 'package:flutter_base/models/entities/process/step_entity.dart';
-import 'package:flutter_base/models/entities/season/season_entity.dart';
-import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
+
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/models/params/season/create_season_param.dart';
-import 'package:flutter_base/models/response/object_response.dart';
-import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
-import 'package:flutter_base/repositories/process_repository.dart';
-import 'package:flutter_base/repositories/season_repository.dart';
-import 'package:flutter_base/utils/date_utils.dart' as Util;
+import 'package:flutter_base/models/params/task/create_contract_task_params.dart';
+import 'package:flutter_base/repositories/contract_task_responsitory.dart';
+
 part 'contract_task_add_state.dart';
 
 class ContractTaskAddingCubit extends Cubit<ContractTaskAddingState> {
-  ContractWorkRepositoy contractWorkRepositoy;
- ContractTaskAddingCubit(
-      {required this.contractWorkRepositoy})
+  ContractTaskRepository contractTaskRepository;
+  ContractTaskAddingCubit(
+      {required this.contractTaskRepository})
       : super(ContractTaskAddingState());
 
-
-
-  void changeSeasonName(String name) {
-    emit(state.copyWith(seasonName: name));
-  }
 
   void changeGarden(GardenEntity value) {
     emit(state.copyWith(gardenEntity: value));
   }
   void changeWork(ContractWorkEntity value){
-
+    emit(state.copyWith(contractWorkEntity: value));
   }
 
   void changeStartTime(String startTime) {
@@ -42,11 +29,30 @@ class ContractTaskAddingCubit extends Cubit<ContractTaskAddingState> {
     emit(state.copyWith(startTime: startTime));
 
   }
-  void changeEndTime(String endTime) {
-    emit(state.copyWith(endTime: endTime));
-
-  }
   void changeTreePlaceQuantity(String treePlaceQuantity){
     emit(state.copyWith(treePlaceQuantityMax: treePlaceQuantity));
+  }
+
+  Future <void> createContractTask(String? treeQuantity) async {
+    emit(state.copyWith(addContractTaskStatus: LoadStatus.LOADING));
+    try{
+      CreateContractTaskParam param = CreateContractTaskParam(
+        work: state.contractWorkEntity,
+        gardenName: state.gardenEntity!.name,
+        treeQuantity: num.parse(treeQuantity.toString())
+      );
+      final response =  await contractTaskRepository.createContractTask(param: param);
+      print(response);
+      if(response != null){
+        emit(state.copyWith(addContractTaskStatus: LoadStatus.SUCCESS));
+      }else{
+        emit(state.copyWith(addContractTaskStatus: LoadStatus.FAILURE));
+      }
+
+    }catch (error){
+      print(error);
+      emit(state.copyWith(addContractTaskStatus: LoadStatus.FAILURE));
+      throw error;
+    }
   }
 }

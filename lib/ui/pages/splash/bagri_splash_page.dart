@@ -42,6 +42,9 @@ class _SplashPageState extends State<SplashPage> {
           case SplashNavigator.OPEN_ACCOUNT:
             showStorageByAccount();
             break;
+          case SplashNavigator.OPEN_GARDEN_MANAGER_HOME:
+            showHomeGardenManager();
+            break;
           case SplashNavigator.OPEN_HOME:
             showHome();
             break;
@@ -142,6 +145,9 @@ class _SplashPageState extends State<SplashPage> {
 
   void showLogin() {
     Application.router?.navigateTo(context, Routes.login, replace: true);
+  }
+  void showHomeGardenManager(){
+    Application.router?.navigateTo(context,Routes.homeGardenManager, replace: true);
   }
 
   void showErrorHapped() {

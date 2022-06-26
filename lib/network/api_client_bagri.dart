@@ -19,12 +19,14 @@ import 'package:flutter_base/models/entities/notification/notification_detail.da
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/process_delete.dart';
 import 'package:flutter_base/models/entities/process/process_detail.dart';
+import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/qr_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/season/season_steps_response.dart';
 import 'package:flutter_base/models/entities/season/season_task_detail_entity.dart';
 import 'package:flutter_base/models/entities/season/season_task_entity.dart';
 import 'package:flutter_base/models/entities/season/season_update_entity.dart';
+import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/entities/task/task.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/entities/task/work.dart';
@@ -250,6 +252,13 @@ abstract class ApiClient {
   Future<ObjectResponse<TaskDeleteEntity>> deleteTask(
       @Path("task_id") String taskId);
 
+  ///get Step by day for garden manager
+
+  @GET("/steps?day={day}")
+  Future<List<StepEntityResponseByDay>> getStepsByDay(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("day") String? day);
   ///user
   @GET("/me")
   Future<ObjectResponse<UserEntity>> getProfile();
@@ -281,7 +290,16 @@ abstract class ApiClient {
       @Header("Authorization") String? auth,
       @Header('Content-Type')String content_type,
       @Body() Map<String, dynamic> body);
+  @GET("/contract-tasks")
+  Future<List<ContractTask>> getListContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth);
 
+  @DELETE("/contract-tasks/{contract_task_id}")
+  Future<dynamic> deleteContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("contract_task_id") String? contractTaskId);
 
   /// Upload File
   @POST("/files")
@@ -313,6 +331,7 @@ abstract class ApiClient {
 
   @DELETE("/materials/{material_id}")
   Future<dynamic> deleteMaterial(@Path("material_id") String? materialId);
+
 
 }
 
