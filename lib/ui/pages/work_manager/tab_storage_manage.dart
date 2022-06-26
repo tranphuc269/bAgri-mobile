@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/ui/pages/storage_management/material_list/list_material_page.dart';
-import 'package:flutter_base/ui/pages/storage_management/tool_list/list_tool_page.dart';
+// import 'package:flutter_base/ui/pages/storage_management/material_list/list_material_page.dart';
+// import 'package:flutter_base/ui/pages/storage_management/tool_list/list_tool_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 
 class StorageTabPage extends StatefulWidget{
@@ -69,8 +69,8 @@ class _StorageTabPageState extends State<StorageTabPage>
                child: TabBarView(
                  controller: _controller,
                  children: [
-                   TabListMaterial(),
-                   TabListTool(),
+                   // TabListMaterial(),
+                   // TabListTool(),
                  ],
                ),
              ),

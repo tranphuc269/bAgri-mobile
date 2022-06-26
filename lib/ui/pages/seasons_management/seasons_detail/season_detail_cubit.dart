@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/models/entities/season/qr_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
-import 'package:flutter_base/models/entities/season/season_update_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/models/params/season/create_season_param.dart';
 import 'package:flutter_base/models/response/object_response.dart';
@@ -39,23 +38,27 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
         start_date: state.season!.start_date,
         end_date: state.season!.end_date,
       );
-      SeasonEntity result =
-          await seasonRepository.updateSeason(seasonId, param);
+      // SeasonEntity result =
+      //     await seasonRepository.updateSeason(seasonId, param);
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  Future<bool> generateQRCode(String seasonId) async {
-    try {
-      ObjectResponse<QREntity> result =
-          await seasonRepository.generateQRCode(seasonId);
-      emit(state.copyWith(
-          linkQR: result.data!.qr_code_url, linkUrl: result.data!.link));
-      return true;
-    } catch (e) {
-      return false;
-    }
+  Future<void> endSeason(String seasonId) async{
+    await seasonRepository.endSeason(seasonId);
   }
+
+  // Future<bool> generateQRCode(String seasonId) async {
+  //   try {
+  //     ObjectResponse<QREntity> result =
+  //         await seasonRepository.generateQRCode(seasonId);
+  //     emit(state.copyWith(
+  //         linkQR: result.data!.qr_code_url, linkUrl: result.data!.link));
+  //     return true;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
 }

@@ -1,9 +1,24 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter_base/models/enums/load_status.dart';
-
+part of 'temporary_task_list_cubit.dart';
 class TemporaryTaskListState extends Equatable {
   LoadStatus? loadStatus;
-  List<dynamic>? temporaryTaskList;
+  List<TemporaryTask>? temporaryTaskList;
+
+  TemporaryTaskListState({
+    this.loadStatus,
+    this.temporaryTaskList
+});
+
+  TemporaryTaskListState copyWith({
+    List<TemporaryTask>? temporaryTaskList,
+    // final String? description,
+    LoadStatus? loadStatus,
+  }) {
+    return TemporaryTaskListState(
+      temporaryTaskList: temporaryTaskList ?? this.temporaryTaskList,
+      // description: description ?? this.description,
+      loadStatus: loadStatus ?? this.loadStatus,
+    );
+  }
   @override
   List<dynamic> get props => [
     loadStatus,

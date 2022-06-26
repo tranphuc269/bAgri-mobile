@@ -43,16 +43,6 @@ class _SeasonUpdatingPageState extends State<SeasonUpdatingPage> {
     super.initState();
     _cubit.getSeasonDetail(widget.seasonId);
 
-    nameController.addListener(() {
-      _cubit.changeSeasonName(nameController.text);
-    });
-    treeController.addListener(() {
-      _cubit.changeTree(treeController.treeEntity!);
-      processController.processEntity = null;
-    });
-    gardenController.addListener(() {
-      _cubit.changeGarden(gardenController.gardenEntity!);
-    });
     processController.addListener(() {
       _cubit.changeProcess(processController.processEntity);
       if (processController.processEntity != null) {

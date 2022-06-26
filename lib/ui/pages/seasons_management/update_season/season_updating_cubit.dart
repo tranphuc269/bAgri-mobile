@@ -31,13 +31,13 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
       SeasonEntity param = SeasonEntity(
         name: state.seasonName,
         gardenId: state.gardenEntity!.garden_id,
-        process: state.processEntity!,
+        // process: state.processEntity!,
         tree: state.treeEntity!,
         start_date: state.startTime?.replaceAll('/', '-'),
         end_date: state.endTime?.replaceAll('/', '-'),
       );
-      SeasonEntity result =
-          await seasonRepository.updateSeason(seasonId, param);
+      // SeasonEntity result =
+      //     await seasonRepository.updateSeason(seasonId, param);
 
       emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
     } catch (e) {
@@ -56,7 +56,7 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
           loadStatus: LoadStatus.SUCCESS,
           // gardenEntity: result.data!.season!.garden,
           treeEntity: result/*.data!.season!*/.tree,
-          processEntity: result/*.data!.season!*/.process,
+          // processEntity: result/*.data!.season!*/.process,
           // seasonDetail: result/*.data!*/.season!,
           seasonName: result./*data!.season!.*/name,
           startTime: result./*data!.season!.*/start_date?.replaceAll('-', '/'),

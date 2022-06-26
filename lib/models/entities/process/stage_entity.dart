@@ -13,6 +13,7 @@ class StageEntity extends Equatable {
   int? aboutTo;
   String? description;
 
+
   // factory StageEntity.fromJson(Map<String, dynamic> json) =>
   //     _$StageEntityFromJson(json);
   // Map<String, dynamic> toJson() => _$StageEntityToJson(this);

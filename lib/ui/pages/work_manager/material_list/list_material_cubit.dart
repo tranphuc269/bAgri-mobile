@@ -31,7 +31,7 @@ class MaterialListCubit extends Cubit<ListMaterialState> {
       if (response != null) {
         emit(state.copyWith(
           getProcessStatus: LoadStatus.SUCCESS,
-          listData: response.data!.processes,
+          listData: response./*data!.*/processes,
         ));
       } else {
         emit(state.copyWith(getProcessStatus: LoadStatus.FAILURE));

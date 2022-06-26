@@ -93,8 +93,7 @@ class Routes {
   static String addMaterial = '/addMaterial';
   static String updateMaterial = '/updateMaterial';
 
-  ///Garden Manager
-  static String homeGardenManager = '/homeGardenManager';
+
 
 
   static void configureRoutes(FluroRouter router) {
@@ -324,7 +323,7 @@ class Routes {
     router.define(manageStorage,
         handler: storageManagementHandler,
         transitionType: TransitionType.fadeIn);
-    router.define(updateMaterial, handler: updateMaterialHandler, transitionType: TransitionType.fadeIn);
+    // router.define(updateMaterial, handler: updateMaterialHandler, transitionType: TransitionType.fadeIn);
     router.define(addMaterial, handler: addMaterialHandler, transitionType: TransitionType.fadeIn);
   }
 }

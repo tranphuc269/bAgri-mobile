@@ -90,7 +90,6 @@ class _ProcessDetailPageState extends State<ProcessDetailPage> {
                             nameController =
                                 TextEditingController(text: _cubit!.state.name);
                           }
-                          // TODO: implement listener
                         },
                         builder: (context, state) {
                           return AppTextField(

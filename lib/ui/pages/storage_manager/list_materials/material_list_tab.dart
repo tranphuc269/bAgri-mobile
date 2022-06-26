@@ -15,8 +15,6 @@ import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../../../../main.dart';
-
 class TabMaterialList extends StatelessWidget {
   const TabMaterialList({Key? key}) : super(key: key);
 
@@ -65,15 +63,17 @@ class _MaterialListPageState extends State<MaterialListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: _buildBody(),
-          // Padding(
-          //   padding:
-          //       EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 25),
-          //   child: _buildItem(name: "Vật tư"),
-          // ),
+          child:
+              _buildBody(),
+              // Padding(
+              //   padding:
+              //       EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 25),
+              //   child: _buildItem(name: "Vật tư"),
+              // ),
+
+
         ),
         floatingActionButton: FloatingActionButton(
-          heroTag: "btn2",
           backgroundColor: AppColors.main,
           onPressed: () async {
             bool isAdd = await Application.router!
@@ -123,31 +123,35 @@ class _MaterialListPageState extends State<MaterialListPage> {
                     },
                     itemBuilder: (context, index) {
                       String? name = state.listMaterials![index].name ?? "";
-                      var material = state.listMaterials![index];
+                      var material =
+                          state.listMaterials![index];
                       return _buildItem(
                         name: name,
                         quantity: state.listMaterials![index].quantity,
                         unit: state.listMaterials![index].unit,
                         unitPrice: state.listMaterials![index].unitPrice,
                         onUpdate: () async {
-                          bool isUpdate = await Application.router!.navigateTo(
-                            appNavigatorKey.currentContext!,
-                            Routes.updateMaterial,
-                            routeSettings: RouteSettings(
-                              arguments: state.listMaterials![index].materialId
-                            ),
-                          );
-                          if (isUpdate) {
-                            _onRefreshData();
-                          }
+                          // bool isUpdate = await Application.router!.navigateTo(
+                          //   appNavigatorKey.currentContext!,
+                          //   Routes.treeUpdate,
+                          //   routeSettings: RouteSettings(
+                          //     arguments: TreeUpdateArgument(
+                          //       tree_id: tree.tree_id,
+                          //       name: tree.name,
+                          //       // description: tree.description,
+                          //     ),
+                          //   ),
+                          // );
+                          // if (isUpdate) {
+                          //   _onRefreshData();
+                          // }
                         },
                         onDelete: () async {
                           bool isDelete = await showDialog(
                               context: context,
                               builder: (context) => AppDeleteDialog(
                                     onConfirm: () async {
-                                      await _cubit!.deleteMaterial(state
-                                          .listMaterials![index].materialId!);
+                                      await _cubit!.deleteMaterial(state.listMaterials![index].materialId!);
                                       Navigator.pop(context, true);
                                     },
                                   ));
@@ -185,9 +189,8 @@ class _MaterialListPageState extends State<MaterialListPage> {
 
   _buildItem(
       {required String name,
-      int? quantity,
-      int? unitPrice,
-      String? unit,
+        int? quantity,
+        int? unitPrice, String? unit,
       String? avatarUrl,
       VoidCallback? onDelete,
       VoidCallback? onPressed,
@@ -275,19 +278,10 @@ class _MaterialListPageState extends State<MaterialListPage> {
                     SizedBox(
                       height: 5,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          // width: MediaQuery.of(context).size.width * 0.2,
-                          child: Text("Số lượng: ${quantity.toString()}",
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        Container(
-                          child: Text("Giá: ${unitPrice.toString()} ${unit}", overflow: TextOverflow.ellipsis),
-                        ),
-                        SizedBox(width: 5)
-                      ],
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      child:
+                          Text("Số lượng: ", overflow: TextOverflow.ellipsis),
                     ),
                   ],
                 )),
@@ -303,7 +297,6 @@ class _MaterialListPageState extends State<MaterialListPage> {
       ),
     );
   }
-
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
@@ -311,4 +304,5 @@ class _MaterialListPageState extends State<MaterialListPage> {
       message: message,
     ));
   }
+
 }

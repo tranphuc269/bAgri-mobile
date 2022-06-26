@@ -25,31 +25,3 @@ class ProcessDetailResponse {
   }
 }
 
-// @JsonSerializable()
-// class StageEntity {
-//   String? name;
-//   dynamic duration;
-//   List<TaskEntity>? steps;
-//
-//   factory StageEntity.fromJson(Map<String, dynamic> json) =>
-//       _$StageEntityFromJson(json);
-//   Map<String, dynamic> toJson() => _$StageEntityToJson(this);
-//
-//   StageEntity({
-//     this.name,
-//     this.duration,
-//     this.steps,
-//   });
-//
-//   StageEntity copyWith({
-//     String? name,
-//     dynamic duration,
-//     List<TaskEntity>? steps,
-//   }) {
-//     return StageEntity(
-//       name: name ?? this.name,
-//       duration: duration ?? this.duration,
-//       steps: steps ?? this.steps,
-//     );
-//   }
-// }
