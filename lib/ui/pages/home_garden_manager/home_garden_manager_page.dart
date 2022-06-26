@@ -515,7 +515,6 @@ class MainDrawer extends StatefulWidget {
 class _MainDrawerState extends State<MainDrawer> {
   AppCubit? _appCubit;
   UserEntity? _userInfo;
-
   @override
   void initState() {
     super.initState();

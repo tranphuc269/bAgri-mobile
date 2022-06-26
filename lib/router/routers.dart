@@ -93,6 +93,10 @@ class Routes {
   static String addMaterial = '/addMaterial';
   static String updateMaterial = '/updateMaterial';
 
+  ///Garden Manager
+  static String homeGardenManager = '/homeGardenManager';
+
+
   static void configureRoutes(FluroRouter router) {
     router.notFoundHandler = notHandler;
     // router.define(root, handler: splashHandler);
@@ -287,8 +291,7 @@ class Routes {
     router.define(
       manageAccount,
       handler: listAccountHandler,
-      transitionType: TransitionType.fadeIn,
-    );
+      transitionType: TransitionType.fadeIn,);
 
     /// homeGardenManager
     router.define(
