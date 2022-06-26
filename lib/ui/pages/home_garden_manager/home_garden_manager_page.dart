@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -12,19 +10,14 @@ import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
-
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
 import 'package:flutter_base/utils/dialog_utils.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'home_garden_manager_cubit.dart';
@@ -147,13 +140,15 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              _buildBody(),
-            ],
-          ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 26),
+            Expanded(flex: 1, child: _buildHeader()),
+            Expanded(flex: 3, child:_buildCalendar() ),
+            Expanded(flex: 3, child: _buildEvents()),
+          ],
         ),
         drawer: MainDrawer(),
         floatingActionButton: FloatingActionButton(
@@ -170,7 +165,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
             size: 40,
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: AnimatedBottomNavigationBar.builder(
             itemCount: iconList.length,
             tabBuilder: (int index, bool isActive) {
@@ -212,78 +207,81 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
       ),
     );
   }
-
-  Widget _buildBody() {
+  Widget _buildCalendar(){
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          children: [
-            TableCalendar(
-              firstDay: DateTime(kToday.year, kToday.month - 3, kToday.day),
-              lastDay: DateTime(kToday.year, kToday.month + 3, kToday.day),
-              focusedDay: _focusedDay,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              rangeStartDay: _rangeStart,
-              rangeEndDay: _rangeEnd,
-              calendarFormat: _calendarFormat,
-              rangeSelectionMode: _rangeSelectionMode,
-              // eventLoader: () => _cubit!.fetchStepOfDay(_selectedDay),
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              calendarStyle: CalendarStyle(
-                cellMargin: EdgeInsets.all(0),
-                // Use `CalendarStyle` to customize the UI
-                outsideDaysVisible: true,
-                todayDecoration: BoxDecoration(
-                  border: Border.all(color: AppColors.mainDarker),
-                  shape: BoxShape.circle,
-                ),
-                todayTextStyle: TextStyle(color: Color(0xFF5A5A5A)),
-                markerSize: 0,
-              ),
-              onDaySelected: _onDaySelected,
+      child: TableCalendar(
+        firstDay: DateTime(kToday.year, kToday.month - 3, kToday.day),
+        lastDay: DateTime(kToday.year, kToday.month + 3, kToday.day),
+        focusedDay: _focusedDay,
+        selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+        rangeStartDay: _rangeStart,
+        rangeEndDay: _rangeEnd,
+        calendarFormat: _calendarFormat,
+        rangeSelectionMode: _rangeSelectionMode,
+        startingDayOfWeek: StartingDayOfWeek.monday,
+        shouldFillViewport: true,
+        calendarStyle: CalendarStyle(
+          cellMargin: EdgeInsets.all(0),
+          // Use `CalendarStyle` to customize the UI
+          outsideDaysVisible: true,
+          todayDecoration: BoxDecoration(
+            border: Border.all(color: AppColors.mainDarker),
+            shape: BoxShape.circle,
+          ),
+          todayTextStyle: TextStyle(color: Color(0xFF5A5A5A)),
+          markerSize: 0,
+        ),
+        onDaySelected: _onDaySelected,
 
-              locale: "vi",
-              onPageChanged: (focusedDay) {
-                _focusedDay = focusedDay;
-              },
-              headerStyle: HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true,
-                  titleTextStyle:
-                  TextStyle(color: AppColors.mainDarker, fontSize: 17)),
-              calendarBuilders: CalendarBuilders(
-                selectedBuilder: (context, day, day1) {
-                  return AnimatedContainer(
-                    duration: Duration(milliseconds: 250),
-                    margin: EdgeInsets.all(6),
-                    padding: EdgeInsets.all(0),
-                    decoration: const BoxDecoration(
-                      color: AppColors.mainDarker,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(day.day.toString(),
-                        style: TextStyle(color: Colors.white)),
-                  );
-                },
-                todayBuilder: (context, today, day) {
-                  AnimatedContainer(
-                    duration: Duration(milliseconds: 250),
-                    margin: EdgeInsets.all(6),
-                    padding: EdgeInsets.all(0),
-                    decoration: const BoxDecoration(
-                      color: AppColors.mainDarker,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(day.day.toString(),
-                        style: TextStyle(color: Colors.red)),
-                  );
-                },
+        locale: "vi",
+        onPageChanged: (focusedDay) {
+          _focusedDay = focusedDay;
+        },
+        headerStyle: HeaderStyle(
+            formatButtonVisible: false,
+            titleCentered: true,
+            titleTextStyle:
+            TextStyle(color: AppColors.mainDarker, fontSize: 17)),
+        calendarBuilders: CalendarBuilders(
+          selectedBuilder: (context, day, day1) {
+            return AnimatedContainer(
+              duration: Duration(milliseconds: 250),
+              margin: EdgeInsets.all(6),
+              padding: EdgeInsets.all(0),
+              decoration: const BoxDecoration(
+                color: AppColors.mainDarker,
+                shape: BoxShape.circle,
               ),
-            ),
-            const SizedBox(height: 8.0),
-            BlocBuilder<HomeGardenManagerCubit, HomeGardenManagerState>(
+              alignment: Alignment.center,
+              child: Text(day.day.toString(),
+                  style: TextStyle(color: Colors.white)),
+            );
+          },
+          todayBuilder: (context, today, day) {
+            AnimatedContainer(
+              duration: Duration(milliseconds: 250),
+              margin: EdgeInsets.all(6),
+              padding: EdgeInsets.all(0),
+              decoration: const BoxDecoration(
+                color: AppColors.mainDarker,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Text(day.day.toString(),
+                  style: TextStyle(color: Colors.red)),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+
+  Widget _buildEvents() {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+         child: BlocBuilder<HomeGardenManagerCubit, HomeGardenManagerState>(
                 bloc: _cubit,
                 buildWhen: (previous, current) =>
                 previous.getEventStatus != current.getEventStatus,
@@ -302,25 +300,25 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
                         ? RefreshIndicator(
                       color: AppColors.main,
                       onRefresh: _onRefreshData,
-                      child:SingleChildScrollView(
-                        child: ListView.separated(
+                      child: ListView.separated(
                         padding: EdgeInsets.only(
                             left: 10, right: 10, top: 10),
                         physics: AlwaysScrollableScrollPhysics(),
                         itemCount: state.eventsOfDays!.length,
+                        // itemCount: 100,
                         shrinkWrap: true,
                         primary: false,
                         controller: _scrollController,
                         itemBuilder: (context, index) {
-                          StepEntityResponseByDay step =
-                          state.eventsOfDays![index];
-                          return _buildEvent(gardenName: step.garden, step: step.name, season: step.season);
+                         StepEntityResponseByDay step =
+                         state.eventsOfDays![index];
+                         return _buildEvent(gardenName: step.garden, step: step.name, season: step.season);
                         },
                         separatorBuilder: (context, index) {
                           return SizedBox(height: 10);
                         },
                       ),
-                      )) : Container(
+                      ) : Container(
                       height: 60,
                       child: Center(
                         child: Text("Không có công việc"),
@@ -331,8 +329,8 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
                     return Container();
                   }
                 }),
-          ],
-        ));
+        // ],
+        );
   }
 
   Widget _buildHeader() {
