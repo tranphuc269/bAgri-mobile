@@ -9,6 +9,7 @@ import 'package:flutter_base/blocs/navigation/navigation_cubit.dart';
 
 import 'package:flutter_base/commons/app_themes.dart';
 import 'package:flutter_base/configs/app_config.dart';
+import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/network/api_weather.dart';
 
 import 'package:flutter_base/repositories/auth_repository.dart';
@@ -16,10 +17,12 @@ import 'package:flutter_base/repositories/contract_task_responsitory.dart';
 import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 
 import 'package:flutter_base/repositories/garden_repository.dart';
+import 'package:flutter_base/repositories/material_repository.dart';
 import 'package:flutter_base/repositories/notification_repository.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/task_repository.dart';
+import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/repositories/upload_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';
@@ -170,11 +173,14 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<UploadRepository>(create: (context) {
           return UploadRepositoryImpl(_apiClient);
         }),
-        // RepositoryProvider<GlobalDataRepository>(create: (context) {
-        //   return GlobalDataRepositoryImpl(_apiClient);
-        // }),
+        RepositoryProvider<TemporaryTaskRepository>(create: (context) {
+          return TemporaryTaskRepositoryImpl(_apiClient);
+        }),
         RepositoryProvider<ZoneRepository>(create: (context) {
           return ZoneRepositoryImpl(_apiClient);
+        }),
+        RepositoryProvider<MaterialRepository>(create: (context) {
+          return MaterialRepositoryImpl(_apiClient);
         }),
         RepositoryProvider<ContractWorkRepositoy>(create: (context) {
           return ContractWorkRepositoryImpl(_apiClient);
@@ -206,21 +212,25 @@ class _MyAppState extends State<MyApp> {
                 RepositoryProvider.of<ContractWorkRepositoy>(context);
             final _contractTaskRepository =
                 RepositoryProvider.of<ContractTaskRepository>(context);
-
+            final _temporaryTaskRepository =
+                RepositoryProvider.of<TemporaryTaskRepository>(context);
+            final _materialRepository =
+                RepositoryProvider.of<MaterialRepository>(context);
 
 
             return AppCubit(
-              treeRepository: _treeRepository,
-              authRepository: _authRepository,
-              gardenRepository: _gardenRepository,
-              taskRepository: _taskRepository,
-              processRepository: _processRepository,
-              userRepository: _userRepository,
-              weatherRepository: _weatherRepository,
-              zoneRepository: _zoneRepository,
-              contractWorkRepositoy: _contractWorkRepository,
-              contractTaskRepository: _contractTaskRepository
-            );
+                treeRepository: _treeRepository,
+                authRepository: _authRepository,
+                gardenRepository: _gardenRepository,
+                taskRepository: _taskRepository,
+                processRepository: _processRepository,
+                userRepository: _userRepository,
+                weatherRepository: _weatherRepository,
+                zoneRepository: _zoneRepository,
+                materialRepository: _materialRepository,
+                temporaryTaskRepository: _temporaryTaskRepository,
+                contractWorkRepository: _contractWorkRepository,
+                contractWorkRepositoy: _contractWorkRepository);
           }),
           BlocProvider<NavigationCubit>(create: (context) => _navigationCubit!),
           BlocProvider(create: (context) {

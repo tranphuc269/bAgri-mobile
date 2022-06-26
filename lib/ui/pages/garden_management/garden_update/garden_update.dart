@@ -304,7 +304,6 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
                   child: Icon(Icons.keyboard_arrow_down)),
               onChanged: (value) {
                _managerValue = value as UserEntity?;
-               print(_managerValue!.username);
                 // _cubit.changeManagerUsername()
                // _cubit!.state.listManager!.indexWhere((element) => element.id == _cubit!.state.gardenData!.manager["id"])
               },
@@ -385,9 +384,6 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
                 child: AppGreenButton(
                   title: 'Xác nhận',
                   onPressed: () {
-                    print(areaController.text);
-                    print(treePlaceQuantityControler.text);
-                    print(widget.zoneName);
                     if (_formKey.currentState!.validate()) {
                       _cubit!.changeName(nameController.text);
                       _cubit!.changeArea(areaController.text);
