@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'task_entity.g.dart';
 
@@ -37,3 +38,4 @@ class TaskEntity {
     );
   }
 }
+

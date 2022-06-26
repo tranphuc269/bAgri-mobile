@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter_base/router/router_handlers/auth_bagri_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/contract_task_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/contract_work_router_handler.dart';
-import 'package:flutter_base/router/router_handlers/employee_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/garden_manager_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/garden_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/home_bagri_router_handler.dart';
@@ -84,6 +84,7 @@ class Routes {
   ///Task
   static String tabTask = '/tabTask';
   static String addContractTask = '/addContractTask';
+  static String contractTaskDetailAdmin = 'contractTaskDetailAdmin';
 
   ///Storage
   static String manageStorage = '/manageStorage';
@@ -303,6 +304,9 @@ class Routes {
         addContractTask,
         handler: addContractTaskHandler,
         transitionType: TransitionType.fadeIn);
+    router.define(
+        contractTaskDetailAdmin,
+        handler: contractTaskDetailByAdminHandler);
     
     ///manage Storage
     router.define(manageStorage, handler: storageManagementHandler, transitionType: TransitionType.fadeIn);
