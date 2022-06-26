@@ -78,16 +78,23 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
               SizedBox(
                 height: 10,
               ),
-              Text("Mô tả công việc: ", style: AppTextStyle.greyS16),
+              Text("Mô tả công việc từ kĩ thuật viên: ", style: AppTextStyle.greyS16),
               SizedBox(height: 10),
-              AppTextAreaField(
-                hintText: '',
-                keyboardType: TextInputType.multiline,
-                maxLines: 8,
-                enable: true,
-                textInputAction: TextInputAction.newline,
-              ),
-              SizedBox(height: 10),
+             if (GlobalData.instance.role == "GARDEN_MANAGER" || GlobalData.instance.role == "ACCOUNTANT")
+               Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Text(
+                    "Phân bón: 20kg, thuốc trừ sâu: 5 bình, Nước tưới: 500 lit, Hoan thanh trong 3 ngay",
+                    style: AppTextStyle.greyS16Bold,)
+                ),
+              if(GlobalData.instance.role == "ADMIN" || GlobalData.instance.role == "SUPER_ADMIN")
+                  AppTextAreaField(
+                    hintText: '',
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 8,
+                    enable: true,
+                    textInputAction: TextInputAction.newline,
+                  ),
             ],
           ),
         ),

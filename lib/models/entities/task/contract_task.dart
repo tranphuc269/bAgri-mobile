@@ -13,21 +13,26 @@ class ContractTask{
   String? gardenName;
   num? treeQuantity;
   String? start;
+  String? end;
+  String? description;
 
-  ContractTask({this.id, this.work, this.gardenName, this.treeQuantity, this.start});
+  ContractTask({this.id, this.work, this.gardenName, this.treeQuantity, this.start, this.end, this.description});
   ContractTask copyWith({
     String? id,
     ContractWorkEntity? work,
     String? gardenName,
     num? treeQuantity,
-    String? start
+    String? start,
+    String? end,
+    String? description
   }){
     return ContractTask(
       id: id ?? this.id,
       work: work ?? this.work,
       gardenName: gardenName ?? gardenName,
       treeQuantity: treeQuantity ?? this.treeQuantity,
-      start: start ?? this.start
+      start: start ?? this.start,
+      description:  description ?? this.description,
     );
   }
   factory ContractTask.fromJson(Map<String, dynamic> json) =>
