@@ -30,6 +30,7 @@ class AppColors {
   static const Color blue900 = Color(0xFF0D47A1);
   static const Color blueBackground = Color(0xFFE7F6FF);
   static const Color blue009 = Color(0xFF009CFC);
+  static const Color green94B = Color(0xFF94B49F);
 
   ///Gradient
   static const Color gradientEnd = Color(0xFFA9007C);

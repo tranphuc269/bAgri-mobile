@@ -4,7 +4,7 @@ class AppConfig {
   static const String appName = 'B-Agri';
 
   // // STAGING
-  // static const baseUrl = "http://139.59.192.86:8080/v1"; //Stagging
+  // static const baseUrl = "https://a205-222-252-10-226.ap.ngrok.io"; //Stagging
 
   static const baseUrl = "http://167.71.196.194:7000";
   static const weatherUrl = "https://api.openweathermap.org/data/2.5";
@@ -22,7 +22,7 @@ class AppConfig {
   ///DateFormat
   static const dateAPIFormat = 'dd/MM/yyyy';
   static const dateAPIFormatStrikethrough = 'dd-MM-yyyy';
-  static const dateDisplayFormat = 'dd/MM/yyyy';
+  static const dateDisplayFormat = 'yyyy-MM-dd';
   static const dateTimeAPIFormat =
       "MM/dd/yyyy'T'hh:mm:ss.SSSZ"; //Use DateTime.parse(date) instead of ...
   static const timeDisplayFormat = 'h:mm';

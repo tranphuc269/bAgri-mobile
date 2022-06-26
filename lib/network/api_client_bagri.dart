@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_base/configs/app_config.dart';
+import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/entities/farmer/farmer.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/file/file_entity.dart';
@@ -11,18 +13,23 @@ import 'package:flutter_base/models/entities/garden_task/garden_task_detail.dart
 import 'package:flutter_base/models/entities/garden_task/task_delete_entity.dart';
 import 'package:flutter_base/models/entities/manager/manager_entity.dart';
 import 'package:flutter_base/models/entities/garden_task/garden_task.dart';
+import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/notification/notification.dart';
 import 'package:flutter_base/models/entities/notification/notification_detail.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/process_delete.dart';
 import 'package:flutter_base/models/entities/process/process_detail.dart';
+import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/qr_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/season/season_steps_response.dart';
 import 'package:flutter_base/models/entities/season/season_task_detail_entity.dart';
 import 'package:flutter_base/models/entities/season/season_task_entity.dart';
 import 'package:flutter_base/models/entities/season/season_update_entity.dart';
+import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/entities/task/task.dart';
+import 'package:flutter_base/models/entities/task/temporary_task.dart';
+import 'package:flutter_base/models/entities/task/work.dart';
 import 'package:flutter_base/models/entities/token/login_model.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_delete_response.dart';
@@ -39,6 +46,7 @@ part 'api_client_bagri.g.dart';
 @RestApi(baseUrl: AppConfig.baseUrl)
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
+
   @POST("/auth")
   Future<TokenEntity> authLogin(@Body() Map<String, dynamic> body);
 
@@ -49,7 +57,8 @@ abstract class ApiClient {
   Future<dynamic> authRegistty(@Body() Map<String, dynamic> body);
 
   @GET("/accounts")
-  Future<List<UserEntity>> getListAccounts(@Header('accept') String content, @Header("Authorization") String token);
+  Future<List<UserEntity>> getListAccounts(
+      @Header('accept') String content, @Header("Authorization") String token);
 
   @PUT("/accounts/{id}")
   Future<dynamic> setRoleAccount(@Header('accept') String accept, @Header("Authorization") String auth,@Header("Content-Type")String content_type, @Path("id") String? id, @Body() Map<String, dynamic> body );
@@ -91,8 +100,7 @@ abstract class ApiClient {
 
   /// Garden
   @GET("/gardens")
-  Future<ObjectResponse<GardenListResponse>> getGardenData(
-      @Body() Map<String, dynamic> body);
+  Future<List<GardenEntity>> getGardenData();
 
   @GET("/gardens")
   Future<ObjectResponse<GardenListResponse>> getGardensByManagerId(
@@ -118,9 +126,9 @@ abstract class ApiClient {
       {@Path("garden_id") String? gardenId});
 
   /// Process
-  @GET("/processes")
-  Future<ListProcessResponse> getListProcessData(
-      @Body() Map<String, dynamic> body);
+  // @GET("/processes")
+  // Future<ProcessDataEntity> getListProcessData(
+  //     @Body() Map<String, dynamic> body);
 
   @DELETE("/processes/{process_id}")
   Future<ProcessDeleteResponse> deleteProcess(
@@ -134,21 +142,21 @@ abstract class ApiClient {
       @Path("process_id") String? processId, @Body() Map<String, dynamic> body);
 
   @GET("/processes/{process_id}")
-  Future<ObjectResponse<ProcessDetailResponse>> getProcessById(
+  Future<ProcessEntity> getProcessById(
       @Path('process_id') String processId);
 
   @GET("/processes_by_tree?tree_id={tree_id}")
-  Future<ListProcessResponse> getProcessOfTree(@Path("tree_id") String treeId);
+  Future<ProcessDataEntity> getProcessOfTree(@Path("tree_id") String treeId);
 
   /// Tree
-  @GET("/trees")
-  Future<List<TreeEntity>> getListTreeData(@Body() Map<String, dynamic> body);
+  // @GET("/trees")
+  // Future<TreeDataEntity> getListTreeData();
 
   @DELETE("/trees/{tree_id}")
-  Future<List<TreeEntity>> deleteTree(@Header('accept') String? accept, @Header("Authorization") String? auth,@Path("tree_id") String? treeId);
+  Future<TreeDeleteResponse> deleteTree({@Path("tree_id") String? treeId});
 
   @POST("/trees")
-  Future<dynamic> createTree(@Header('accept') String accept, @Header("Authorization") String auth, @Body() Map<String, dynamic> body);
+  Future<dynamic> createTree(@Body() Map<String, dynamic> body);
 
   @PUT("/trees/{tree_id}")
   Future<dynamic> updateTree(
@@ -158,28 +166,28 @@ abstract class ApiClient {
   Future<ObjectResponse<TreeDetailResponse>> getTreeById(
       @Path('tree_id') String treeId);
 
-  /// Employee/Farmer
-  @GET("/farmers")
-  Future<FarmerList> getListFarmerData();
-
-  @GET("/farmers")
-  Future<FarmerList> getListFarmerByManager(
-      @Query('manager_id') String managerId);
-
-  @GET("/farmers/{farmerId}")
-  Future<ObjectResponse<FarmerDetailResponse>> getFarmerById(
-      @Path('farmerId') String farmerId);
-
-  @DELETE("/farmers/{farmerId}")
-  Future<TreeDeleteResponse> deleteFarmer(@Path("farmerId") String farmerId);
-
-  @POST("/farmers")
-  Future<ObjectResponse<FarmerCreateResponse>> createFarmer(
-      @Body() CreateFarmerParam param);
-
-  @PUT("/farmers/{farmer_id}")
-  Future<ObjectResponse<FarmerUpdateResponse>> updateFarmer(
-      @Path("farmer_id") String farmerId, @Body() CreateFarmerParam param);
+  // /// Employee/Farmer
+  // @GET("/farmers")
+  // Future<FarmerList> getListFarmerData();
+  //
+  // @GET("/farmers")
+  // Future<FarmerList> getListFarmerByManager(
+  //     @Query('manager_id') String managerId);
+  //
+  // @GET("/farmers/{farmerId}")
+  // Future<ObjectResponse<FarmerDetailResponse>> getFarmerById(
+  //     @Path('farmerId') String farmerId);
+  //
+  // @DELETE("/farmers/{farmerId}")
+  // Future<TreeDeleteResponse> deleteFarmer(@Path("farmerId") String farmerId);
+  //
+  // @POST("/farmers")
+  // Future<ObjectResponse<FarmerCreateResponse>> createFarmer(
+  //     @Body() CreateFarmerParam param);
+  //
+  // @PUT("/farmers/{farmer_id}")
+  // Future<ObjectResponse<FarmerUpdateResponse>> updateFarmer(
+  //     @Path("farmer_id") String farmerId, @Body() CreateFarmerParam param);
 
   /// Notification
   @GET("/notifications")
@@ -191,23 +199,23 @@ abstract class ApiClient {
 
   /// Season
   @GET("/seasons")
-  Future<ObjectResponse<SeasonListResponse>> getListSeasonData(
-      @Query('status') String status);
+  Future<List<SeasonEntity>> getListSeasonData(
+      );
 
   @GET("/seasons/{seasonId}")
-  Future<ObjectResponse<SeasonDetailResponse>> getSeasonById(
+  Future<SeasonEntity> getSeasonById(
       @Path('seasonId') String seasonId);
 
   @POST("/seasons")
-  Future<ObjectResponse<SeasonCreateResponse>> createSeason(
-      @Body() CreateSeasonParam param);
+  Future<dynamic> createSeason(
+      @Body() Map<String, dynamic> body);
 
   @DELETE("/seasons/{season_id}")
   Future<TreeDeleteResponse> deleteSeason(@Path("season_id") String seasonId);
 
   @PUT("/seasons/{season_id}")
-  Future<ObjectResponse<SeasonUpdateResponse>> updateSeason(
-      @Path("season_id") String seasonId, @Body() CreateSeasonParam param);
+  Future<SeasonEntity> updateSeason(
+      @Path("season_id") String seasonId, @Body() Map<String, dynamic> param);
 
   @GET("/tasks")
   Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
@@ -244,6 +252,13 @@ abstract class ApiClient {
   Future<ObjectResponse<TaskDeleteEntity>> deleteTask(
       @Path("task_id") String taskId);
 
+  ///get Step by day for garden manager
+
+  @GET("/steps?day={day}")
+  Future<List<StepEntityResponseByDay>> getStepsByDay(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("day") String? day);
   ///user
   @GET("/me")
   Future<ObjectResponse<UserEntity>> getProfile();
@@ -252,7 +267,39 @@ abstract class ApiClient {
   @GET("/managers")
   Future<ObjectResponse<ManagerListResponse>> getListManager();
 
+  ///Contract Work
+  @GET("/works")
+  Future<List<ContractWorkEntity>> getListContractWork(@Header("accept") String? accept, @Header("Authorization") String? auth);
+  @POST("/works")
+  Future<dynamic> createContractWork(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
+  @DELETE("/works/{work_id}")
+  Future <dynamic> deleteContractWork (
+      @Header("accept") String? accept,
+      @Header("Authorization") String? auth,
+      @Path("work_id") String? workId,);
+  @PUT("/works/{work_id}")
+  Future <dynamic> modifyContractWork(@Header('accept') String accept,@Header("Authorization") String? auth,@Header('Content-Type')String content_type,@Path("work_id") String? workId,@Body() Map<String, dynamic> body);
+/// Create Contract task
+  @POST("/contract-tasks")
+  Future <dynamic> createContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
+  @GET("/contract-tasks")
+  Future<List<ContractTask>> getListContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth);
 
+  @DELETE("/contract-tasks/{contract_task_id}")
+  Future<dynamic> deleteContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("contract_task_id") String? contractTaskId);
 
   /// Upload File
   @POST("/files")
@@ -261,4 +308,48 @@ abstract class ApiClient {
   @POST("/seasons/{season_id}/qr_code")
   Future<ObjectResponse<QREntity>> generateQRCode(
       @Path("season_id") String seasonId);
+
+  ///temporary task
+  @GET("/temporary-tasks")
+  Future<List<TemporaryTask>> getListTemporaryTasks();
+
+  @POST("/temporary-tasks")
+  Future<dynamic> createTemporaryTask(@Body() Map<String, dynamic> body);
+
+  ///material
+  @GET("/materials")
+  Future<List<Material>> getListMaterials();
+
+  @GET("/materials/{material_id}")
+  Future<Material> getMaterialById(@Path("material_id") String? materialId);
+
+  @POST("/materials")
+  Future<dynamic> createMaterial(@Body() Map<String, dynamic> body);
+
+  @PUT("/materials/{material_id}")
+  Future<dynamic> updateMaterial(@Body() Map<String, dynamic> body, @Path("material_id") String? materialId);
+
+  @DELETE("/materials/{material_id}")
+  Future<dynamic> deleteMaterial(@Path("material_id") String? materialId);
+
+
+}
+
+class AppApi {
+  static AppApi instance = AppApi();
+  Dio _dio = Dio();
+  Future<TreeDataEntity> getListTreeData() async {
+    final response = await _dio.get("${AppConfig.baseUrl}/trees",
+        options: Options(headers: {
+          'Authorization': 'Bearer ${GlobalData.instance.token}'
+        }));
+    return TreeDataEntity.fromJson(response.data);
+  }
+  Future<ProcessDataEntity> getListProcessData() async {
+    final response = await _dio.get("${AppConfig.baseUrl}/processes",
+        options: Options(headers: {
+          'Authorization': 'Bearer ${GlobalData.instance.token}'
+        }));
+    return ProcessDataEntity.fromJson(response.data);
+  }
 }

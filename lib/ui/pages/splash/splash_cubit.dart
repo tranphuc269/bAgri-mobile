@@ -14,7 +14,8 @@ part 'splash_state.dart';
 enum SplashNavigator {
   OPEN_HOME,
   OPEN_LOGIN,
-  OPEN_GARDEN_QLV,
+  OPEN_ACCOUNT,
+  OPEN_GARDEN_MANAGER_HOME,
   OPEN_LOAD_DATA_FAILURE,
 }
 
@@ -37,17 +38,21 @@ class SplashCubit extends Cubit<SplashState> {
     if (token == null) {
       navigatorController.sink.add(SplashNavigator.OPEN_LOGIN);
     } else {
-      if (role == 'SUPER_ADMIN') {
+      if (role == 'ACCOUNTANT') {
         GlobalData.instance.token = token;
         GlobalData.instance.role = role;
         GlobalData.instance.userEntity = _userInfo;
-        navigatorController.sink.add(SplashNavigator.OPEN_HOME);
+        navigatorController.sink.add(SplashNavigator.OPEN_ACCOUNT);
+      } else if(role == "GARDEN_MANAGER"){
+        GlobalData.instance.token = token;
+        GlobalData.instance.role = role;
+        GlobalData.instance.userEntity = _userInfo;
+        navigatorController.sink.add(SplashNavigator.OPEN_GARDEN_MANAGER_HOME);
       } else {
         GlobalData.instance.token = token;
         GlobalData.instance.role = role;
         GlobalData.instance.userEntity = _userInfo;
-        navigatorController.sink.add(SplashNavigator.OPEN_GARDEN_QLV);
-        // navigatorController.sink.add(SplashNavigator.OPEN_HOME);
+        navigatorController.sink.add(SplashNavigator.OPEN_HOME);
       }
     }
   }

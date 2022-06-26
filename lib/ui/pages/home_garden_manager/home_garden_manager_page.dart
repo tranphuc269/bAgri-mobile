@@ -1,10 +1,14 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
@@ -13,9 +17,15 @@ import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
 import 'package:flutter_base/utils/dialog_utils.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import 'home_garden_manager_cubit.dart';
 
@@ -28,10 +38,38 @@ class HomeGardenManagerPage extends StatefulWidget {
   }
 }
 
-class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
+class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with TickerProviderStateMixin {
   HomeGardenManagerCubit? _cubit;
   AppCubit? _appCubit;
-  late NotificationManagementCubit _notificationCubit;
+
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
+
+  final _scrollController = ScrollController();
+
+
+  // Bottom navigation
+  final autoSizeGroup = AutoSizeGroup();
+  var _bottomNavIndex = 0; //default index of a first screen
+
+  late AnimationController _fabAnimationController;
+  late AnimationController _borderRadiusAnimationController;
+  late Animation<double> fabAnimation;
+  late Animation<double> borderRadiusAnimation;
+  late CurvedAnimation fabCurve;
+  late CurvedAnimation borderRadiusCurve;
+  late AnimationController _hideBottomBarAnimationController;
+  final iconList = <String>[
+    AppImages.icCrop,
+    AppImages.icDialyWork
+  ];
+
+  final kToday = DateTime.now();
 
   @override
   void initState() {
@@ -39,11 +77,45 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
     final repository = RepositoryProvider.of<AuthRepository>(context);
     _cubit = BlocProvider.of<HomeGardenManagerCubit>(context);
     _appCubit = BlocProvider.of<AppCubit>(context);
-    //_notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
-
-
     _appCubit!.getData();
-    //_notificationCubit.getListNotification();
+    _selectedDay = _focusedDay;
+    _cubit!.fetchStepOfDay(_selectedDay);
+
+    _fabAnimationController = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _borderRadiusAnimationController = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+    fabCurve = CurvedAnimation(
+      parent: _fabAnimationController,
+      curve: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn),
+    );
+    borderRadiusCurve = CurvedAnimation(
+      parent: _borderRadiusAnimationController,
+      curve: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn),
+    );
+
+    fabAnimation = Tween<double>(begin: 0, end: 1).animate(fabCurve);
+    borderRadiusAnimation = Tween<double>(begin: 0, end: 1).animate(
+      borderRadiusCurve,
+    );
+
+    _hideBottomBarAnimationController = AnimationController(
+      duration: Duration(milliseconds: 200),
+      vsync: this,
+    );
+
+    Future.delayed(
+      Duration(seconds: 1),
+          () => _fabAnimationController.forward(),
+    );
+    Future.delayed(
+      Duration(seconds: 1),
+          () => _borderRadiusAnimationController.forward(),
+    );
   }
 
   @override
@@ -51,65 +123,216 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
     super.dispose();
   }
 
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+        _rangeStart = null; // Important to clean those
+        _rangeEnd = null;
+        _rangeSelectionMode = RangeSelectionMode.toggledOff;
+        _cubit!.fetchStepOfDay(_selectedDay);
+      });
+    }
+  }
+
+  Future<void> _onRefreshData() async {
+    _cubit!.fetchStepOfDay(_selectedDay);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: AppColors.main,
-        body: _buildBody(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(),
+              _buildBody(),
+            ],
+          ),
+        ),
         drawer: MainDrawer(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            bool isAdd =
+            await Application.router?.navigateTo(context, Routes.addContractTask);
+            if (isAdd) {
+              _onRefreshData();
+            }
+          },
+          backgroundColor: AppColors.main,
+          child: Icon(
+            Icons.add,
+            size: 40,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+            itemCount: iconList.length,
+            tabBuilder: (int index, bool isActive) {
+              final color = isActive ? AppColors.mainDarker : AppColors.mainDarker;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(iconList[index], width: 30, height: 30,),
+                  const SizedBox(height: 4),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: AutoSizeText(
+                      index == 0 ? "Mùa vụ" : "Công việc",
+                      maxLines: 1,
+                      style: TextStyle(color: color),
+                      group: autoSizeGroup,
+                    ),
+                  )
+                ],
+              );
+            },
+          backgroundColor: Colors.white,
+          activeIndex: _bottomNavIndex,
+          splashColor: AppColors.mainDarker,
+          notchAndCornersAnimation: borderRadiusAnimation,
+          splashSpeedInMilliseconds: 300,
+          notchSmoothness: NotchSmoothness.defaultEdge,
+          gapLocation: GapLocation.center,
+          onTap: (index) => setState(() => index == 0 ? Application.router?.navigateTo(context, Routes.seasonManagement): Application.router?.navigateTo(context, Routes.tabTask)),
+          hideAnimationController: _hideBottomBarAnimationController,
+          shadow: BoxShadow(
+            offset: Offset(0, 1),
+            blurRadius: 12,
+            spreadRadius: 0.5,
+            color: Colors.grey,
+          ),
+            ),
       ),
     );
   }
 
   Widget _buildBody() {
-    return SafeArea(
-      child: Column(
-        children: [
-          _buildHeader(),
-          Expanded(
-              child: Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CategoryItem(
-                    title: 'Quản lý vườn',
-                    color: AppColors.green289768,
-                    urlImage: AppImages.icGarden,
-                    ridirectPage: redirectZone,
-                  ),
-                  CategoryItem(
-                    title: 'Quản lý mùa vụ',
-                    color: AppColors.brown975D28,
-                    urlImage: AppImages.icSeason,
-                    ridirectPage: redirectSeason,
-                  ),
-                  CategoryItem(
-                    title: 'Quản lý quy trình',
-                    color: AppColors.blue4493DB,
-                    urlImage: AppImages.icProcedure,
-                    ridirectPage: redirectProcess,
-                  ),
-                  CategoryItem(
-                      title: "Quản lý công việc",
-                      color: AppColors.blueA5CAD2,
-                      urlImage: AppImages.icWorks,
-                      ridirectPage: redirectManageAccount,
-                    )
-                ],
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          children: [
+            TableCalendar(
+              firstDay: DateTime(kToday.year, kToday.month - 3, kToday.day),
+              lastDay: DateTime(kToday.year, kToday.month + 3, kToday.day),
+              focusedDay: _focusedDay,
+              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+              rangeStartDay: _rangeStart,
+              rangeEndDay: _rangeEnd,
+              calendarFormat: _calendarFormat,
+              rangeSelectionMode: _rangeSelectionMode,
+              // eventLoader: () => _cubit!.fetchStepOfDay(_selectedDay),
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              calendarStyle: CalendarStyle(
+                cellMargin: EdgeInsets.all(0),
+                // Use `CalendarStyle` to customize the UI
+                outsideDaysVisible: true,
+                todayDecoration: BoxDecoration(
+                  border: Border.all(color: AppColors.mainDarker),
+                  shape: BoxShape.circle,
+                ),
+                todayTextStyle: TextStyle(color: Color(0xFF5A5A5A)),
+                markerSize: 0,
+              ),
+              onDaySelected: _onDaySelected,
+
+              locale: "vi",
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+              },
+              headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                  titleTextStyle:
+                  TextStyle(color: AppColors.mainDarker, fontSize: 17)),
+              calendarBuilders: CalendarBuilders(
+                selectedBuilder: (context, day, day1) {
+                  return AnimatedContainer(
+                    duration: Duration(milliseconds: 250),
+                    margin: EdgeInsets.all(6),
+                    padding: EdgeInsets.all(0),
+                    decoration: const BoxDecoration(
+                      color: AppColors.mainDarker,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(day.day.toString(),
+                        style: TextStyle(color: Colors.white)),
+                  );
+                },
+                todayBuilder: (context, today, day) {
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 250),
+                    margin: EdgeInsets.all(6),
+                    padding: EdgeInsets.all(0),
+                    decoration: const BoxDecoration(
+                      color: AppColors.mainDarker,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(day.day.toString(),
+                        style: TextStyle(color: Colors.red)),
+                  );
+                },
               ),
             ),
-          ))
-        ],
-      ),
-    );
+            const SizedBox(height: 8.0),
+            BlocBuilder<HomeGardenManagerCubit, HomeGardenManagerState>(
+                bloc: _cubit,
+                buildWhen: (previous, current) =>
+                previous.getEventStatus != current.getEventStatus,
+                builder: (context, state) {
+                  if (state.getEventStatus == LoadStatus.LOADING) {
+                    return Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.main,
+                        ));
+                  } else if (state.getEventStatus == LoadStatus.FAILURE) {
+                    return Center(
+                      child: Text("Co loi xay ra"),
+                    );
+                  } else if (state.getEventStatus == LoadStatus.SUCCESS) {
+                    return state.eventsOfDays!.length != 0
+                        ? RefreshIndicator(
+                      color: AppColors.main,
+                      onRefresh: _onRefreshData,
+                      child:SingleChildScrollView(
+                        child: ListView.separated(
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, top: 10),
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemCount: state.eventsOfDays!.length,
+                        shrinkWrap: true,
+                        primary: false,
+                        controller: _scrollController,
+                        itemBuilder: (context, index) {
+                          StepEntityResponseByDay step =
+                          state.eventsOfDays![index];
+                          return _buildEvent(gardenName: step.garden, step: step.name, season: step.season);
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(height: 10);
+                        },
+                      ),
+                      )) : Container(
+                      height: 60,
+                      child: Center(
+                        child: Text("Không có công việc"),
+                      ),
+                    );
+
+                  }else{
+                    return Container();
+                  }
+                }),
+          ],
+        ));
   }
 
   Widget _buildHeader() {
@@ -140,59 +363,60 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
           }),
           Expanded(
               child: Padding(
-            padding: const EdgeInsets.only(top: 7),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      width: 50,
-                      height: 46,
-                      child: Image.asset(
-                        AppImages.icCloudBA,
-                        fit: BoxFit.fill,
-                      )),
-                  Container(
-                    height: 30,
-                    child: BlocBuilder<AppCubit, AppState>(
-                      builder: (context, state) {
-                        if (state.weather != null) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${state.weather!.main!.temp!.toInt()}℃',
-                                style: AppTextStyle.whiteS12
-                                    .copyWith(fontSize: 20),
-                              ),
-                              Text(
-                                '  |  ',
-                                style: AppTextStyle.whiteS12
-                                    .copyWith(fontSize: 20),
-                              ),
-                              Image.asset(
-                                AppImages.icHumidity,
-                                width: 10,
-                                height: 15,
-                                fit: BoxFit.fill,
-                              ),
-                              Text(
-                                ' ${state.weather!.main!.humidity!.toInt()}%',
-                                style: AppTextStyle.whiteS12
-                                    .copyWith(fontSize: 20),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return Container();
-                        }
-                      },
-                    ),
-                  ),
-                ]),
-          )),
+                padding: const EdgeInsets.only(top: 7),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          width: 50,
+                          height: 46,
+                          child: Image.asset(
+                            AppImages.icCloudBA,
+                            fit: BoxFit.fill,
+                          )),
+                      Container(
+                        height: 30,
+                        child: BlocBuilder<AppCubit, AppState>(
+                          builder: (context, state) {
+                            if (state.weather != null) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${state.weather!.main!.temp!.toInt()}℃',
+                                    style: AppTextStyle.whiteS12
+                                        .copyWith(fontSize: 20),
+                                  ),
+                                  Text(
+                                    '  |  ',
+                                    style: AppTextStyle.whiteS12
+                                        .copyWith(fontSize: 20),
+                                  ),
+                                  Image.asset(
+                                    AppImages.icHumidity,
+                                    width: 10,
+                                    height: 15,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  Text(
+                                    ' ${state.weather!.main!.humidity!
+                                        .toInt()}%',
+                                    style: AppTextStyle.whiteS12
+                                        .copyWith(fontSize: 20),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                      ),
+                    ]),
+              )),
           GestureDetector(
             onTap: () {
-              redirectNotificationPage();
+              //redirectNotificationPage();
             },
             child: Padding(
               padding: const EdgeInsets.only(top: 13),
@@ -211,13 +435,13 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
                       child: BlocBuilder<NotificationManagementCubit,
                           NotificationManagementState>(
                         buildWhen: (prev, current) =>
-                            prev.loadStatus != current.loadStatus,
+                        prev.loadStatus != current.loadStatus,
                         builder: (context, state) {
                           if (state.loadStatus == LoadStatus.SUCCESS) {
                             var length = 0;
                             for (int i = 0;
-                                i < state.notificationList!.length;
-                                i++) {
+                            i < state.notificationList!.length;
+                            i++) {
                               if (state.notificationList![i].seen == false) {
                                 length++;
                               }
@@ -249,78 +473,37 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage> {
     );
   }
 
-  void redirectNotificationPage() {
-    Application.router?.navigateTo(context, Routes.notificationManagement);
-  }
-
-  void redirectZone() {
-    Application.router?.navigateTo(context, Routes.zoneList);
-  }
-
-  void redirectSeason() {
-    Application.router?.navigateTo(context, Routes.seasonManagement);
-  }
-
-  void redirectProcess() {
-    Application.router?.navigateTo(context, Routes.tabProcess);
-  }
-
-  void redirectEmployee() {
-    Application.router?.navigateTo(context, Routes.employeeManagement);
-  }
-  void redirectManageAccount(){
-    Application.router?.navigateTo(context, Routes.manageAccount);
-  }
-}
-
-class CategoryItem extends StatelessWidget {
-  final String? title;
-  final Color? color;
-  final String? urlImage;
-  final VoidCallback? ridirectPage;
-
-  const CategoryItem({
-    Key? key,
-    this.title,
-    this.color,
-    this.urlImage,
-    this.ridirectPage,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: ridirectPage,
-      child: Container(
-        height: 80,
-        padding: EdgeInsets.symmetric(vertical: 22, horizontal: 20),
-        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+  Widget _buildEvent({String? gardenName, String? season, String? step}) {
+    return Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 12.0,
+        ),
         decoration: BoxDecoration(
-          color: color!,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          border: Border.all(color: AppColors.mainDarker),
+          color: Color(0xFFEAFBEC),
+          borderRadius: BorderRadius.circular(12.0),
         ),
-        alignment: Alignment.center,
-        child: Row(
-          children: [
-            SizedBox(width: 40),
-            Image.asset(
-              urlImage!,
-              height: 36,
-              width: 36,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(width: 20),
-            Expanded(
-              child: Text(
-                title!,
-                style: AppTextStyle.whiteS14Bold.copyWith(fontSize: 20),
-                overflow: TextOverflow.ellipsis,
+        child: ListTile(
+          onTap: (){
+            Application.router!.navigateTo(context,
+              Routes.tabTask);
+          },
+
+          title: Text(
+            "Vườn: ${gardenName}",
+            style: AppTextStyle.blackS16Bold,
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Mùa vụ: ${season}",
+                style: AppTextStyle.greyS14,
               ),
-            )
-          ],
-        ),
-      ),
-    );
+              Text("Bước: ${step}")
+            ],
+          ),
+        ));
   }
 }
 
@@ -377,10 +560,7 @@ class _MainDrawerState extends State<MainDrawer> {
                           style: TextStyle(color: Colors.black87, fontSize: 18),
                         ),
                         Text(
-                          '${_userInfo?.role == "SUPER_ADMIN"? "Super Admin"
-                              : (_userInfo?.role == "ADMIN" ? "Admin"
-                              : (_userInfo?.role == "QLV" ? "Quản lý vườn"
-                              : "Kĩ thuật viên"))}',
+                          '${_userInfo?.role == "SUPER_ADMIN" ? "Super Admin" : (_userInfo?.role == "ADMIN" ? "Kỹ thuật viên" : (_userInfo?.role == "GARDEN_MANAGER" ? "Quản lý vườn" : "Kế toán"))}',
                           style: TextStyle(color: AppColors.main, fontSize: 18),
                         ),
                       ],

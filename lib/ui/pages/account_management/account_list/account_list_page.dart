@@ -94,9 +94,8 @@ class _AccountListState extends State<AccountListPage> {
                             UserEntity user = state.listUserData![index];
                             return _buildItem(
                               name: user.name ?? "",
-                              role: user.role ?? "",
+                              role: user.role == "SUPER_ADMIN" ? "Super Admin" : (user.role == "ADMIN" ? "Kỹ thuật viên" : (user.role == "GARDEN_MANAGER" ? "Quản lý vườn" : (user.role == "ACCOUNTANT" ? "Kế toán" : "NULL"))),
                               phoneNumber: user.phoneNumber ?? "",
-
                               onPressed: () async {
                                 showDialog(
                                     context: context,
@@ -113,14 +112,11 @@ class _AccountListState extends State<AccountListPage> {
                           },
                         ),
                       )
-                    : Expanded(
+                    : Container(
+                        width: double.infinity,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: EmptyDataWidget(),
-                            ),
-                          ],
+                          children: [EmptyDataWidget()],
                         ),
                       );
               } else {
@@ -239,12 +235,13 @@ class _AccountListState extends State<AccountListPage> {
     );
   }
 
-  Widget _dialog(
-      {required UserEntity user,
-      // {required String name,
-      // required String phoneNumber,
-      // required String role,
-      required String id,}) {
+  Widget _dialog({
+    required UserEntity user,
+    // {required String name,
+    // required String phoneNumber,
+    // required String role,
+    required String id,
+  }) {
     return StatefulBuilder(builder: (context, setState) {
       return AlertDialog(
         title: const Text("Thông tin tài khoản"),
@@ -304,19 +301,18 @@ class _AccountListState extends State<AccountListPage> {
           SizedBox(
             height: 5,
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-                  FlatButton(
-                    height: 40,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      color: AppColors.redButton,
-                      onPressed: (() => {Navigator.of(context).pop()}),
-                      child: Text("Hủy",
-                          style: TextStyle(color: Colors.white, fontSize: 14))),
+              FlatButton(
+                  height: 40,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color: AppColors.redButton,
+                  onPressed: (() => {Navigator.of(context).pop()}),
+                  child: Text("Hủy",
+                      style: TextStyle(color: Colors.white, fontSize: 14))),
               BlocConsumer<AccountListCubit, AccountListState>(
                   bloc: _cubit,
                   listenWhen: (prev, current) {
@@ -341,20 +337,21 @@ class _AccountListState extends State<AccountListPage> {
                         color: AppColors.main,
                         isLoading: isLoading,
                         title: "Xác nhận",
-                        onPressed: isLoading ? null :
-                            () async {
-                            if(_value.role_id == "NO_ROLE"){
-                              showSnackBar("Vui lòng chọn vai trò!");
-                            }else {
-                              await _cubit!.setRole(user.id.toString(),_value.role_id.toString());
-                              Navigator.of(context).pop();
-                              _onRefreshData();
-                            }
-                        });
+                        onPressed: isLoading
+                            ? null
+                            : () async {
+                                if (_value.role_id == "NO_ROLE") {
+                                  showSnackBar("Vui lòng chọn vai trò!");
+                                } else {
+                                  await _cubit!.setRole(user.id.toString(),
+                                      _value.role_id.toString());
+                                  Navigator.of(context).pop();
+                                  _onRefreshData();
+                                }
+                              });
                   })
             ],
           )
-
         ]));
   }
 

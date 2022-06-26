@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter_base/utils/logger.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:uuid/uuid.dart';
 
 class AttachFileHelper {
   AttachFileHelper._privateConstructor();

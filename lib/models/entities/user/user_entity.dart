@@ -57,7 +57,24 @@ class UserEntity {
     );
   }
 
-  factory UserEntity.fromJson(Map<String, dynamic> json) =>
-      _$UserEntityFromJson(json);
-  Map<String, dynamic> toJson() => _$UserEntityToJson(this);
+  // factory UserEntity.fromJson(Map<String, dynamic> json) =>
+  //     _$UserEntityFromJson(json);
+  // Map<String, dynamic> toJson() => _$UserEntityToJson(this);
+
+  factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
+    id: json['_id'] as String?,
+    username: json['username'] as String?,
+    name: json['name'] as String?,
+    role: json['role'] as String?,
+    phoneNumber: json['phoneNumber'] as String?,
+  );
+
+  Map<String, dynamic> toJson() =>
+      <String, dynamic>{
+        '_id': this.id,
+        'username': this.username,
+        'name': this.name,
+        'role': this.role,
+        'phoneNumber': this.phoneNumber,
+      };
 }

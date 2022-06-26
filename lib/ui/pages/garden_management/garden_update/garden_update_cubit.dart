@@ -75,11 +75,11 @@ class GardenUpdateCubit extends Cubit<GardenUpdateState> {
   //     return;
   //   }
   // }
-  void updateGarden(String? gardenId, String? gardenArea, String? treePlaceQuantity, String? zoneName ) async{
+  void updateGarden(String? gardenId, String? unit, String? gardenArea, String? treePlaceQuantity, String? zoneName ) async{
     emit(state.copyWith(updateGardenStatus: LoadStatus.LOADING));
     final param = UpdateGardenParam(
       name: state.name,
-      areaUnit: state.areaUnit,
+      areaUnit: unit,
       area: num.parse(gardenArea!),
       treePlaceQuantity: num.parse(treePlaceQuantity!),
       managerUsername: state.managerUsername,
@@ -122,7 +122,7 @@ class GardenUpdateCubit extends Cubit<GardenUpdateState> {
       final response = await gardenRepository!.getListAcounts();
       List<UserEntity> managers = [];
       response.forEach((element) {
-        if(element.role == "QLV"){
+        if(element.role == "GARDEN_MANAGER"){
           managers.add(element);
           print(element.name);
         }

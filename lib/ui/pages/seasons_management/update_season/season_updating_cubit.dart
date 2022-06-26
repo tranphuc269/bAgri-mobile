@@ -28,16 +28,15 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
   Future<void> updateSeason(String seasonId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      CreateSeasonParam param = CreateSeasonParam(
+      SeasonEntity param = SeasonEntity(
         name: state.seasonName,
-        garden_id: state.gardenEntity!.garden_id,
-        process_id: state.processEntity!.process_id,
-        tree_id: state.treeEntity!.tree_id,
+        gardenId: state.gardenEntity!.garden_id,
+        process: state.processEntity!,
+        tree: state.treeEntity!,
         start_date: state.startTime?.replaceAll('/', '-'),
         end_date: state.endTime?.replaceAll('/', '-'),
-        status: "",
       );
-      ObjectResponse<SeasonUpdateResponse> result =
+      SeasonEntity result =
           await seasonRepository.updateSeason(seasonId, param);
 
       emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
@@ -49,19 +48,19 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
   Future<void> getSeasonDetail(String seasonId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      final ObjectResponse<SeasonDetailResponse> result =
+      final SeasonEntity result =
           await seasonRepository.getSeasonById(seasonId);
-      //result.data!.season!.garden!.garden_id = result.data!.season!.garden!.id;
-      result.data!.season!.tree!.tree_id = result.data!.season!.tree!.tree_id;
+      // result./*data!.season!.*/gardenId = result.data!.season!.garden!.id;
+      // result/*.data!.season!*/.tree!.name= result./*data!.season!.*/tree!.name;
       emit(state.copyWith(
           loadStatus: LoadStatus.SUCCESS,
-          gardenEntity: result.data!.season!.garden,
-          treeEntity: result.data!.season!.tree,
-          processEntity: result.data!.season!.process,
-          seasonDetail: result.data!.season!,
-          seasonName: result.data!.season!.name,
-          startTime: result.data!.season!.start_date?.replaceAll('-', '/'),
-          endTime: result.data!.season!.end_date?.replaceAll('-', '/')));
+          // gardenEntity: result.data!.season!.garden,
+          treeEntity: result/*.data!.season!*/.tree,
+          processEntity: result/*.data!.season!*/.process,
+          // seasonDetail: result/*.data!*/.season!,
+          seasonName: result./*data!.season!.*/name,
+          startTime: result./*data!.season!.*/start_date?.replaceAll('-', '/'),
+          endTime: result./*data!.season!.*/end_date?.replaceAll('-', '/')));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
     }
@@ -70,10 +69,11 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
   Future<void> changeDuration(String processId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      ObjectResponse<ProcessDetailResponse> result =
-          await processRepository.getProcessById(processId);
+      // ObjectResponse<ProcessDetailResponse> result =
+      //     await processRepository.getProcessById(processId);
 
-      ProcessEntity processResult = result.data!.process!;
+      ProcessEntity processResult =/* result.data!.process!;*/
+      await processRepository.getProcessById(processId);
       int duration = 0;
       if (processResult.stages != null) {
         for (StageEntity stage in processResult.stages!) {

@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_base/repositories/auth_repository.dart';
 import 'package:flutter_base/repositories/weather_repository.dart';
 import 'package:flutter_base/ui/pages/home_garden_manager/home_garden_manager_cubit.dart';
 import 'package:flutter_base/ui/pages/home_garden_manager/home_garden_manager_page.dart';
@@ -11,7 +12,8 @@ Handler homeGardenManagerHandler = new Handler(
         create: (context) {
           final weatherRepository =
           RepositoryProvider.of<WeatherRepository>(context);
-          return HomeGardenManagerCubit(weatherRepository: weatherRepository);
+          final authRepository = RepositoryProvider.of<AuthRepository>(context);
+          return HomeGardenManagerCubit(weatherRepository: weatherRepository, authRepository: authRepository);
         },
         child: HomeGardenManagerPage(),
       );

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
-import 'package:flutter_base/commons/app_colors.dart';
 
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_floating_action_button.dart';
-import 'package:flutter_base/ui/widgets/b_agri/page_picker/garden_picker/app_garden_picker_page.dart';
+import 'package:flutter_base/ui/widgets/b_agri/page_picker/multiple_tree_picker/app_tree_picker_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/shims/dart_ui.dart';
 
-import '../../app_button.dart';
 import '../../app_circular_progress_indicator.dart';
 
 class AppSingleTreePickerPage extends StatefulWidget {
@@ -92,7 +88,7 @@ class _AppSingleTreePickerPageState extends State<AppSingleTreePickerPage> {
               return ItemWidget(
                   title: title,
                   isSelected: isSelected,
-                  onTap: () {
+                  onTap: (isSelected) {
                     Navigator.of(context).pop(tree);
                   });
             },

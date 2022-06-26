@@ -3,26 +3,22 @@ import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/season/season_steps_response.dart';
 import 'package:flutter_base/models/entities/season/season_task_detail_entity.dart';
 import 'package:flutter_base/models/entities/season/season_task_entity.dart';
-import 'package:flutter_base/models/entities/season/season_update_entity.dart';
-import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_delete_response.dart';
-import 'package:flutter_base/models/params/farmer/create_farmer_param.dart';
-import 'package:flutter_base/models/params/season/create_season_param.dart';
 import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class SeasonRepository {
-  Future<ObjectResponse<SeasonListResponse>> getListSeasonData(String status);
+  Future<List<SeasonEntity>> getListSeasonData();
 
-  Future<ObjectResponse<SeasonDetailResponse>> getSeasonById(String seasonId);
+  Future<SeasonEntity> getSeasonById(String seasonId);
 
-  Future<ObjectResponse<SeasonCreateResponse>> createSeason(
-      CreateSeasonParam param);
+  Future createSeason(
+      SeasonEntity param);
 
   Future<TreeDeleteResponse> deleteSeason(String seasonId);
 
-  Future<ObjectResponse<SeasonUpdateResponse>> updateSeason(
-      String seasonId, CreateSeasonParam param);
+  Future<SeasonEntity> updateSeason(
+      String seasonId, SeasonEntity param);
 
   Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
       String seasonId, String date);
@@ -44,21 +40,20 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future<ObjectResponse<SeasonListResponse>> getListSeasonData(
-      String status) async {
-    return await _apiClientBagri!.getListSeasonData(status);
+  Future<List<SeasonEntity>> getListSeasonData() async {
+    return await _apiClientBagri!.getListSeasonData();
   }
 
   @override
-  Future<ObjectResponse<SeasonDetailResponse>> getSeasonById(
+  Future<SeasonEntity> getSeasonById(
       String seasonId) async {
     return await _apiClientBagri!.getSeasonById(seasonId);
   }
 
   @override
-  Future<ObjectResponse<SeasonCreateResponse>> createSeason(
-      CreateSeasonParam param) async {
-    return await _apiClientBagri!.createSeason(param);
+  Future createSeason(
+      SeasonEntity param) async {
+    return await _apiClientBagri!.createSeason(param.toJson());
   }
 
   @override
@@ -67,9 +62,9 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future<ObjectResponse<SeasonUpdateResponse>> updateSeason(
-      String seasonId, CreateSeasonParam param) async {
-    return await _apiClientBagri!.updateSeason(seasonId, param);
+  Future<SeasonEntity> updateSeason(
+      String seasonId, SeasonEntity param) async {
+    return await _apiClientBagri!.updateSeason(seasonId, param.toJson());
   }
 
   @override

@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
-import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
-
-import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_floating_action_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/garden_picker/app_garden_picker_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/shims/dart_ui.dart';
-
-import '../../app_button.dart';
 import '../../app_circular_progress_indicator.dart';
 
 class AppProcessPickerPage extends StatefulWidget {
@@ -32,10 +24,11 @@ class _AppProcessPickerPageState extends State<AppProcessPickerPage> {
   @override
   void initState() {
     _cubit = BlocProvider.of<AppCubit>(context);
-    super.initState();
     _cubit.fetchListProcess();
-    print('tree id ${widget.selectedTreeId ?? "null treeId"}');
-    print('process id ${widget.selectedProcessId ?? "nullprocess"}');
+    setState(() {
+
+    });
+    super.initState();
   }
 
   @override
@@ -62,37 +55,35 @@ class _AppProcessPickerPageState extends State<AppProcessPickerPage> {
         return prev.getGardenStatus != current.getGardenStatus;
       },
       builder: (context, state) {
+        // _cubit.fetchListProcess();
         if (state.getGardenStatus == LoadStatus.LOADING) {
           return Center(
             child: AppCircularProgressIndicator(),
           );
         } else {
-          List<ProcessEntity> listProcess = state.processes!.where((element) {
-            if (element.trees != null) {
-              for (int i = 0; i < element.trees!.length; i++) {
-                if (element.trees![i].tree_id == widget.selectedTreeId) {
-                  return true;
-                }
-              }
-              return false;
-            } else {
-              return false;
-            }
-          }).toList();
-          for (dynamic e in listProcess) {
-            print(e.process_id);
-          }
+          // List<ProcessEntity> listProcess = state.processes!.where((element) {
+          //   if (element.trees != null) {
+          //     for (int i = 0; i < element.trees!.length; i++) {
+          //       if (widget.selectedProcessId!=null && element.trees![i].tree_id == widget.selectedTreeId) {
+          //         return true;
+          //       }
+          //     }
+          //     return false;
+          //   } else {
+          //     return true;
+          //   }
+          // }).toList();
 
           return ListView.separated(
             padding: EdgeInsets.only(top: 10),
-            itemCount: listProcess.length,
+            itemCount: state.processes?.length ?? 0,
             shrinkWrap: true,
             primary: false,
             separatorBuilder: (context, index) {
               return SizedBox(height: 10);
             },
             itemBuilder: (context, index) {
-              final process = listProcess[index];
+              final process = state.processes![index];
               String title = process.name!;
               bool isSelected = false;
               if (widget.selectedProcessId != null) if (process.process_id ==

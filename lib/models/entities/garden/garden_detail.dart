@@ -2,32 +2,32 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'garden_detail.g.dart';
 
-@JsonSerializable()
-class GardenDetailResponse {
-  @JsonKey()
-  String? status;
-  @JsonKey()
-  GardenDetailEntity? data;
-
-  GardenDetailResponse({
-    this.status,
-    this.data,
-  });
-
-  GardenDetailResponse copyWith({
-    String? status,
-    GardenDetailEntity? data,
-  }) {
-    return GardenDetailResponse(
-      status: status ?? this.status,
-      data: data ?? this.data,
-    );
-  }
-
-  factory GardenDetailResponse.fromJson(Map<String, dynamic> json) =>
-      _$GardenDetailResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$GardenDetailResponseToJson(this);
-}
+// @JsonSerializable()
+// class GardenDetailResponse {
+//   @JsonKey()
+//   String? status;
+//   @JsonKey()
+//   GardenDetailEntity? data;
+//
+//   GardenDetailResponse({
+//     this.status,
+//     this.data,
+//   });
+//
+//   GardenDetailResponse copyWith({
+//     String? status,
+//     GardenDetailEntity? data,
+//   }) {
+//     return GardenDetailResponse(
+//       status: status ?? this.status,
+//       data: data ?? this.data,
+//     );
+//   }
+//
+//   factory GardenDetailResponse.fromJson(Map<String, dynamic> json) =>
+//       _$GardenDetailResponseFromJson(json);
+//   Map<String, dynamic> toJson() => _$GardenDetailResponseToJson(this);
+// }
 
 @JsonSerializable()
 class GardenDetailEntity {
@@ -203,7 +203,30 @@ class GardenDetailEntityResponse{
     );
   }
   factory GardenDetailEntityResponse.fromJson(Map<String, dynamic> json) =>
-      _$GardenDetailEntityResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$GardenDetailEntityResponseToJson(this);
+      // _$GardenDetailEntityResponseFromJson(json);
+  GardenDetailEntityResponse(
+  gardenId: json['_id'] as String?,
+  gardenName: json['name'] as String?,
+  area: json['area'] as int?,
+  areaUnit: json['areaUnit'] as String?,
+  managerId: json['manager']['_id'] as String?,
+  manager: json['manager']['name'] as String?,
+  treePlaceQuantity: json['treePlaceQuantity'] as int?,
+  zoneId: json['zone'] as String?,
+  );
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'gardenId': this.gardenId,
+    'gardenName': this.gardenName,
+    'area': this.area,
+    'areaUnit': this.areaUnit,
+    'manager':{
+      '_id': this.managerId,
+      'name':this.manager
+    },
+    'treePlaceQuantity': this.treePlaceQuantity,
+    'zone': {
+      '_id':this.zoneId,
+    }
+  };
 
 }

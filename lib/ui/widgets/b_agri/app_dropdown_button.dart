@@ -369,10 +369,10 @@ class _AppRolePickerState extends State<AppRolePicker> {
   @override
   void initState() {
     _roleList = [
-      RoleEntity(role_id: "KTV", name: "Kỹ Thuật Viên"),
-      RoleEntity(role_id: "QLV", name: "Quản Lý Vườn"),
+      RoleEntity(role_id: "GARDEN_MANAGER", name: "Quản Lý Vườn"),
+      RoleEntity(role_id: "ACCOUNTANT", name: "Kế toán"),
       RoleEntity(role_id: "SUPER_ADMIN", name: "Super Admin"),
-      RoleEntity(role_id: 'ADMIN', name: "Admin")
+      RoleEntity(role_id: 'ADMIN', name: "Kĩ thuật viên(Admin)")
     ];
     super.initState();
   }

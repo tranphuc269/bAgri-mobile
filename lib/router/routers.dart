@@ -1,12 +1,15 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter_base/router/router_handlers/auth_bagri_router_handler.dart';
-import 'package:flutter_base/router/router_handlers/employee_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/contract_task_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/contract_work_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/garden_manager_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/garden_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/home_bagri_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/notification_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/season_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/process_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/storage_manager_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/task_manage_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/task_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/tree_router_handler.dart';
 
@@ -22,8 +25,10 @@ class Routes {
   static String registry = "/registry";
 
   static String home = "/home";
+
   /// Zone
   static String zoneList = "/zoneList";
+
   /// Garden
   static String gardenList = "/gardenList";
   static String gardenCreate = "/gardenCreate";
@@ -72,6 +77,21 @@ class Routes {
   ///Account Management
   static String manageAccount = '/manageAccount';
 
+  ///Garden Manager
+  static String homeGardenManager = '/homeGardenManager';
+
+  ///Contract Work
+  static String contractWorkList = '/contractWorkList';
+
+  ///Task
+  static String tabTask = '/tabTask';
+  static String addContractTask = '/addContractTask';
+  static String contractTaskDetailAdmin = 'contractTaskDetailAdmin';
+
+  ///Storage
+  static String manageStorage = '/manageStorage';
+  static String addMaterial = '/addMaterial';
+  static String updateMaterial = '/updateMaterial';
 
   ///Garden Manager
   static String homeGardenManager = '/homeGardenManager';
@@ -113,11 +133,11 @@ class Routes {
       handler: homeHandler,
       transitionType: TransitionType.fadeIn,
     );
+
     /// Zone
-    router.define(
-        zoneList,
-        handler: zoneListHandler,
-        transitionType: TransitionType.fadeIn);
+    router.define(zoneList,
+        handler: zoneListHandler, transitionType: TransitionType.fadeIn);
+
     /// Garden
     router.define(
       gardenList,
@@ -183,34 +203,38 @@ class Routes {
       handler: treeCreateHandler,
       transitionType: TransitionType.fadeIn,
     );
-    router.define(
-      treeUpdate,
-      handler: treeUpdateHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(treeList, handler: treeListHandler, transitionType: TransitionType.fadeIn);
+    // router.define(
+    //   treeUpdate,
+    //   handler: treeUpdateHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   treeDetail,
+    //   handler: treeDetailHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
 
     /// Employee
-    router.define(
-      employeeManagement,
-      handler: employeeManagementHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      employeeAdding,
-      handler: employeeAddingHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      employeeUpdating,
-      handler: employeeUpdatingHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      employeeDetail,
-      handler: employeeDetailHandler,
-      transitionType: TransitionType.fadeIn,
-    );
+    // router.define(
+    //   employeeManagement,
+    //   handler: employeeManagementHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   employeeAdding,
+    //   handler: employeeAddingHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   employeeUpdating,
+    //   handler: employeeUpdatingHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   employeeDetail,
+    //   handler: employeeDetailHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
 
     /// Season
     router.define(
@@ -262,6 +286,7 @@ class Routes {
       handler: gardenTaskHandler,
       transitionType: TransitionType.fadeIn,
     );
+
     /// ManageAccount
     router.define(
       manageAccount,
@@ -272,6 +297,34 @@ class Routes {
     router.define(
       homeGardenManager,
       handler: homeGardenManagerHandler,
-      transitionType: TransitionType.fadeIn,);
+      transitionType: TransitionType.fadeIn,
+    );
+
+    /// contractWorkList
+    router.define(contractWorkList,
+        handler: contractWorkListHandler,
+        transitionType: TransitionType.fadeIn);
+
+    ///New task manage
+
+    router.define(
+        tabTask,
+        handler: tabTaskHandler,
+        transitionType: TransitionType.fadeIn);
+    router.define(
+        addContractTask,
+        handler: addContractTaskHandler,
+        transitionType: TransitionType.fadeIn);
+    router.define(
+        contractTaskDetailAdmin,
+        handler: contractTaskDetailByAdminHandler);
+    
+
+    ///manage Storage
+    router.define(manageStorage,
+        handler: storageManagementHandler,
+        transitionType: TransitionType.fadeIn);
+    router.define(updateMaterial, handler: updateMaterialHandler, transitionType: TransitionType.fadeIn);
+    router.define(addMaterial, handler: addMaterialHandler, transitionType: TransitionType.fadeIn);
   }
 }

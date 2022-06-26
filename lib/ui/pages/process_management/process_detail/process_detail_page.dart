@@ -9,6 +9,7 @@ import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/process_management/process_detail/process_detail_cubit.dart';
 import 'package:flutter_base/ui/pages/process_management/update_process/update_process_page.dart';
+import 'package:flutter_base/ui/pages/process_management/widget/modal_add_stage_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
@@ -113,7 +114,6 @@ class _ProcessDetailPageState extends State<ProcessDetailPage> {
                             treeController = TreePickerController(
                                 treeList: _cubit!.state.trees);
                           }
-                          // TODO: implement listener
                         },
                         builder: (context, state) => AppPageTreePicker(
                           controller: treeController,
@@ -144,7 +144,7 @@ class _ProcessDetailPageState extends State<ProcessDetailPage> {
                                         (index) => PhaseProcess(
                                               index: index,
                                               cubitProcess: _cubit!,
-                                              phase: '${index + 1}',
+                                              phase:state.stages![index].name ?? '${index + 1}',
                                               onRemove: () {},
                                             )),
                                   )

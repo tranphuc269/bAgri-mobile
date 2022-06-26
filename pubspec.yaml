@@ -149,6 +149,13 @@ dependencies:
   flutter_html: ^2.2.0
   location_web: ^3.1.1
 
+  #table calender
+  table_calendar: ^3.0.6
+
+  #bottom navigation
+  animated_bottom_navigation_bar: ^1.0.0
+  auto_size_text: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

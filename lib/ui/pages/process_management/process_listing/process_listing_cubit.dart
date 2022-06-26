@@ -30,7 +30,7 @@ class ProcessListCubit extends Cubit<ProcessListState> {
       if (response != null) {
         emit(state.copyWith(
           getProcessStatus: LoadStatus.SUCCESS,
-          listData: response.data!.processes,
+          listData: response./*data!.*/processes,
         ));
       } else {
         emit(state.copyWith(getProcessStatus: LoadStatus.FAILURE));

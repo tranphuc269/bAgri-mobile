@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
+import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/process_detail.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
@@ -37,6 +38,15 @@ class UpdateProcessCubit extends Cubit<UpdateProcessState> {
     emit(state.copyWith(
         stages: newList,
         updateProcessStatus: LoadStatus.FORMAT_EXTENSION_FILE));
+  }
+
+  void editStage(int indexStages, String name, String description){
+    List<StageEntity> stages = state.stages!;
+    stages[indexStages].name = name;
+    stages[indexStages].description = description;
+    List<StageEntity> newList = stages;
+    emit(state.copyWith(
+        stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
   }
 
   void removeList(int index) {
@@ -95,31 +105,32 @@ class UpdateProcessCubit extends Cubit<UpdateProcessState> {
   void updateProcess(String? processId) async {
     emit(state.copyWith(updateProcessStatus: LoadStatus.LOADING));
     try {
-      List<String> listTree = [];
-      if (state.trees != null) {
-        state.trees!.forEach((element) {
-          listTree.add(element.tree_id!);
-        });
-      }
 
-      List<StagesParamsEntity> listStages = [];
-      if (state.stages != null) {
-        for (int i = 0; i < state.stages!.length; i++) {
-          List<StepEntity> steps = [];
-          state.stages![i].steps!.forEach((ele) {
-            steps.add(ele);
-          });
-          listStages.add(StagesParamsEntity(
-              name: 'Giai đoạn ${i + 1}',
-              stage_id: state.stages![i].stage_id,
-              steps: steps));
-        }
-      }
+      // List<TreeEntity> listTree = [];
+      // if (state.trees != null) {
+      //   state.trees!.forEach((element) {
+      //     listTree.add(TreeEntity(tree_id: element.tree_id, name:  element.name));
+      //   });
+      // }
 
-      final param = CreateProcessParam(
+      // List<StagesParamsEntity> listStages = [];
+      // if (state.stages != null) {
+      //   for (int i = 0; i < state.stages!.length; i++) {
+      //     List<StepEntity> steps = [];
+      //     state.stages![i].steps!.forEach((ele) {
+      //       steps.add(ele);
+      //     });
+      //     listStages.add(StagesParamsEntity(
+      //         name: 'Giai đoạn ${i + 1}',
+      //         stage_id: state.stages![i].stage_id,
+      //         steps: steps));
+      //   }
+      // }
+
+      final param = ProcessEntity(
         name: state.name,
-        tree_ids: listTree,
-        stages: listStages,
+        trees: state.trees,
+        stages: state.stages,
       );
 
       final response = await processRepository!
@@ -139,14 +150,14 @@ class UpdateProcessCubit extends Cubit<UpdateProcessState> {
   Future<void> getProcessDetail(String processId) async {
     emit(state.copyWith(loadDetailStatus: LoadStatus.LOADING));
     try {
-      final ObjectResponse<ProcessDetailResponse> result =
+      final ProcessEntity result =
           await processRepository!.getProcessById(processId);
 
       emit(state.copyWith(
           loadDetailStatus: LoadStatus.SUCCESS,
-          name: result.data?.process?.name!,
-          trees: result.data?.process?.trees!,
-          stages: result.data?.process?.stages!));
+          name: result./*data?.process?.*/name!,
+          trees: result./*data?.process?.*/trees!,
+          stages: result./*data?.process?.*/stages!));
     } catch (e) {
       emit(state.copyWith(loadDetailStatus: LoadStatus.FAILURE));
     }

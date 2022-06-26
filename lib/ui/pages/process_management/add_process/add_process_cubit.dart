@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
+import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
@@ -54,16 +55,25 @@ class AddProcessCubit extends Cubit<AddProcessState> {
   }
 
   void changeDuration(int index, String value) {
-    // List<StageEntity> stages = state.stages!;
+    List<StageEntity> stages = state.stages!;
     // stages[index].duration = value;
-    // stages[index].name = 'Giai đoạn ${index + 1}';
-    // List<StageEntity> newList = stages;
-    // emit(state.copyWith(stages: newList));
+    stages[index].name = 'Giai đoạn ${index + 1}';
+    List<StageEntity> newList = stages;
+    emit(state.copyWith(stages: newList));
   }
 
   void editSteps(int index, int indexStages, StepEntity value) {
     List<StageEntity> stages = state.stages!;
     stages[indexStages].steps![index] = value;
+    List<StageEntity> newList = stages;
+    emit(state.copyWith(
+        stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
+  }
+
+  void editStage(int indexStages, String name, String description){
+    List<StageEntity> stages = state.stages!;
+    stages[indexStages].name = name;
+    stages[indexStages].description = description;
     List<StageEntity> newList = stages;
     emit(state.copyWith(
         stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
@@ -91,31 +101,36 @@ class AddProcessCubit extends Cubit<AddProcessState> {
   void createProcess() async {
     emit(state.copyWith(addProcessStatus: LoadStatus.LOADING));
     try {
-      List<String> listTree = [];
-      if (state.trees != null) {
-        state.trees!.forEach((element) {
-          listTree.add(element.tree_id!);
-        });
-      }
+      // List<String> listTree = [];
+      // if (state.trees != null) {
+      //   state.trees!.forEach((element) {
+      //     listTree.add(element.tree_id!);
+      //   });
+      // }
+      //
+      // List<StagesParamsEntity> listStages = [];
+      // if (state.stages != null) {
+      //   for (int i = 0; i < state.stages!.length; i++) {
+      //     List<StepEntity> steps = [];
+      //     state.stages![i].steps!.forEach((ele) {
+      //       steps.add(ele);
+      //     });
+      //     listStages.add(StagesParamsEntity(
+      //         name: 'Giai đoạn ${i + 1}',
+      //         // duration: item.duration,
+      //         steps: steps));
+      //   }
+      // }
 
-      List<StagesParamsEntity> listStages = [];
-      if (state.stages != null) {
-        for (int i = 0; i < state.stages!.length; i++) {
-          List<StepEntity> steps = [];
-          state.stages![i].steps!.forEach((ele) {
-            steps.add(ele);
-          });
-          listStages.add(StagesParamsEntity(
-              name: 'Giai đoạn ${i + 1}',
-              // duration: item.duration,
-              steps: steps));
-        }
-      }
-
-      final param = CreateProcessParam(
+      // final param = CreateProcessParam(
+        // name: state.name,
+        // tree_ids: listTree,
+        // stages: listStages,
+      // );
+      final param = ProcessEntity(
         name: state.name,
-        tree_ids: listTree,
-        stages: listStages,
+        trees: state.trees,
+        stages: state.stages,
       );
       final response = await processRepository!.createProcess(param: param);
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
+import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/process_management/process_season/process_season_cubit.dart';
 import 'package:flutter_base/ui/pages/process_management/widget/modal_add_step_widget.dart';
@@ -272,8 +272,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: "success",
-      message: message,
+      message: message, typeSnackBar: '',
     ));
   }
 }
@@ -519,9 +518,9 @@ class _StepWidgetState extends State<StepWidget> {
             stepId: widget.step!.step_id,
             startDate: widget.step!.from_day!.toString(),
             endDate: widget.step!.to_day!.toString(),
-            actualDay: (widget.step!.actual_day) != null
-                ? widget.step!.actual_day.toString()
-                : "",
+            // actualDay: (widget.step!.actual_day) != null
+            //     ? widget.step!.actual_day.toString()
+            //     : "",
             onPressed: (name, startDate, endDate, stepId, actualDay) {
               String? id;
               if (stepId == null) {

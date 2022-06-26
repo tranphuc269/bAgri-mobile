@@ -3,6 +3,8 @@ class AppImages {
   static final icBAgri = 'assets/images/logo_bagri.png';
   static final icMenuFold = 'assets/images/ic_menufold.png';
   static final icCloudBA = 'assets/images/ic_cloud.png';
+  static final icCrop = 'assets/images/ic_crop.png';
+  static final icCropNoColor = 'assets/images/ic_crop_no_color.png';
   static final icGarden = 'assets/images/ic_garden.png';
   static final icSeason = 'assets/images/ic_season.png';
   static final icLabor = 'assets/images/ic_labor.png';
@@ -33,7 +35,9 @@ class AppImages {
   static final icImagePlaceholder = 'assets/images/ic_image_placeholder.png';
   static final icWarning = 'assets/images/ic_warning.png';
   static final icGardenNoColor = 'assets/images/ic_garden_no_color.png';
+  static final icDialyWork = 'assets/images/ic_dialy_work.png';
   static final icStorage = 'assets/images/ic_storage.png';
+  static final icMaterial = 'assets/images/ic_fertilizer_2.png';
 
   ///employee
   static final icEmployeeAvatar = 'assets/images/ic_employee_avatar.png';

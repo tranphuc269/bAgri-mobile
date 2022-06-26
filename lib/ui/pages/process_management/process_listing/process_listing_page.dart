@@ -173,15 +173,15 @@ class _ProcessListPageState extends State<ProcessListPage>
                     ),
                   ),
                 )
-              : Expanded(
-                  child: Column(
+              : /*Expanded(
+                  child:*/ Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
                         child: EmptyDataWidget(),
                       ),
                     ],
-                  ),
+                  // ),
                 );
         } else {
           return Container();
@@ -324,8 +324,7 @@ class _ProcessListPageState extends State<ProcessListPage>
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: "success",
-      message: message,
+      message: message, typeSnackBar: '',
     ));
   }
 

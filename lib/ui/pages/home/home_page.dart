@@ -41,9 +41,8 @@ class _HomePageState extends State<HomePage> {
     _appCubit = BlocProvider.of<AppCubit>(context);
     //_notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
 
-
     _appCubit!.getData();
-    //_notificationCubit.getListNotification();
+    // _notificationCubit.getListNotification();
   }
 
   @override
@@ -79,36 +78,52 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  if(GlobalData.instance.userEntity!.role != "ACCOUNTANT") ...[
+                    CategoryItem(
+                      title: 'Quản lý vườn',
+                      color: AppColors.green289768,
+                      urlImage: AppImages.icGarden,
+                      ridirectPage: redirectZone,
+                    ),
+                    CategoryItem(
+                      title: 'Quản lý mùa vụ',
+                      color: AppColors.brown975D28,
+                      urlImage: AppImages.icSeason,
+                      ridirectPage: redirectSeason,
+                    ),
+                    if (GlobalData.instance.userEntity!.role != "GARDEN_MANAGER")
+                    CategoryItem(
+                      title: 'Quản lý quy trình',
+                      color: AppColors.blue4493DB,
+                      urlImage: AppImages.icProcedure,
+                      ridirectPage: redirectProcess,
+                    ),
+                  ],
                   CategoryItem(
-                    title: 'Quản lý vườn',
-                    color: AppColors.green289768,
-                    urlImage: AppImages.icGarden,
-                    ridirectPage: redirectZone,
-                  ),
-                  CategoryItem(
-                    title: 'Quản lý mùa vụ',
-                    color: AppColors.brown975D28,
-                    urlImage: AppImages.icSeason,
-                    ridirectPage: redirectSeason,
-                  ),
-                  CategoryItem(
-                    title: 'Quản lý quy trình',
-                    color: AppColors.blue4493DB,
-                    urlImage: AppImages.icProcedure,
-                    ridirectPage: redirectProcess,
-                  ),
-                  CategoryItem(
-                    title: 'Quản lý kho',
-                    color: AppColors.orangeE9703C,
-                    urlImage: AppImages.icStorage,
-                    ridirectPage: redirectEmployee,
-                  ),
-                  GlobalData.instance.userEntity!.role == "SUPER_ADMIN" ? CategoryItem(
+                      title: 'Công việc hằng ngày',
+                      color: AppColors.green94B,
+                      urlImage: AppImages.icDialyWork,
+                      ridirectPage: redirectTabTask),
+                  if (GlobalData.instance.userEntity!.role != "GARDEN_MANAGER")
+                    CategoryItem(
+                        title: 'Quản lý công việc khoán',
+                        color: Color(0xFFA2CDCD),
+                        urlImage: AppImages.icWorks,
+                        ridirectPage: redirectContractWorkList),
+                  if (GlobalData.instance.userEntity!.role == "SUPER_ADMIN")
+                    CategoryItem(
                       title: "Quản lý tài khoản",
-                      color: AppColors.blueA5CAD2,
+                      color: Color(0xFFD57E7E),
                       urlImage: AppImages.icUser,
                       ridirectPage: redirectManageAccount,
-                    ) : Container()
+                    ),
+                  if(GlobalData.instance.userEntity!.role == "ACCOUNTANT")
+                    CategoryItem(
+                      title: "Quản lý kho",
+                      color: Color(0xFF9FB4FF),
+                      urlImage: AppImages.icStorage,
+                      ridirectPage: redirectManageStorage,
+                    )
                 ],
               ),
             ),
@@ -274,8 +289,20 @@ class _HomePageState extends State<HomePage> {
   void redirectEmployee() {
     Application.router?.navigateTo(context, Routes.employeeManagement);
   }
-  void redirectManageAccount(){
+
+  void redirectManageAccount() {
     Application.router?.navigateTo(context, Routes.manageAccount);
+  }
+
+  void redirectManageStorage() {
+    Application.router?.navigateTo(context, Routes.manageStorage);
+  }
+
+  void redirectContractWorkList() {
+    Application.router?.navigateTo(context, Routes.contractWorkList);
+  }
+  void redirectTabTask(){
+    Application.router?.navigateTo(context, Routes.tabTask);
   }
 }
 
@@ -308,7 +335,7 @@ class CategoryItem extends StatelessWidget {
         alignment: Alignment.center,
         child: Row(
           children: [
-            SizedBox(width: 40),
+            SizedBox(width: 10),
             Image.asset(
               urlImage!,
               height: 36,
@@ -338,6 +365,7 @@ class MainDrawer extends StatefulWidget {
 class _MainDrawerState extends State<MainDrawer> {
   AppCubit? _appCubit;
   UserEntity? _userInfo;
+
   @override
   void initState() {
     super.initState();
@@ -383,10 +411,7 @@ class _MainDrawerState extends State<MainDrawer> {
                           style: TextStyle(color: Colors.black87, fontSize: 18),
                         ),
                         Text(
-                          '${_userInfo?.role == "SUPER_ADMIN"? "Super Admin"
-                              : (_userInfo?.role == "ADMIN" ? "Admin"
-                              : (_userInfo?.role == "QLV" ? "Quản lý vườn"
-                              : "Kĩ thuật viên"))}',
+                          '${_userInfo?.role == "SUPER_ADMIN" ? "Super Admin" : (_userInfo?.role == "ADMIN" ? "Kỹ thuật viên" : (_userInfo?.role == "GARDEN_MANAGER" ? "Quản lý vườn" : "Kế toán"))}',
                           style: TextStyle(color: AppColors.main, fontSize: 18),
                         ),
                       ],

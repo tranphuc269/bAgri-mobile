@@ -9,7 +9,7 @@ import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class GardenRepository {
-  Future<ObjectResponse<GardenListResponse>> getGardenData();
+  Future<List<GardenEntity>> getGardenData();
 
   Future<dynamic> createGarden({CreateGardenParam? param});
 
@@ -34,8 +34,8 @@ class GardenRepositoryImpl extends GardenRepository {
   }
 
   @override
-  Future<ObjectResponse<GardenListResponse>> getGardenData() async {
-    return await _apiClientBagri!.getGardenData({});
+  Future<List<GardenEntity>> getGardenData() async {
+    return await _apiClientBagri!.getGardenData();
   }
 
   Future<dynamic> createGarden({CreateGardenParam? param}) {

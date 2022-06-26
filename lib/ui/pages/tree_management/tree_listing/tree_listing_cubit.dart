@@ -1,17 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/generated/l10n.dart';
-import 'package:flutter_base/models/entities/garden/garden_entity.dart';
-import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
-import 'package:flutter_base/ui/widgets/loading_indicator_widget.dart';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 part 'tree_listing_state.dart';
 
@@ -35,7 +30,7 @@ class TreeListCubit extends Cubit<TreeListState> {
       if (response != null) {
         emit(state.copyWith(
           getTreeStatus: LoadStatus.SUCCESS,
-          listData: response,
+          listData: response.trees,
         ));
       } else {
         emit(state.copyWith(getTreeStatus: LoadStatus.FAILURE));
@@ -57,22 +52,6 @@ class TreeListCubit extends Cubit<TreeListState> {
         message: S.current.error_occurred,
         type: SnackBarType.ERROR,
       ));
-      return;
-    }
-  }
-  void createTree(String name) async {
-    emit(state.copyWith(createTreeStatus: LoadStatus.LOADING));
-    try {
-
-      final response = await treeRepository!.createTree(name: name);
-
-      if (response != null) {
-        emit(state.copyWith(createTreeStatus: LoadStatus.SUCCESS));
-      } else {
-        emit(state.copyWith(createTreeStatus: LoadStatus.FAILURE));
-      }
-    } catch (e) {
-      emit(state.copyWith(createTreeStatus: LoadStatus.FAILURE));
       return;
     }
   }

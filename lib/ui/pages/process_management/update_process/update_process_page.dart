@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/process_management/update_process/update_process_cubit.dart';
+import 'package:flutter_base/ui/pages/process_management/widget/modal_add_stage_widget.dart';
 import 'package:flutter_base/ui/pages/process_management/widget/modal_add_step_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
@@ -14,7 +14,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/multiple_tree_picker/app_tree_picker.dart';
 
-import 'package:flutter_base/utils/dialog_utils.dart';
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -87,7 +86,8 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                           listener: (context, state) {
                             if (state.loadDetailStatus == LoadStatus.SUCCESS) {
                               nameController = TextEditingController(
-                                  text: _cubit!.state.name);
+                                text: _cubit!.state.name,
+                              );
                             }
                             // TODO: implement listener
                           },
@@ -158,7 +158,8 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                                   height: 30,
                                   width: double.infinity,
                                   onPressed: () {
-                                    _cubit?.addList(StageEntity());
+                                    changeNameDesStage();
+                                    // _cubit?.addList(StageEntity());
                                   },
                                 ),
                               ),
@@ -185,7 +186,7 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                                           (index) => PhaseProcess(
                                                 index: index,
                                                 cubitProcess: _cubit!,
-                                                phase: '${index + 1}',
+                                                phase: state.stages![index].name ?? '${index + 1}',
                                                 onRemove: () {
                                                   _cubit!.removeList(index);
                                                 },
@@ -212,7 +213,26 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
       ),
     );
   }
-
+  changeNameDesStage(){
+    showModalBottomSheet(
+        isDismissible: false,
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20))),
+        builder: (context) => Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(20),
+                  topRight: const Radius.circular(20))),
+          child: ModalAddStageWidget( onDelete: (){}, onPressed: (String name, String description) { _cubit!.addList(StageEntity(name: name, description: description)); },),
+        )
+    );
+  }
   Widget buildActionCreate(BuildContext context) {
     return BlocConsumer<UpdateProcessCubit, UpdateProcessState>(
       bloc: _cubit,
@@ -249,6 +269,7 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                 title: 'Xác nhận',
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    _cubit?.changeName(nameController.text);
                     _cubit?.updateProcess(widget.process_id);
                   }
                 },
@@ -269,8 +290,7 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: "success",
-      message: message,
+      message: message, typeSnackBar: '',
     ));
   }
 }
@@ -298,6 +318,8 @@ class _PhaseProcessState extends State<PhaseProcess> {
   Widget build(BuildContext context) {
     int sumStart = 0;
     int sumEnd = 0;
+    String? stageName;
+
     if (widget.cubitProcess.state.stages![widget.index!].steps != null) {
       for (int i = 0;
           i < widget.cubitProcess.state.stages![widget.index!].steps!.length;
@@ -328,34 +350,60 @@ class _PhaseProcessState extends State<PhaseProcess> {
                       color: AppColors.colors[widget.index!],
                       borderRadius: BorderRadius.circular(3),
                     ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Giai đoạn ${widget.phase}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    child: GestureDetector(
+                      onTap: (){
+                        showModalBottomSheet(
+                          isDismissible: false,
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft:
+                                  const Radius.circular(20),
+                                  topRight:
+                                  const Radius.circular(20))),
+                          builder: (context) => ModalAddStageWidget(
+                            name: widget.cubitProcess.state.stages![widget.index!].name ?? '',
+                            onPressed:
+                                (name, description ) {
+                              // widget.cubitProcess.state.stages![widget.index!].name = name;
+                              // stageName = name;
+                              // widget.cubitProcess.state.stages![widget.index!].description = description;
+                                  widget.cubitProcess.editStage(widget.index!, name, description);
+                            },
                           ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Thời gian: ',
-                          style: TextStyle(
-                            color: Color(0xFFBBB5D4),
-                            fontSize: 14,
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            'Giai đoạn ${widget.phase}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          '$sumStart - $sumEnd ngày',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
+                          SizedBox(
+                            width: 10,
                           ),
-                        ),
-                      ],
+                          Text(
+                            'Thời gian: ',
+                            style: TextStyle(
+                              color: Color(0xFFBBB5D4),
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            '$sumStart - $sumEnd ngày',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -526,6 +574,7 @@ class _StepWidgetState extends State<StepWidget> {
             stepId: widget.step!.step_id,
             startDate: widget.step!.from_day!.toString(),
             endDate: widget.step!.to_day!.toString(),
+            actualDay: widget.step!.actual_day,
             onPressed: (name, startDate, endDate, stepId) {
               String? id;
               if (stepId == null) {
@@ -536,8 +585,7 @@ class _StepWidgetState extends State<StepWidget> {
                 } else {
                   id = stepId;
                 }
-              }
-              StepEntity step = StepEntity(
+              }              StepEntity step = StepEntity(
                   name: name,
                   step_id: id,
                   from_day: int.parse(startDate),

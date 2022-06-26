@@ -1,7 +1,5 @@
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
-import 'package:flutter_base/models/entities/process/stage_entity.dart';
-import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -72,15 +70,17 @@ class SeasonCreateResponse {
 
 @JsonSerializable()
 class SeasonEntity {
-  @JsonKey(name: 'season_id')
+  @JsonKey(name: '_id')
   String? seasonId;
   String? name;
-  GardenEntity? garden;
+  String? gardenId;
   ProcessEntity? process;
   TreeEntity? tree;
+  @JsonKey(name: 'start')
   String? start_date;
+  @JsonKey(name: 'end')
   String? end_date;
-  String? status;
+  int? treeQuantity;
 
   factory SeasonEntity.fromJson(Map<String, dynamic> json) =>
       _$SeasonEntityFromJson(json);
@@ -89,33 +89,33 @@ class SeasonEntity {
   SeasonEntity copyWith({
     String? seasonId,
     String? name,
-    GardenEntity? garden,
+    String? gardenId,
     ProcessEntity? process,
     TreeEntity? tree,
     String? start_date,
     String? end_date,
-    String? status,
+    int? treeQuantity,
   }) {
     return SeasonEntity(
       seasonId: seasonId ?? this.seasonId,
       name: name ?? this.name,
-      garden: garden ?? this.garden,
+      gardenId: gardenId ?? this.gardenId,
       process: process ?? this.process,
       tree: tree ?? this.tree,
       start_date: start_date ?? this.start_date,
       end_date: end_date ?? this.end_date,
-      status: status ?? this.status,
+      treeQuantity: treeQuantity ?? this.treeQuantity,
     );
   }
 
   SeasonEntity({
     this.seasonId,
     this.name,
-    this.garden,
+    this.gardenId,
     this.process,
     this.tree,
     this.start_date,
     this.end_date,
-    this.status,
+    this.treeQuantity,
   });
 }

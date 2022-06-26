@@ -13,14 +13,20 @@ class AppState extends Equatable {
   List<TaskEntity>? tasks;
   final LoadStatus? taskStatus;
 
+  List<Material>? listMaterials;
+  final LoadStatus? getMaterialsStatus;
+
   List<UserEntity>? managers;
   final LoadStatus? getManagersStatus;
 
   List<FarmerEntity>? farmers;
   final LoadStatus? farmerStatus;
+  List<ContractWorkEntity>? contractWorks;
+  final LoadStatus? contractWorkStatus;
 
   WeatherResponse? weather;
   final LoadStatus? weatherStatus;
+
 
   @override
   List<Object?> get props => [
@@ -36,11 +42,15 @@ class AppState extends Equatable {
         this.getManagersStatus,
         this.farmers,
         this.farmerStatus,
+        this.contractWorks,
+        this.contractWorkStatus,
         this.weather,
         this.weatherStatus,
+        this.listMaterials,
+    this.getMaterialsStatus
       ];
 
-  AppState({
+  AppState({this.getMaterialsStatus,
     this.trees,
     this.getTreeStatus,
     this.gardens,
@@ -53,9 +63,12 @@ class AppState extends Equatable {
     this.getManagersStatus,
     this.farmers,
     this.farmerStatus,
+    this.contractWorks,
+    this.contractWorkStatus,
     this.weather,
     this.weatherStatus,
-  });
+    this.listMaterials,}
+   );
 
   AppState copyWith({
     List<TreeEntity>? trees,
@@ -72,8 +85,12 @@ class AppState extends Equatable {
     LoadStatus? fetchUser,
     List<FarmerEntity>? farmers,
     LoadStatus? farmerStatus,
+    List<ContractWorkEntity>? contractWorks,
+    LoadStatus? contractWorkStatus,
     WeatherResponse? weather,
     LoadStatus? weatherStatus,
+    List<Material>? listMaterials,
+    LoadStatus? getMaterialsStatus,
   }) {
     return AppState(
       trees: trees ?? this.trees,
@@ -86,10 +103,15 @@ class AppState extends Equatable {
       taskStatus: taskStatus ?? this.taskStatus,
       managers: managers ?? this.managers,
       getManagersStatus: getManagersStatus ?? this.getManagersStatus,
+      contractWorks: contractWorks ?? this.contractWorks,
+      contractWorkStatus: contractWorkStatus ?? this.contractWorkStatus,
       farmers: farmers ?? this.farmers,
       farmerStatus: farmerStatus ?? this.farmerStatus,
       weather: weather ?? this.weather,
       weatherStatus: weatherStatus ?? this.weatherStatus,
+      listMaterials: listMaterials ?? this.listMaterials,
+      getMaterialsStatus: getMaterialsStatus ?? this.getMaterialsStatus
+
     );
   }
 }
