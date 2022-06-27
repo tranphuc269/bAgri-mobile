@@ -79,8 +79,6 @@ class _SeasonUpdatingPageState extends State<SeasonUpdatingPage> {
                 nameController.text = state.seasonName ?? "";
                 treeController.treeEntity = state.treeEntity;
                 gardenController.gardenEntity = state.gardenEntity;
-
-                ///set Tree first then set process => change endTime because of process change=>duration change => endTime change
                 processController.processEntity = state.processEntity;
               },
               builder: (context, state) {

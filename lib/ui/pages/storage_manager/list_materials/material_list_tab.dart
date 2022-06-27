@@ -15,6 +15,8 @@ import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../../../../main.dart';
+
 class TabMaterialList extends StatelessWidget {
   const TabMaterialList({Key? key}) : super(key: key);
 
@@ -131,20 +133,16 @@ class _MaterialListPageState extends State<MaterialListPage> {
                         unit: state.listMaterials![index].unit,
                         unitPrice: state.listMaterials![index].unitPrice,
                         onUpdate: () async {
-                          // bool isUpdate = await Application.router!.navigateTo(
-                          //   appNavigatorKey.currentContext!,
-                          //   Routes.treeUpdate,
-                          //   routeSettings: RouteSettings(
-                          //     arguments: TreeUpdateArgument(
-                          //       tree_id: tree.tree_id,
-                          //       name: tree.name,
-                          //       // description: tree.description,
-                          //     ),
-                          //   ),
-                          // );
-                          // if (isUpdate) {
-                          //   _onRefreshData();
-                          // }
+                          bool isUpdate = await Application.router!.navigateTo(
+                            appNavigatorKey.currentContext!,
+                            Routes.updateMaterial,
+                            routeSettings: RouteSettings(
+                              arguments: state.listMaterials![index].materialId
+                            ),
+                          );
+                          if (isUpdate) {
+                            _onRefreshData();
+                          }
                         },
                         onDelete: () async {
                           bool isDelete = await showDialog(
@@ -279,17 +277,13 @@ class _MaterialListPageState extends State<MaterialListPage> {
                       height: 5,
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
+                      // width: MediaQuery.of(context).size.width * 0.2,
                       child:
-                          Text("Số lượng: ", overflow: TextOverflow.ellipsis),
+                          Text("Số lượng: ${quantity.toString()}  Đơn vị: ${unitPrice.toString()} $unit", overflow: TextOverflow.ellipsis),
                     ),
                   ],
                 )),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.grey,
-                  size: 20,
-                )
+
               ],
             ),
           ),
