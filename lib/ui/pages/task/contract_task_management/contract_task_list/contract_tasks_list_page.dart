@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/contract_task_responsitory.dart';
@@ -63,7 +64,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
   Widget build(BuildContext context) {
     return Scaffold(
         body: _buildBody(),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton:(GlobalData.instance.role != 'ACCOUNTANT') ? FloatingActionButton(
           backgroundColor: AppColors.main,
           onPressed: () async {
             bool isAdd = await Application.router
@@ -77,7 +78,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
             Icons.add,
             size: 40,
           ),
-        ));
+        ): Container());
   }
 
   Widget _buildBody() {
