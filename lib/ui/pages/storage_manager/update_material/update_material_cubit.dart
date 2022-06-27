@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/material_repository.dart';
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
@@ -53,5 +54,12 @@ class UpdateMaterialCubit extends Cubit<UpdateMaterialState>{
       emit(state.copyWith(loadingStatus: LoadStatus.FAILURE));
       return;
     }
+  }
+  Future<void> getMaterialById(String? materialId) async{
+    Material material = await materialRepository!.getMaterialById(materialId);
+    changeQuantity(material.quantity ?? 0);
+    changeUnit(material.unit ?? "");
+    changeName(material.name ?? "");
+    changeUnitPrice(material.unitPrice ?? 0);
   }
 }

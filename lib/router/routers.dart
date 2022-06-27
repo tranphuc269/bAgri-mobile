@@ -317,13 +317,13 @@ class Routes {
     router.define(
         contractTaskDetailAdmin,
         handler: contractTaskDetailByAdminHandler);
-    
+
 
     ///manage Storage
     router.define(manageStorage,
         handler: storageManagementHandler,
         transitionType: TransitionType.fadeIn);
-    // router.define(updateMaterial, handler: updateMaterialHandler, transitionType: TransitionType.fadeIn);
+    router.define(updateMaterial, handler: updateMaterialHandler, transitionType: TransitionType.fadeIn);
     router.define(addMaterial, handler: addMaterialHandler, transitionType: TransitionType.fadeIn);
   }
 }
