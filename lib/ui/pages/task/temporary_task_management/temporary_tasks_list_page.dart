@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
@@ -57,8 +58,8 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(child: _buildBody()),
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'btnl',
+        floatingActionButton:(GlobalData.instance.role != 'ACCOUNTANT') ? FloatingActionButton(
+          heroTag: 'btnadd',
           backgroundColor: AppColors.main,
           onPressed: () async{
             bool isAdd = await Application.router
@@ -72,7 +73,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
             Icons.add,
             size: 40,
           ),
-        ));
+        ): Container());
   }
 
   void showSnackBar(String message) {
