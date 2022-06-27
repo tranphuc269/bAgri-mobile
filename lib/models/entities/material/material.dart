@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'material.g.dart';
 
 @JsonSerializable()
-class Material{
+class MaterialEntity{
   @JsonKey(name: '_id')
   String? materialId;
   String? unit;
@@ -11,7 +11,7 @@ class Material{
   String? name;
   int? quantity;
 
-  Material({
+  MaterialEntity({
     this.unit,
     this.name,
     this.unitPrice,
@@ -19,14 +19,14 @@ class Material{
     this.quantity
   });
 
-  Material copyWith({
+  MaterialEntity copyWith({
     String? materialId,
     String? unit,
     String? name,
     int? unitPrice,
     int? quantity
   }) {
-    return Material(
+    return MaterialEntity(
         materialId: materialId ?? this.materialId,
         unit: unit ?? this.unit,
         name: name ?? this.name,
@@ -35,7 +35,7 @@ class Material{
     );
   }
 
-  factory Material.fromJson(Map<String, dynamic> json) =>
-      _$MaterialFromJson(json);
-  Map<String, dynamic> toJson() => _$MaterialToJson(this);
+  factory MaterialEntity.fromJson(Map<String, dynamic> json) =>
+      _$MaterialEntityFromJson(json);
+  Map<String, dynamic> toJson() => _$MaterialEntityToJson(this);
 }

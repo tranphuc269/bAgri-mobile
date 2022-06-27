@@ -1,7 +1,7 @@
 part of 'add_material_cubit.dart';
 
 class AddMaterialState extends Equatable {
-  Material? material;
+  MaterialEntity? material;
 
   // final String? description;
   LoadStatus? loadingStatus;
@@ -21,7 +21,7 @@ class AddMaterialState extends Equatable {
   });
 
   AddMaterialState copyWith({
-    Material? material,
+    MaterialEntity? material,
     // final String? description,
     LoadStatus? loadingStatus,
     String? name,

@@ -1,6 +1,6 @@
 part of 'storage_management_cubit.dart';
 class StorageManagementState extends Equatable {
-  List<Material>? listMaterials;
+  List<MaterialEntity>? listMaterials;
   // final String? description;
   LoadStatus? loadingStatus;
 
@@ -11,7 +11,7 @@ class StorageManagementState extends Equatable {
   });
 
   StorageManagementState copyWith({
-    List<Material>? listMaterials,
+    List<MaterialEntity>? listMaterials,
     // final String? description,
     LoadStatus? loadingStatus,
   }) {
