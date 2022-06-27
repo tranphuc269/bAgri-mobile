@@ -3,8 +3,8 @@ part of 'process_season_cubit.dart';
 class ProcessSeasonState extends Equatable {
   final String? name;
   final LoadStatus? updateProcessSeasonStatus;
-  final List<TreeEntity>? trees;
-  final List<StageEntity>? stages;
+  final TreeEntity? trees;
+  final List<StageSeason>? stages;
   final LoadStatus? loadDetailStatus;
   int actionWithStepStatus;
 
@@ -19,10 +19,10 @@ class ProcessSeasonState extends Equatable {
 
   ProcessSeasonState copyWith({
     String? name,
-    List<TreeEntity>? trees,
+    TreeEntity? trees,
     LoadStatus? updateProcessSeasonStatus,
     LoadStatus? loadDetailStatus,
-    List<StageEntity>? stages,
+    List<StageSeason>? stages,
     int? actionWithStepStatus,
   }) {
     return ProcessSeasonState(

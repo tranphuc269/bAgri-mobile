@@ -4,6 +4,8 @@ import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
+import 'package:flutter_base/models/entities/season/stage_season.dart';
+import 'package:flutter_base/models/entities/season/step_season.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/process_management/process_season/process_season_cubit.dart';
@@ -19,9 +21,9 @@ import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateProcessSeasonPage extends StatefulWidget {
-  final String? process_id;
+  final String? seasonId;
 
-  UpdateProcessSeasonPage({Key? key, this.process_id}) : super(key: key);
+  UpdateProcessSeasonPage({Key? key, this.seasonId}) : super(key: key);
 
   @override
   _UpdateProcessSeasonPageState createState() =>
@@ -47,7 +49,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
       _cubit!.changeName(nameController.text);
     });
 
-    _cubit!.getProcessDetail(widget.process_id!);
+    _cubit!.getProcessDetail(widget.seasonId!);
   }
 
   @override
@@ -79,55 +81,62 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        // Text(
+                        //   'Tên quy trình',
+                        //   style: AppTextStyle.greyS14,
+                        // ),
+                        // SizedBox(height: 10),
+                        // BlocConsumer<ProcessSeasonCubit, ProcessSeasonState>(
+                        //   listener: (context, state) {
+                        //     if (state.loadDetailStatus == LoadStatus.SUCCESS) {
+                        //       nameController = TextEditingController(
+                        //           text: _cubit!.state.name);
+                        //     }
+                        //     // TODO: implement listener
+                        //   },
+                        //   builder: (context, state) {
+                        //     return AppTextField(
+                        //       autoValidateMode:
+                        //           AutovalidateMode.onUserInteraction,
+                        //       hintText: 'Nhập vào tên quy trình',
+                        //       controller: nameController,
+                        //       validator: (value) {
+                        //         if (Validator.validateNullOrEmpty(value!))
+                        //           return "Chưa nhập tên quy trình";
+                        //         else
+                        //           return null;
+                        //       },
+                        //     );
+                        //   },
+                        // ),
+                        // SizedBox(height: 20),
                         Text(
-                          'Tên quy trình',
+                          'Cây trồng áp dụng',
                           style: AppTextStyle.greyS14,
                         ),
                         SizedBox(height: 10),
-                        BlocConsumer<ProcessSeasonCubit, ProcessSeasonState>(
-                          listener: (context, state) {
-                            if (state.loadDetailStatus == LoadStatus.SUCCESS) {
-                              nameController = TextEditingController(
-                                  text: _cubit!.state.name);
-                            }
-                            // TODO: implement listener
-                          },
-                          builder: (context, state) {
-                            return AppTextField(
-                              autoValidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              hintText: 'Nhập vào tên quy trình',
-                              controller: nameController,
-                              validator: (value) {
-                                if (Validator.validateNullOrEmpty(value!))
-                                  return "Chưa nhập tên quy trình";
-                                else
-                                  return null;
-                              },
-                            );
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Các loại cây trồng áp dụng',
-                          style: AppTextStyle.greyS14,
-                        ),
-                        SizedBox(height: 10),
-                        BlocConsumer<ProcessSeasonCubit, ProcessSeasonState>(
-                          listener: (context, state) {
-                            if (state.loadDetailStatus == LoadStatus.SUCCESS) {
-                              treeController = TreePickerController(
-                                  treeList: _cubit!.state.trees);
-                            }
-                            // TODO: implement listener
-                          },
-                          builder: (context, state) => AppPageTreePicker(
-                            controller: treeController,
-                            onChanged: (value) {
-                              _cubit?.changeTree(value);
-                            },
-                          ),
-                        ),
+                        // BlocConsumer<ProcessSeasonCubit, ProcessSeasonState>(
+                        //   listener: (context, state) {
+                        //     // if (state.loadDetailStatus == LoadStatus.SUCCESS) {
+                        //     //   treeController = TreePickerController(
+                        //     //       treeList: _cubit!.state.trees);
+                        //     // }
+                        //     // TODO: implement listener
+                        //   },
+                        //   builder: (context, state) => AppPageTreePicker(
+                        //     controller: treeController,
+                        //     onChanged: (value) {
+                        //       // _cubit?.changeTree(value);
+                        //     },
+                        //   ),
+                        // ),
+                        BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
+                            builder: (context, state) {
+                          return AppTextField(
+                            enable: false,
+                            hintText: state.trees?.name ?? "",
+                          );
+                        }),
                         SizedBox(height: 20),
                         Text(
                           'Các giai đoạn chăm sóc',
@@ -159,7 +168,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                                   height: 30,
                                   width: double.infinity,
                                   onPressed: () {
-                                    _cubit?.addList(StageEntity());
+                                    _cubit?.addList(StageSeason());
                                   },
                                 ),
                               ),
@@ -186,7 +195,9 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                                           (index) => PhaseProcess(
                                                 index: index,
                                                 cubitProcess: _cubit!,
-                                                phase: '${index + 1}',
+                                                phase:
+                                                    state.stages![index].name ??
+                                                        '${index + 1}',
                                                 onRemove: () {
                                                   _cubit!.removeList(index);
                                                 },
@@ -252,7 +263,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                 title: 'Xác nhận',
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    _cubit?.updateProcess(widget.process_id);
+                    // _cubit?.updateProcess(widget.process_id);
                   }
                 },
                 isLoading: isLoading,
@@ -272,7 +283,8 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      message: message, typeSnackBar: '',
+      message: message,
+      typeSnackBar: '',
     ));
   }
 }
@@ -280,6 +292,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
 class PhaseProcess extends StatefulWidget {
   int? index;
   String? phase;
+  String? startDate;
   VoidCallback? onRemove;
   ProcessSeasonCubit cubitProcess;
 
@@ -287,6 +300,7 @@ class PhaseProcess extends StatefulWidget {
       {Key? key,
       this.index,
       this.phase,
+      this.startDate,
       this.onRemove,
       required this.cubitProcess})
       : super(key: key);
@@ -351,13 +365,19 @@ class _PhaseProcessState extends State<PhaseProcess> {
                             fontSize: 14,
                           ),
                         ),
-                        Text(
-                          '$sumStart - $sumEnd ngày',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                        ),
+                        BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
+                            buildWhen: (prev, current) =>
+                                prev.actionWithStepStatus !=
+                                current.actionWithStepStatus,
+                            builder: (context, state) {
+                              return Text(
+                                widget.phase!,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              );
+                            }),
                       ],
                     ),
                   ),
@@ -432,7 +452,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                         phase: widget.phase ?? "",
                                         onPressed:
                                             (name, startDate, endDate, stepId) {
-                                          StepEntity step = StepEntity(
+                                          StepSeason step = StepSeason(
                                               name: name,
                                               from_day: int.parse(startDate),
                                               to_day: int.parse(endDate));
@@ -480,7 +500,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
 
 class StepWidget extends StatefulWidget {
   final int? index;
-  final StepEntity? step;
+  final StepSeason? step;
   final String? phase;
   final int? indexStages;
   final ProcessSeasonCubit cubitProcess;
@@ -532,7 +552,7 @@ class _StepWidgetState extends State<StepWidget> {
                   id = stepId;
                 }
               }
-              StepEntity step = StepEntity(
+              StepSeason step = StepSeason(
                 name: name,
                 step_id: id,
                 from_day: int.parse(startDate),
@@ -601,9 +621,9 @@ class _StepWidgetState extends State<StepWidget> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  (widget.step!.actual_day) != null
-                      ? 'Thời gian thực hiện ${widget.step!.actual_day} ngày'
-                      : 'Thời gian thực hiện dự kiến ${widget.step!.from_day} ngày',
+                  (widget.step!.start) != null
+                      ? 'Thời gian bắt đầu ${widget.step!.start!.substring(0, 10)}'
+                      : 'Chưa có thời gian bắt đầu',
                   style: TextStyle(
                     color: Color(0xFF9E7F2F),
                   ),

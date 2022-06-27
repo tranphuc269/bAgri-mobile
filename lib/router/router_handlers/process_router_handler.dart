@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
+import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/ui/pages/process_management/add_process/add_process_cubit.dart';
 import 'package:flutter_base/ui/pages/process_management/add_process/add_process_page.dart';
 import 'package:flutter_base/ui/pages/process_management/process_detail/process_detail_cubit.dart';
@@ -69,16 +70,16 @@ Handler processDetailHandler = new Handler(
 
 Handler processSeasonUpdateHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  ProcessSeasonArgument args =
-      context!.settings!.arguments as ProcessSeasonArgument;
+  String? args =
+      context!.settings!.arguments as String?;
   return BlocProvider(
     create: (context) {
-      final processRepository =
-          RepositoryProvider.of<ProcessRepository>(context);
-      return ProcessSeasonCubit(processRepository: processRepository);
+      final seasonRepository =
+          RepositoryProvider.of<SeasonRepository>(context);
+      return ProcessSeasonCubit(seasonRepository: seasonRepository);
     },
     child: UpdateProcessSeasonPage(
-      process_id: args.process_id,
+      seasonId: args,
     ),
   );
 });
