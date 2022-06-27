@@ -58,10 +58,15 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
     return Scaffold(
         body: SafeArea(child: _buildBody()),
         floatingActionButton: FloatingActionButton(
-          heroTag: 'btnm',
+          heroTag: 'btnl',
           backgroundColor: AppColors.main,
-          onPressed: () {
-
+          onPressed: () async{
+            bool isAdd = await Application.router
+                ?.navigateTo(context, Routes.addTemporaryTask);
+            if (isAdd) {
+              _onRefreshData();
+              showSnackBar('Thêm mới thành công!');
+            }
           },
           child: Icon(
             Icons.add,

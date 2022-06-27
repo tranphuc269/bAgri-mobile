@@ -192,7 +192,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                         if (_formKey1.currentState!.validate()) {
                           print("create");
                           _cubit!.changeName(nameController.text);
-                          _cubit!.changeQuantity(quantityController.value.hashCode);
+                          _cubit!.changeQuantity(int.parse(quantityController.text));
                           _cubit!.changeUnit(unitController.text);
                           _cubit!.changeUnitPrice(int.parse(unitPriceController.text));
                           _cubit!.createMaterial();

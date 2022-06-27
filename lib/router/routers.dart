@@ -90,6 +90,7 @@ class Routes {
   static String contractTaskDetailAdmin = '/contractTaskDetailAdmin';
 
   static String updateTemporaryTask = '/updateTemporaryTask';
+  static String addTemporaryTask = '/addTemporaryTask';
 
   ///Storage
   static String manageStorage = '/manageStorage';
@@ -322,6 +323,7 @@ class Routes {
         handler: contractTaskDetailByAdminHandler);
     router.define(updateTemporaryTask, handler: updateTemporaryTaskHandler);
 
+    router.define(addTemporaryTask, handler: temporaryTaskAddHandler);
     ///manage Storage
     router.define(manageStorage,
         handler: storageManagementHandler,
