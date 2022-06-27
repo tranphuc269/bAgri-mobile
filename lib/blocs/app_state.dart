@@ -13,7 +13,7 @@ class AppState extends Equatable {
   List<TaskEntity>? tasks;
   final LoadStatus? taskStatus;
 
-  List<Material>? listMaterials;
+  List<MaterialEntity>? listMaterials;
   final LoadStatus? getMaterialsStatus;
 
   List<UserEntity>? managers;
@@ -89,7 +89,7 @@ class AppState extends Equatable {
     LoadStatus? contractWorkStatus,
     WeatherResponse? weather,
     LoadStatus? weatherStatus,
-    List<Material>? listMaterials,
+    List<MaterialEntity>? listMaterials,
     LoadStatus? getMaterialsStatus,
   }) {
     return AppState(

@@ -38,7 +38,7 @@ class AddMaterialCubit extends Cubit<AddMaterialState>{
   }
 
   void createMaterial() async{
-    Material material = Material(
+    MaterialEntity material = MaterialEntity(
       name: state.name,
       unitPrice: state.unitPrice,
       unit: state.unit,

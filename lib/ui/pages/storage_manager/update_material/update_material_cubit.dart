@@ -56,7 +56,7 @@ class UpdateMaterialCubit extends Cubit<UpdateMaterialState>{
     }
   }
   Future<void> getMaterialById(String? materialId) async{
-    Material material = await materialRepository!.getMaterialById(materialId);
+    MaterialEntity material = await materialRepository!.getMaterialById(materialId);
     changeQuantity(material.quantity ?? 0);
     changeUnit(material.unit ?? "");
     changeName(material.name ?? "");

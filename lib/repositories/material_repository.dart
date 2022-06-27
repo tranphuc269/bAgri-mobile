@@ -2,11 +2,11 @@ import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class MaterialRepository{
-  Future<List<Material>> getListMaterial();
-  Future<dynamic> createMaterial(Material material);
+  Future<List<MaterialEntity>> getListMaterial();
+  Future<dynamic> createMaterial(MaterialEntity material);
   Future<dynamic> deleteMaterial (String? materialId);
   Future<dynamic> updateMaterial (String? materialId, Map<String, dynamic> body);
-  Future<Material> getMaterialById(String? materialId);
+  Future<MaterialEntity> getMaterialById(String? materialId);
 }
 
 class MaterialRepositoryImpl extends MaterialRepository{
@@ -17,12 +17,12 @@ class MaterialRepositoryImpl extends MaterialRepository{
   }
 
   @override
-  Future<List<Material>> getListMaterial() async{
+  Future<List<MaterialEntity>> getListMaterial() async{
     return await apiClientBagri!.getListMaterials();
   }
 
   @override
-  Future createMaterial(Material material) async{
+  Future createMaterial(MaterialEntity material) async{
     return await apiClientBagri!.createMaterial(material.toJson());
   }
 
@@ -37,7 +37,7 @@ class MaterialRepositoryImpl extends MaterialRepository{
   }
 
   @override
-  Future<Material> getMaterialById(String? materialId) async{
+  Future<MaterialEntity> getMaterialById(String? materialId) async{
     return await apiClientBagri!.getMaterialById(materialId);
   }
 
