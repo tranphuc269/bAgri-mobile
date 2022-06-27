@@ -7,18 +7,18 @@ part 'temporary_task.g.dart';
 class TemporaryTask {
   @JsonKey(name: '_id')
   String? temporaryTaskId;
-  String? gardenName;
+  String? garden;
   String? from;
   String? to;
   String? title;
   List<DailyTask>? dailyTasks;
 
   TemporaryTask(
-      {this.gardenName, this.title, this.from, this.to, this.temporaryTaskId, this.dailyTasks});
+      {this.garden, this.title, this.from, this.to, this.temporaryTaskId, this.dailyTasks});
 
   TemporaryTask copyWith({
     String? temporaryTaskId,
-    String? gardenName,
+    String? garden,
     String? title,
     String? to,
     String? from,
@@ -26,7 +26,7 @@ class TemporaryTask {
   }) {
     return TemporaryTask(
         temporaryTaskId: temporaryTaskId ?? this.temporaryTaskId,
-        gardenName: gardenName ?? this.gardenName,
+        garden: garden ?? this.garden,
         title: title ?? this.title,
         from: from ?? this.from,
         dailyTasks: dailyTasks ?? this.dailyTasks,

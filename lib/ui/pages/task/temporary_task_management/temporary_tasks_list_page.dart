@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/router/application.dart';
@@ -57,8 +58,11 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
     return Scaffold(
         body: SafeArea(child: _buildBody()),
         floatingActionButton: FloatingActionButton(
+          heroTag: 'btnm',
           backgroundColor: AppColors.main,
-          onPressed: () {},
+          onPressed: () {
+
+          },
           child: Icon(
             Icons.add,
             size: 40,
@@ -106,24 +110,24 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                     itemBuilder: (context, index) {
                       String? name =
                           state.temporaryTaskList![index].title ?? "";
-                      var material = state.temporaryTaskList![index];
+                      var temporaryTask = state.temporaryTaskList![index];
                       return _buildItem(
-                        name: name,
+                        temporaryTask: temporaryTask,
                         onPressed: (){
 
                         },
-                        // onUpdate: () async {
-                        //   bool isUpdate = await Application.router!.navigateTo(
-                        //     appNavigatorKey.currentContext!,
-                        //     Routes.updateTemporaryList,
-                        //     routeSettings: RouteSettings(
-                        //         arguments: state.listMaterials![index].materialId
-                        //     ),
-                        //   );
-                        //   if (isUpdate) {
-                        //     _onRefreshData();
-                        //   }
-                        // },
+                        onUpdate: () async {
+                          bool isUpdate = await Application.router!.navigateTo(
+                            appNavigatorKey.currentContext!,
+                            Routes.updateTemporaryTask,
+                            routeSettings: RouteSettings(
+                                arguments:temporaryTask
+                            ),
+                          );
+                          if (isUpdate) {
+                            _onRefreshData();
+                          }
+                        },
                         onDelete: () async {
                           bool isDelete = await showDialog(
                               context: context,
@@ -168,7 +172,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   }
 
   Widget _buildItem(
-      {required String name,
+      {required TemporaryTask temporaryTask,
       String? avatarUrl,
       VoidCallback? onDelete,
       VoidCallback? onPressed,
@@ -247,17 +251,17 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      name,
+                      temporaryTask.title!,
                       style: TextStyle(
                           color: Color(0xFF5C5C5C),
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
-                    // Text("Số lượng: 20 cái", style: AppTextStyle.blackS14,)
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text("Vườn: ${temporaryTask.garden}", style: AppTextStyle.blackS14,)
                   ],
                 )),
                 Icon(

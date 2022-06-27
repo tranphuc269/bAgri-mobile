@@ -11,6 +11,7 @@ import 'package:flutter_base/router/router_handlers/process_router_handler.dart'
 import 'package:flutter_base/router/router_handlers/storage_manager_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/task_manage_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/task_router_handler.dart';
+import 'package:flutter_base/router/router_handlers/temporary_task_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/tree_router_handler.dart';
 
 import 'router_handlers/root_router_handler.dart';
@@ -86,7 +87,9 @@ class Routes {
   ///Task
   static String tabTask = '/tabTask';
   static String addContractTask = '/addContractTask';
-  static String contractTaskDetailAdmin = 'contractTaskDetailAdmin';
+  static String contractTaskDetailAdmin = '/contractTaskDetailAdmin';
+
+  static String updateTemporaryTask = '/updateTemporaryTask';
 
   ///Storage
   static String manageStorage = '/manageStorage';
@@ -317,7 +320,7 @@ class Routes {
     router.define(
         contractTaskDetailAdmin,
         handler: contractTaskDetailByAdminHandler);
-
+    router.define(updateTemporaryTask, handler: updateTemporaryTaskHandler);
 
     ///manage Storage
     router.define(manageStorage,

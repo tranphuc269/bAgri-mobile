@@ -498,7 +498,6 @@ class _SeasonListPageState extends State<SeasonListPage> {
                       itemBuilder: (context, index) {
                         SeasonEntity seasonEntity = state.seasonList![index];
                         return _buildItem(
-
                             seasonName: seasonEntity.name ?? "",
                             treeName: seasonEntity.tree!.name ?? "",
                             onPressed: () {
