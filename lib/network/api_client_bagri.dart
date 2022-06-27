@@ -290,10 +290,16 @@ abstract class ApiClient {
       @Header("Authorization") String? auth,
       @Header('Content-Type')String content_type,
       @Body() Map<String, dynamic> body);
+
   @GET("/contract-tasks")
   Future<List<ContractTask>> getListContractTask(
       @Header('accept') String accept,
       @Header("Authorization") String? auth);
+  @GET("/contract-tasks/{contract_task_id}")
+  Future <ContractTask> getContractTaskDetail(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("contract_task_id") String? contractTaskId,);
 
   @DELETE("/contract-tasks/{contract_task_id}")
   Future<dynamic> deleteContractTask(
@@ -301,6 +307,20 @@ abstract class ApiClient {
       @Header("Authorization") String? auth,
       @Path("contract_task_id") String? contractTaskId);
 
+  @PUT("/contract-tasks/{contract_task_id}")
+  Future<dynamic> updateContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("contract_task_id") String? contractTaskId,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
+  @PATCH("/contract-tasks/{contract_task_id}/end")
+  Future <dynamic> finishContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("contract_task_id") String? contractTaskId,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
   /// Upload File
   @POST("/files")
   Future<ObjectResponse<FileEntity>> uploadFile(@Body() dynamic body);

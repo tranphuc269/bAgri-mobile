@@ -8,6 +8,8 @@ import 'package:flutter_base/repositories/contract_task_responsitory.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_add/contract_task_add_page.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_cubit.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_page.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_list/contract_tasks_list_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
@@ -119,20 +121,25 @@ class _ContractTaskListState extends State<ContractTaskListPage>
                                 bool isDelete = await showDialog(
                                     context: context,
                                     builder: (context) => AppDeleteDialog(
-                                          onConfirm: () {
-                                            _cubit!.deleteContractTask(
+                                          onConfirm: () async {
+                                           await _cubit!.deleteContractTask(
                                                 contractTask.id);
                                             Navigator.pop(context, true);
                                           },
                                         ));
                                 if (isDelete) {
-                                  _onRefreshData();
+                                 _onRefreshData();
                                   showSnackBar('Đã xóa thành công!');
                                 }
                               },
                               onPressed: () {
                                 Application.router
-                                    ?.navigateTo(context, Routes.contractTaskDetailAdmin);
+                                    ?.navigateTo(context, Routes.contractTaskDetailAdmin,
+                                routeSettings:  RouteSettings(
+                                  arguments: ContractTaskDetailArgument(
+                                    contractTask_id: contractTask.id
+                                  ),
+                                ),);
                               }
                               );
                         },
@@ -282,6 +289,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
       ),
     );
   }
+
 
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;

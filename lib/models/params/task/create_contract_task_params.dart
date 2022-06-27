@@ -8,25 +8,29 @@ class CreateContractTaskParam {
   String? gardenName;
   num? treeQuantity;
   String? description;
+  List<MaterialUsedByTask>? materials;
 
   CreateContractTaskParam({
     this.work,
     this.gardenName,
     this.treeQuantity,
-    this.description
+    this.description,
+    this.materials
   });
 
   CreateContractTaskParam copyWith({
     ContractWorkEntity? work,
     String? gardenName,
     num? treeQuantity,
-    String? description
+    String? description,
+    List<MaterialUsedByTask>? materials
   }) {
     return CreateContractTaskParam(
       work: work ?? this.work,
       gardenName: gardenName ?? this.gardenName,
       treeQuantity: treeQuantity ?? this.treeQuantity,
-      description: description ?? this.description
+      description: description ?? this.description,
+      materials: materials ?? this.materials
     );
   }
 

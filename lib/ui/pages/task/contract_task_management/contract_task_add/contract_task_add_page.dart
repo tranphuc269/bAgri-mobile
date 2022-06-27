@@ -132,7 +132,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 color: AppColors.main,
                 title: 'Xác nhận',
                 onPressed: () async {
-                  _cubit.createContractTask(treeQuantityController.text);
+                 await _cubit.createContractTask(treeQuantityController.text);
                  Navigator.of(context).pop(true);
                 },
               ),

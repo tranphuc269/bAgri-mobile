@@ -1,4 +1,5 @@
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
+import 'package:flutter_base/models/entities/material/material.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 part 'contract_task.g.dart';
@@ -15,8 +16,9 @@ class ContractTask{
   String? start;
   String? end;
   String? description;
+  List<MaterialUsedByTask>? materials;
 
-  ContractTask({this.id, this.work, this.gardenName, this.treeQuantity, this.start, this.end, this.description});
+  ContractTask({this.id, this.work, this.gardenName, this.treeQuantity, this.start, this.end, this.description, this.materials});
   ContractTask copyWith({
     String? id,
     ContractWorkEntity? work,
@@ -24,7 +26,8 @@ class ContractTask{
     num? treeQuantity,
     String? start,
     String? end,
-    String? description
+    String? description,
+    List<MaterialUsedByTask>? materials
   }){
     return ContractTask(
       id: id ?? this.id,
@@ -33,6 +36,7 @@ class ContractTask{
       treeQuantity: treeQuantity ?? this.treeQuantity,
       start: start ?? this.start,
       description:  description ?? this.description,
+      materials: materials ?? this.materials
     );
   }
   factory ContractTask.fromJson(Map<String, dynamic> json) =>

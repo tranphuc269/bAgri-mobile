@@ -17,7 +17,7 @@ class ContractTaskListCubit extends Cubit<ContractTaskListState> {
     emit(state.copyWith(getListContractTaskStatus: LoadStatus.LOADING));
     try {
      final response = await contractTaskRepositoy!.getListContractTask();
-     print("response contract task: ");
+     print("response contract task:");
      print(response.toString());
       if (response != null) {
         emit(state.copyWith(getListContractTaskStatus: LoadStatus.SUCCESS,
