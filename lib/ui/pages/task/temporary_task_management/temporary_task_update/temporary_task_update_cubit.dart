@@ -37,7 +37,6 @@ class TemporaryTaskUpdateCubit extends Cubit<TemporaryTaskUpdateState> {
       title: name,
       fee: (int.tryParse(fee) ?? 0),
     ));
-    // stages.add(value);
     List<DailyTask> newList = dailyTasks;
     emit(state.copyWith(
         dailyTasks: newList, loadStatus: LoadStatus.FORMAT_EXTENSION_FILE));

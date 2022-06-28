@@ -139,8 +139,8 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                     TemporaryTaskUpdateState>(listener: (context, state) {
                   if (state.loadStatus == LoadStatus.SUCCESS) {}
                 }, builder: (context, state) {
-                    if (state.loadStatus == LoadStatus.LOADING) {
-                      return Center(
+                    // if (state.loadStatus == LoadStatus.LOADING) {
+                      return /*Center(
                         child: CircularProgressIndicator(
                         color: AppColors.main,
                       ));
@@ -149,7 +149,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                     } else if (state.loadStatus ==
                     LoadStatus.SUCCESS) {
                       return state.dailyTasks!.length != 0
-                          ? ListView.builder(
+                          ? */ListView.builder(
                             shrinkWrap: true,
                             itemBuilder: (context, index) =>
                                 DailyTaskWidget(
@@ -160,9 +160,9 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                                     isUpdate: true,
                                     index: index),
                             itemCount: state.dailyTasks?.length ?? 0,
-                      ): Container();
+                     /* ): Container();
                     }
-                    return Container();
+                    return Container(*/);
                 }),
                 SizedBox(height: 15,),
                 _buildActionUpdate()
