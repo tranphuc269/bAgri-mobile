@@ -195,7 +195,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               clearStack: true, replace: true);
         }
         if (state.loadStatus == LoadStatus.FAILURE) {
-          showSnackBar('Có lỗi xảy ra!');
+          showSnackBar('${state.messageError}');
         }
       },
       builder: (context, state) {

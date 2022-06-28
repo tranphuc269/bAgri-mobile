@@ -19,6 +19,13 @@ class ContractTaskDetailCubit extends Cubit<ContractTaskDetailState>{
       final response = await contractTaskRepository.getContractTaskDetail(contractTaskId: id);
       if(response != null){
         emit(state.copyWith(loadStatus: LoadStatus.SUCCESS, contractTask: response, materials: response.materials));
+        if(response.end != null){
+          print(response.end);
+          emit(state.copyWith(getFinishStatus: LoadStatus.SUCCESS));
+        }else {
+          emit(state.copyWith(getFinishStatus: LoadStatus.FAILURE));
+        }
+
       }else{
         emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
       }

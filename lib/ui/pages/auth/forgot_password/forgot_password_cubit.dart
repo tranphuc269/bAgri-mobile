@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
@@ -27,7 +28,11 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
       }
     } catch (error) {
       logger.e(error);
-      emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+      if (error is DioError) {
+        if(error.response!.statusCode == 400){
+          emit(state.copyWith(loadStatus: LoadStatus.FAILURE, messageError: "Email không tồn tại"));
+        }
+      }
     }
   }
 }

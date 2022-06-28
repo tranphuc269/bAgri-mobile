@@ -1,25 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/role/role_entity.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/account_management/account_list/account_list_cubit.dart';
 import 'package:flutter_base/ui/pages/auth/login/login_cubit.dart';
-import 'package:flutter_base/ui/pages/home/home_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_dropdown_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
-import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
-import 'package:flutter_base/utils/validators.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AccountListPage extends StatefulWidget {
   @override
@@ -140,60 +135,7 @@ class _AccountListState extends State<AccountListPage> {
           color: AppColors.grayEC,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Slidable(
-          endActionPane: ActionPane(
-            extentRatio: 1 / 3,
-            motion: BehindMotion(),
-            children: [
-              CustomSlidableAction(
-                  backgroundColor: AppColors.blueSlideButton,
-                  foregroundColor: Colors.white,
-                  onPressed: (BuildContext context) {
-                    // onUpdate?.call();
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: Image.asset(AppImages.icSlideEdit),
-                      ),
-                      SizedBox(height: 4),
-                      FittedBox(
-                        child: Text(
-                          'Sửa',
-                          style: AppTextStyle.whiteS16,
-                        ),
-                      )
-                    ],
-                  )),
-              CustomSlidable(
-                  backgroundColor: AppColors.redSlideButton,
-                  foregroundColor: Colors.white,
-                  onPressed: (BuildContext context) {
-                    // onDelete?.call();
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: Image.asset(AppImages.icSlideDelete),
-                      ),
-                      SizedBox(height: 4),
-                      FittedBox(
-                        child: Text(
-                          'Xóa',
-                          style: AppTextStyle.whiteS16,
-                        ),
-                      )
-                    ],
-                  )),
-            ],
-          ),
-          child: Padding(
+        child: Padding(
             padding:
                 const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
             child: Row(
@@ -230,8 +172,7 @@ class _AccountListState extends State<AccountListPage> {
               ],
             ),
           ),
-        ),
-      ),
+        )
     );
   }
 
@@ -382,7 +323,6 @@ class _AccountListState extends State<AccountListPage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      // _cubit!.fetchNextGardenData();
     }
   }
 }
