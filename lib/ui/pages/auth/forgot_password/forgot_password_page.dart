@@ -6,7 +6,6 @@ import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/auth/forgot_password/forgot_password_cubit.dart';
-import 'package:flutter_base/ui/pages/auth/otp_authentication/otp_authentication_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
@@ -27,8 +26,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _passwordController = TextEditingController(text: "");
   final _confirmPasswordController = TextEditingController(text: "");
 
-  bool _visiblePassword = false;
-  bool _visibleConfirmPassword = false;
+  bool isErrorMessage = false;
 
   @override
   void initState() {
@@ -132,7 +130,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           _showSuccess();
         }
         if (state.loadStatus == LoadStatus.FAILURE) {
-          showSnackBar('Có lỗi xảy ra!');
+          showSnackBar('${state.messageError}');
         }
       },
       builder: (context, state) {
@@ -165,11 +163,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
-  void showSnackBar(String message) {
+  void showSnackBar(String message) async {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
       typeSnackBar: "success",
       message: message,
     ));
+    setState(() {
+      isErrorMessage = true;
+    });
+    await Future.delayed(Duration(milliseconds: 2200));
+    setState(() {
+      isErrorMessage = false;
+    });
   }
 }

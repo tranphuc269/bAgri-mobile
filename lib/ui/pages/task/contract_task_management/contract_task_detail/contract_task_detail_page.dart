@@ -7,6 +7,8 @@ import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
+import 'package:flutter_base/router/application.dart';
+import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_cubit.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/modal_add_material_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
@@ -51,15 +53,27 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
       appBar: AppBarWidget(
         context: context,
         title: 'Chi tiết công việc',
+        onBackPressed: (){
+          Application.router!.navigateTo(context, Routes.tabTask, replace: true);
+        },
       ),
       body: SafeArea(
         child: Column(
           children: [
             _buildInput(),
-            if(_cubit!.state.contractTask!.end != "")
-              GlobalData.instance.role == "GARDEN_MANAGER"
-                ? _buildButtonByGardenManager(widget.contractTaskId, _cubit!.state.materials)
-                : _buildButtonByAdmin(),
+            BlocBuilder<ContractTaskDetailCubit, ContractTaskDetailState>(
+                bloc: _cubit,
+                builder: (context, state) {
+                  if (state.getFinishStatus == LoadStatus.SUCCESS) {
+                    return Container();
+                  } else {
+                    return GlobalData.instance.role == "GARDEN_MANAGER"
+                        ? _buildButtonByGardenManager(
+                            widget.contractTaskId, _cubit!.state.materials)
+                        : _buildButtonByAdmin();
+                  }
+                  ;
+                }),
             SizedBox(
               height: 30,
             )
@@ -70,136 +84,180 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
   }
 
   Widget _buildInput() {
-
     return BlocBuilder<ContractTaskDetailCubit, ContractTaskDetailState>(
         bloc: _cubit,
         builder: (context, state) {
-          if(state.loadStatus == LoadStatus.LOADING){
+          if (state.loadStatus == LoadStatus.LOADING) {
             return Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.main,
-                ));
-          }else if (state.loadStatus == LoadStatus.FAILURE) {
+              color: AppColors.main,
+            ));
+          } else if (state.loadStatus == LoadStatus.FAILURE) {
             return Expanded(
                 child: Center(
-                  child: Text("Đã có lỗi xảy ra!"),
-                ));
-          }else {
-            _descriptionController = TextEditingController(text: state.contractTask!.description);
+              child: Text("Đã có lỗi xảy ra!"),
+            ));
+          } else {
+            _descriptionController =
+                TextEditingController(text: state.contractTask!.description);
             return Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                  child: Scrollbar(
-                    isAlwaysShown: true,
-                    child: SingleChildScrollView(
-                      physics: ClampingScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: Scrollbar(
+                isAlwaysShown: true,
+                child: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildInformation(
+                          title: "Công việc: ",
+                          information: "${state.contractTask!.work!.title}"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _buildInformation(
+                          title: "Vườn: ",
+                          information: "${state.contractTask!.gardenName}"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _buildInformation(
+                          title: "Số lượng cây: ",
+                          information: "${state.contractTask!.treeQuantity}"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
                         children: [
-                          _buildInformation(
-                              title: "Công việc: ", information: "${state.contractTask!.work!.title}"),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          _buildInformation(title: "Vườn: ", information:"${state.contractTask!.gardenName}" ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          _buildInformation(
-                              title: "Số lượng cây: ", information: "${state.contractTask!.treeQuantity}"),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text("Ngày bắt đầu: ", style: AppTextStyle.greyS16),
-                              Text("${formatDate.format(DateTime.parse(state.contractTask!.start.toString()))}", style: AppTextStyle.blackS16)
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text("Mô tả công việc từ kĩ thuật viên: ",
-                              style: AppTextStyle.greyS16),
-                          SizedBox(height: 10),
-                          if (GlobalData.instance.role == "GARDEN_MANAGER" ||
-                              GlobalData.instance.role == "ACCOUNTANT")
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
-                                child: Text(
-                                  state.contractTask!.description != null ? "${state.contractTask!.description}" : "",
-                                  style: AppTextStyle.greyS16Bold,
-                                )),
-                          if (GlobalData.instance.role == "ADMIN" ||
-                              GlobalData.instance.role == "SUPER_ADMIN")
-                            AppTextAreaField(
-                              hintText: '',
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 10,
-                              controller: _descriptionController,
-                              enable: true,
-                              textInputAction: TextInputAction.newline,
-                            ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          isAddMaterial == true ?
-                          Padding(
-                            padding: EdgeInsets.only(left: 180),
-                            child: AppButton(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Thêm vật tư'),
-                                  FittedBox(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Color(0xFF373737),
-                                      )),
-                                ],
-                              ),
-                              color: Color(0xFF8FE192),
-                              height: 30,
-                              width: double.infinity,
-                              onPressed: () {
-                                changeNameDesStage();
-                              },
-                            ),
-                          ) : Container(),
-                          SizedBox(height: 20,),
-                          BlocBuilder<ContractTaskDetailCubit, ContractTaskDetailState>(
-                            builder: (context, state) {
-                              if (state.loadStatus == LoadStatus.LOADING) {
-                                return Center(
-                                    child: CircularProgressIndicator(
-                                      color: AppColors.main,
-                                    ));
-                              } else if (state.loadStatus ==
-                                  LoadStatus.FAILURE) {
-                                return Container();
-                              } else if (state.loadStatus ==
-                                  LoadStatus.SUCCESS) {
-                                return state.materials!.length != 0
-                                    ? Column(
-                                  children: List.generate(
-                                      state.materials!.length,
-                                          (index) => materialItem(state.materials![index], index)),
-                                )
-                                    : Container();
-                              } else {
-                                return Container();
-                              }
-                            },
-                          ),
+                          Text("Ngày bắt đầu: ", style: AppTextStyle.greyS16),
+                          Text(
+                              "${formatDate.format(DateTime.parse(state.contractTask!.start.toString()))}",
+                              style: AppTextStyle.blackS16)
                         ],
                       ),
-                    ),
-
+                      state.getFinishStatus == LoadStatus.SUCCESS
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Ngày kết thúc: ",
+                                        style: AppTextStyle.greyS16),
+                                    Text(
+                                        "${formatDate.format(DateTime.parse(state.contractTask!.end.toString()))}",
+                                        style: AppTextStyle.blackS16)
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _buildInformation(
+                          title: "Trạng thái: ",
+                          information: state.contractTask!.end != null
+                              ? "Đã hoàn thành"
+                              : "Đang thực hiện"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text("Mô tả công việc từ kĩ thuật viên: ",
+                          style: AppTextStyle.greyS16),
+                      SizedBox(height: 10),
+                      if (GlobalData.instance.role == "GARDEN_MANAGER" ||
+                          GlobalData.instance.role == "ACCOUNTANT")
+                        AppTextAreaField(
+                          hintText: state.contractTask?.description ??
+                              "Chưa có mô tả từ kĩ thuật viên",
+                          keyboardType: TextInputType.multiline,
+                          controller: _descriptionController,
+                          enable: false,
+                          textInputAction: TextInputAction.newline,
+                        ),
+                      if (GlobalData.instance.role == "ADMIN" ||
+                          GlobalData.instance.role == "SUPER_ADMIN")
+                        AppTextAreaField(
+                          hintText: state.contractTask?.description ??
+                              "Chưa có mô tả từ kĩ thuật viên",
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 10,
+                          controller: _descriptionController,
+                          enable: true,
+                          textInputAction: TextInputAction.newline,
+                        ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text("Danh sách vật tư đã sử dụng: ",
+                          style: AppTextStyle.greyS16),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      (isAddMaterial == true && state.contractTask!.end == null)
+                          ? Padding(
+                              padding: EdgeInsets.only(left: 180),
+                              child: AppButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Thêm vật tư'),
+                                    FittedBox(
+                                        child: Icon(
+                                      Icons.add,
+                                      color: Color(0xFF373737),
+                                    )),
+                                  ],
+                                ),
+                                color: Color(0xFF8FE192),
+                                height: 30,
+                                width: double.infinity,
+                                onPressed: () {
+                                  addMaterial();
+                                },
+                              ),
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      BlocBuilder<ContractTaskDetailCubit,
+                          ContractTaskDetailState>(
+                        builder: (context, state) {
+                          if (state.loadStatus == LoadStatus.LOADING) {
+                            return Center(
+                                child: CircularProgressIndicator(
+                              color: AppColors.main,
+                            ));
+                          } else if (state.loadStatus == LoadStatus.FAILURE) {
+                            return Container();
+                          } else if (state.loadStatus == LoadStatus.SUCCESS) {
+                            return state.materials!.length != 0
+                                ? Column(
+                                    children: List.generate(
+                                        state.materials!.length,
+                                        (index) => materialItem(
+                                            state.materials![index], index)),
+                                  )
+                                : Container();
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                ));
-          }});
+                ),
+              ),
+            ));
+          }
+        });
   }
-  changeNameDesStage(){
+
+  addMaterial() {
     showModalBottomSheet(
         isDismissible: false,
         context: context,
@@ -210,19 +268,22 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                 topLeft: const Radius.circular(20),
                 topRight: const Radius.circular(20))),
         builder: (context) => Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(20),
-                  topRight: const Radius.circular(20))),
-          child: ModalAddMaterialWidget(onPressed: (String name, String quantity, String unit) {
-            setState(() {
-              _cubit!.state.materials!.add(MaterialUsedByTask(name: name, quantity:  int.parse(quantity.toString()),unit: unit ));
-            });
-
-            },),
-        )
-    );
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20))),
+              child: ModalAddMaterialWidget(
+                onPressed: (String name, String quantity, String unit) {
+                  setState(() {
+                    _cubit!.state.materials!.add(MaterialUsedByTask(
+                        name: name,
+                        quantity: int.parse(quantity.toString()),
+                        unit: unit));
+                  });
+                },
+              ),
+            ));
   }
 
   Widget _buildInformation({String? title, String? information}) {
@@ -234,44 +295,66 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
     );
   }
 
-  Widget _buildButtonByGardenManager(String? contractTaskId, List<MaterialUsedByTask>? materials) {
-    return Container(
-      height: 40,
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 28),
-      child: AppButton(
-        color: AppColors.main,
-        title: isAddMaterial ? "Hoàn tất" :'Hoàn thành công việc',
-        onPressed: () async {
-          if(isAddMaterial == false){
-            showDialog(
-                context: context,
-                builder: (context) => _dialogFinish(
-                    onConfirm: (){
-                      setState(() {
-                        isAddMaterial = true;
-                        Navigator.pop(context, true);
-                      });
-                    }
-                ));
-          }if(isAddMaterial == true){
-              _cubit!.finishContractTask(contractTaskId,  materials!);
-          }
-          // _cubit.createContractTask(treeQuantityController.text);
-          // Navigator.of(context).pop(true);
-        },
-      ),
+  Widget _buildButtonByGardenManager(
+      String? contractTaskId, List<MaterialUsedByTask>? materials) {
+    return BlocBuilder<ContractTaskDetailCubit, ContractTaskDetailState>(
+      bloc: _cubit,
+      builder: (context, state) {
+        final isLoading = state.finishContractTaskStatus == LoadStatus.LOADING;
+        return Container(
+          height: 40,
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 28),
+          child: AppButton(
+            color: AppColors.main,
+            title: isAddMaterial ? "Hoàn tất" : 'Hoàn thành công việc',
+            isLoading: isAddMaterial ? isLoading : false,
+            onPressed: () async {
+              if (isAddMaterial == false) {
+                showDialog(
+                    context: context,
+                    builder: (context) => _dialogFinish(
+                        onConfirm: () {
+                          setState(() {
+                            isAddMaterial = true;
+                            Navigator.pop(context, true);
+                          });
+                        },
+                        close: () {
+                          print("close");
+                          setState(() {
+                            Navigator.pop(context, false);
+                          });
+
+                        })
+                );
+              }
+              if (isAddMaterial == true) {
+                setState(() async {
+                  await _cubit!.finishContractTask(contractTaskId, materials!);
+                  _cubit!.getContractTaskDetail(widget.contractTaskId!);
+                });
+                showSnackBarSuccess("Hoàn thành công viêc");
+              }
+              // _cubit.createContractTask(treeQuantityController.text);
+              // Navigator.of(context).pop(true);
+            },
+          ),
+        );
+      },
     );
   }
-  Widget _dialogFinish({VoidCallback? onConfirm,
-    VoidCallback? notAddMaterial,}
-      ){
+
+  Widget _dialogFinish({
+    VoidCallback? onConfirm,
+    VoidCallback? close,
+  }) {
     return Dialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Padding(
         padding:
-        const EdgeInsets.only(top: 20, left: 20, right: 15, bottom: 15),
+            const EdgeInsets.only(top: 20, left: 20, right: 15, bottom: 15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -287,11 +370,9 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    notAddMaterial;
-                  },
+                  onTap: close,
                   child: Text(
-                    'Không',
+                    'Đóng',
                     style: TextStyle(
                         color: AppColors.redLighterTextButton, fontSize: 16),
                   ),
@@ -337,47 +418,53 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                   title: 'Xác nhận',
                   onPressed: () async {
                     print(_descriptionController.text);
-                    await _cubit!.addDescriptionForContrackTask(_cubit!.state.contractTask,_descriptionController.text );
-                    if(_cubit!.state.updateContractTaskStatus == LoadStatus.SUCCESS){
+                    await _cubit!.addDescriptionForContrackTask(
+                        _cubit!.state.contractTask,
+                        _descriptionController.text);
+                    if (_cubit!.state.updateContractTaskStatus ==
+                        LoadStatus.SUCCESS) {
                       showSnackBarSuccess("Thay đổi thông tin thành công!");
                       Navigator.of(context).pop(true);
-                    }else{
+                    } else {
                       showSnackBarError("Đã có lỗi xảy ra");
                     }
-                  }
-              ),
+                  }),
             )
           ],
         ));
   }
+
   void showSnackBarSuccess(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      message: message, typeSnackBar: 'success',
-    ));
-  }
-  void showSnackBarError(String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      message: message, typeSnackBar: 'error',
+      message: message,
+      typeSnackBar: 'success',
     ));
   }
 
-  Widget materialItem(MaterialUsedByTask? material, int? index){
+  void showSnackBarError(String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      message: message,
+      typeSnackBar: 'error',
+    ));
+  }
+
+  Widget materialItem(MaterialUsedByTask? material, int? index) {
     return GestureDetector(
-      onTap: (){
-        showDialog(
-            context: context,
-            builder: (context) => AppDeleteDialog(
-              onConfirm: () {
-                setState(() {
-                  _cubit!.state.materials!.removeAt(index!);
-                });
-                Navigator.pop(context, true);
-              },
-            ));
-      },
-        child:Container(
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (context) => AppDeleteDialog(
+                    onConfirm: () {
+                      setState(() {
+                        _cubit!.state.materials!.removeAt(index!);
+                      });
+                      Navigator.pop(context, true);
+                    },
+                  ));
+        },
+        child: Container(
           height: 60,
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.only(bottom: 10),
@@ -409,6 +496,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
         ));
   }
 }
+
 class ContractTaskDetailArgument {
   String? contractTask_id;
 
@@ -416,5 +504,3 @@ class ContractTaskDetailArgument {
     this.contractTask_id,
   });
 }
-
-

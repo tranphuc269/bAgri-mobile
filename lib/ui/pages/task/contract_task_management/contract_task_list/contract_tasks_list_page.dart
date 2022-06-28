@@ -65,21 +65,23 @@ class _ContractTaskListState extends State<ContractTaskListPage>
   Widget build(BuildContext context) {
     return Scaffold(
         body: _buildBody(),
-        floatingActionButton:(GlobalData.instance.role != 'ACCOUNTANT') ? FloatingActionButton(
-          backgroundColor: AppColors.main,
-          onPressed: () async {
-            bool isAdd = await Application.router
-                ?.navigateTo(context, Routes.addContractTask);
-            if (isAdd) {
-              _onRefreshData();
-              showSnackBar('Thêm mới thành công!');
-            }
-          },
-          child: Icon(
-            Icons.add,
-            size: 40,
-          ),
-        ): Container());
+        floatingActionButton: (GlobalData.instance.role != 'ACCOUNTANT')
+            ? FloatingActionButton(
+                backgroundColor: AppColors.main,
+                onPressed: () async {
+                  bool isAdd = await Application.router
+                      ?.navigateTo(context, Routes.addContractTask);
+                  if (isAdd) {
+                    _onRefreshData();
+                    showSnackBar('Thêm mới thành công!');
+                  }
+                },
+                child: Icon(
+                  Icons.add,
+                  size: 40,
+                ),
+              )
+            : Container());
   }
 
   Widget _buildBody() {
@@ -133,15 +135,15 @@ class _ContractTaskListState extends State<ContractTaskListPage>
                                 }
                               },
                               onPressed: () {
-                                Application.router
-                                    ?.navigateTo(context, Routes.contractTaskDetailAdmin,
-                                  routeSettings:  RouteSettings(
+                                Application.router?.navigateTo(
+                                  context,
+                                  Routes.contractTaskDetailAdmin,
+                                  routeSettings: RouteSettings(
                                     arguments: ContractTaskDetailArgument(
-                                        contractTask_id: contractTask.id
-                                    ),
-                                  ),);
-                              }
-                              );
+                                        contractTask_id: contractTask.id),
+                                  ),
+                                );
+                              });
                         },
                       ),
                     ),
@@ -172,7 +174,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: 80,
+        height: 85,
         decoration: BoxDecoration(
           color: AppColors.grayEC,
           borderRadius: BorderRadius.circular(10),
@@ -232,10 +234,14 @@ class _ContractTaskListState extends State<ContractTaskListPage>
           ),
           child: Padding(
             padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
+                const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
             child: Row(
               children: [
-                Image.asset(avatarUrl ?? AppImages.icWorks),
+                Image.asset(
+                  avatarUrl ?? AppImages.icWorks,
+                  width: 50,
+                  height: 50,
+                ),
                 SizedBox(width: 18),
                 Expanded(
                     child: Column(
@@ -254,27 +260,55 @@ class _ContractTaskListState extends State<ContractTaskListPage>
                     ),
                     Row(
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          child: Text("Vườn: ${contractTask.gardenName}",
-                              overflow: TextOverflow.ellipsis),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            // width: MediaQuery.of(context).size.width * 0.2,
+                            child: Text("Vườn: ${contractTask.gardenName}",
+                                overflow: TextOverflow.ellipsis),
+                          ),
                         ),
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Ngày bắt đầu: ',
-                                ),
-                                Text(
-                                  //"${DateTime.parse(contractTask.start.toString()).toLocal()}".split(' ')[0],
-                                  "${dateFormat.format(DateTime.parse(contractTask.start.toString()))}",
+
+                        contractTask.end == null
+                            ? Expanded(
+                              flex:2 ,
+                              child: Text(
+                                  "Đang thực hiện",
+                                  style: TextStyle(
+                                      color: Color(0xFF5C5C5C),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                              ],
-                            ))
+                            )
+                            : Expanded(
+                          flex: 2,
+                              child: Text(
+                                  "Đã hoàn thành",
+                                  style: TextStyle(
+                                      color: AppColors.main,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                            )
                       ],
-                    )
+                    ),
+                    SizedBox(height: 3,),
+                    Container(
+                        // width: MediaQuery.of(context).size.width * 0.45,
+                        child: Row(
+                      children: [
+                        Text(
+                          'Ngày bắt đầu: ',
+                        ),
+                        Text(
+                          //"${DateTime.parse(contractTask.start.toString()).toLocal()}".split(' ')[0],
+                          "${dateFormat.format(DateTime.parse(contractTask.start.toString()))}",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ))
                   ],
                 )),
                 Icon(

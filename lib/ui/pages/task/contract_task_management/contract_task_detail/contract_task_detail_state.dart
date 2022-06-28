@@ -5,6 +5,7 @@ class ContractTaskDetailState extends Equatable {
   LoadStatus? addDescriptionStatus;
   LoadStatus? updateContractTaskStatus;
   ContractTask? contractTask;
+  LoadStatus? getFinishStatus;
   LoadStatus? addMaterialStatus;
   LoadStatus? finishContractTaskStatus;
   List<MaterialUsedByTask>? materials;
@@ -17,6 +18,7 @@ class ContractTaskDetailState extends Equatable {
     updateContractTaskStatus,
     addMaterialStatus,
     finishContractTaskStatus,
+    getFinishStatus,
     materials
   ];
 
@@ -26,6 +28,7 @@ class ContractTaskDetailState extends Equatable {
         this.contractTask,
         this.finishContractTaskStatus,
         this.updateContractTaskStatus,
+        this.getFinishStatus,
         this.addMaterialStatus, this.materials});
 
   ContractTaskDetailState copyWith({
@@ -35,6 +38,7 @@ class ContractTaskDetailState extends Equatable {
     ContractTask? contractTask,
     LoadStatus? addMaterialStatus,
     LoadStatus? finishContractTaskStatus,
+    LoadStatus? getFinishStatus,
     List<MaterialUsedByTask>? materials
   }) {
     return ContractTaskDetailState(
@@ -44,6 +48,7 @@ class ContractTaskDetailState extends Equatable {
       updateContractTaskStatus: updateContractTaskStatus ?? this.updateContractTaskStatus,
       finishContractTaskStatus: finishContractTaskStatus ?? this.finishContractTaskStatus,
       addMaterialStatus: addMaterialStatus ?? this.addMaterialStatus,
+      getFinishStatus: getFinishStatus ?? this.getFinishStatus,
       materials: materials ?? this.materials,
     );
   }

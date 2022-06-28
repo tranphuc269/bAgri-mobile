@@ -35,10 +35,18 @@ class RegistryCubit extends Cubit<RegistryState> {
       if (error is DioError) {
         emit(state.copyWith(RegisterStatus: LoadStatus.FAILURE));
         if(error.response!.statusCode == 400){
-          emit(state.copyWith(
-            messageError: "Tên đăng nhập đã được sử dụng!",
-            RegisterStatus: LoadStatus.FAILURE
-          ));
+          print("message: ");
+          if(error.response!.data['message'].toString().contains(phone)){
+            emit(state.copyWith(
+                messageError: "Số điện thoại đã được sử dụng!",
+                RegisterStatus: LoadStatus.FAILURE
+            ));
+          } if(error.response!.data['message'].toString().contains(email)){
+            emit(state.copyWith(
+                messageError: "Email đã được sử dụng!",
+                RegisterStatus: LoadStatus.FAILURE
+            ));
+          }
         }
         // logger.e(error.response!.data['error']['message']);
         // emit(state.copyWith(
