@@ -236,7 +236,7 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
                 _cubit!.state.listManager!.length > 0
                     ? setState(() {
                         _managerValue = value! as UserEntity?;
-                        _cubit!.changeManagerUsername(_managerValue!.username.toString());
+                        // _cubit!.changeManagerUsername(_managerValue!.username.toString());
                       })
                     : setState(() {
                         _managerValue = value! as UserEntity?;

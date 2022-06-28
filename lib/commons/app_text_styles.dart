@@ -37,6 +37,7 @@ class AppTextStyle {
 
   static final greenS14 = green.copyWith(fontSize: 14);
   static final greenS16 = green.copyWith(fontSize: 16);
+  static final greenS18Bold = green.copyWith(fontSize: 18);
 
   //s30
   static final green30 = green.copyWith(fontSize: 30);

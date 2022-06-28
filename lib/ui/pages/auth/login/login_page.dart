@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   late StreamSubscription _navigationSubscription;
   late StreamSubscription _showMessageSubscription;
 
-  final _usernameController = TextEditingController(text: '');
+  final _phoneNumberController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -53,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
 
     _cubit!.changeRole(RoleEntity(role_id: "ktv", name: "Kỹ Thuật Viên"));
 
-    _usernameController.addListener(() {
-      _cubit!.usernameChange(_usernameController.text);
+    _phoneNumberController.addListener(() {
+      _cubit!.usernameChange(_phoneNumberController.text);
     });
 
     _passwordController.addListener(() {
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _cubit!.close();
-    _usernameController.dispose();
+    _phoneNumberController.dispose();
     _passwordController.dispose();
     _showMessageSubscription.cancel();
     _navigationSubscription.cancel();
@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
       bloc: _cubit,
       buildWhen: (prev, current) {
         return (prev.LoginStatus != current.LoginStatus) ||
-            (prev.username != current.username) ||
+            (prev.phonenumber != current.phonenumber) ||
             (prev.password != current.password);
       },
       builder: (context, state) {
@@ -126,14 +126,15 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             title: S.of(context).sign_up_btn,
             textStyle: AppTextStyle.whiteS16Bold,
-            onPressed:   isLoading
+            onPressed:
+            isLoading
                 ? null
                 : () {
               if (_formKey.currentState!.validate()) {
-                _cubit!.signIn(state.username.trim(), state.password);
+                _cubit!.signIn(state.phonenumber, state.password);
               }
             },
-            isLoading: isLoading,
+           isLoading: isLoading,
           ),
         );
       },
@@ -155,14 +156,11 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.15),
             _buildLogo(),
             SizedBox(height: 8.15),
-            _buildTextLabel(S.of(context).signIn_Username),
+            _buildTextLabel(S.of(context).enter_phonenumber),
             _buildUserNameInput(),
             SizedBox(height: 3.37),
             _buildTextLabel(S.of(context).signIn_password),
             _buildPasswordInput(),
-            // SizedBox(height: 3.37),
-            // _buildTextLabel('Vai trò'),
-            // _buildRoleOption(),
             SizedBox(height: 5),
             _buildTextForgotPass(),
             _buildSignButton(),
@@ -197,11 +195,12 @@ class _LoginPageState extends State<LoginPage> {
       ),
       child: AppTextField(
         autoValidateMode: AutovalidateMode.onUserInteraction,
-        hintText: 'Nhập vào tên người dùng',
-        controller: _usernameController,
+        hintText: 'Nhập vào số điện thoại',
+        controller: _phoneNumberController,
+        keyboardType: TextInputType.number,
         validator: (value) {
           if (Validator.validateNullOrEmpty(value!))
-            return "Chưa nhập tên người dùng";
+            return "Chưa nhập số điện thoại";
           else
             return null;
         },
@@ -244,29 +243,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ));
-  }
-
-
-  Widget _buildRoleOption() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child: AppRolePicker(
-        onChange: (value) {
-          _cubit!.changeRole(value);
-        },
-        value: RoleEntity(role_id: "ktv", name: "Kỹ Thuật Viên"),
-        autoValidateMode: AutovalidateMode.onUserInteraction,
-        validator: (value) {
-          if (Validator.validateNullOrEmpty(value!.role_id!))
-            return "Chưa chọn vai trò";
-          else
-            return null;
-        },
-      ),
-    );
   }
 
   Widget _buildTextForgotPass() {

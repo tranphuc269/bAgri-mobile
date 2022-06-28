@@ -64,11 +64,24 @@ abstract class ApiClient {
       @Path("id") String? id,
       @Body() Map<String, dynamic> body);
 
-  @PUT("/change-password")
-  Future<dynamic> changePassword(@Body() Map<String, dynamic> body);
+  @PATCH("/accounts/password")
+  Future<dynamic> changePassword(
+      @Header("accept") String? accept,
+      @Header("Authorization") String auth,
+      @Header("Content-Type") String content_type,
+      @Body() Map<String, dynamic> body);
 
-  @POST("/reset-password")
-  Future<dynamic> forgotPassword(@Body() Map<String, dynamic> body);
+  /// reset-password
+  @POST("/accounts/reset-password/init?email={email}")
+  Future<dynamic> forgotPassword(
+      @Header("accept") String? accept,
+      @Path("email") String? email);
+
+  @POST("/accounts/reset-password/finish")
+  Future<dynamic> AuthOtp(
+      @Header("accept") String? accept,
+      @Header("Content-Type") String content_type,
+      @Body() Map<String, dynamic> body);
 
   /// Zone
   @POST("/zones")
@@ -302,11 +315,31 @@ abstract class ApiClient {
       @Header("Authorization") String? auth,
       @Header('Content-Type') String content_type,
       @Body() Map<String, dynamic> body);
+  @GET("/contract-tasks/{contract_task_id}")
+  Future <ContractTask> getContractTaskDetail(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("contract_task_id") String? contractTaskId,);
+
   @DELETE("/contract-tasks/{contract_task_id}")
   Future<dynamic> deleteContractTask(
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
       @Path("contract_task_id") String? contractTaskId);
+  @PUT("/contract-tasks/{contract_task_id}")
+  Future<dynamic> updateContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("contract_task_id") String? contractTaskId,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
+  @PATCH("/contract-tasks/{contract_task_id}/end")
+  Future <dynamic> finishContractTask(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("contract_task_id") String? contractTaskId,
+      @Header('Content-Type')String content_type,
+      @Body() Map<String, dynamic> body);
 
   /// Upload File
   @POST("/files")

@@ -16,10 +16,10 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     return super.close();
   }
 
-  void forgotPassword(String userName, String phone) async {
+  void forgotPassword(String? email) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      final result = await repository!.forgotPassword(userName, phone);
+      final result = await repository!.forgotPassword(email: email);
       if (result != null) {
         emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
       } else {

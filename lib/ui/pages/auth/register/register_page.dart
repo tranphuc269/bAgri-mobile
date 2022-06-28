@@ -29,11 +29,10 @@ class RegistryPage extends StatefulWidget {
 
 class _RegistryPageState extends State<RegistryPage> {
   final _formKey = GlobalKey<FormState>();
-
-  final _usernameController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
   final _phoneController = TextEditingController(text: '');
   final _fullNameController = TextEditingController(text: '');
+  final _emailController = TextEditingController(text: '');
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isErrorMessage = false;
   RegistryCubit? _cubit;
@@ -44,8 +43,8 @@ class _RegistryPageState extends State<RegistryPage> {
   void initState() {
     _cubit = BlocProvider.of<RegistryCubit>(context);
     super.initState();
-    _usernameController.addListener(() {
-      _cubit!.usernameChange(_usernameController.text);
+    _emailController.addListener(() {
+      _cubit!.emailChange(_emailController.text);
     });
 
     _passwordController.addListener(() {
@@ -64,7 +63,7 @@ class _RegistryPageState extends State<RegistryPage> {
   @override
   void dispose() {
     _cubit!.close();
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     _phoneController.dispose();
     _fullNameController.dispose();
@@ -107,8 +106,8 @@ class _RegistryPageState extends State<RegistryPage> {
               children: [
                 _buildLogo(),
                 SizedBox(height: 20.15),
-                _buildTextLabel(S.of(context).signIn_Username),
-                _buildUserNameInput(),
+                _buildTextLabel(S.of(context).enter_phonenumber),
+                _buildPhoneInput(),
                 SizedBox(height: 3),
                 _buildTextLabel(S.of(context).signIn_password),
                 _buildPasswordInput(),
@@ -116,8 +115,8 @@ class _RegistryPageState extends State<RegistryPage> {
                 _buildTextLabel('Họ và tên'),
                 _buildFullNameInput(),
                 SizedBox(height: 3),
-                _buildTextLabel('Số điện thoại'),
-                _buildPhoneInput(),
+                _buildTextLabel(S.of(context).enter_email),
+                _buildEmailInput(),
                 SizedBox(height: 3),
                 // _buildTextLabel('Vai trò'),
                 // // _buildRoleOption(),
@@ -163,14 +162,10 @@ class _RegistryPageState extends State<RegistryPage> {
                 ? null
                 : () {
                     if (_formKey.currentState!.validate()) {
-                      _cubit!.registry(
-                          _usernameController.text,
-                          _passwordController.text,
-                          _fullNameController.text,
-                          _phoneController.text);
+                      _cubit!.registry(state.name.toString(), state.phone.toString(), state.password.toString(), state.email.toString());
                     }
                   },
-            isLoading: isLoading,
+           isLoading: isLoading,
             color: AppColors.main,
           ),
         );
@@ -193,25 +188,6 @@ class _RegistryPageState extends State<RegistryPage> {
     );
   }
 
-  Widget _buildUserNameInput() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child: AppTextField(
-        autoValidateMode: AutovalidateMode.onUserInteraction,
-        hintText: 'Nhập vào tên người dùng',
-        controller: _usernameController,
-        validator: (value) {
-          if (Validator.validateNullOrEmpty(value!))
-            return "Chưa nhập tên người dùng";
-          else
-            return null;
-        },
-      ),
-    );
-  }
 
   Widget _buildFullNameInput() {
     return Container(
@@ -226,6 +202,25 @@ class _RegistryPageState extends State<RegistryPage> {
         validator: (value) {
           if (Validator.validateNullOrEmpty(value!))
             return "Chưa nhập tên đẩy đủ";
+          else
+            return null;
+        },
+      ),
+    );
+  }
+  Widget _buildEmailInput() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      child: AppTextField(
+        autoValidateMode: AutovalidateMode.onUserInteraction,
+        hintText: 'Nhập vào địa chỉ email',
+        controller: _emailController,
+        validator: (value) {
+          if (Validator.validateNullOrEmpty(value!))
+            return "Chưa nhập email";
           else
             return null;
         },

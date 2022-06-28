@@ -18,11 +18,11 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   }
 
   void changePassword(
-      String oldPass, String newPass, String confirmedPass) async {
+      String oldPass, String newPass) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
       final result =
-          await repository!.changePassword(oldPass, newPass, confirmedPass);
+          await repository!.changePassword(oldPass, newPass);
       if (result != null) {
         emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
       } else {

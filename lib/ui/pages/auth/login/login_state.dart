@@ -10,13 +10,13 @@ enum LoginStatusBagri {
 
 class LoginState extends Equatable {
   final LoginStatusBagri LoginStatus;
-  final String username;
+  final String phonenumber;
   final String password;
   final RoleEntity? role;
 
   LoginState(
       {this.LoginStatus = LoginStatusBagri.INITIAL,
-      this.username = "",
+      this.phonenumber = "",
       this.password = "",
       this.role});
 
@@ -29,11 +29,11 @@ class LoginState extends Equatable {
   }
 
   bool get isValidEmail {
-    return Validator.validateEmail(username);
+    return Validator.validateEmail(phonenumber);
   }
 
   bool get isValidPhone {
-    return Validator.validatePhone(username);
+    return Validator.validatePhone(phonenumber);
   }
 
   LoginState copyWith({
@@ -44,7 +44,7 @@ class LoginState extends Equatable {
   }) {
     return new LoginState(
       LoginStatus: LoginStatus ?? this.LoginStatus,
-      username: username ?? this.username,
+      phonenumber: username ?? this.phonenumber,
       password: password ?? this.password,
       role: role ?? this.role,
     );
@@ -53,7 +53,7 @@ class LoginState extends Equatable {
   @override
   List<Object?> get props => [
         this.LoginStatus,
-        this.username,
+        this.phonenumber,
         this.password,
         this.role,
       ];
