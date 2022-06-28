@@ -15,7 +15,7 @@ class SeasonAddingState extends Equatable {
 
   bool get buttonEnabled {
     if (seasonName == null ||
-        startTime == null ||
+        // startTime == null ||
         // endTime == null ||
         gardenEntity == null ||
         processEntity == null ||

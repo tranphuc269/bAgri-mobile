@@ -28,7 +28,7 @@ class ProcessAddingPage extends StatefulWidget {
 
 class _ProcessAddingPageState extends State<ProcessAddingPage> {
   final _formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController(text: "");
+  final nameController = TextEditingController();
 
   List<PhaseProcess> listPhase = [];
 
@@ -84,6 +84,9 @@ class _ProcessAddingPageState extends State<ProcessAddingPage> {
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                         hintText: 'Nhập vào tên quy trình',
                         controller: nameController,
+                        onChanged: (value){
+                          _cubit.changeName(value);
+                        },
                         validator: (value) {
                           if (Validator.validateNullOrEmpty(value!))
                             return "Chưa nhập tên quy trình";

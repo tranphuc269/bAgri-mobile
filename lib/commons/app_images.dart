@@ -66,4 +66,5 @@ class AppImages {
 
   /// ic garden manager
   static final icWorks = 'assets/images/ic_work.png';
+  static final icTemplateTask = 'assets/images/IC_agricultural.png';
 }

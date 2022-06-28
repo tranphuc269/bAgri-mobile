@@ -81,55 +81,11 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        // Text(
-                        //   'Tên quy trình',
-                        //   style: AppTextStyle.greyS14,
-                        // ),
-                        // SizedBox(height: 10),
-                        // BlocConsumer<ProcessSeasonCubit, ProcessSeasonState>(
-                        //   listener: (context, state) {
-                        //     if (state.loadDetailStatus == LoadStatus.SUCCESS) {
-                        //       nameController = TextEditingController(
-                        //           text: _cubit!.state.name);
-                        //     }
-                        //     // TODO: implement listener
-                        //   },
-                        //   builder: (context, state) {
-                        //     return AppTextField(
-                        //       autoValidateMode:
-                        //           AutovalidateMode.onUserInteraction,
-                        //       hintText: 'Nhập vào tên quy trình',
-                        //       controller: nameController,
-                        //       validator: (value) {
-                        //         if (Validator.validateNullOrEmpty(value!))
-                        //           return "Chưa nhập tên quy trình";
-                        //         else
-                        //           return null;
-                        //       },
-                        //     );
-                        //   },
-                        // ),
-                        // SizedBox(height: 20),
                         Text(
                           'Cây trồng áp dụng',
                           style: AppTextStyle.greyS14,
                         ),
                         SizedBox(height: 10),
-                        // BlocConsumer<ProcessSeasonCubit, ProcessSeasonState>(
-                        //   listener: (context, state) {
-                        //     // if (state.loadDetailStatus == LoadStatus.SUCCESS) {
-                        //     //   treeController = TreePickerController(
-                        //     //       treeList: _cubit!.state.trees);
-                        //     // }
-                        //     // TODO: implement listener
-                        //   },
-                        //   builder: (context, state) => AppPageTreePicker(
-                        //     controller: treeController,
-                        //     onChanged: (value) {
-                        //       // _cubit?.changeTree(value);
-                        //     },
-                        //   ),
-                        // ),
                         BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
                             builder: (context, state) {
                           return AppTextField(
@@ -195,6 +151,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                                           (index) => PhaseProcess(
                                                 index: index,
                                                 cubitProcess: _cubit!,
+                                                startDate: state.stages![index].start,
                                                 phase:
                                                     state.stages![index].name ??
                                                         '${index + 1}',
@@ -293,6 +250,7 @@ class PhaseProcess extends StatefulWidget {
   int? index;
   String? phase;
   String? startDate;
+  String? endDate;
   VoidCallback? onRemove;
   ProcessSeasonCubit cubitProcess;
 
@@ -302,6 +260,7 @@ class PhaseProcess extends StatefulWidget {
       this.phase,
       this.startDate,
       this.onRemove,
+        this.endDate,
       required this.cubitProcess})
       : super(key: key);
 
@@ -337,48 +296,60 @@ class _PhaseProcessState extends State<PhaseProcess> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 40,
-                    width: double.infinity,
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: AppColors.colors[widget.index!],
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Giai đoạn ${widget.phase}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: (){
+                      if(widget.endDate == null){
+                        showModalBottomSheet(context: context, builder: (context){
+                          return Container();
+                        });
+                      }
+                    },
+                    child: Container(
+                      height: 40,
+                      width: double.infinity,
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: AppColors.colors[widget.index!],
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Giai đoạn ${widget.phase}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Thời gian: ',
-                          style: TextStyle(
-                            color: Color(0xFFBBB5D4),
-                            fontSize: 14,
+                          SizedBox(
+                            width: 10,
                           ),
-                        ),
-                        BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
-                            buildWhen: (prev, current) =>
-                                prev.actionWithStepStatus !=
-                                current.actionWithStepStatus,
-                            builder: (context, state) {
-                              return Text(
-                                widget.phase!,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
-                              );
-                            }),
-                      ],
+                          Text(
+                            'Thời gian: ',
+                            style: TextStyle(
+                              color: Color(0xFFBBB5D4),
+                              fontSize: 14,
+                            ),
+                          ),
+                          BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
+                              buildWhen: (prev, current) =>
+                                  prev.actionWithStepStatus !=
+                                  current.actionWithStepStatus,
+                              builder: (context, state) {
+                                if(widget.startDate != null){
+                                  return Text(
+                                    widget.startDate!.substring(0,10),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  );
+                                }
+                                return Text("");
+                              }),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -637,10 +608,3 @@ class _StepWidgetState extends State<StepWidget> {
   }
 }
 
-class ProcessSeasonArgument {
-  String? process_id;
-
-  ProcessSeasonArgument({
-    this.process_id,
-  });
-}

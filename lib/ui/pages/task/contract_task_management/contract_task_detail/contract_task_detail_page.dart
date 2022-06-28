@@ -70,6 +70,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
   }
 
   Widget _buildInput() {
+
     return BlocBuilder<ContractTaskDetailCubit, ContractTaskDetailState>(
         bloc: _cubit,
         builder: (context, state) {
@@ -193,6 +194,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                         ],
                       ),
                     ),
+
                   ),
                 ));
           }});
