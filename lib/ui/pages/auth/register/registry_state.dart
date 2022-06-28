@@ -2,45 +2,44 @@ part of 'registry_cubit.dart';
 
 class RegistryState extends Equatable {
   LoadStatus? RegisterStatus;
-  String? username;
+  String? email;
   String? password;
   String? phone;
-  String? fullName;
+  String? name;
   String? messageError;
   @override
   List<Object?> get props => [
         this.RegisterStatus,
-        this.username,
+        this.email,
         this.password,
         this.phone,
-        this.fullName,
+        this.name,
         this.messageError
       ];
 
   RegistryState({
     this.RegisterStatus,
-    this.username,
+    this.email,
     this.password,
     this.phone,
-    this.fullName,
+    this.name,
     this.messageError,
   });
 
   RegistryState copyWith({
     LoadStatus? RegisterStatus,
-    String? username,
+    String? email,
     String? password,
     String? phone,
-    String? fullName,
+    String? name,
     String? messageError,
   }) {
     return RegistryState(
       RegisterStatus: RegisterStatus ?? this.RegisterStatus,
-      username: username ?? this.username,
+      email: email ?? this.email,
       password: password ?? this.password,
       phone: phone ?? this.phone,
-
-      fullName: fullName ?? this.fullName,
+      name: name ?? this.name,
       messageError: messageError ?? this.messageError,
     );
   }

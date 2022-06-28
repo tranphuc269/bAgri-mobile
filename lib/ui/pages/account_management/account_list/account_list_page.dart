@@ -94,8 +94,8 @@ class _AccountListState extends State<AccountListPage> {
                             UserEntity user = state.listUserData![index];
                             return _buildItem(
                               name: user.name ?? "",
-                              role: user.role == "SUPER_ADMIN" ? "Super Admin" : (user.role == "ADMIN" ? "Kỹ thuật viên" : (user.role == "GARDEN_MANAGER" ? "Quản lý vườn" : (user.role == "ACCOUNTANT" ? "Kế toán" : "NULL"))),
-                              phoneNumber: user.phoneNumber ?? "",
+                              role: user.role == "SUPER_ADMIN" ? "Super Admin" : (user.role == "ADMIN" ? "Kỹ thuật viên" : (user.role == "GARDEN_MANAGER" ? "Quản lý vườn" : (user.role == "ACCOUNTANT" ? "Kế toán" : "NO_ROLE"))),
+                              phoneNumber: user.phone ?? "",
                               onPressed: () async {
                                 showDialog(
                                     context: context,
@@ -257,7 +257,7 @@ class _AccountListState extends State<AccountListPage> {
               ),
               SizedBox(height: 10),
               Text(
-                "Số điện thoại: ${user.phoneNumber}",
+                "Số điện thoại: ${user.phone}",
                 style: AppTextStyle.greyS14,
                 overflow: TextOverflow.ellipsis,
               ),

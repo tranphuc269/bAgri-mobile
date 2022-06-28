@@ -25,35 +25,36 @@ part 'user_entity.g.dart';
 
 @JsonSerializable()
 class UserEntity {
+  @JsonKey(name: "_id")
   String? id;
-  String? username;
   String? name;
   String? role;
-  String? phoneNumber;
+  String? phone;
+  String? email;
 
 
   UserEntity({
     this.id,
-    this.username,
     this.name,
     this.role,
-    this.phoneNumber,
+    this.phone,
+    this.email
 
   });
 
   UserEntity copyWith({
     String? id,
-    String? username,
     String? name,
     String? role,
-    String? phoneNumber,
+    String? phone,
+    String? email
   }) {
     return UserEntity(
       id: id ?? this.id,
-      username: username ?? this.username,
       name: name ?? this.name,
       role: role ?? this.role,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
+      phone: phone ?? this.phone,
+      email: email ?? this.email
     );
   }
 
@@ -63,18 +64,18 @@ class UserEntity {
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
     id: json['_id'] as String?,
-    username: json['username'] as String?,
     name: json['name'] as String?,
     role: json['role'] as String?,
-    phoneNumber: json['phoneNumber'] as String?,
+    phone: json['phone'] as String?,
+    email: json['email'] as String?,
   );
 
   Map<String, dynamic> toJson() =>
       <String, dynamic>{
         '_id': this.id,
-        'username': this.username,
         'name': this.name,
         'role': this.role,
-        'phoneNumber': this.phoneNumber,
+        'phoneNumber': this.phone,
+        'email': this.email
       };
 }

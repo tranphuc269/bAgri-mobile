@@ -22,13 +22,17 @@ Handler addContractTaskHandler = new Handler(
 });
 Handler contractTaskDetailByAdminHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  return BlocProvider(
-      create: (context) {
-        final contractTaskRepository =
-        RepositoryProvider.of<ContractTaskRepository>(context);
-        return ContractTaskDetailCubit(contractTaskRepository: contractTaskRepository);
-      },
-    child: ContractTaskDetailPage(),
+      ContractTaskDetailArgument args =
+      context!.settings!.arguments as ContractTaskDetailArgument;
+      return BlocProvider(
+        create: (context) {
+          final contractTaskRepository =
+          RepositoryProvider.of<ContractTaskRepository>(context);
+          return ContractTaskDetailCubit(contractTaskRepository: contractTaskRepository);
+        },
+        child: ContractTaskDetailPage(
+          contractTaskId: args.contractTask_id,
+        ),
       );
 
-});
+    });

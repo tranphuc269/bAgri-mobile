@@ -10,6 +10,8 @@ import 'package:flutter_base/ui/pages/auth/forgot_password/forgot_password_cubit
 import 'package:flutter_base/ui/pages/auth/forgot_password/forgot_password_page.dart';
 import 'package:flutter_base/ui/pages/auth/login/login_cubit.dart';
 import 'package:flutter_base/ui/pages/auth/login/login_page.dart';
+import 'package:flutter_base/ui/pages/auth/otp_authentication/otp_authentication_cubit.dart';
+import 'package:flutter_base/ui/pages/auth/otp_authentication/otp_authentication_page.dart';
 import 'package:flutter_base/ui/pages/auth/register/register_page.dart';
 import 'package:flutter_base/ui/pages/auth/register/registry_cubit.dart';
 import 'package:flutter_base/ui/pages/splash/bagri_splash_page.dart';
@@ -73,5 +75,17 @@ Handler listAccountHandler = new Handler(  handlerFunc: (BuildContext? context, 
       return AccountListCubit(authRepository: repository);
     },
     child: AccountListPage(),
+  );
+});
+
+Handler OtpAuthHandler = new Handler(  handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+  String args =
+  context!.settings!.arguments as String;
+  return BlocProvider(
+    create: (context) {
+      final repository = RepositoryProvider.of<AuthRepository>(context);
+      return OtpAuthenticationCubit(authRepository: repository);
+    },
+    child: OtpAuthenticationPage(email: args),
   );
 });

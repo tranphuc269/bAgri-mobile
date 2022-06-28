@@ -7,7 +7,15 @@ class ContractTaskListState extends Equatable{
   LoadStatus? deleteContractTaskStatus;
   LoadStatus? modifyContractTaskStatus;
   List<ContractTask>? listContractTasks;
-  ContractTaskListState({this.getListContractTaskStatus, this.createContractTaskStatus, this.deleteContractTaskStatus, this.modifyContractTaskStatus, this.listContractTasks});
+
+  ContractTaskListState({
+    this.getListContractTaskStatus,
+    this.createContractTaskStatus,
+    this.deleteContractTaskStatus,
+    this.modifyContractTaskStatus,
+    this.listContractTasks,
+
+  });
 
   ContractTaskListState copyWith({
     LoadStatus? getListContractTaskStatus,
@@ -22,8 +30,6 @@ class ContractTaskListState extends Equatable{
         deleteContractTaskStatus: deleteContractTaskStatus ?? this.deleteContractTaskStatus,
         modifyContractTaskStatus: modifyContractTaskStatus ?? this.modifyContractTaskStatus,
         listContractTasks: listContractTasks ?? this.listContractTasks
-
-
     );
   }
 

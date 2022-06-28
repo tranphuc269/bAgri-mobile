@@ -387,7 +387,7 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
                     if (_formKey.currentState!.validate()) {
                       _cubit!.changeName(nameController.text);
                       _cubit!.changeArea(areaController.text);
-                      _cubit!.changeManagerUsername(_managerValue!.username.toString());
+                      //_cubit!.changeManagerUsername(_managerValue!.username.toString());
                       _cubit!.changeArea(areaController.text);
                       _cubit!.changeTreePlaceQuantity(treePlaceQuantityControler.text);
                       _cubit!.changeAreaUnit(unit);
@@ -450,7 +450,7 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
                   onPressed: () {
                     _cubit!.changeName(nameController.text);
                     _cubit!.changeArea(areaController.text);
-                    _cubit!.changeManagerUsername(_managerValue!.username.toString());
+                   // _cubit!.changeManagerUsername(_managerValue!.username.toString());
                     _cubit!.changeArea(areaController.text);
                     _cubit!.changeTreePlaceQuantity(treePlaceQuantityControler.text);
                     _cubit!.changeAreaUnit(unit);

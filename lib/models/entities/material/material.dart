@@ -39,3 +39,31 @@ class MaterialEntity{
       _$MaterialEntityFromJson(json);
   Map<String, dynamic> toJson() => _$MaterialEntityToJson(this);
 }
+
+@JsonSerializable()
+class MaterialUsedByTask{
+  String? name;
+  String? unit;
+  int? quantity;
+  MaterialUsedByTask({
+    this.name,
+    this.unit,
+    this.quantity
+  });
+  MaterialUsedByTask copyWith({
+    String? unit,
+    String? name,
+    int? quantity
+  }) {
+    return MaterialUsedByTask(
+        unit: unit ?? this.unit,
+        name: name ?? this.name,
+        quantity: quantity ?? this.quantity
+    );
+  }
+
+  factory MaterialUsedByTask.fromJson(Map<String, dynamic> json) =>
+      _$MaterialUsedByTaskFromJson(json);
+  Map<String, dynamic> toJson() => _$MaterialUsedByTaskToJson(this);
+
+}

@@ -29,6 +29,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _newPasswordController = TextEditingController(text: "");
   final _confirmNewPasswordController = TextEditingController(text: "");
 
+  bool isVisibleOldPassword = false;
+  bool isVisibleNewPassword = false;
+  bool isVisibleConfirmPassword = false;
+
   @override
   void initState() {
     _cubit = BlocProvider.of<ChangePasswordCubit>(context);
@@ -70,12 +74,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       style: AppTextStyle.greyS14,
                     ),
                     SizedBox(height: 10),
-                    AppTextField(
+                    AppPasswordField(
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       hintText: 'Nhập vào mật khẩu',
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
+                      obscureText: !isVisibleOldPassword,
                       controller: _oldPasswordController,
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setState(() {
+                            isVisibleOldPassword = !isVisibleOldPassword;
+                          });
+                        },
+                        child: Icon(
+                          isVisibleOldPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: isVisibleOldPassword ? AppColors.main : AppColors.grayIntro,
+                        ),),
                       validator: (value) {
                         if (Validator.validateNullOrEmpty(value!))
                           return "Chưa nhập mật khẩu";
@@ -91,22 +107,29 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       style: AppTextStyle.greyS14,
                     ),
                     SizedBox(height: 10),
-                    AppTextField(
+                    AppPasswordField(
                       autoValidateMode: AutovalidateMode.onUserInteraction,
                       hintText: 'Nhập vào mật khẩu mới',
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
+                      obscureText: !isVisibleNewPassword,
                       controller: _newPasswordController,
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setState(() {
+                            isVisibleNewPassword= !isVisibleNewPassword;
+                          });
+                        },
+                        child: Icon(
+                          isVisibleNewPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: isVisibleNewPassword ? AppColors.main : AppColors.grayIntro,
+                        ),),
                       validator: (value) {
                         if (Validator.validateNullOrEmpty(value!))
-                          return "Chưa nhập mật khẩu mới";
-                        else {
-                          if (value == _oldPasswordController.text) {
-                            return "Không được trùng mật khẩu cũ";
-                          } else {
-                            return null;
-                          }
-                        }
+                          return "Chưa nhập mật khẩu";
+                        else
+                          return null;
                       },
                     ),
                     SizedBox(
@@ -117,22 +140,31 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       style: AppTextStyle.greyS14,
                     ),
                     SizedBox(height: 10),
-                    AppTextField(
+                    AppPasswordField(
                       autoValidateMode: AutovalidateMode.onUserInteraction,
-                      hintText: 'Nhập vào mật khẩu mới',
+                      hintText: 'Nhập lại mật khẩu mới',
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
+                      obscureText: !isVisibleConfirmPassword,
                       controller: _confirmNewPasswordController,
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setState(() {
+                            isVisibleConfirmPassword = !isVisibleConfirmPassword;
+                          });
+                        },
+                        child: Icon(
+                          isVisibleConfirmPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: isVisibleConfirmPassword ? AppColors.main : AppColors.grayIntro,
+                        ),),
                       validator: (value) {
                         if (Validator.validateNullOrEmpty(value!))
-                          return "Chưa nhập mật khẩu mới";
-                        else {
-                          if (value != _newPasswordController.text) {
-                            return "Mật khẩu mới không trùng khớp";
-                          } else {
-                            return null;
-                          }
-                        }
+                          return "Chưa nhập mật khẩu";
+                        if(_confirmNewPasswordController.text != _newPasswordController.text)
+                          return "Mật khẩu không trùng khớp";
+                        else
+                          return null;
                       },
                     ),
                     SizedBox(
@@ -177,8 +209,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             if (_formKey.currentState!.validate()) {
               _cubit!.changePassword(
                   _oldPasswordController.text,
-                  _newPasswordController.text,
-                  _confirmNewPasswordController.text);
+                  _newPasswordController.text);
             }
           },
         );

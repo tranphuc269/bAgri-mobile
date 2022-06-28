@@ -14,18 +14,17 @@ class RegistryCubit extends Cubit<RegistryState> {
 
   RegistryCubit({this.repository})
       : super(
-            RegistryState(phone: '', username: '', password: '', fullName: ''));
+            RegistryState(phone: '', email: '', password: '', name: ''));
 
   @override
   Future<void> close() {
     return super.close();
   }
 
-  void registry(String username, String password, String fullname, String phone) async {
+  void registry(String name, String phone, String password, String email) async {
     emit(state.copyWith(RegisterStatus: LoadStatus.LOADING));
     try {
-      final response = await repository!
-          .authRegistty(username, password, fullname, phone);
+      final response = await repository!.authRegistty(name, phone, password, email);
       print(response);
       if (response != null) {
         emit(state.copyWith(RegisterStatus: LoadStatus.SUCCESS));
@@ -49,8 +48,8 @@ class RegistryCubit extends Cubit<RegistryState> {
     }
   }
 
-  void usernameChange(String? username) {
-    emit(state.copyWith(username: username));
+  void emailChange(String? email) {
+    emit(state.copyWith(email: email));
   }
 
   void passChange(String? pass) {
@@ -62,7 +61,7 @@ class RegistryCubit extends Cubit<RegistryState> {
   }
 
   void changeFullName(String? fullName) {
-    emit(state.copyWith(fullName: fullName));
+    emit(state.copyWith(name: fullName));
   }
 
 }

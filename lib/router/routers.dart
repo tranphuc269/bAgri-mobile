@@ -24,6 +24,7 @@ class Routes {
   static String changePassword = "/changePassword";
   static String forgotPassword = "/forgotPassword";
   static String registry = "/registry";
+  static String OtpAuth = "/OtpAuth";
 
   static String home = "/home";
 
@@ -124,6 +125,11 @@ class Routes {
     router.define(
       forgotPassword,
       handler: forgotPasswordHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+        OtpAuth,
+        handler: OtpAuthHandler,
       transitionType: TransitionType.fadeIn,
     );
     router.define(

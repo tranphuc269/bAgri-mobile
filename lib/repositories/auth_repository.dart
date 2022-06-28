@@ -12,18 +12,16 @@ abstract class AuthRepository {
 
   Future<TokenEntity> signIn(String username, String password);
 
-  Future<dynamic> authRegistty(String username, String password,
-      String fullname, String phone);
+  Future<dynamic> authRegistty(String name, String phone, String password, String email);
 
   Future<dynamic> changePassword(
-      String oldPass, String newPass, String confirmedPass);
+      String oldPass, String newPass);
 
-  Future<dynamic> forgotPassword(String userName, String phone);
-
+  Future<dynamic> forgotPassword({String? email});
   Future<dynamic> getListAcounts();
-
   Future <dynamic> setRole({String? accessToken, String? id, String? role});
   Future<List<StepEntityResponseByDay>> getStepsByDay({String? day});
+  Future<dynamic> resetPasswordFinish({String? email, String? otp, String? newPassword});
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -40,44 +38,39 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<TokenEntity> signIn(String username, String password) async {
+  Future<TokenEntity> signIn(String phonenumber, String password) async {
     final param = {
-      'phone': username,
+      'phone': phonenumber,
       'password': password,
     };
     return _apiClientBagri!.authLogin(param);
   }
 
   @override
-  Future<dynamic> authRegistty(String username, String password,
-      String fullname, String phone) async {
+  Future<dynamic> authRegistty(String name,String phone, String password,
+   String email ) async {
     final param = {
-      'username': username,
-      'password': password,
-      'name': fullname,
+      'name': name,
       'phone': phone,
+      'password': password,
+      'email': email,
     };
     return _apiClientBagri!.authRegistty(param);
   }
 
   @override
   Future<dynamic> changePassword(
-      String oldPass, String newPass, String confirmedPass) async {
+      String oldPass, String newPass) async {
     final param = {
-      'old_password': oldPass,
-      'new_password': newPass,
-      'retype_new_password': confirmedPass,
+      "oldPassword": oldPass,
+      "newPassword": newPass,
     };
-    return _apiClientBagri!.changePassword(param);
+    return _apiClientBagri!.changePassword("*/*","Bearer ${accessToken}","application/json",param);
   }
 
   @override
-  Future<dynamic> forgotPassword(String userName, String phone) async {
-    final param = {
-      'username': userName,
-      'phone': phone,
-    };
-    return _apiClientBagri!.forgotPassword(param);
+  Future<dynamic> forgotPassword({String? email}) async {
+    return _apiClientBagri!.forgotPassword("*/*", email);
   }
 
   @override
@@ -96,6 +89,14 @@ class AuthRepositoryImpl extends AuthRepository {
     return await _apiClientBagri!.getStepsByDay("application/json","Bearer ${accessToken}",day);
   }
 
-
+  @override
+  Future <dynamic> resetPasswordFinish({String? email, String? otp, String? newPassword}) async {
+    final body = {
+      "email" : email,
+      "otp": otp,
+      "newPassword": newPassword
+    };
+    return await _apiClientBagri!.AuthOtp("*/*", "application/json", body);
+  }
 
 }

@@ -43,11 +43,11 @@ class LoginCubit extends Cubit<LoginState> {
   void clearInformation() {
     emit(state.copyWith(username: "", password: ""));
   }
-  void  signIn(String username, String password) async {
+  void  signIn(String phonenumer, String password) async {
     //validate
-    if (username.isEmpty) {
+    if (phonenumer.isEmpty) {
       showMessageController.sink.add(SnackBarMessage(
-        message: 'Chưa nhập tên đăng nhập',
+        message: 'Chưa nhập số điện thoại ',
         type: SnackBarType.ERROR,
       ));
       return;
@@ -61,7 +61,7 @@ class LoginCubit extends Cubit<LoginState> {
     }
     //emit(state.copyWith(LoginStatus: LoginStatusBagri.LOADING));
     try {
-      final result = await repository!.signIn(username, password);
+      final result = await repository!.signIn(phonenumer, password);
       SharedPreferencesHelper.setToken(result.access_token!);
       GlobalData.instance.token = result.access_token;
       emit(state.copyWith(LoginStatus: LoginStatusBagri.SUCCESS));
