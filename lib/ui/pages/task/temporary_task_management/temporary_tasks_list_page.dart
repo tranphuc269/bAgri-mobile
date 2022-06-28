@@ -58,22 +58,24 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(child: _buildBody()),
-        floatingActionButton:(GlobalData.instance.role != 'ACCOUNTANT') ? FloatingActionButton(
-          heroTag: 'btnadd',
-          backgroundColor: AppColors.main,
-          onPressed: () async{
-            bool isAdd = await Application.router
-                ?.navigateTo(context, Routes.addTemporaryTask);
-            if (isAdd) {
-              _onRefreshData();
-              showSnackBar('Thêm mới thành công!');
-            }
-          },
-          child: Icon(
-            Icons.add,
-            size: 40,
-          ),
-        ): Container());
+        floatingActionButton: (GlobalData.instance.role != 'ACCOUNTANT')
+            ? FloatingActionButton(
+                heroTag: 'btnadd',
+                backgroundColor: AppColors.main,
+                onPressed: () async {
+                  bool isAdd = await Application.router
+                      ?.navigateTo(context, Routes.addTemporaryTask);
+                  if (isAdd) {
+                    _onRefreshData();
+                    showSnackBar('Thêm mới thành công!');
+                  }
+                },
+                child: Icon(
+                  Icons.add,
+                  size: 40,
+                ),
+              )
+            : Container());
   }
 
   void showSnackBar(String message) {
@@ -119,16 +121,21 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                       var temporaryTask = state.temporaryTaskList![index];
                       return _buildItem(
                         temporaryTask: temporaryTask,
-                        onPressed: (){
-
+                        onPressed: () async{
+                          Application.router!.navigateTo(
+                            appNavigatorKey.currentContext!,
+                            Routes.temporaryTaskDetail,
+                            routeSettings: RouteSettings(
+                              arguments: temporaryTask.temporaryTaskId,
+                            ),
+                          );
                         },
                         onUpdate: () async {
                           bool isUpdate = await Application.router!.navigateTo(
                             appNavigatorKey.currentContext!,
                             Routes.updateTemporaryTask,
-                            routeSettings: RouteSettings(
-                                arguments:temporaryTask
-                            ),
+                            routeSettings:
+                                RouteSettings(arguments: temporaryTask.temporaryTaskId,),
                           );
                           if (isUpdate) {
                             _onRefreshData();
@@ -139,7 +146,9 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                               context: context,
                               builder: (context) => AppDeleteDialog(
                                     onConfirm: () async {
-                                      await _cubit?.deleteTemporaryTask(state.temporaryTaskList![index].temporaryTaskId!);
+                                      await _cubit?.deleteTemporaryTask(state
+                                          .temporaryTaskList![index]
+                                          .temporaryTaskId!);
                                       // await _cubit!.deleteTemporary(state
                                       //     .listMaterials![index].materialId!);
                                       Navigator.pop(context, true);
@@ -249,7 +258,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                 const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
             child: Row(
               children: [
-                Image.asset(avatarUrl ?? AppImages.icGarden),
+                Image.asset(avatarUrl ?? AppImages.icTemplateTask),
                 SizedBox(width: 18),
                 Expanded(
                     child: Column(
@@ -257,7 +266,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      temporaryTask.title!,
+                      temporaryTask.title ?? "",
                       style: TextStyle(
                           color: Color(0xFF5C5C5C),
                           fontWeight: FontWeight.bold,
@@ -267,7 +276,10 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                     SizedBox(
                       height: 5,
                     ),
-                    Text("Vườn: ${temporaryTask.garden}", style: AppTextStyle.blackS14,)
+                    Text(
+                      "Vườn: ${temporaryTask.garden}",
+                      style: AppTextStyle.blackS14,
+                    )
                   ],
                 )),
                 Icon(

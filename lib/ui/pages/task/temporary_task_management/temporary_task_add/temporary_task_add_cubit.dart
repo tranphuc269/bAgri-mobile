@@ -11,8 +11,57 @@ class TemporaryTaskAddCubit extends Cubit<TemporaryTaskAddState>{
 
   TemporaryTaskAddCubit({this.temporaryTaskRepository}): super(TemporaryTaskAddState());
 
-  createTemporaryTask(){
+  createTemporaryTask() async{
+    emit(state.copyWith(loadStatus: LoadStatus.LOADING));
+    try{
+      final param = TemporaryTask(
+        title: state.name,
+        garden: state.gardenEntity?.name,
+        dailyTasks: state.dailyTasks,
+      );
+      final response = await temporaryTaskRepository!.createTemporaryTask(param);
+      if (response != null) {
+        emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
+      } else {
+        emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+      }
+    } catch (e) {
+      emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+      // showMessageController.sink.add(SnackBarMessage(
+      //   message: S.current.error_occurred,
+      //   type: SnackBarType.ERROR,
+      // ));
+      return;
+    }
+  }
 
+  changeGarden(GardenEntity gardenEntity){
+    emit(state.copyWith(gardenEntity: gardenEntity));
+  }
+
+  changeName(String name){
+    emit(state.copyWith(name:name));
+  }
+  changeStartTime(String start){
+    emit(state.copyWith(startTime: start));
+  }
+  addList(String name,  String fee, String workerQuantity, String startTime){
+    emit(state.copyWith(loadStatus: LoadStatus.LOADING_MORE));
+    List<DailyTask> dailyTasks = state.dailyTasks ?? [];
+    dailyTasks.add(DailyTask(date:startTime, workerQuantity: (int.tryParse(workerQuantity) ?? 0), title: name, fee: (int.tryParse(fee) ?? 0), ));
+    // stages.add(value);
+    List<DailyTask> newList = dailyTasks;
+    emit(state.copyWith(
+        dailyTasks: newList, loadStatus: LoadStatus.FORMAT_EXTENSION_FILE));
+  }
+
+  removeList(int index){
+    emit(state.copyWith(loadStatus: LoadStatus.LOADING_MORE));
+    List<DailyTask> dailyTasks = state.dailyTasks ?? [];
+    dailyTasks.removeAt(index);
+    List<DailyTask> newList = dailyTasks;
+    emit(state.copyWith(
+        dailyTasks: newList, loadStatus: LoadStatus.FORMAT_EXTENSION_FILE));
   }
 
 }

@@ -4,6 +4,8 @@ import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_add/temporary_task_add_cubit.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_add/temporary_task_add_page.dart';
+import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_detail/temporary_task_detail_cubit.dart';
+import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_detail/temporary_task_detail_page.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_list_cubit.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_cubit.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_page.dart';
@@ -34,7 +36,7 @@ Handler temporaryTaskAddHandler = new Handler(
 });
 Handler updateTemporaryTaskHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  TemporaryTask args = context!.settings!.arguments as TemporaryTask;
+  String args = context!.settings!.arguments as String;
   return BlocProvider(
     create: (context) {
       TemporaryTaskRepository temporaryTaskRepository =
@@ -43,7 +45,20 @@ Handler updateTemporaryTaskHandler = new Handler(
           temporaryTaskRepository: temporaryTaskRepository);
     },
     child: TemporaryTaskUpdatePage(
-      temporaryTask: args,
+      temporaryTaskId: args,
     ),
   );
 });
+Handler temporaryTaskDetailHandler = new Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      String args = context!.settings!.arguments as String;
+      return BlocProvider(
+        create: (context) {
+          TemporaryTaskRepository temporaryTaskRepository =
+          RepositoryProvider.of<TemporaryTaskRepository>(context);
+          return TemporaryTaskDetailCubit(
+              temporaryTaskRepository: temporaryTaskRepository);
+        },
+        child: TemporaryTaskDetailPage(temporaryTaskId: args),
+      );
+    });

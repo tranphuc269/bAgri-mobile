@@ -499,7 +499,7 @@ class _SeasonListPageState extends State<SeasonListPage> {
                         SeasonEntity seasonEntity = state.seasonList![index];
                         return _buildItem(
                             seasonName: seasonEntity.name ?? "",
-                            treeName: seasonEntity.tree!.name ?? "",
+                            treeName: seasonEntity.tree?.name ?? "",
                             onPressed: () {
                               Application.router!.navigateTo(
                                 appNavigatorKey.currentContext!,
@@ -510,19 +510,13 @@ class _SeasonListPageState extends State<SeasonListPage> {
                               );
                             },
                             onUpdate: () async {
-                              bool isUpdate =
-                                  await Application.router!.navigateTo(
+                              Application.router!.navigateTo(
                                 appNavigatorKey.currentContext!,
-                                Routes.seasonUpdating,
+                                Routes.seasonDetail,
                                 routeSettings: RouteSettings(
-                                  arguments: SeasonUpdatingPage(
-                                    seasonId: seasonEntity.seasonId!,
-                                  ),
+                                  arguments: seasonEntity,
                                 ),
                               );
-                              if (isUpdate) {
-                                refreshData();
-                              }
                             },
                             onDelete: () async {
                               bool isDelete = await showDialog(

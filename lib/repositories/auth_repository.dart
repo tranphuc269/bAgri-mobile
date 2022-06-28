@@ -42,7 +42,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<TokenEntity> signIn(String username, String password) async {
     final param = {
-      'username': username,
+      'phone': username,
       'password': password,
     };
     return _apiClientBagri!.authLogin(param);

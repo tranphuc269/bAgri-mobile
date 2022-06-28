@@ -1,18 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_base/generated/l10n.dart';
-import 'package:flutter_base/models/entities/process/list_process.dart';
-import 'package:flutter_base/models/entities/process/process_detail.dart';
-import 'package:flutter_base/models/entities/process/stage_entity.dart';
-import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/process_season.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/season/stage_season.dart';
 import 'package:flutter_base/models/entities/season/step_season.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/models/params/process/create_process_params.dart';
-import 'package:flutter_base/models/response/object_response.dart';
-import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 import 'package:equatable/equatable.dart';
@@ -93,7 +85,6 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
   void updateProcess(String? processId) async {
     emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     try {
-
       List<StageSeason> listStages = [];
       if (state.stages != null) {
         for (int i = 0; i < state.stages!.length; i++) {

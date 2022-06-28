@@ -10,12 +10,10 @@ class TemporaryTaskListState extends Equatable {
 
   TemporaryTaskListState copyWith({
     List<TemporaryTask>? temporaryTaskList,
-    // final String? description,
     LoadStatus? loadStatus,
   }) {
     return TemporaryTaskListState(
       temporaryTaskList: temporaryTaskList ?? this.temporaryTaskList,
-      // description: description ?? this.description,
       loadStatus: loadStatus ?? this.loadStatus,
     );
   }

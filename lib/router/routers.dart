@@ -91,6 +91,7 @@ class Routes {
 
   static String updateTemporaryTask = '/updateTemporaryTask';
   static String addTemporaryTask = '/addTemporaryTask';
+  static String temporaryTaskDetail = '/temporaryTaskDetail';
 
   ///Storage
   static String manageStorage = '/manageStorage';
@@ -324,6 +325,7 @@ class Routes {
     router.define(updateTemporaryTask, handler: updateTemporaryTaskHandler);
 
     router.define(addTemporaryTask, handler: temporaryTaskAddHandler);
+    router.define(temporaryTaskDetail, handler: temporaryTaskDetailHandler);
     ///manage Storage
     router.define(manageStorage,
         handler: storageManagementHandler,
