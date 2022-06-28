@@ -47,7 +47,6 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
 
   Widget _buildInput() {
     return Expanded(
-
       child: Padding(
         padding: EdgeInsets.only(top: 20, left: 20, right: 20),
       child: Scrollbar(

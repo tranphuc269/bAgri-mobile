@@ -60,7 +60,6 @@ class SeasonRepositoryImpl extends SeasonRepository {
   @override
   Future createSeason(
       SeasonEntity param) async {
-    print("gúyhgbfjks");
     return await _apiClientBagri!.createSeason(param.toJson());
   }
 

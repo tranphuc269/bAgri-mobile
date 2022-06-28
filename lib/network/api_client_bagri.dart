@@ -204,8 +204,7 @@ abstract class ApiClient {
       @Body() Map<String, dynamic> body, @Path('phase_id') String phaseId);
 
   @PATCH("/phases/{phase_id}/end")
-  Future<dynamic> endPhase(
-    @Path('phase_id') String phaseId);
+  Future<dynamic> endPhase(@Path('phase_id') String phaseId);
 
   @DELETE("/phases/{phase_id}")
   Future<dynamic> deletePhase(@Path('phase_id') String phaseId);
@@ -224,7 +223,8 @@ abstract class ApiClient {
       @Path('phase_id') String phaseId, @Path('step_id') String stepId);
 
   @DELETE('steps/{phase_id}/{step_id}')
-  Future<dynamic> deleteStep(@Path('phase_id') String phaseId,@Path('step_id') String stepId);
+  Future<dynamic> deleteStep(
+      @Path('phase_id') String phaseId, @Path('step_id') String stepId);
 
   ///Task
   @GET("/tasks")
@@ -256,6 +256,7 @@ abstract class ApiClient {
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
       @Path("day") String? day);
+
   ///user
   @GET("/me")
   Future<ObjectResponse<UserEntity>> getProfile();
@@ -275,10 +276,10 @@ abstract class ApiClient {
       @Header("Authorization") String? auth,
       @Header('Content-Type') String content_type,
       @Body() Map<String, dynamic> body);
+
   @GET("/contract-tasks")
   Future<List<ContractTask>> getListContractTask(
-      @Header('accept') String accept,
-      @Header("Authorization") String? auth);
+      @Header('accept') String accept, @Header("Authorization") String? auth);
 
   @DELETE("/works/{work_id}")
   Future<dynamic> deleteContractWork(
@@ -302,6 +303,7 @@ abstract class ApiClient {
       @Header("Authorization") String? auth,
       @Header('Content-Type') String content_type,
       @Body() Map<String, dynamic> body);
+
   @DELETE("/contract-tasks/{contract_task_id}")
   Future<dynamic> deleteContractTask(
       @Header('accept') String accept,
@@ -327,6 +329,10 @@ abstract class ApiClient {
   Future<dynamic> updateTemporaryTask(@Body() Map<String, dynamic> body,
       @Path('temporary_task_id') String? temporaryTaskId);
 
+  @GET("/temporary-tasks/{temporary_task_id}")
+  Future<TemporaryTask> getTemporaryTaskById(
+      @Path('temporary_task_id') String? temporaryTaskId);
+
   @DELETE("//temporary-tasks/{temporary_task_id}")
   Future<dynamic> deleteTemporaryTask(@Path('temporary_task_id') String? id);
 
@@ -335,7 +341,8 @@ abstract class ApiClient {
   Future<List<MaterialEntity>> getListMaterials();
 
   @GET("/materials/{material_id}")
-  Future<MaterialEntity> getMaterialById(@Path("material_id") String? materialId);
+  Future<MaterialEntity> getMaterialById(
+      @Path("material_id") String? materialId);
 
   @POST("/materials")
   Future<dynamic> createMaterial(@Body() Map<String, dynamic> body);
@@ -346,8 +353,6 @@ abstract class ApiClient {
 
   @DELETE("/materials/{material_id}")
   Future<dynamic> deleteMaterial(@Path("material_id") String? materialId);
-
-
 }
 
 class AppApi {

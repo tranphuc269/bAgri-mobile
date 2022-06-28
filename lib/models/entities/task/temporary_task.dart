@@ -8,29 +8,32 @@ class TemporaryTask {
   @JsonKey(name: '_id')
   String? temporaryTaskId;
   String? garden;
-  String? from;
-  String? to;
+  String? description;
   String? title;
   List<DailyTask>? dailyTasks;
 
   TemporaryTask(
-      {this.garden, this.title, this.from, this.to, this.temporaryTaskId, this.dailyTasks});
+      {this.garden,
+      this.title,
+      this.description,
+      this.temporaryTaskId,
+      this.dailyTasks});
 
-  TemporaryTask copyWith({
-    String? temporaryTaskId,
-    String? garden,
-    String? title,
-    String? to,
-    String? from,
-    List<DailyTask>? dailyTasks
-  }) {
+  TemporaryTask copyWith(
+      {String? temporaryTaskId,
+      String? garden,
+      String? title,
+
+      String? description,
+      List<DailyTask>? dailyTasks}) {
     return TemporaryTask(
         temporaryTaskId: temporaryTaskId ?? this.temporaryTaskId,
         garden: garden ?? this.garden,
         title: title ?? this.title,
-        from: from ?? this.from,
+
+        description: description ?? this.description,
         dailyTasks: dailyTasks ?? this.dailyTasks,
-        to: to ?? this.to);
+      );
   }
 
   factory TemporaryTask.fromJson(Map<String, dynamic> json) =>
@@ -49,9 +52,13 @@ class DailyTask {
   int? workerQuantity;
   List<MaterialTask>? material;
 
-
   DailyTask(
-      {this.title, this.dailyTaskId, this.date, this.fee, this.workerQuantity, this.material});
+      {this.title,
+      this.dailyTaskId,
+      this.date,
+      this.fee,
+      this.workerQuantity,
+      this.material});
 
   DailyTask copyWith(
       {String? dailyTaskId,
@@ -61,8 +68,16 @@ class DailyTask {
       int? workerQuantity,
       List<MaterialTask>? material}) {
     return DailyTask(
-        date: date, title: title, fee: fee, workerQuantity: workerQuantity, material: material);
+        dailyTaskId: dailyTaskId,
+        date: date,
+        title: title,
+        fee: fee,
+        workerQuantity: workerQuantity,
+        material: material);
   }
-  factory DailyTask.fromJson(Map<String, dynamic> json) => _$DailyTaskFromJson(json);
+
+  factory DailyTask.fromJson(Map<String, dynamic> json) =>
+      _$DailyTaskFromJson(json);
+
   Map<String, dynamic> toJson() => _$DailyTaskToJson(this);
 }

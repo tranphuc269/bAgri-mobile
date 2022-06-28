@@ -9,6 +9,7 @@ class SeasonEntity {
   @JsonKey(name: '_id')
   String? seasonId;
   String? name;
+  @JsonKey(name: 'garden')
   String? gardenId;
   ProcessSeason? process;
   TreeEntity? tree;

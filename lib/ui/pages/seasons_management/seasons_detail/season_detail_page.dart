@@ -78,7 +78,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
       }
     }
     currentStage += 1;
-    return process.stages?[currentStage -1].name ??'$currentStage';
+    return process.stages?[currentStage - 1].name ?? '$currentStage';
   }
 
   @override
@@ -158,34 +158,32 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                   ),
                                   SizedBox(width: 10),
                                   (state.season?.end_date != null)
-                                    ? SizedBox()
-                                      :
-                                  GestureDetector(
-                                    onTap: () async {
-                                      bool isUpdate =
-                                          await Application.router!.navigateTo(
-                                        appNavigatorKey.currentContext!,
-                                        Routes.processSeasonUpdate,
-                                        routeSettings: RouteSettings(
-                                          arguments:
-                                            state
-                                                .season?.seasonId,
-
+                                      ? SizedBox()
+                                      : GestureDetector(
+                                          onTap: () async {
+                                            bool isUpdate = await Application
+                                                .router!
+                                                .navigateTo(
+                                              appNavigatorKey.currentContext!,
+                                              Routes.processSeasonUpdate,
+                                              routeSettings: RouteSettings(
+                                                arguments:
+                                                    state.season?.seasonId,
+                                              ),
+                                            );
+                                            if (isUpdate) {
+                                              refreshData();
+                                            }
+                                          },
+                                          child: SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: Image.asset(
+                                              AppImages.icSlideEdit,
+                                              color: AppColors.blue5B,
+                                            ),
+                                          ),
                                         ),
-                                      );
-                                      if (isUpdate) {
-                                        refreshData();
-                                      }
-                                    },
-                                    child: SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Image.asset(
-                                        AppImages.icSlideEdit,
-                                        color: AppColors.blue5B,
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                               SizedBox(height: 20),
@@ -217,50 +215,50 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                     //     },
                     //   ),
                     // ),
+                    buildProcess(),
                     SizedBox(
                       height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                      (state.season!.end_date != null)
+                        (state.season!.end_date != null)
                             ? SizedBox()
-                            :
-                        AppButton(
-                          color: Color(0xFF01A560),
-                          title: 'Kết thúc mùa vụ',
-                          height: 40,
-                          width: 200,
-                          onPressed: () async {
-                            bool isConfirmed = await showDialog(
-                                context: context,
-                                builder: (context) => AppConfirmedDialog(
-                                      onConfirm: () async {
-                                        // final result = awai
-                                        _cubit.endSeason(state.season?.seasonId ?? "");
-                                      },
-                                      // onConfirm: () async {
-                                      //   final result =
-                                      //       await _cubit.updateSeason(
-                                      //           state.season?.seasonId ?? "");
-                                      //   if (result != false) {
-                                      // final resultQR =
-                                      //     await _cubit.generateQRCode(
-                                      //         state.season?.seasonId ??
-                                      //             "");
-                                      // if (resultQR != false) {
-                                      //   Navigator.pop(context, true);
-                                      //   refreshData();
-                                      // } else {
-                                      //   Navigator.pop(context, false);
-                                      // }
-                                      //   } else {
-                                      //     Navigator.pop(context, false);
-                                      //   }
-                                      // },
-                                    ));
-                          },
-                        ),
+                            : AppButton(
+                                color: Color(0xFF01A560),
+                                title: 'Kết thúc mùa vụ',
+                                height: 40,
+                                width: 200,
+                                onPressed: () async {
+                                  bool isConfirmed = await showDialog(
+                                      context: context,
+                                      builder: (context) => AppConfirmedDialog(
+                                            onConfirm: () async {
+                                              _cubit.endSeason(
+                                                  state.season?.seasonId ?? "");
+                                            },
+                                            // onConfirm: () async {
+                                            //   final result =
+                                            //       await _cubit.updateSeason(
+                                            //           state.season?.seasonId ?? "");
+                                            //   if (result != false) {
+                                            // final resultQR =
+                                            //     await _cubit.generateQRCode(
+                                            //         state.season?.seasonId ??
+                                            //             "");
+                                            // if (resultQR != false) {
+                                            //   Navigator.pop(context, true);
+                                            //   refreshData();
+                                            // } else {
+                                            //   Navigator.pop(context, false);
+                                            // }
+                                            //   } else {
+                                            //     Navigator.pop(context, false);
+                                            //   }
+                                            // },
+                                          ));
+                                },
+                              ),
                       ],
                     ),
                     SizedBox(
@@ -283,5 +281,335 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
       typeSnackBar: "success",
       message: message,
     ));
+  }
+
+  Widget buildProcess() {
+    return BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
+      builder: (context, state) {
+        if (state.loadStatus == LoadStatus.LOADING) {
+          return Center(
+              child: CircularProgressIndicator(
+            color: AppColors.main,
+          ));
+        } else if (state.loadStatus == LoadStatus.FAILURE) {
+          return Container();
+        } else if (state.loadStatus == LoadStatus.SUCCESS) {
+          return state.season?.process?.stages!.length != 0
+              ? Column(
+                  children: List.generate(
+                      state.season?.process?.stages!.length ?? 0,
+                      (index) => PhaseProcess(
+                            index: index,
+                            // cubitProcess: _cubit!,
+                        startDate: state.season?.process?.stages![index].start?.substring(0,10) ,
+                            phase: state.season?.process?.stages![index].name ??
+                                '${index + 1}',
+                            onRemove: () {
+                              // _cubit!.removeList(index);
+                            },
+                          )),
+                )
+              : Container();
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
+
+class PhaseProcess extends StatefulWidget {
+  int? index;
+  String? phase;
+  String? startDate;
+  VoidCallback? onRemove;
+
+  // ProcessSeasonCubit cubitProcess;
+
+  PhaseProcess({
+    Key? key,
+    this.index,
+    this.phase,
+    this.startDate,
+    this.onRemove,
+    /* required this.cubitProcess*/
+  }) : super(key: key);
+
+  @override
+  State<PhaseProcess> createState() => _PhaseProcessState();
+}
+
+class _PhaseProcessState extends State<PhaseProcess> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(left: 2, right: 2, bottom: 30),
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Stack(children: [
+            Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 40,
+                    width: double.infinity,
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: AppColors.colors[widget.index!],
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Giai đoạn ${widget.phase}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Thời gian: ',
+                          style: TextStyle(
+                            color: Color(0xFFBBB5D4),
+                            fontSize: 14,
+                          ),
+                        ),
+                        BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
+                            buildWhen: (prev, current) =>
+                                prev.loadStatus != current.loadStatus,
+                            builder: (context, state) {
+                              return Text(
+                                widget.startDate!,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              );
+                            }),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
+                                buildWhen: (prev, current) =>
+                                    prev.loadStatus != current.loadStatus,
+                                builder: (context, state) {
+                                  return Column(
+                                    children: List.generate(
+                                        state
+                                                .season
+                                                ?.process
+                                                ?.stages![widget.index!]
+                                                .steps
+                                                ?.length ??
+                                            0, (index) {
+                                      return StepWidget(
+                                          index: index,
+                                          indexStages: widget.index!,
+                                          phase: widget.phase,
+                                          // cubitProcess: widget.cubitProcess,
+                                          step: state
+                                              .season
+                                              ?.process
+                                              ?.stages![widget.index!]
+                                              .steps![index]);
+                                    }),
+                                  );
+                                },
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ]),
+            // GestureDetector(
+            //   onTap: widget.onRemove,
+            //   child: Align(
+            //     alignment: Alignment.topRight,
+            //     child: Container(
+            //       height: 30,
+            //       padding: EdgeInsets.only(top: 7, right: 5),
+            //       child: FittedBox(
+            //         child: Icon(
+            //           Icons.close,
+            //           color: Colors.white,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          ]),
+        ),
+        SizedBox(
+          height: 10,
+        )
+      ],
+    );
+  }
+}
+
+class StepWidget extends StatefulWidget {
+  final int? index;
+  final StepSeason? step;
+  final String? phase;
+  final int? indexStages;
+
+  // final ProcessSeasonCubit cubitProcess;
+
+  const StepWidget({
+    Key? key,
+    required this.index,
+    this.indexStages,
+    this.step,
+    this.phase,
+    // required this.cubitProcess,
+  }) : super(key: key);
+
+  @override
+  State<StepWidget> createState() => _StepWidgetState();
+}
+
+class _StepWidgetState extends State<StepWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // showModalBottomSheet(
+        //   isDismissible: false,
+        //   context: context,
+        //   isScrollControlled: true,
+        //   backgroundColor: Colors.transparent,
+        //   shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.only(
+        //           topLeft: const Radius.circular(20),
+        //           topRight: const Radius.circular(20))),
+        // builder: (context) => ModalEditStepWidget(
+        //   phase: widget.phase ?? "",
+        //   name: widget.step!.name,
+        //   stepId: widget.step!.step_id,
+        //   startDate: widget.step!.from_day!.toString(),
+        //   endDate: widget.step!.to_day!.toString(),
+        //   // actualDay: (widget.step!.actual_day) != null
+        //   //     ? widget.step!.actual_day.toString()
+        //   //     : "",
+        //   onPressed: (name, startDate, endDate, stepId, actualDay) {
+        //     String? id;
+        //     if (stepId == null) {
+        //       id = null;
+        //     } else {
+        //       if (stepId.isEmpty) {
+        //         id = null;
+        //       } else {
+        //         id = stepId;
+        //       }
+        //     }
+        //     StepSeason step = StepSeason(
+        //       name: name,
+        //       step_id: id,
+        //       from_day: int.parse(startDate),
+        //       to_day: int.parse(endDate),
+        //       actual_day: int.parse(actualDay),
+        //     );
+        //
+        //     widget.cubitProcess
+        //         .editSteps(widget.index!, widget.indexStages!, step);
+        //     },
+        //     onDelete: () {
+        //       // widget.cubitProcess
+        //       //     .removeStep(widget.index!, widget.indexStages!);
+        //     },
+        //   ),
+        // );
+      },
+      child: Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+            color: Color(0xFFDDDAEA),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.step!.name ?? '',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text('Từ'),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text(
+                      '${widget.step!.from_day}',
+                    ),
+                    SizedBox(
+                      width: 2,
+                    ),
+                    Text('-'),
+                    SizedBox(
+                      width: 2,
+                    ),
+                    Text('${widget.step!.to_day}'),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Text('ngày'),
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  (widget.step!.start) != null
+                      ? 'Thời gian bắt đầu ${widget.step!.start!.substring(0, 10)}'
+                      : 'Chưa có thời gian bắt đầu',
+                  style: TextStyle(
+                    color: Color(0xFF9E7F2F),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
