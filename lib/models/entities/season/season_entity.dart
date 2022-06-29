@@ -20,8 +20,28 @@ class SeasonEntity {
   int? treeQuantity;
 
   factory SeasonEntity.fromJson(Map<String, dynamic> json) =>
-      _$SeasonEntityFromJson(json);
-  Map<String, dynamic> toJson() => _$SeasonEntityToJson(this);
+      SeasonEntity(
+        seasonId: json['_id'] as String?,
+        name: json['name'] as String?,
+        gardenId: json['garden'] as String?,
+        process: json['process'] == null
+            ? null
+            : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
+        tree:TreeEntity(tree_id: json['tree_id']),
+        start_date: json['start'] as String?,
+        end_date: json['end'] as String?,
+        treeQuantity: json['treeQuantity'] as int?,
+      );
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    '_id': this.seasonId,
+    'name': this.name,
+    'garden': this.gardenId,
+    'process': this.process,
+    'tree': this.tree?.tree_id,
+    'start': this.start_date,
+    'end': this.end_date,
+    'treeQuantity': this.treeQuantity,
+  };
 
   SeasonEntity copyWith({
     String? seasonId,

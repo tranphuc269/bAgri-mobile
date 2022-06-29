@@ -64,7 +64,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
             BlocBuilder<ContractTaskDetailCubit, ContractTaskDetailState>(
                 bloc: _cubit,
                 builder: (context, state) {
-                  if (state.getFinishStatus == LoadStatus.SUCCESS) {
+                  if (state.finishContractTaskStatus == LoadStatus.SUCCESS) {
                     return Container();
                   } else {
                     return GlobalData.instance.role == "GARDEN_MANAGER"
@@ -136,7 +136,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                               style: AppTextStyle.blackS16)
                         ],
                       ),
-                      state.getFinishStatus == LoadStatus.SUCCESS
+                      state.finishContractTaskStatus == LoadStatus.SUCCESS
                           ? Column(
                               children: [
                                 SizedBox(

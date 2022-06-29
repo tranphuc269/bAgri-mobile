@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
+import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 
@@ -8,13 +9,17 @@ class DailyTaskWidget extends StatefulWidget {
   int? index;
   DailyTask? dailyTask;
   Function()? onRemove;
+  Function()? onAddMaterial;
   bool? isUpdate;
+  TemporaryTaskUpdateCubit? cubit;
 
   DailyTaskWidget(
       {Key? key,
       this.index,
       this.dailyTask,
       this.onRemove,
+      this.onAddMaterial,
+      this.cubit,
       this.isUpdate = false})
       : super(key: key);
 

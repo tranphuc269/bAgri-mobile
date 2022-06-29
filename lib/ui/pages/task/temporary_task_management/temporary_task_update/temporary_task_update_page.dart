@@ -16,17 +16,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../main.dart';
 import '../daily_task_widget.dart';
 
-class TemporaryTaskUpdatePage extends StatefulWidget{
+class TemporaryTaskUpdatePage extends StatefulWidget {
   String? temporaryTaskId;
-  TemporaryTaskUpdatePage({Key? key, required this.temporaryTaskId}) : super(key: key);
+
+  TemporaryTaskUpdatePage({Key? key, required this.temporaryTaskId})
+      : super(key: key);
+
   @override
   _TemporaryTaskUpdatePageState createState() {
     return _TemporaryTaskUpdatePageState();
   }
-
 }
-class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
 
+class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
   TemporaryTaskUpdateCubit? cubit;
 
   @override
@@ -35,6 +37,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
     cubit?.getTemporaryDetail(widget.temporaryTaskId);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,11 +84,13 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                     TemporaryTaskUpdateState>(listener: (context, state) {
                   if (state.loadStatus == LoadStatus.SUCCESS) {}
                 }, builder: (context, state) {
-                      var description = state.temporaryTask?.description ?? 'Hiện chưa có';
+                  var description =
+                      state.temporaryTask?.description ?? 'Hiện chưa có';
                   return Container(
                     margin: EdgeInsets.only(left: 10, right: 10, bottom: 0),
                     child: Text(
-                     /* hintText:*/ state.temporaryTask?.description ?? ' Hiện chưa có',
+                      /* hintText:*/
+                      state.temporaryTask?.description ?? ' Hiện chưa có',
                       // keyboardType: TextInputType.multiline,
                       maxLines: 8,
                       // enable: false,
@@ -111,7 +116,8 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                   builder: (context, state) {
                     return Container(
                       padding: const EdgeInsets.only(left: 160),
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                       child: AppButton(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -119,9 +125,9 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                             Text('Thêm công việc'),
                             FittedBox(
                                 child: Icon(
-                                  Icons.add,
-                                  color: Color(0xFF373737),
-                                )),
+                              Icons.add,
+                              color: Color(0xFF373737),
+                            )),
                           ],
                         ),
                         color: Color(0xFF8FE192),
@@ -139,8 +145,8 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                     TemporaryTaskUpdateState>(listener: (context, state) {
                   if (state.loadStatus == LoadStatus.SUCCESS) {}
                 }, builder: (context, state) {
-                    // if (state.loadStatus == LoadStatus.LOADING) {
-                      return /*Center(
+                  // if (state.loadStatus == LoadStatus.LOADING) {
+                  return /*Center(
                         child: CircularProgressIndicator(
                         color: AppColors.main,
                       ));
@@ -149,22 +155,26 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                     } else if (state.loadStatus ==
                     LoadStatus.SUCCESS) {
                       return state.dailyTasks!.length != 0
-                          ? */ListView.builder(
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) =>
-                                DailyTaskWidget(
-                                    onRemove: () {
-                                      cubit?.removeList(index);
-                                    },
-                                    dailyTask: state.dailyTasks![index],
-                                    isUpdate: true,
-                                    index: index),
-                            itemCount: state.dailyTasks?.length ?? 0,
-                     /* ): Container();
+                          ? */
+                      ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => DailyTaskWidget(
+                        cubit: cubit,
+                        onRemove: () {
+                          cubit?.removeList(index);
+                        },
+                        dailyTask: state.dailyTasks![index],
+                        isUpdate: true,
+                        index: index),
+                    itemCount: state.dailyTasks?.length ?? 0,
+                    /* ): Container();
                     }
-                    return Container(*/);
+                    return Container(*/
+                  );
                 }),
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 _buildActionUpdate()
               ],
             ),
@@ -173,6 +183,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
       ),
     );
   }
+
   Widget _buildInformation({String? title, String? information}) {
     return Row(
       children: [
@@ -181,6 +192,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
       ],
     );
   }
+
   addDailyTask() {
     showModalBottomSheet(
         isDismissible: false,
@@ -192,21 +204,22 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
                 topLeft: const Radius.circular(20),
                 topRight: const Radius.circular(20))),
         builder: (context) => Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(20),
-                  topRight: const Radius.circular(20))),
-          child: ModalAddDailyTaskWidget(
-            // cubit: cubit,
-            onDelete: () {},
-            onPressed: (String name, String fee, String workerQuantity,
-                String startTime) {
-              cubit?.addList(name, fee, workerQuantity, startTime);
-            },
-          ),
-        ));
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20))),
+              child: ModalAddDailyTaskWidget(
+                // cubit: cubit,
+                onDelete: () {},
+                onPressed: (String name, String fee, String workerQuantity,
+                    String startTime) {
+                  cubit?.addList(name, fee, workerQuantity, startTime);
+                },
+              ),
+            ));
   }
+
   Widget _buildActionUpdate() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -226,15 +239,16 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage>{
             width: 100,
             color: AppColors.main,
             title: (GlobalData.instance.role == "ADMIN" ||
-                GlobalData.instance.role == "SUPER_ADMIN") ? 'Cập nhật mô tả công việc' : 'Chỉnh sửa công việc',
+                    GlobalData.instance.role == "SUPER_ADMIN")
+                ? 'Cập nhật mô tả công việc'
+                : 'Chỉnh sửa công việc',
             onPressed: () async {
               cubit?.updateTemporaryTask(widget.temporaryTaskId!);
-                Navigator.of(context).pop(true);
+              Navigator.of(context).pop(true);
             },
           ),
         ),
       ],
     );
   }
-
 }

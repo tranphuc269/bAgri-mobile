@@ -84,16 +84,18 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
                     TemporaryTaskDetailState>(listener: (context, state) {
                   if (state.loadStatus == LoadStatus.SUCCESS) {}
                 }, builder: (context, state) {
+                      if(state.temporaryTask?.description != null){
+                        descriptionController = TextEditingController(text: state.temporaryTask?.description);
+                      }
                   return Container(
                     margin: EdgeInsets.only(left: 10, right: 10, bottom: 0),
                     child: AppTextAreaField(
                       controller: descriptionController,
-                      onChanged: (value){
+                      onSaved: (value){
                         cubit?.changeDescription(value);
                       },
                       hintText: state.temporaryTask?.description ?? ' Hiện chưa có',
                       keyboardType: TextInputType.multiline,
-                      maxLines: 8,
                       enable: (GlobalData.instance.role == "ADMIN" ||
                           GlobalData.instance.role == "SUPER_ADMIN"),
                       textInputAction: TextInputAction.newline,

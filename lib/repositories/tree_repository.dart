@@ -14,7 +14,7 @@ abstract class TreeRepository {
 
   Future<dynamic> updateTree({String? treeId, CreateTreeParam? param});
 
-  Future<ObjectResponse<TreeDetailResponse>> getTreeById(String treeId);
+  Future<TreeEntity> getTreeById(String treeId);
 }
 
 class TreeRepositoryImpl extends TreeRepository {
@@ -50,7 +50,7 @@ class TreeRepositoryImpl extends TreeRepository {
   }
 
   @override
-  Future<ObjectResponse<TreeDetailResponse>> getTreeById(String treeId) async {
+  Future<TreeEntity> getTreeById(String treeId) async {
     return await _apiClient!.getTreeById(treeId);
   }
 }
