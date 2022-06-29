@@ -58,7 +58,7 @@ class UpdateTreeCubit extends Cubit<UpdateTreeState> {
       final result = await treeRepository.getTreeById(treeId);
 
       emit(state.copyWith(
-          loadStatus: LoadStatus.SUCCESS, treeData: result.data?.tree!));
+          loadStatus: LoadStatus.SUCCESS, treeData: result));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
     }

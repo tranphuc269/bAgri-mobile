@@ -144,6 +144,9 @@ abstract class ApiClient {
   Future<GardenDeleteResponse> deleteGarden(
       {@Path("garden_id") String? gardenId});
 
+  @GET('/gardens/{garden_id}')
+  Future<GardenEntity> getGardenById(@Path('garden_id') String? gardenId);
+
   /// Process
 
   @DELETE("/processes/{process_id}")
@@ -176,7 +179,7 @@ abstract class ApiClient {
       @Path("tree_id") String? treeId, @Body() Map<String, dynamic> body);
 
   @GET("/trees/{tree_id}")
-  Future<ObjectResponse<TreeDetailResponse>> getTreeById(
+  Future<TreeEntity> getTreeById(
       @Path('tree_id') String treeId);
 
   /// Notification
