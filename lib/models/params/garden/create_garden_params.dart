@@ -6,7 +6,7 @@ part 'create_garden_params.g.dart';
 @JsonSerializable()
 class CreateGardenParam {
   @JsonKey()
-  String? managerUsername;
+  String? managerPhone;
   @JsonKey()
   String? name;
   @JsonKey()
@@ -19,12 +19,12 @@ class CreateGardenParam {
   String? zoneName;
 
 
-  CreateGardenParam({this.name, this.area, this.managerUsername, this.areaUnit, this.treePlaceQuantity, this.zoneName});
+  CreateGardenParam({this.name, this.area, this.managerPhone, this.areaUnit, this.treePlaceQuantity, this.zoneName});
 
   CreateGardenParam copyWith({
     String? name,
     num? area,
-    String? managerUsername,
+    String? managerPhone,
     String? areaUnit,
     num? treePlaceQuantity,
     String? zoneName,
@@ -32,7 +32,7 @@ class CreateGardenParam {
     return CreateGardenParam(
       name: name ?? this.name,
       area: area ?? this.area,
-      managerUsername: managerUsername ?? this.managerUsername,
+      managerPhone: managerPhone ?? this.managerPhone,
       treePlaceQuantity: treePlaceQuantity ?? this.treePlaceQuantity,
       zoneName: zoneName ?? this.zoneName
     );

@@ -53,9 +53,6 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
       appBar: AppBarWidget(
         context: context,
         title: 'Chi tiết công việc',
-        onBackPressed: (){
-          Application.router!.navigateTo(context, Routes.tabTask, replace: true);
-        },
       ),
       body: SafeArea(
         child: Column(
@@ -64,7 +61,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
             BlocBuilder<ContractTaskDetailCubit, ContractTaskDetailState>(
                 bloc: _cubit,
                 builder: (context, state) {
-                  if (state.finishContractTaskStatus == LoadStatus.SUCCESS) {
+                  if (state.getFinishStatus == LoadStatus.SUCCESS || GlobalData.instance.role == "ACCOUNTANT" ) {
                     return Container();
                   } else {
                     return GlobalData.instance.role == "GARDEN_MANAGER"
@@ -168,27 +165,54 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                       Text("Mô tả công việc từ kĩ thuật viên: ",
                           style: AppTextStyle.greyS16),
                       SizedBox(height: 10),
-                      if (GlobalData.instance.role == "GARDEN_MANAGER" ||
-                          GlobalData.instance.role == "ACCOUNTANT")
-                        AppTextAreaField(
-                          hintText: state.contractTask?.description ??
-                              "Chưa có mô tả từ kĩ thuật viên",
-                          keyboardType: TextInputType.multiline,
-                          controller: _descriptionController,
-                          enable: false,
-                          textInputAction: TextInputAction.newline,
-                        ),
-                      if (GlobalData.instance.role == "ADMIN" ||
-                          GlobalData.instance.role == "SUPER_ADMIN")
-                        AppTextAreaField(
-                          hintText: state.contractTask?.description ??
-                              "Chưa có mô tả từ kĩ thuật viên",
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 10,
-                          controller: _descriptionController,
-                          enable: true,
-                          textInputAction: TextInputAction.newline,
-                        ),
+                      BlocConsumer<ContractTaskDetailCubit,
+                          ContractTaskDetailState>(listener: (context, state) {
+                        if (state.loadStatus == LoadStatus.SUCCESS) {}
+                      }, builder: (context, state) {
+                        if(state.contractTask?.description != null){
+                          _descriptionController = TextEditingController(text: state.contractTask?.description);
+                        }
+                        return Container(
+                          margin: EdgeInsets.only(left: 10, right: 10, bottom: 0),
+                          child: AppTextAreaField(
+                            controller: _descriptionController,
+                            onSaved: (value){
+                              _cubit?.changeDescription(value);
+                            },
+                            hintText: state.contractTask?.description ?? ' Hiện chưa có',
+                            keyboardType: TextInputType.multiline,
+                            enable: state.getFinishStatus == LoadStatus.SUCCESS ? false : (
+                                GlobalData.instance.role == "ADMIN" ? true :
+                            (GlobalData.instance.role == "ADMIN" ||
+                                GlobalData.instance.role == "SUPER_ADMIN" )),
+                            textInputAction: TextInputAction.newline,
+                          ),
+                        );
+                      }),
+                      // BlocConsumer(
+                      //     builder: builder,
+                      //     listener: listener)
+                      // if (GlobalData.instance.role == "GARDEN_MANAGER" ||
+                      //     GlobalData.instance.role == "ACCOUNTANT")
+                      //   AppTextAreaField(
+                      //     hintText: state.contractTask?.description ??
+                      //         "Chưa có mô tả từ kĩ thuật viên",
+                      //     keyboardType: TextInputType.multiline,
+                      //     controller: _descriptionController,
+                      //     enable: false,
+                      //     textInputAction: TextInputAction.newline,
+                      //   ),
+                      // if (GlobalData.instance.role == "ADMIN" ||
+                      //     GlobalData.instance.role == "SUPER_ADMIN")
+                      //   AppTextAreaField(
+                      //     hintText: state.contractTask?.description ??
+                      //         "Chưa có mô tả từ kĩ thuật viên",
+                      //     keyboardType: TextInputType.multiline,
+                      //     maxLines: 10,
+                      //     controller: _descriptionController,
+                      //     enable: true,
+                      //     textInputAction: TextInputAction.newline,
+                      //   ),
                       SizedBox(
                         height: 20,
                       ),
@@ -469,7 +493,8 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
-              color: Color(0xFFC3F6C6),
+              color: Color(0xFFF1F7E7),
+              border: Border.all(color:Color(0xFF9D9D9D) ),
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

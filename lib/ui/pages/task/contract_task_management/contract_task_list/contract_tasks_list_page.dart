@@ -271,7 +271,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
 
                         contractTask.end == null
                             ? Expanded(
-                              flex:2 ,
+                              flex:3 ,
                               child: Text(
                                   "Đang thực hiện",
                                   style: TextStyle(
@@ -282,7 +282,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
                                 ),
                             )
                             : Expanded(
-                          flex: 2,
+                          flex: 3,
                               child: Text(
                                   "Đã hoàn thành",
                                   style: TextStyle(

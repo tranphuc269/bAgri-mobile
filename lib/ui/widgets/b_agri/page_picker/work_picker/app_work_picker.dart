@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
+import 'package:flutter_base/utils/validators.dart';
 
 
 import 'app_work_picker_page.dart';
@@ -35,7 +36,6 @@ class AppPageWorkPicker extends StatelessWidget {
       valueListenable: controller,
       builder: (context, ContractWorkEntity? contractWorkEntity, child) {
         String text = contractWorkEntity?.title ?? "";
-
         return GestureDetector(
           onTap: enabled
               ? () {
@@ -53,6 +53,12 @@ class AppPageWorkPicker extends StatelessWidget {
               TextFormField(
                 enabled: false,
                 controller: TextEditingController(text: text),
+                validator: (value){
+                  if(Validator.validateNullOrEmpty(value!))
+                    return "Vui lòng chọn công việc khoán";
+                  else
+                    return null;
+                },
                 decoration: InputDecoration(
                   hintText: 'Chọn công việc khoán',
                   suffixIcon: Padding(
@@ -88,6 +94,7 @@ class AppPageWorkPicker extends StatelessWidget {
                   //   borderSide: BorderSide(color: AppColors.lineGray),
                   // ),
                   hintStyle: AppTextStyle.greyS14,
+                  errorStyle:   TextStyle(color: Colors.red)
                 ),
                 style: AppTextStyle.blackS16,
               ),

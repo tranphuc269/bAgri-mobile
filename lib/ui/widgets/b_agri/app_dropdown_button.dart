@@ -351,7 +351,7 @@ class AppRolePicker extends StatefulWidget {
       this.autoValidateMode,
       this.textStyle,
       this.hintText,
-      required this.value,
+      this.value,
       this.onChange,
       this.validator,
       this.centerItem = false,

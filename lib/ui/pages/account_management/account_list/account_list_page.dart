@@ -13,6 +13,8 @@ import 'package:flutter_base/ui/widgets/b_agri/app_dropdown_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
+import 'package:flutter_base/utils/validators.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,6 +26,7 @@ class AccountListPage extends StatefulWidget {
 class _AccountListState extends State<AccountListPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _nameZoneController = TextEditingController(text: "");
 
   late List<RoleEntity> _roleList;
   AccountListCubit? _cubit;
@@ -50,76 +53,87 @@ class _AccountListState extends State<AccountListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBarWidget(
-          title: 'Quản lý tài khoản',
-          context: context,
-        ),
-        body: Container(
-          child: BlocBuilder<AccountListCubit, AccountListState>(
-            bloc: _cubit,
-            buildWhen: (previous, current) =>
-                previous.getListAccountStatus != current.getListAccountStatus,
-            builder: (context, state) {
-              if (state.getListAccountStatus == LoginStatusBagri.LOADING) {
-                return Center(
-                    child: CircularProgressIndicator(
-                  color: AppColors.main,
-                ));
-              } else if (state.getListAccountStatus ==
-                  LoginStatusBagri.FAILURE) {
-                return AppErrorListWidget(
-                  onRefresh: _onRefreshData,
-                );
-              } else if (state.getListAccountStatus ==
-                  LoginStatusBagri.SUCCESS) {
-                return state.listUserData!.length != 0
-                    ? RefreshIndicator(
-                        color: AppColors.main,
-                        onRefresh: _onRefreshData,
-                        child: ListView.separated(
-                          padding: EdgeInsets.only(
-                              left: 10, right: 10, top: 10, bottom: 25),
-                          physics: AlwaysScrollableScrollPhysics(),
-                          itemCount: state.listUserData!.length,
-                          shrinkWrap: true,
-                          primary: false,
-                          controller: _scrollController,
-                          itemBuilder: (context, index) {
-                            UserEntity user = state.listUserData![index];
-                            return _buildItem(
-                              name: user.name ?? "",
-                              role: user.role == "SUPER_ADMIN" ? "Super Admin" : (user.role == "ADMIN" ? "Kỹ thuật viên" : (user.role == "GARDEN_MANAGER" ? "Quản lý vườn" : (user.role == "ACCOUNTANT" ? "Kế toán" : "NO_ROLE"))),
-                              phoneNumber: user.phone ?? "",
-                              onPressed: () async {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => _dialog(
-                                          user: user,
-                                          // role: user.role ?? "",
-                                          id: user.id ?? "",
-                                        ));
-                              },
-                            );
+      key: _scaffoldKey,
+      appBar: AppBarWidget(
+        title: 'Quản lý tài khoản',
+        context: context,
+      ),
+      body: BlocBuilder<AccountListCubit, AccountListState>(
+        bloc: _cubit,
+        buildWhen: (previous, current) =>
+            previous.getListAccountStatus != current.getListAccountStatus,
+        builder: (context, state) {
+          if (state.getListAccountStatus == LoginStatusBagri.LOADING) {
+            return Center(
+                child: CircularProgressIndicator(
+              color: AppColors.main,
+            ));
+          } else if (state.getListAccountStatus == LoginStatusBagri.FAILURE) {
+            return AppErrorListWidget(
+              onRefresh: _onRefreshData,
+            );
+          } else if (state.getListAccountStatus == LoginStatusBagri.SUCCESS) {
+            return state.listUserData!.length != 0
+                ? RefreshIndicator(
+                    color: AppColors.main,
+                    onRefresh: _onRefreshData,
+                    child: ListView.separated(
+                      padding: EdgeInsets.only(
+                          left: 10, right: 10, top: 10, bottom: 25),
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemCount: state.listUserData!.length,
+                      shrinkWrap: true,
+                      primary: false,
+                      controller: _scrollController,
+                      itemBuilder: (context, index) {
+                        UserEntity user = state.listUserData![index];
+                        return _buildItem(
+                          name: user.name ?? "",
+                          role: user.role == "SUPER_ADMIN"
+                              ? "Super Admin"
+                              : (user.role == "ADMIN"
+                                  ? "Kỹ thuật viên"
+                                  : (user.role == "GARDEN_MANAGER"
+                                      ? "Quản lý vườn"
+                                      : (user.role == "ACCOUNTANT"
+                                          ? "Kế toán"
+                                          : "NO_ROLE"))),
+                          phoneNumber: user.phone ?? "",
+                          onPressed: () async {
+                            bool isAddSuccess = await showDialog(
+                                context: context,
+                                builder: (context) => _dialog(user: user));
+                            if (isAddSuccess) {
+                              _onRefreshData();
+                              showSnackBar(
+                                "Thêm khu thành công",
+                              );
+                            } else {
+                              showSnackBar(
+                                "Tên khu đã tồn tại",
+                              );
+                            }
                           },
-                          separatorBuilder: (context, index) {
-                            return SizedBox(height: 10);
-                          },
-                        ),
-                      )
-                    : Container(
-                        width: double.infinity,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [EmptyDataWidget()],
-                        ),
-                      );
-              } else {
-                return Container();
-              }
-            },
-          ),
-        ));
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 10);
+                      },
+                    ),
+                  )
+                : Container(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [EmptyDataWidget()],
+                    ),
+                  );
+          } else {
+            return Container();
+          }
+        },
+      ),
+    );
   }
 
   _buildItem(
@@ -128,20 +142,21 @@ class _AccountListState extends State<AccountListPage> {
       required String phoneNumber,
       VoidCallback? onPressed}) {
     return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        height: 75,
-        decoration: BoxDecoration(
-          color: AppColors.grayEC,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
+        onTap: onPressed,
+        child: Container(
+          height: 75,
+          decoration: BoxDecoration(
+            color: AppColors.grayEC,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
             padding:
                 const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
             child: Row(
               children: [
                 Expanded(
                     child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +176,6 @@ class _AccountListState extends State<AccountListPage> {
                         )
                       ],
                     ),
-                    SizedBox(width: 40),
                     Text(
                       role,
                       style: AppTextStyle.greyS14Bold,
@@ -172,22 +186,17 @@ class _AccountListState extends State<AccountListPage> {
               ],
             ),
           ),
-        )
-    );
+        ));
   }
 
   Widget _dialog({
     required UserEntity user,
-    // {required String name,
-    // required String phoneNumber,
-    // required String role,
-    required String id,
   }) {
     return StatefulBuilder(builder: (context, setState) {
       return AlertDialog(
         title: const Text("Thông tin tài khoản"),
         content: Container(
-            height: MediaQuery.of(context).size.height / 3.5,
+            height: MediaQuery.of(context).size.height / 3.7,
             width: MediaQuery.of(context).size.width,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -217,27 +226,46 @@ class _AccountListState extends State<AccountListPage> {
   }
 
   Widget _buildRoleOption({required UserEntity user}) {
-    RoleEntity _value = RoleEntity(role_id: "NO_ROLE", name: "No Role");
+    RoleEntity _value = user.role == "ADMIN"
+        ? RoleEntity(role_id: 'ADMIN', name: "Kĩ thuật viên(Admin)")
+        : (user.role == "SUPER_ADMIN"
+        ? RoleEntity(role_id: "SUPER_ADMIN", name: "Super Admin")
+        : (user.role == "ACCOUNTANT"
+        ? RoleEntity(role_id: "ACCOUNTANT", name: "Kế toán")
+        : RoleEntity(
+        role_id: "GARDEN_MANAGER",
+        name: "Quản Lý Vườn")));
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(children: [
-          AppRolePicker(
-            onChange: (value) {
-              setState(() {
-                _value = value!;
-              });
-            },
-            value: _value.role_id == "NO_ROLE" ? null : _value,
-            hintText: "Thay đổi vai trò",
-            autoValidateMode: AutovalidateMode.onUserInteraction,
-            validator: (value) {
-              if (value!.role_id == "NO_ROLE")
-                return "Chưa chọn vai trò";
-              else
-                return null;
-            },
+          Form(
+            key: _formKey,
+            child: AppRolePicker(
+              onChange: (value) {
+                setState(() {
+                  _value = value!;
+                });
+              },
+              value: user.role == "ADMIN"
+                  ? RoleEntity(role_id: 'ADMIN', name: "Kĩ thuật viên(Admin)")
+                  : (user.role == "SUPER_ADMIN"
+                      ? RoleEntity(role_id: "SUPER_ADMIN", name: "Super Admin")
+                      : (user.role == "ACCOUNTANT"
+                          ? RoleEntity(role_id: "ACCOUNTANT", name: "Kế toán")
+                          : RoleEntity(
+                              role_id: "GARDEN_MANAGER",
+                              name: "Quản Lý Vườn"))),
+              hintText: "Thay đổi vai trò",
+              autoValidateMode: AutovalidateMode.onUserInteraction,
+              validator: (value) {
+                if (value?.role_id == "NO_ROLE")
+                  return "Chưa chọn vai trò";
+                else
+                  return null;
+              },
+            ),
           ),
           SizedBox(
             height: 5,
@@ -322,7 +350,6 @@ class _AccountListState extends State<AccountListPage> {
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
-    }
+    if (maxScroll - currentScroll <= _scrollThreshold) {}
   }
 }

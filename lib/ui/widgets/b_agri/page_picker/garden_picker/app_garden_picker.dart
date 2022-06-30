@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
+import 'package:flutter_base/utils/validators.dart';
 
 
 import 'app_garden_picker_page.dart';
@@ -20,7 +21,6 @@ class GardenPickerController extends ValueNotifier<GardenEntity?> {
 class AppPageGardenPicker extends StatelessWidget {
   final GardenPickerController controller;
   final ValueChanged<GardenEntity?>? onChanged;
-
   final bool enabled;
 
   AppPageGardenPicker({
@@ -35,7 +35,6 @@ class AppPageGardenPicker extends StatelessWidget {
       valueListenable: controller,
       builder: (context, GardenEntity? gardenEntity, child) {
         String text = gardenEntity?.name ?? "";
-
         return GestureDetector(
           onTap: enabled
               ? () {
@@ -53,7 +52,14 @@ class AppPageGardenPicker extends StatelessWidget {
               TextFormField(
                 enabled: false,
                 controller: TextEditingController(text: text),
+                validator: (value){
+                  if(Validator.validateNullOrEmpty(value!))
+                    return "Vui lòng chọn vườn";
+                  else
+                    return null;
+                },
                 decoration: InputDecoration(
+                  errorStyle: TextStyle(color: Colors.red),
                   hintText: 'Chọn vườn',
                   suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 10),
@@ -90,6 +96,7 @@ class AppPageGardenPicker extends StatelessWidget {
                   hintStyle: AppTextStyle.greyS14,
                 ),
                 style: AppTextStyle.blackS16,
+
               ),
             ],
           ),

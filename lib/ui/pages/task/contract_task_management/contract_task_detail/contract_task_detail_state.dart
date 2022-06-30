@@ -8,6 +8,7 @@ class ContractTaskDetailState extends Equatable {
   LoadStatus? getFinishStatus;
   LoadStatus? addMaterialStatus;
   LoadStatus? finishContractTaskStatus;
+  String? description;
   List<MaterialUsedByTask>? materials;
 
   @override
@@ -15,6 +16,7 @@ class ContractTaskDetailState extends Equatable {
     loadStatus,
     addDescriptionStatus,
     contractTask,
+    description,
     updateContractTaskStatus,
     addMaterialStatus,
     finishContractTaskStatus,
@@ -26,6 +28,7 @@ class ContractTaskDetailState extends Equatable {
       {this.loadStatus,
         this.addDescriptionStatus,
         this.contractTask,
+        this.description,
         this.finishContractTaskStatus,
         this.updateContractTaskStatus,
         this.getFinishStatus,
@@ -39,6 +42,7 @@ class ContractTaskDetailState extends Equatable {
     LoadStatus? addMaterialStatus,
     LoadStatus? finishContractTaskStatus,
     LoadStatus? getFinishStatus,
+    String? description,
     List<MaterialUsedByTask>? materials
   }) {
     return ContractTaskDetailState(
@@ -50,6 +54,7 @@ class ContractTaskDetailState extends Equatable {
       addMaterialStatus: addMaterialStatus ?? this.addMaterialStatus,
       getFinishStatus: getFinishStatus ?? this.getFinishStatus,
       materials: materials ?? this.materials,
+      description: description ?? this.description,
     );
   }
 }

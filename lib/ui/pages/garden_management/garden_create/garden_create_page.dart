@@ -6,7 +6,6 @@ import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/components/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
@@ -236,7 +235,7 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
                 _cubit!.state.listManager!.length > 0
                     ? setState(() {
                         _managerValue = value! as UserEntity?;
-                        // _cubit!.changeManagerUsername(_managerValue!.username.toString());
+                        _cubit!.changeManagerPhone(_managerValue!.phone.toString());
                       })
                     : setState(() {
                         _managerValue = value! as UserEntity?;

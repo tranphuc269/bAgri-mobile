@@ -77,4 +77,11 @@ class ContractTaskDetailCubit extends Cubit<ContractTaskDetailState>{
 
   }
 
+  void changeDescription(String? description){
+    emit(state.copyWith(description: description));
+    ContractTask temp = state.contractTask!;
+    temp.description = description;
+    emit(state.copyWith(contractTask: temp));
+  }
+
 }
