@@ -140,15 +140,16 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 26),
-            Expanded(flex: 1, child: _buildHeader()),
-            Expanded(flex: 3, child:_buildCalendar() ),
-            Expanded(flex: 3, child: _buildEvents()),
-          ],
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _buildHeader(),
+              Expanded(flex: 4, child:_buildCalendar()),
+              Expanded(flex: 4, child: _buildEvents()),
+            ],
+          ),
         ),
         drawer: MainDrawer(),
         floatingActionButton: FloatingActionButton(
@@ -229,6 +230,10 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
             border: Border.all(color: AppColors.mainDarker),
             shape: BoxShape.circle,
           ),
+          selectedDecoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.mainDarker
+          ),
           todayTextStyle: TextStyle(color: Color(0xFF5A5A5A)),
           markerSize: 0,
         ),
@@ -243,36 +248,6 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
             titleCentered: true,
             titleTextStyle:
             TextStyle(color: AppColors.mainDarker, fontSize: 17)),
-        calendarBuilders: CalendarBuilders(
-          selectedBuilder: (context, day, day1) {
-            return AnimatedContainer(
-              duration: Duration(milliseconds: 250),
-              margin: EdgeInsets.all(6),
-              padding: EdgeInsets.all(0),
-              decoration: const BoxDecoration(
-                color: AppColors.mainDarker,
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: Text(day.day.toString(),
-                  style: TextStyle(color: Colors.white)),
-            );
-          },
-          todayBuilder: (context, today, day) {
-            AnimatedContainer(
-              duration: Duration(milliseconds: 250),
-              margin: EdgeInsets.all(6),
-              padding: EdgeInsets.all(0),
-              decoration: const BoxDecoration(
-                color: AppColors.mainDarker,
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: Text(day.day.toString(),
-                  style: TextStyle(color: Colors.red)),
-            );
-          },
-        ),
       ),
     );
   }
@@ -335,7 +310,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
 
   Widget _buildHeader() {
     return Container(
-      height: 100,
+      height: 90,
       decoration: BoxDecoration(
         color: AppColors.main,
       ),
@@ -412,60 +387,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
                       ),
                     ]),
               )),
-          GestureDetector(
-            onTap: () {
-              //redirectNotificationPage();
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(top: 13),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Image.asset(
-                    AppImages.icNotificationBA,
-                    width: 16,
-                    height: 19,
-                    fit: BoxFit.fill,
-                  ),
-                  Positioned(
-                      top: -5,
-                      right: -7,
-                      child: BlocBuilder<NotificationManagementCubit,
-                          NotificationManagementState>(
-                        buildWhen: (prev, current) =>
-                        prev.loadStatus != current.loadStatus,
-                        builder: (context, state) {
-                          if (state.loadStatus == LoadStatus.SUCCESS) {
-                            var length = 0;
-                            for (int i = 0;
-                            i < state.notificationList!.length;
-                            i++) {
-                              if (state.notificationList![i].seen == false) {
-                                length++;
-                              }
-                            }
-                            if (length > 0) {
-                              return CircleAvatar(
-                                backgroundColor: Colors.red,
-                                radius: 8,
-                                child: FittedBox(
-                                  child: Text(
-                                    '$length',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return SizedBox();
-                            }
-                          } else
-                            return SizedBox();
-                        },
-                      ))
-                ],
-              ),
-            ),
-          ),
+
         ],
       ),
     );
@@ -545,7 +467,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${_userInfo?.name ?? ""}',
+                      'Họ và tên: ${_userInfo?.name ?? ""}',
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                     ),
                     SizedBox(

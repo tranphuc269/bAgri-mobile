@@ -96,11 +96,6 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 SizedBox(height: 3),
                 _buildTextLabel("Số bầu cây: "),
                 _buildTreeQuantity(),
-                // SizedBox(height: 3,),
-                // _buildDatePicker(),
-                // _buildTextLabel('Vai trò'),
-                // // _buildRoleOption(),
-                // SizedBox(height: 5),
               ],
             ),
           ),
@@ -132,8 +127,12 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 color: AppColors.main,
                 title: 'Xác nhận',
                 onPressed: () async {
-                  _cubit.createContractTask(treeQuantityController.text);
-                 Navigator.of(context).pop(true);
+                  if(_formKey.currentState!.validate()){
+                    _cubit.createContractTask(treeQuantityController.text);
+                    Navigator.of(context).pop(true);
+                  }
+
+
                 },
               ),
             )
@@ -187,6 +186,12 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
               hintText: "Nhập số lượng bầu cây",
               keyboardType: TextInputType.number,
               controller: treeQuantityController,
+             validator: (value){
+                if(Validator.validateNullOrEmpty(value!))
+                  return "Chưa nhập số lượng bầu cây";
+                else
+                  return null;
+             },
              // initialValue: ,
             ),
           );
@@ -217,59 +222,6 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
       ),
     );
   }
-
-  // Widget _buildDatePicker() {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(25.0),
-  //     ),
-  //     child: Row(children: [
-  //       Text(
-  //         'Ngày bắt đầu:',
-  //         style: AppTextStyle.greyS16,
-  //       ),
-  //       SizedBox(width: 15),
-  //       Text(
-  //         "${selectedDate.toLocal()}".split(' ')[0],
-  //         style: AppTextStyle.blackS16
-  //             .copyWith(decoration: TextDecoration.underline),
-  //       ),
-  //       SizedBox(width: 10),
-  //       GestureDetector(
-  //         onTap: () async {
-  //           final result = await showDatePicker(
-  //               context: context,
-  //               locale: Locale('vi'),
-  //               initialEntryMode: DatePickerEntryMode.input,
-  //               builder: (context, child) {
-  //                 return _buildCalendarTheme(child);
-  //               },
-  //               fieldHintText: "yyyy/mm/dd",
-  //               initialDate: DateTime.now(),
-  //               firstDate: DateTime.now(),
-  //               lastDate: DateTime(2024));
-  //           if(result != null){
-  //             setState(() {
-  //               changeDate(result);
-  //             });
-  //             // print(result);
-  //             // // changeDate(result);
-  //           }
-  //         },
-  //         child: SizedBox(
-  //           height: 26,
-  //           width: 26,
-  //           child: Image.asset(
-  //             AppImages.icCalendar,
-  //             fit: BoxFit.fill,
-  //           ),
-  //         ),
-  //       ),
-  //     ]),
-  //   );
-  // }
-
 
   Widget _buildLabelText(String label) {
     return Text(

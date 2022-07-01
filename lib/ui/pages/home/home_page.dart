@@ -211,60 +211,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ]),
           )),
-          GestureDetector(
-            onTap: () {
-              redirectNotificationPage();
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(top: 13),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Image.asset(
-                    AppImages.icNotificationBA,
-                    width: 16,
-                    height: 19,
-                    fit: BoxFit.fill,
-                  ),
-                  Positioned(
-                      top: -5,
-                      right: -7,
-                      child: BlocBuilder<NotificationManagementCubit,
-                          NotificationManagementState>(
-                        buildWhen: (prev, current) =>
-                            prev.loadStatus != current.loadStatus,
-                        builder: (context, state) {
-                          if (state.loadStatus == LoadStatus.SUCCESS) {
-                            var length = 0;
-                            for (int i = 0;
-                                i < state.notificationList!.length;
-                                i++) {
-                              if (state.notificationList![i].seen == false) {
-                                length++;
-                              }
-                            }
-                            if (length > 0) {
-                              return CircleAvatar(
-                                backgroundColor: Colors.red,
-                                radius: 8,
-                                child: FittedBox(
-                                  child: Text(
-                                    '$length',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return SizedBox();
-                            }
-                          } else
-                            return SizedBox();
-                        },
-                      ))
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -398,7 +344,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${_userInfo?.name ?? ""}',
+                      'Họ và tên: ${_userInfo?.name ?? ""}',
                       style: TextStyle(color: Colors.black87, fontSize: 20),
                     ),
                     SizedBox(

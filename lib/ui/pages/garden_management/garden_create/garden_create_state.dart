@@ -3,7 +3,7 @@ part of 'garden_create_cubit.dart';
 class GardenCreateState extends Equatable {
   String? name;
   String? area;
-  String? managerUsername;
+  String? managerPhone;
   LoadStatus? createGardenStatus;
   List<UserEntity>? listManager;
   LoadStatus? getListManagerStatus;
@@ -11,7 +11,7 @@ class GardenCreateState extends Equatable {
   GardenCreateState(
       {this.name,
       this.area,
-      this.managerUsername,
+      this.managerPhone,
       this.createGardenStatus,
       this.listManager,
       this.getListManagerStatus});
@@ -19,14 +19,14 @@ class GardenCreateState extends Equatable {
   GardenCreateState copyWith(
       {String? name,
       String? area,
-      String? managerUsername,
+      String? managerPhone,
       LoadStatus? createGardenStatus,
       List<UserEntity>? listManager,
       LoadStatus? getListManagerStatus}) {
     return GardenCreateState(
         name: name ?? this.name,
         area: area ?? this.area,
-        managerUsername: managerUsername ?? this.managerUsername,
+        managerPhone: managerPhone ?? this.managerPhone,
         createGardenStatus: createGardenStatus ?? this.createGardenStatus,
         listManager: listManager ?? this.listManager,
         getListManagerStatus:
@@ -37,7 +37,7 @@ class GardenCreateState extends Equatable {
   List<Object?> get props => [
         this.name,
         this.area,
-        this.managerUsername,
+        this.managerPhone,
         this.createGardenStatus,
         this.getListManagerStatus
       ];

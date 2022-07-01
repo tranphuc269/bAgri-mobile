@@ -40,7 +40,7 @@ class GardenRepositoryImpl extends GardenRepository {
 
   Future<dynamic> createGarden({CreateGardenParam? param}) {
     final body = {
-      "managerUsername": param?.managerUsername ?? "",
+      "managerPhone": param?.managerPhone ?? "",
       "name": param?.name ?? "",
       "area": param?.area ?? "",
       "areaUnit": param?.areaUnit ?? "",

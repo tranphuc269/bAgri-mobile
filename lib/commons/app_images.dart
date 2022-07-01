@@ -5,7 +5,7 @@ class AppImages {
   static final icCloudBA = 'assets/images/ic_cloud.png';
   static final icCrop = 'assets/images/ic_crop.png';
   static final icCropNoColor = 'assets/images/ic_crop_no_color.png';
-  static final icGarden = 'assets/images/ic_field.png';
+  static final icGarden = 'assets/images/ic_garden.png';
   static final icSeason = 'assets/images/ic_season.png';
   static final icLabor = 'assets/images/ic_labor.png';
   static final icUser = 'assets/images/ic_user.png';
@@ -66,5 +66,5 @@ class AppImages {
 
   /// ic garden manager
   static final icWorks = 'assets/images/ic_work.png';
-  static final icTemplateTask = 'assets/images/IC_agricultural.png';
+  static final icTemplateTask = 'assets/images/ic_agriculture.png';
 }

@@ -35,13 +35,13 @@ class GardenCreateCubit extends Cubit<GardenCreateState> {
   void changeArea(String area) {
     emit(state.copyWith(area: area));
   }
-  void changeManagerUsername(String managerUsername){
-    emit(state.copyWith(managerUsername: managerUsername));
+  void changeManagerPhone(String managerPhone){
+    emit(state.copyWith(managerPhone: managerPhone));
   }
 
 
   void changeManagerId(String value) {
-    emit(state.copyWith(managerUsername: value));
+    emit(state.copyWith(managerPhone: value));
   }
 
   void createGarden(String areaUnit, String zoneName, String treePlaceQuantity) async {
@@ -52,7 +52,7 @@ class GardenCreateCubit extends Cubit<GardenCreateState> {
         area: num.parse(state.area.toString()),
         areaUnit: areaUnit,
         treePlaceQuantity: num.parse(treePlaceQuantity),
-        managerUsername: state.managerUsername,
+        managerPhone: state.managerPhone,
         zoneName: zoneName
       );
       final response = await gardenRepository!.createGarden(param: param);
