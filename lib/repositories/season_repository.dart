@@ -15,10 +15,10 @@ abstract class SeasonRepository {
       SeasonEntity param);
 
   Future<TreeDeleteResponse> deleteSeason(String seasonId);
-  Future<dynamic> addPhase(StageSeason phaseSeason, String seasonId);
+  Future<SeasonEntity> addPhase(StageSeason phaseSeason, String seasonId);
   Future<dynamic> putPhase(StageSeason phageSeason, String phaseId);
   Future<dynamic> putStep(String stepSeasonId, String phaseId, StepSeason stepSeason);
-  Future<dynamic> addStep(String phaseId, StepSeason stepSeason);
+  Future<SeasonEntity> addStep(String phaseId, StepSeason stepSeason);
   Future<dynamic> deletePhase(String phaseId);
   Future<dynamic> deleteStep(String stepId, String phaseId);
   Future<dynamic> endStep(String phaseId, String stepId);
@@ -73,12 +73,12 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future addPhase(StageSeason phaseSeason, String seasonId) async{
+  Future<SeasonEntity> addPhase(StageSeason phaseSeason, String seasonId) async{
     return await _apiClientBagri!.createPhase(phaseSeason.toJson(), seasonId);
   }
 
   @override
-  Future addStep(String phaseId, StepSeason stepSeason) async{
+  Future<SeasonEntity> addStep(String phaseId, StepSeason stepSeason) async{
     return await _apiClientBagri!.addStep(stepSeason.toJson(), phaseId);
   }
 

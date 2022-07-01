@@ -188,7 +188,8 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                             height: 37,
                             border: 10,
                             width: double.infinity,
-                            onPressed: () {
+                            onPressed: /*() {*/
+                              widget.onAddMaterial
                               // showModalBottomSheet(
                               //   isDismissible: false,
                               //   context: context,
@@ -215,7 +216,7 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                               //     ),
                               //   );
                               // }),
-                            },
+                            // },
                           ),
                         ),
                     ],

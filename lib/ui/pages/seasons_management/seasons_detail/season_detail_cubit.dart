@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/models/entities/season/qr_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
+import 'package:flutter_base/models/entities/season/stage_season.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/models/params/season/create_season_param.dart';
 import 'package:flutter_base/models/response/object_response.dart';
@@ -14,6 +15,27 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
   SeasonRepository seasonRepository;
   SeasonDetailCubit({required this.seasonRepository})
       : super(SeasonDetailState());
+
+  void endStage(int index, String? phaseId) {
+    // emit(state.copyWith(loadStatus: LoadStatus.LOADING));
+    try {
+      var result = seasonRepository.endPhase(phaseId!);
+      getSeasonDetail(state.season!.seasonId!);
+    } catch (e) {
+      // emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+    }
+  }
+  void endStep(int index, int indexStage) async{
+    List<StageSeason> stages = state.season!.process!.stages ?? [];
+    try {
+      var result = await seasonRepository.endStep(stages[indexStage].stage_id!,
+          stages[indexStage].steps![index].step_id!
+          );
+      getSeasonDetail(state.season!.seasonId!);
+    } catch (e) {
+      // emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+    }
+  }
 
   Future<void> getSeasonDetail(String seasonId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
@@ -47,7 +69,14 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
   }
 
   Future<void> endSeason(String seasonId) async{
-    await seasonRepository.endSeason(seasonId);
+    emit(state.copyWith(loadStatus: LoadStatus.LOADING));
+    try{
+      var result = await seasonRepository.endSeason(seasonId);
+      emit(state.copyWith(
+          loadStatus: LoadStatus.SUCCESS, /*season: result*//*.data!.season!*/));
+    } catch (e) {
+      emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+    }
   }
 
   // Future<bool> generateQRCode(String seasonId) async {

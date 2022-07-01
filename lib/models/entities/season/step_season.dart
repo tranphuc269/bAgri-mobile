@@ -11,8 +11,8 @@ class StepSeason {
   int? to_day;
   String? name;
   String? description;
-  @JsonKey(name: 'actualDay')
-  int? actual_day;
+  // @JsonKey(name: 'actualDay')
+  // int? actual_day;
   String? start;
   String? end;
 
@@ -24,12 +24,12 @@ class StepSeason {
     this.description,
     this.start,
     this.end,
-    this.actual_day,
+    // this.actual_day,
   });
 
   @override
   List<Object?> get props =>
-      [step_id, from_day, to_day, name, actual_day, description, start, end];
+      [step_id, from_day, to_day, name,/* actual_day,*/ description, start, end];
 
   factory StepSeason.fromJson(Map<String, dynamic> json) => StepSeason(
     step_id: json['_id'] as String?,
@@ -39,7 +39,7 @@ class StepSeason {
     description: json['description'] as String?,
     start: json['start'] as String?,
     end: json['end'] as String?,
-    actual_day: json['actualDay'] as int?,
+    // actual_day: json['actualDay'] as int?,
   );
   Map<String, dynamic> toJson() => <String, dynamic>{
     if(this.step_id != null) '_id': this.step_id,
@@ -47,7 +47,7 @@ class StepSeason {
     'aboutTo': this.to_day,
     'name': this.name,
     'description': this.description,
-    'actualDay': this.actual_day,
+    // 'actualDay': this.actual_day,
     'start': this.start,
     'end': this.end,
   };

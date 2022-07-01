@@ -72,7 +72,6 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                             widget.contractTaskId, _cubit!.state.materials)
                         : _buildButtonByAdmin();
                   }
-                  ;
                 }),
             SizedBox(
               height: 30,

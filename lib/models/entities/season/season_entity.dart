@@ -9,7 +9,6 @@ class SeasonEntity {
   @JsonKey(name: '_id')
   String? seasonId;
   String? name;
-  @JsonKey(name: 'garden')
   String? gardenId;
   ProcessSeason? process;
   TreeEntity? tree;
@@ -23,21 +22,21 @@ class SeasonEntity {
       SeasonEntity(
         seasonId: json['_id'] as String?,
         name: json['name'] as String?,
-        gardenId: json['garden'] as String?,
+        gardenId: json['gardenId'] as String?,
         process: json['process'] == null
             ? null
             : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
-        tree:TreeEntity(tree_id: json['tree_id']),
+        tree:TreeEntity(name: json['tree']),
         start_date: json['start'] as String?,
         end_date: json['end'] as String?,
         treeQuantity: json['treeQuantity'] as int?,
       );
   Map<String, dynamic> toJson() => <String, dynamic>{
-    '_id': this.seasonId,
+    if(this.seasonId != null) '_id': this.seasonId,
     'name': this.name,
-    'garden': this.gardenId,
+    'gardenId': this.gardenId,
     'process': this.process,
-    'tree': this.tree?.tree_id,
+    'tree': this.tree?.name,
     'start': this.start_date,
     'end': this.end_date,
     'treeQuantity': this.treeQuantity,
