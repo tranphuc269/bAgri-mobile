@@ -389,6 +389,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/garden/season_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
@@ -441,7 +442,8 @@ class _SeasonListPageState extends State<SeasonListPage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+
+      floatingActionButton: (GlobalData.instance.role == 'ADMIN' || GlobalData.instance.role == 'SUPER_ADMIN') ? FloatingActionButton(
         heroTag: "btn2",
         onPressed: () async {
           bool isAdd = await Application.router!
@@ -458,7 +460,7 @@ class _SeasonListPageState extends State<SeasonListPage> {
           Icons.add,
           size: 40,
         ),
-      ),
+      ) : Container(),
     );
   }
 

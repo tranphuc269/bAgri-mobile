@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
+import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
@@ -75,42 +76,72 @@ class _GardenDetailPageState extends State<GardenDetailPage>
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 18),
+                    SizedBox(height: 20),
+                    // Center(child: Image.asset(AppImages.icCrop, width: 50, height: 50,)),
                     Text(
                       'Thông tin chi tiết:',
                       style: AppTextStyle.blackS18Bold,
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 30,
                     ),
-                    Text(
-                      'Tên vườn: ${state.gardenData!.gardenName}',
-                      style: AppTextStyle.blackS16,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Tên vườn:',
+                          style: AppTextStyle.blackS16,
+                        ),
+                        Text(' ${state.gardenData!.gardenName}'),
+                      ],
                     ),
+                    SizedBox(height: 5),
+                    Divider(color: Colors.grey),
                     SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
-                    Text(
-                      "Diện tích: ${state.gardenData!.area} ${state.gardenData!.areaUnit}",
-                      style: AppTextStyle.blackS16,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Diện tích: ",
+                          style: AppTextStyle.blackS16,
+                        ),
+                        Text('${state.gardenData!.area} ${state.gardenData!.areaUnit}'),
+                      ],
                     ),
+                    SizedBox(height: 5),
+                    Divider(color: Colors.grey),
                     SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
-                    Text(
-                      "Số lượng bầu: ${state.gardenData!.treePlaceQuantity} bầu",
-                      style: AppTextStyle.blackS16,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Số lượng bầu: ",
+                          style: AppTextStyle.blackS16,
+                        ),
+                        Text('${state.gardenData!.treePlaceQuantity} bầu'),
+                      ],
                     ),
+                    SizedBox(height: 5),
+                    Divider(color: Colors.grey),
                     SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
-                    Text(
-                      'Người quản lý: ${state.gardenData!.manager} ',
-                      style: AppTextStyle.blackS16,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Người quản lý: ',
+                          style: AppTextStyle.blackS16,
+                        ),
+                        Text('${state.gardenData!.manager} '),
+                      ],
                     ),
-                    SizedBox(
-                      height: 25,
-                    ),
+                    SizedBox(height: 5),
+                    Divider(color: Colors.grey),
                   ],
                 ),
               ),

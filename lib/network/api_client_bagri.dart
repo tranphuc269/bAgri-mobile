@@ -24,6 +24,7 @@ import 'package:flutter_base/models/entities/season/season_steps_response.dart';
 import 'package:flutter_base/models/entities/season/season_task_detail_entity.dart';
 import 'package:flutter_base/models/entities/season/season_task_entity.dart';
 import 'package:flutter_base/models/entities/season/season_update_entity.dart';
+import 'package:flutter_base/models/entities/season/stage_season.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/entities/task/task.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
@@ -212,7 +213,7 @@ abstract class ApiClient {
 
   ///phase-season
   @POST("/phases/{season_id}")
-  Future<dynamic> createPhase(
+  Future<SeasonEntity> createPhase(
       @Body() Map<String, dynamic> body, @Path('season_id') String seasonId);
 
   @PUT("/phases/{phase_id}")
@@ -227,18 +228,18 @@ abstract class ApiClient {
 
   ///step-season
   @POST('/steps/{phase_id}')
-  Future<dynamic> addStep(
+  Future<SeasonEntity> addStep(
       @Body() Map<String, dynamic> body, @Path('phase_id') String phaseId);
 
   @PUT('/steps/{phase_id}/{step_id}')
   Future<dynamic> putStep(@Path('phase_id') String phaseId,
       @Path('step_id') String stepId, @Body() Map<String, dynamic> body);
 
-  @PATCH('steps/{phase_id}/{step_id}/end')
+  @PATCH('/steps/{phase_id}/{step_id}/end')
   Future<dynamic> endStep(
       @Path('phase_id') String phaseId, @Path('step_id') String stepId);
 
-  @DELETE('steps/{phase_id}/{step_id}')
+  @DELETE('/steps/{phase_id}/{step_id}')
   Future<dynamic> deleteStep(
       @Path('phase_id') String phaseId, @Path('step_id') String stepId);
 

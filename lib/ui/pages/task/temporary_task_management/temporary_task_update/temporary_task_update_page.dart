@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/material/material.dart';
+import 'package:flutter_base/models/entities/material/material_task.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/modal_add_material_widget.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_cubit.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/widget/modal_add_daily_task_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
@@ -163,6 +166,9 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                         onRemove: () {
                           cubit?.removeList(index);
                         },
+                        onAddMaterial:(){
+                          addMaterial(index);
+                        },
                         dailyTask: state.dailyTasks![index],
                         isUpdate: true,
                         index: index),
@@ -250,5 +256,30 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
         ),
       ],
     );
+  }
+  addMaterial(int index) {
+    showModalBottomSheet(
+        isDismissible: false,
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20))),
+        builder: (context) => Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(20),
+                  topRight: const Radius.circular(20))),
+          child: ModalAddMaterialWidget(
+            onPressed: (String name, String quantity, String unit) {
+              cubit?.createMaterial(index, MaterialTask( name: name,
+                        quantity: int.parse(quantity.toString()),
+                        unit: unit));
+            },
+          ),
+        ));
   }
 }

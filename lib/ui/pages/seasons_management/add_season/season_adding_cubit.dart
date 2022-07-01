@@ -28,7 +28,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
 
   ProcessSeason calculateStartDay() {
     int afterDay = 0;
-    DateTime dateStart = DateTime.parse(state.startTime!);
+    DateTime dateStart = DateTime.parse(state.startTime ?? DateTime.now().toString());
     List<StageSeason> listStages = [];
     if (state.processEntity != null) {
       final pt = state.processEntity!;
@@ -49,7 +49,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
                   description: phase.steps![index].description,
                   from_day: phase.steps![index].from_day,
                   to_day: phase.steps![index].to_day,
-                  actual_day: phase.steps![index].actual_day);
+                  /*actual_day: phase.steps![index].actual_day*/);
               afterDay += phase.steps![index].to_day ?? 7;
               listSteps.add(stepSeason);
             }
@@ -80,7 +80,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
           gardenId: state.gardenEntity!.garden_id,
           process: calculateStartDay(),
           tree: state.treeEntity!,
-          start_date: state.startTime,
+          // start_date: state.startTime,
           // end_date: state.endTime ,
           treeQuantity: treeQuantity);
       var result = await seasonRepository.createSeason(param);

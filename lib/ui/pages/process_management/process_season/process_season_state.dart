@@ -14,6 +14,7 @@ class ProcessSeasonState extends Equatable {
     this.updateProcessSeasonStatus,
     this.stages,
     this.loadDetailStatus,
+
     required this.actionWithStepStatus,
   });
 

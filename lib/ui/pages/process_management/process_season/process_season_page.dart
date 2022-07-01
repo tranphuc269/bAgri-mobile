@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/configs/app_config.dart';
+import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/stage_season.dart';
@@ -9,7 +10,12 @@ import 'package:flutter_base/models/entities/season/step_season.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/process_management/process_season/process_season_cubit.dart';
+import 'package:flutter_base/ui/pages/process_management/widget/modal_add_stage_season_widget.dart';
+import 'package:flutter_base/ui/pages/process_management/widget/modal_add_stage_widget.dart';
+import 'package:flutter_base/ui/pages/process_management/widget/modal_add_step_season_widget.dart';
 import 'package:flutter_base/ui/pages/process_management/widget/modal_add_step_widget.dart';
+import 'package:flutter_base/ui/pages/process_management/widget/modal_edit_phase_season_widget.dart';
+import 'package:flutter_base/ui/pages/process_management/widget/modal_edit_step_season_widget.dart';
 import 'package:flutter_base/ui/pages/process_management/widget/modal_edit_step_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
@@ -64,6 +70,9 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBarWidget(
+        onBackPressed: () {
+          // Navigator.of(context).pop(true);
+        },
         context: context,
         title: 'Sửa quy trình',
       ),
@@ -99,38 +108,42 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                           style: AppTextStyle.greyS14,
                         ),
                         SizedBox(height: 10),
-                        BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
-                          builder: (context, state) {
-                            return Visibility(
-                              visible:
-                                  state.stages!.length >= AppConfig.stagesLength
-                                      ? false
-                                      : true,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 140),
-                                child: AppButton(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text('Thêm giai đoạn'),
-                                      FittedBox(
-                                          child: Icon(
-                                        Icons.add,
-                                        color: Color(0xFF373737),
-                                      )),
-                                    ],
+                        if (GlobalData.instance.role == "ADMIN" ||
+                            GlobalData.instance.role == "SUPER_ADMIN")
+                          BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
+                            builder: (context, state) {
+                              return Visibility(
+                                visible: state.stages!.length >=
+                                        AppConfig.stagesLength
+                                    ? false
+                                    : true,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 140),
+                                  child: AppButton(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text('Thêm giai đoạn'),
+                                        FittedBox(
+                                            child: Icon(
+                                          Icons.add,
+                                          color: Color(0xFF373737),
+                                        )),
+                                      ],
+                                    ),
+                                    color: Color(0xFF8FE192),
+                                    height: 30,
+                                    width: double.infinity,
+                                    onPressed: () {
+                                      changeNameDesStage();
+                                      // _cubit?.addList(StageSeason());
+                                    },
                                   ),
-                                  color: Color(0xFF8FE192),
-                                  height: 30,
-                                  width: double.infinity,
-                                  onPressed: () {
-                                    _cubit?.addList(StageSeason());
-                                  },
                                 ),
-                              ),
-                            );
-                          },
-                        ),
+                              );
+                            },
+                          ),
                         SizedBox(height: 20),
                         BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
                           builder: (context, state) {
@@ -149,14 +162,19 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                                       children: List.generate(
                                           state.stages!.length,
                                           (index) => PhaseProcess(
+                                                stage: state.stages![index],
                                                 index: index,
                                                 cubitProcess: _cubit!,
-                                                startDate: state.stages![index].start,
+                                                startDate:
+                                                    state.stages![index].start,
                                                 phase:
                                                     state.stages![index].name ??
                                                         '${index + 1}',
                                                 onRemove: () {
-                                                  _cubit!.removeList(index);
+                                                  _cubit!.removeList(
+                                                      index,
+                                                      state.stages![index]
+                                                          .stage_id);
                                                 },
                                               )),
                                     )
@@ -170,9 +188,9 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                // SizedBox(
+                //   height: 20,
+                // ),
                 buildActionCreate(context),
               ],
             ),
@@ -180,6 +198,34 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
         ),
       ),
     );
+  }
+
+  changeNameDesStage() {
+    showModalBottomSheet(
+        isDismissible: false,
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20))),
+        builder: (context) => Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20))),
+              child: ModalAddStageSeasonWidget(
+                onDelete: () {},
+                onPressed: (String name, String description, String start) {
+                  _cubit?.addList(
+                      StageSeason(
+                          name: name, description: description, start: start),
+                      widget.seasonId);
+                },
+              ),
+            ));
   }
 
   Widget buildActionCreate(BuildContext context) {
@@ -205,23 +251,12 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
           children: [
             Expanded(
               child: AppButton(
-                color: AppColors.redButton,
-                title: 'Hủy bỏ',
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-            SizedBox(width: 40),
-            Expanded(
-              child: AppButton(
                 width: 100,
                 color: AppColors.main,
-                title: 'Xác nhận',
+                title: 'Hoàn tất chỉnh sửa',
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // _cubit?.updateProcess(widget.process_id);
-                  }
+                  _cubit?.updateProcess();
+                  // Navigator.of(context).pop(true);
                 },
                 isLoading: isLoading,
               ),
@@ -249,6 +284,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
 class PhaseProcess extends StatefulWidget {
   int? index;
   String? phase;
+  StageSeason? stage;
   String? startDate;
   String? endDate;
   VoidCallback? onRemove;
@@ -258,9 +294,10 @@ class PhaseProcess extends StatefulWidget {
       {Key? key,
       this.index,
       this.phase,
+      this.stage,
       this.startDate,
       this.onRemove,
-        this.endDate,
+      this.endDate,
       required this.cubitProcess})
       : super(key: key);
 
@@ -297,11 +334,33 @@ class _PhaseProcessState extends State<PhaseProcess> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: (){
-                      if(widget.endDate == null){
-                        showModalBottomSheet(context: context, builder: (context){
-                          return Container();
-                        });
+                    onTap: () {
+                      if (widget.endDate == null) {
+                        showModalBottomSheet(
+                            isDismissible: false,
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) {
+                              return ModalEditStageSeasonWidget(
+                                name: widget.phase,
+                                onEnd: () {
+                                  widget.cubitProcess.endStage(
+                                      widget.index!, widget.stage?.stage_id);
+                                },
+                                start: widget.startDate,
+                                onPressed: (String name, String description,
+                                    String start) {
+                                  widget.cubitProcess.editStage(
+                                      widget.index!,
+                                      widget.stage?.stage_id,
+                                      name,
+                                      description,
+                                      start);
+                                },
+                                description: widget.stage?.description,
+                              );
+                            });
                       }
                     },
                     child: Container(
@@ -337,9 +396,9 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                   prev.actionWithStepStatus !=
                                   current.actionWithStepStatus,
                               builder: (context, state) {
-                                if(widget.startDate != null){
+                                if (widget.startDate != null) {
                                   return Text(
-                                    widget.startDate!.substring(0,10),
+                                    widget.startDate!.substring(0, 10),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
@@ -389,53 +448,60 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                   );
                                 },
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 180),
-                                child: AppButton(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text('Thêm bước'),
-                                      FittedBox(
-                                          child: Icon(
-                                        Icons.add,
-                                        color: Color(0xFF373737),
-                                      )),
-                                    ],
-                                  ),
-                                  color: Color(0xFFDDDAEA),
-                                  height: 37,
-                                  border: 10,
-                                  width: double.infinity,
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      isDismissible: false,
-                                      context: context,
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft:
-                                                  const Radius.circular(20),
-                                              topRight:
-                                                  const Radius.circular(20))),
-                                      builder: (context) => ModalAddStepWidget(
-                                        phase: widget.phase ?? "",
-                                        onPressed:
-                                            (name, startDate, endDate, stepId) {
-                                          StepSeason step = StepSeason(
-                                              name: name,
-                                              from_day: int.parse(startDate),
-                                              to_day: int.parse(endDate));
+                              if (widget.endDate == null &&(GlobalData.instance.role == "ADMIN" ||
+                                  GlobalData.instance.role == "SUPER_ADMIN"))
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 180),
+                                  child: AppButton(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text('Thêm bước'),
+                                        FittedBox(
+                                            child: Icon(
+                                          Icons.add,
+                                          color: Color(0xFF373737),
+                                        )),
+                                      ],
+                                    ),
+                                    color: Color(0xFFDDDAEA),
+                                    height: 37,
+                                    border: 10,
+                                    width: double.infinity,
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        isDismissible: false,
+                                        context: context,
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.transparent,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft:
+                                                    const Radius.circular(20),
+                                                topRight:
+                                                    const Radius.circular(20))),
+                                        builder: (context) =>
+                                            ModalAddStepSeasonWidget(
+                                          phase: widget.phase ?? "",
+                                          onPressed: (name, from_day, to_day,
+                                              startTime, description) {
+                                            StepSeason step = StepSeason(
+                                                name: name,
+                                                description: description,
+                                                start: startTime,
+                                                from_day:
+                                                    int.tryParse(from_day),
+                                                to_day: int.tryParse(to_day));
 
-                                          widget.cubitProcess
-                                              .createStep(widget.index!, step);
-                                        },
-                                      ),
-                                    );
-                                  },
+                                            widget.cubitProcess.createStep(
+                                                widget.index!, step);
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -503,34 +569,25 @@ class _StepWidgetState extends State<StepWidget> {
               borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(20),
                   topRight: const Radius.circular(20))),
-          builder: (context) => ModalEditStepWidget(
-            phase: widget.phase ?? "",
+          builder: (context) => ModalEditStepSeasonWidget(
+            onEnd: () {
+              widget.cubitProcess.endStep(widget.index!, widget.indexStages!);
+            },
             name: widget.step!.name,
-            stepId: widget.step!.step_id,
-            startDate: widget.step!.from_day!.toString(),
-            endDate: widget.step!.to_day!.toString(),
-            // actualDay: (widget.step!.actual_day) != null
-            //     ? widget.step!.actual_day.toString()
-            //     : "",
-            onPressed: (name, startDate, endDate, stepId, actualDay) {
-              String? id;
-              if (stepId == null) {
-                id = null;
-              } else {
-                if (stepId.isEmpty) {
-                  id = null;
-                } else {
-                  id = stepId;
-                }
-              }
+            description: widget.step!.description,
+            from_day: widget.step!.from_day,
+            to_day: widget.step!.to_day,
+            end: widget.step!.end,
+            onPressed: (name, description, startTime, from_day, to_day) {
+              print("step_id" + (widget.step?.step_id ?? ''));
               StepSeason step = StepSeason(
-                name: name,
-                step_id: id,
-                from_day: int.parse(startDate),
-                to_day: int.parse(endDate),
-                actual_day: int.parse(actualDay),
-              );
-
+                  step_id: widget.step!.step_id,
+                  name: name,
+                  from_day: int.parse(from_day),
+                  to_day: int.parse(to_day),
+                  start: startTime,
+                  description: description);
+              //
               widget.cubitProcess
                   .editSteps(widget.index!, widget.indexStages!, step);
             },
@@ -607,4 +664,3 @@ class _StepWidgetState extends State<StepWidget> {
     );
   }
 }
-
