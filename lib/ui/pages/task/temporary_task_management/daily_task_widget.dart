@@ -4,6 +4,7 @@ import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyTaskWidget extends StatefulWidget {
   int? index;
@@ -148,6 +149,49 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                           ],
                         ),
                       ),
+                      Column(
+                        children: List.generate(
+                            widget.dailyTask!.materials?.length ?? 0, (index) {
+                          return Container(
+                            // width: double.infinity,
+                            // height: 40,
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.only(bottom: 10),
+                            width: MediaQuery.of(context).size.width - 20,
+                            // color: AppColors.grayC4,
+                            decoration: BoxDecoration(
+                                color: Color(0xFFDDDAEA),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Tên vật tư: " +
+                                      (widget.dailyTask!.materials![index].name ??
+                                          ''),
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  "Số lượng: " +
+                                      (widget.dailyTask!.materials![index].quantity?.toString() ??
+                                          ''),
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ),
                       // BlocBuilder<AddProcessCubit, AddProcessState>(
                       //   buildWhen: (prev, current) =>
                       //   prev.actionWithStepStatus !=
@@ -173,23 +217,23 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                         Padding(
                           padding: const EdgeInsets.only(left: 180),
                           child: AppButton(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Thêm vật tư'),
-                                FittedBox(
-                                    child: Icon(
-                                  Icons.add,
-                                  color: Color(0xFF373737),
-                                )),
-                              ],
-                            ),
-                            color: Color(0xFFDDDAEA),
-                            height: 37,
-                            border: 10,
-                            width: double.infinity,
-                            onPressed: /*() {*/
-                              widget.onAddMaterial
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Thêm vật tư'),
+                                  FittedBox(
+                                      child: Icon(
+                                    Icons.add,
+                                    color: Color(0xFF373737),
+                                  )),
+                                ],
+                              ),
+                              color: Color(0xFFDDDAEA),
+                              height: 37,
+                              border: 10,
+                              width: double.infinity,
+                              onPressed: /*() {*/
+                                  widget.onAddMaterial
                               // showModalBottomSheet(
                               //   isDismissible: false,
                               //   context: context,
@@ -216,8 +260,8 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                               //     ),
                               //   );
                               // }),
-                            // },
-                          ),
+                              // },
+                              ),
                         ),
                     ],
                   ),
