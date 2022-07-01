@@ -50,7 +50,7 @@ class DailyTask {
   String? title;
   int? fee;
   int? workerQuantity;
-  List<MaterialTask>? material;
+  List<MaterialTask>? materials;
 
   DailyTask(
       {this.title,
@@ -58,7 +58,7 @@ class DailyTask {
       this.date,
       this.fee,
       this.workerQuantity,
-      this.material});
+      this.materials});
 
   DailyTask copyWith(
       {String? dailyTaskId,
@@ -73,7 +73,7 @@ class DailyTask {
         title: title,
         fee: fee,
         workerQuantity: workerQuantity,
-        material: material);
+        materials: material);
   }
 
   factory DailyTask.fromJson(Map<String, dynamic> json) =>

@@ -43,11 +43,12 @@ class TemporaryTaskUpdateCubit extends Cubit<TemporaryTaskUpdateState> {
   }
 
   void createMaterial(int index, MaterialTask value) {
+    emit(state.copyWith( loadStatus:LoadStatus.LOADING_MORE));
     List<DailyTask> dailyTasks = state.dailyTasks ?? [];
-    if (dailyTasks[index].material == null) {
-      dailyTasks[index].material = [];
+    if (dailyTasks[index].materials == null) {
+      dailyTasks[index].materials = [];
     }
-    dailyTasks[index].material!.add(value);
+    dailyTasks[index].materials!.add(value);
     List<DailyTask> newList = dailyTasks;
     emit(state.copyWith(dailyTasks: newList, loadStatus: state.loadStatus));
   }
@@ -63,7 +64,7 @@ class TemporaryTaskUpdateCubit extends Cubit<TemporaryTaskUpdateState> {
 
   void removeMaterial(int index, int indexStages) {
     List<DailyTask> dailyTasks = state.dailyTasks ?? [];
-    dailyTasks[indexStages].material?.removeAt(index);
+    dailyTasks[indexStages].materials?.removeAt(index);
     List<DailyTask> newList = dailyTasks;
     emit(state.copyWith(dailyTasks: newList));
   }

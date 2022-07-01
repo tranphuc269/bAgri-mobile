@@ -4,6 +4,7 @@ import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DailyTaskWidget extends StatefulWidget {
   int? index;
@@ -148,6 +149,18 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                           ],
                         ),
                       ),
+                      Column(
+                        children: List.generate(
+                            widget.dailyTask!.materials?.length ?? 0, (index) {
+                          return Container(
+                            width: double.infinity,
+                            height: 40,
+                            color: AppColors.grayC4,
+                            child: Text(
+                                "Tên vật tư: " + (widget.dailyTask!.materials![index].name ?? '')),
+                          );
+                        }),
+                      ),
                       // BlocBuilder<AddProcessCubit, AddProcessState>(
                       //   buildWhen: (prev, current) =>
                       //   prev.actionWithStepStatus !=
@@ -173,23 +186,23 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                         Padding(
                           padding: const EdgeInsets.only(left: 180),
                           child: AppButton(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Thêm vật tư'),
-                                FittedBox(
-                                    child: Icon(
-                                  Icons.add,
-                                  color: Color(0xFF373737),
-                                )),
-                              ],
-                            ),
-                            color: Color(0xFFDDDAEA),
-                            height: 37,
-                            border: 10,
-                            width: double.infinity,
-                            onPressed: /*() {*/
-                              widget.onAddMaterial
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Thêm vật tư'),
+                                  FittedBox(
+                                      child: Icon(
+                                    Icons.add,
+                                    color: Color(0xFF373737),
+                                  )),
+                                ],
+                              ),
+                              color: Color(0xFFDDDAEA),
+                              height: 37,
+                              border: 10,
+                              width: double.infinity,
+                              onPressed: /*() {*/
+                                  widget.onAddMaterial
                               // showModalBottomSheet(
                               //   isDismissible: false,
                               //   context: context,
@@ -216,8 +229,8 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                               //     ),
                               //   );
                               // }),
-                            // },
-                          ),
+                              // },
+                              ),
                         ),
                     ],
                   ),
