@@ -43,14 +43,18 @@ class AppTextField extends StatelessWidget {
       obscuringCharacter: "*",
       enabled: enable,
       controller: controller,
+
+
       decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: AppTextStyle.green,
         hintText: hintText,
-        contentPadding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
-          top: 13,
-          bottom: 13,
-        ),
+        // contentPadding: const EdgeInsets.only(
+        //   left: 20,
+        //   right: 20,
+        //   top: 13,
+        //   bottom: 13,
+        // ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: AppColors.redTextButton),
@@ -62,12 +66,18 @@ class AppTextField extends StatelessWidget {
         disabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.main),
             borderRadius: BorderRadius.circular(10)),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.main),
-            borderRadius: BorderRadius.circular(10)),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.main),
-            borderRadius: BorderRadius.circular(10)),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.main),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.main),
+        ),
+        // enabledBorder: OutlineInputBorder(
+        //     borderSide: BorderSide(color: AppColors.main),
+        //     borderRadius: BorderRadius.circular(10)),
+        // focusedBorder: OutlineInputBorder(
+        //     borderSide: BorderSide(color: AppColors.main),
+        //     borderRadius: BorderRadius.circular(10)),
         // focusedErrorBorder: OutlineInputBorder(
         //   // borderRadius: BorderRadius.circular(10),
         //   borderSide: BorderSide(color: AppColors.lineGray),

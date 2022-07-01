@@ -164,6 +164,7 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
           ),
         ),
         SizedBox(width: 5),
+        if(GlobalData.instance.role != 'ACCOUNTANT')
         Expanded(
           child: AppButton(
             width: 100,

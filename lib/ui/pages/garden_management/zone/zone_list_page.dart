@@ -78,7 +78,7 @@ class _GardenListState extends State<ZoneListPage> {
           child: BlocBuilder<ZoneListCubit, ZoneListState>(
             bloc: _cubit,
             buildWhen: (previous, current) =>
-            previous.getZoneStatus != current.getZoneStatus,
+                previous.getZoneStatus != current.getZoneStatus,
             builder: (context, state) {
               if (state.getZoneStatus == LoadStatus.LOADING) {
                 return Center(
@@ -90,106 +90,112 @@ class _GardenListState extends State<ZoneListPage> {
               } else if (state.getZoneStatus == LoadStatus.SUCCESS) {
                 return state.listZoneData!.length != 0
                     ? RefreshIndicator(
-                  color: AppColors.main,
-                  onRefresh: _onRefreshData,
-                  child: ListView.separated(
-                    padding: EdgeInsets.only(
-                        left: 10, right: 10, top: 10, bottom: 25),
-                    physics: AlwaysScrollableScrollPhysics(),
-                    itemCount: state.listZoneData!.length,
-                    shrinkWrap: true,
-                    primary: false,
-                    controller: _scrollController,
-                    itemBuilder: (context, index) {
-                      ZoneEntity zone = state.listZoneData![index];
-                      return _buildItem(
-                        name: zone.name ?? "",
-                        onPressed: () async {
-                          Application.router?.navigateTo(
-                              appNavigatorKey.currentContext!,
-                              Routes.gardenList,
-                              routeSettings: RouteSettings(
-                                arguments: GardenListArgument(
-                                    titleScreen: zone.name,
-                                    zone_id: zone.zone_id),
-                              ));
-                        },
-                        onDelete: () async {
-                          bool isDelete = await showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  AppDeleteDialog(
-                                    onConfirm: () async {
-                                      await _cubit!
-                                          .deleteZone(zone.zone_id);
-                                      Navigator.pop(context, true);
-                                    },
-                                  ));
+                        color: AppColors.main,
+                        onRefresh: _onRefreshData,
+                        child: ListView.separated(
+                          padding: EdgeInsets.only(
+                              left: 10, right: 10, top: 10, bottom: 25),
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: state.listZoneData!.length,
+                          shrinkWrap: true,
+                          primary: false,
+                          controller: _scrollController,
+                          itemBuilder: (context, index) {
+                            ZoneEntity zone = state.listZoneData![index];
+                            return _buildItem(
+                              name: zone.name ?? "",
+                              onPressed: () async {
+                                Application.router?.navigateTo(
+                                    appNavigatorKey.currentContext!,
+                                    Routes.gardenList,
+                                    routeSettings: RouteSettings(
+                                      arguments: GardenListArgument(
+                                          titleScreen: zone.name,
+                                          zone_id: zone.zone_id),
+                                    ));
+                              },
+                              onDelete: () async {
+                                bool isDelete = await showDialog(
+                                    context: context,
+                                    builder: (context) => AppDeleteDialog(
+                                          onConfirm: () async {
+                                            await _cubit!
+                                                .deleteZone(zone.zone_id);
+                                            Navigator.pop(context, true);
+                                          },
+                                        ));
 
-                          if (isDelete) {
-                            _onRefreshData();
-                            showSnackBar(
-                                'Xóa khu vực thành công!', "success");
-                          }
-                        },
-                        onUpdate: () async {
-                          bool isModify = await showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  _dialogModify(
-                                    title: Text("Thay đổi tên khu"),
-                                    hintText: "Nhập vào tên khu",
-                                    spanText: "Tên khu",
-                                    textEditingController:
-                                    _nameModifyController,
-                                    zoneName: zone.name,
-                                    validator: (value) {
-                                      if (Validator.validateNullOrEmpty(value!))
-                                        return "Chưa nhập tên khu";
-                                      else if (value == zone.name) {
-                                        return "Tên đã bị trùng!";
-                                      } else
-                                        return null;
-                                    },
-                                    onConfirm: (() async =>
-                                    {
-                                      if (_formKey.currentState!
-                                          .validate())
-                                        {
-                                          await _cubit!.modifyZone(
-                                              zone.zone_id,
-                                              _nameModifyController
-                                                  .text),
-                                          if(state.modifyZoneStatus == LoadStatus.SUCCESS){
-                                            Navigator.pop(context, true),
-                                            // _nameZoneController.clear(),
-                                          }else{
-                                            Navigator.pop(context, false),
-                                          }
-                                        }
-                                    }),
-                                  ));
-                          if (state.modifyZoneStatus == LoadStatus.SUCCESS) {
-                            _onRefreshData();
-                            showSnackBar(
-                                'Thay đổi tên thành công!', "success");
-                          }else{
-                            showSnackBar("Tên khu đã tồn tại", "error");
-                          }
-                        },
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(height: 10);
-                    },
-                  ),
-                )
+                                if (isDelete) {
+                                  _onRefreshData();
+                                  showSnackBar(
+                                      'Xóa khu vực thành công!', "success");
+                                }
+                              },
+                              onUpdate: () async {
+                                bool isModify = await showDialog(
+                                    context: context,
+                                    builder: (context) => _dialogModify(
+                                          title: Text("Thay đổi tên khu"),
+                                          hintText: "Nhập vào tên khu",
+                                          spanText: "Tên khu",
+                                          textEditingController:
+                                              _nameModifyController,
+                                          zoneName: zone.name,
+                                          validator: (value) {
+                                            if (Validator.validateNullOrEmpty(
+                                                value!))
+                                              return "Chưa nhập tên khu";
+                                            else if (value == zone.name) {
+                                              return "Tên đã bị trùng!";
+                                            } else
+                                              return null;
+                                          },
+                                          onConfirm: (() async => {
+                                                if (_formKey.currentState!
+                                                    .validate())
+                                                  {
+                                                    await _cubit!.modifyZone(
+                                                        zone.zone_id,
+                                                        _nameModifyController
+                                                            .text),
+                                                    if (state
+                                                            .modifyZoneStatus ==
+                                                        LoadStatus.SUCCESS)
+                                                      {
+                                                        Navigator.pop(
+                                                            context, true),
+                                                        // _nameZoneController.clear(),
+                                                      }
+                                                    else
+                                                      {
+                                                        Navigator.pop(
+                                                            context, false),
+                                                      }
+                                                  }
+                                              }),
+                                        ));
+                                if (state.modifyZoneStatus ==
+                                    LoadStatus.SUCCESS) {
+                                  _onRefreshData();
+                                  showSnackBar(
+                                      'Thay đổi tên thành công!', "success");
+                                } else {
+                                  showSnackBar("Tên khu đã tồn tại", "error");
+                                }
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(height: 10);
+                          },
+                        ),
+                      )
                     : Container(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [EmptyDataWidget()],
-                    ));
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [EmptyDataWidget()],
+                        ));
               } else {
                 return Container();
               }
@@ -199,21 +205,20 @@ class _GardenListState extends State<ZoneListPage> {
         floatingActionButton: FloatingActionButton(
           heroTag: "btn2",
           onPressed: () async {
-          bool isAddSuccess =   await showDialog(
+            bool isAddSuccess = await showDialog(
                 context: context,
-                builder: (context) =>
-                    _dialogCreate(
+                builder: (context) => _dialogCreate(
                       title: Text("Thêm khu mới"),
                       hintText: "Nhập vào tên khu",
                       spanText: "Tên khu",
                       textEditingController: _nameZoneController,
                     ));
-          if(isAddSuccess) {
-            _onRefreshData();
-            showSnackBar("Thêm khu thành công", "success");
-          }else{
-            showSnackBar("Tên khu đã tồn tại", "error");
-          }
+            if (isAddSuccess) {
+              _onRefreshData();
+              showSnackBar("Thêm khu thành công", "success");
+            } else {
+              showSnackBar("Tên khu đã tồn tại", "error");
+            }
           },
           backgroundColor: AppColors.main,
           child: Icon(
@@ -225,11 +230,12 @@ class _GardenListState extends State<ZoneListPage> {
     );
   }
 
-  _buildItem({required String name,
-    String? avatarUrl,
-    VoidCallback? onDelete,
-    VoidCallback? onPressed,
-    VoidCallback? onUpdate}) {
+  _buildItem(
+      {required String name,
+      String? avatarUrl,
+      VoidCallback? onDelete,
+      VoidCallback? onPressed,
+      VoidCallback? onUpdate}) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -293,7 +299,7 @@ class _GardenListState extends State<ZoneListPage> {
           ),
           child: Padding(
             padding:
-            const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
+                const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
             child: Row(
               children: [
                 Image.asset(avatarUrl ?? AppImages.icZoneAvatar),
@@ -334,16 +340,10 @@ class _GardenListState extends State<ZoneListPage> {
       return AlertDialog(
         title: title,
         content: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            height: MediaQuery.of(context).size.height / 4,
+            width: MediaQuery.of(context).size.width,
             child:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.symmetric(horizontal: 28),
@@ -391,8 +391,7 @@ class _GardenListState extends State<ZoneListPage> {
                       "Thêm",
                       style: TextStyle(color: Colors.white, fontSize: 14),
                     ))
-              ]
-              )
+              ])
             ])),
       );
     });
@@ -409,66 +408,77 @@ class _GardenListState extends State<ZoneListPage> {
       return AlertDialog(
         title: title,
         content: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            height: MediaQuery.of(context).size.height / 4 ,
+            width: MediaQuery.of(context).size.width,
             child:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.symmetric(horizontal: 28),
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: spanText,
-                      style: AppTextStyle.blackS14,
-                    ),
-                  ]),
-                ),
-              ),
-              Container(
-                  margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  // Container(
+                  //   alignment: Alignment.centerLeft,
+                  //   // margin: EdgeInsets.symmetric(horizontal: 28),
+                  //   child: RichText(
+                  //     text: TextSpan(children: [
+                  //       TextSpan(
+                  //         text: spanText,
+                  //         style: AppTextStyle.blackS14,
+                  //       ),
+                  //     ]),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 15,),
+                  Container(
+                      // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                      decoration: BoxDecoration(
+
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: AppTextField(
+                          labelText: 'Tên khu',
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          hintText:'' /*hintText.toString()*/,
+                          controller: textEditingController,
+                          validator: (value) {
+                            if (Validator.validateNullOrEmpty(value!))
+                              return "Chưa nhập tên khu";
+                            else if (value == zoneName) {
+                              return "Tên đã bị trùng!";
+                            } else
+                              return null;
+                          },
+                        ),
+                      )),
+                  SizedBox(
+                    height: 15,
                   ),
-                  child: Form(
-                    key: _formKey,
-                    child: AppTextField(
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                      hintText: hintText.toString(),
-                      controller: textEditingController,
-                      validator: (value) {
-                        if (Validator.validateNullOrEmpty(value!))
-                          return "Chưa nhập tên khu";
-                        else if (value == zoneName) {
-                          return "Tên đã bị trùng!";
-                        } else
-                          return null;
-                      },
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                    // FlatButton(
+                    //     height: 40,
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(16),
+                    //     ),
+                    //     color: AppColors.redButton,
+                    //     onPressed: (() => {Navigator.of(context).pop()}),
+                    //     child: Text("Hủy",
+                    //         style: TextStyle(color: Colors.white, fontSize: 14))),
+                    Expanded(
+                      child: AppButton(
+                          color: AppColors.redButton,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        title: 'Hủy',
+                          ),
                     ),
-                  )),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                FlatButton(
-                    height: 40,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                    SizedBox(
+                    width: 20,
                     ),
-                    color: AppColors.redButton,
-                    onPressed: (() => {Navigator.of(context).pop()}),
-                    child: Text("Hủy",
-                        style: TextStyle(color: Colors.white, fontSize: 14))),
-                _buildConfirmCreateButton(),
-              ])
+                    Expanded(child: _buildConfirmCreateButton())
+                  ])
             ])),
       );
     });
   }
-
 
   Widget _buildConfirmCreateButton() {
     return BlocBuilder<ZoneListCubit, ZoneListState>(
@@ -477,37 +487,35 @@ class _GardenListState extends State<ZoneListPage> {
         return (prev.createZoneStatus != current.createZoneStatus);
       },
       builder: (context, state) {
-        return Container(
-          height: 40,
-          child: AppButton(
+        return AppButton(
             color: AppColors.main,
             title: "Thêm",
             textStyle: AppTextStyle.whiteS16Bold,
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 await _cubit!.createZone(_nameZoneController.text);
-            //         .then(
-            //             (value) => {
-            //               if(state.createZoneStatus == LoadStatus.FAILURE){
-            //                 showSnackBar("Tên khu đã tồn tại", "error"),
-            //                 Navigator.pop(context),
-            //               } else {
-            //                 Navigator.pop(context),
-            //                 showSnackBar("Thêm khu thành công", "success"),
-            //                 _onRefreshData(),
-            //   }
-            // });
-              if(state.createZoneStatus == LoadStatus.FAILURE){
-              //showSnackBar("Tên khu đã tồn tại", "error");
-              Navigator.pop(context, false);
-              } else{
-              Navigator.pop(context, true);
-              //showSnackBar("Thêm khu thành công", "success");
-              // _onRefreshData();
+                //         .then(
+                //             (value) => {
+                //               if(state.createZoneStatus == LoadStatus.FAILURE){
+                //                 showSnackBar("Tên khu đã tồn tại", "error"),
+                //                 Navigator.pop(context),
+                //               } else {
+                //                 Navigator.pop(context),
+                //                 showSnackBar("Thêm khu thành công", "success"),
+                //                 _onRefreshData(),
+                //   }
+                // });
+                if (state.createZoneStatus == LoadStatus.FAILURE) {
+                  //showSnackBar("Tên khu đã tồn tại", "error");
+                  Navigator.pop(context, false);
+                } else {
+                  Navigator.pop(context, true);
+                  //showSnackBar("Thêm khu thành công", "success");
+                  // _onRefreshData();
+                }
               }
-            }
             },
-          ),
+
         );
       },
     );
@@ -527,8 +535,10 @@ class _GardenListState extends State<ZoneListPage> {
 
   void _showMessage(String message, String type) {
     _scaffoldKey.currentState!.removeCurrentSnackBar();
-    _scaffoldKey.currentState!.showSnackBar(
-        AppSnackBar(message: message, typeSnackBar: type,));
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(
+      message: message,
+      typeSnackBar: type,
+    ));
   }
 
   void _onScroll() {
