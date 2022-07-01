@@ -153,11 +153,42 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                         children: List.generate(
                             widget.dailyTask!.materials?.length ?? 0, (index) {
                           return Container(
-                            width: double.infinity,
-                            height: 40,
-                            color: AppColors.grayC4,
-                            child: Text(
-                                "Tên vật tư: " + (widget.dailyTask!.materials![index].name ?? '')),
+                            // width: double.infinity,
+                            // height: 40,
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.only(bottom: 10),
+                            width: MediaQuery.of(context).size.width - 20,
+                            // color: AppColors.grayC4,
+                            decoration: BoxDecoration(
+                                color: Color(0xFFDDDAEA),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Tên vật tư: " +
+                                      (widget.dailyTask!.materials![index].name ??
+                                          ''),
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  "Số lượng: " +
+                                      (widget.dailyTask!.materials![index].quantity?.toString() ??
+                                          ''),
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         }),
                       ),

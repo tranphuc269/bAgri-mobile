@@ -154,6 +154,7 @@ class _ModalShowStageSeasonWidgetState extends State<ModalShowStageSeasonWidget>
                     children: [
                       Expanded(
                         child: AppButton(
+                          isEnabled: widget.end == null,
                           color: AppColors.redButton,
                           title: 'Kết thúc',
                           onPressed: () {
