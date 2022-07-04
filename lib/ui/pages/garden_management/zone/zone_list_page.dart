@@ -436,7 +436,7 @@ class _GardenListState extends State<ZoneListPage> {
                         child: AppTextField(
                           labelText: 'Tên khu',
                           autoValidateMode: AutovalidateMode.onUserInteraction,
-                          hintText:'' /*hintText.toString()*/,
+                          hintText:'Tên khu' /*hintText.toString()*/,
                           controller: textEditingController,
                           validator: (value) {
                             if (Validator.validateNullOrEmpty(value!))
