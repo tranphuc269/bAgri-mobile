@@ -32,6 +32,7 @@ import 'package:flutter_base/repositories/zone_repository.dart';
 import 'package:flutter_base/router/navigation_observer.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_page.dart';
+import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -263,7 +264,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
-      // home: ContractTaskDetailPage(),
+       // home: LineChartSample1(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

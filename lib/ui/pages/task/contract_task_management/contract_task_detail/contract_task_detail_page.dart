@@ -16,6 +16,8 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
+import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker.dart';
+import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -35,6 +37,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
 
   DateFormat formatDate = DateFormat("dd-MM-yyyy");
   var _descriptionController = TextEditingController(text: "");
+
 
   @override
   void initState() {
@@ -119,7 +122,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                         height: 10,
                       ),
                       _buildInformation(
-                          title: "Số lượng cây: ",
+                          title: "Số lượng bầu cây: ",
                           information: "${state.contractTask!.treeQuantity}"),
                       SizedBox(
                         height: 10,
@@ -132,7 +135,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                               style: AppTextStyle.blackS16)
                         ],
                       ),
-                      state.finishContractTaskStatus == LoadStatus.SUCCESS
+                      state.getFinishStatus == LoadStatus.SUCCESS
                           ? Column(
                               children: [
                                 SizedBox(
@@ -308,7 +311,6 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
               ),
             ));
   }
-
   Widget _buildInformation({String? title, String? information}) {
     return Row(
       children: [
@@ -403,6 +405,12 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                 SizedBox(width: 20),
                 GestureDetector(
                   onTap: onConfirm,
+                  // onTap: (){
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => AppMaterialPickerPage()),
+                  //   );
+                  // },
                   child: Text(
                     'Thêm',
                     style: TextStyle(
@@ -476,6 +484,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
   Widget materialItem(MaterialUsedByTask? material, int? index) {
     return GestureDetector(
         onTap: () {
+          _cubit!.state.getFinishStatus == LoadStatus.SUCCESS ? null :
           showDialog(
               context: context,
               builder: (context) => AppDeleteDialog(
@@ -519,6 +528,18 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
           ),
         ));
   }
+  // Widget _buildMaterialPicker() {
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(25.0),
+  //     ),
+  //     child: AppPageMaterialPicker(
+  //       controller: materialController,
+  //       onChanged: (value) {},
+  //     ),
+  //   );
+  // }
 }
 
 class ContractTaskDetailArgument {

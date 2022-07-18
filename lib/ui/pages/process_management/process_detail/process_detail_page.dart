@@ -261,14 +261,19 @@ class _PhaseProcessState extends State<PhaseProcess> {
                     ),
                     child: Row(
                       children: [
-                        Text(
-                          'Giai đoạn ${widget.phase}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Flexible(
+                            child: Text(
+                              'Giai đoạn ${widget.phase}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          fit: FlexFit.tight,
+                            ),
                         SizedBox(
                           width: 10,
                         ),

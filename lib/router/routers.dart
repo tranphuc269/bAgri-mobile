@@ -71,7 +71,8 @@ class Routes {
   ///Task
   static String taskCreate = "/taskCreate";
   static String taskUpdate = "/taskUpdate";
-  static String gardenTask = "gardenTask";
+  static String gardenTask = "/gardenTask";
+  static String seasonListTask = "/seasonListTask";
 
   ///Home
   static String main = "/main_page";
@@ -294,6 +295,12 @@ class Routes {
     router.define(
       gardenTask,
       handler: gardenTaskHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+
+    router.define(
+      seasonListTask,
+      handler: seasonListTaskHandler,
       transitionType: TransitionType.fadeIn,
     );
 

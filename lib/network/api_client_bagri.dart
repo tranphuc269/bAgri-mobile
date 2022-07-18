@@ -298,6 +298,11 @@ abstract class ApiClient {
   Future<List<ContractTask>> getListContractTask(
       @Header('accept') String accept, @Header("Authorization") String? auth);
 
+  @GET("/contract-tasks?seasonId={season_id}")
+  Future <List<ContractTask>> getListContractTaskBySeason(
+      @Header('accept') String accept, @Header("Authorization") String? auth, @Path("season_id") String? seasonId);
+
+
   @DELETE("/works/{work_id}")
   Future<dynamic> deleteContractWork(
     @Header("accept") String? accept,
