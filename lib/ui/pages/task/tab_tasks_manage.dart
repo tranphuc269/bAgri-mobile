@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_list/contract_tasks_list_page.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_tasks_list_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 
 class TaskTabPage extends StatefulWidget{
+  SeasonEntity seasonEntity;
 
+  TaskTabPage({required this.seasonEntity});
   @override
   _TaskTabPageState createState() => _TaskTabPageState();
 }
@@ -69,7 +72,7 @@ class _TaskTabPageState extends State<TaskTabPage>
                child: TabBarView(
                  controller: _controller,
                  children: [
-                   TabListContractTask(),
+                   TabListContractTask(seasonEntity: widget.seasonEntity,),
                    TabListTemporaryTask(),
                  ],
                ),

@@ -4,6 +4,7 @@ import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
+import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker.dart';
 import 'package:flutter_base/utils/validators.dart';
 
 class ModalAddMaterialWidget extends StatefulWidget {
@@ -31,6 +32,7 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
   TextEditingController nameController = TextEditingController(text: '');
   TextEditingController quantityController = TextEditingController(text: '');
   TextEditingController unitController = TextEditingController(text: '');
+  MaterialPickerController materialController = MaterialPickerController();
   late double heightResize = 0.5;
 
   @override
@@ -44,7 +46,7 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.7;
+        heightResize = 0.45;
       });
     } else {
       setState(() {
@@ -103,29 +105,28 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildTextLabel("Tên vật tư"),
-                      SizedBox(height: 10,),
-                      AppTextField(
-                        autoValidateMode: AutovalidateMode.onUserInteraction,
-                        hintText: 'Nhập tên của vật tư',
-                        controller: nameController,
-                        validator: (value) {
-                          if (Validator.validateNullOrEmpty(value!))
-                            return "Chưa nhập tên vật tư";
-                          else
-                            return null;
-                        },
+                      _buildTextLabel("Vật tư"),
+                      SizedBox(
+                        height: 10,
                       ),
+                      _buildMaterialPicker(),
                       SizedBox(
                         height: 20,
                       ),
-                      _buildTextLabel("Số lượng"),
-                      SizedBox(height: 10,),
+                      _buildTextLabel("Số lượng: "),
+                      SizedBox(
+                        height: 10,
+                      ),
                       AppTextField(
                         autoValidateMode: AutovalidateMode.onUserInteraction,
                         hintText: 'Nhập số lượng vật tư',
                         keyboardType: TextInputType.number,
                         controller: quantityController,
+                        suffixText: materialController.materialEntity?.unit,
+                        suffixTextStyle: TextStyle(
+                          color: AppColors.mainDarker,
+                          fontSize: 18,
+                        ),
                         validator: (value) {
                           if (Validator.validateNullOrEmpty(value!))
                             return "Chưa nhập số lương vật tư";
@@ -133,21 +134,21 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
                             return null;
                         },
                       ),
+
+                      // AppTextField(
+                      //   autoValidateMode: AutovalidateMode.onUserInteraction,
+                      //   hintText: 'Nhập số lượng vật tư',
+                      //   keyboardType: TextInputType.number,
+                      //   controller: quantityController,
+                      //   validator: (value) {
+                      //     if (Validator.validateNullOrEmpty(value!))
+                      //       return "Chưa nhập số lương vật tư";
+                      //     else
+                      //       return null;
+                      //   },
+                      // ),
                       SizedBox(
                         height: 20,
-                      ),
-                      _buildTextLabel("Đơn vị"),
-                      SizedBox(height: 10,),
-                      AppTextField(
-                        autoValidateMode: AutovalidateMode.onUserInteraction,
-                        hintText: 'Nhập đơn vị của vật tư',
-                        controller: unitController,
-                        validator: (value) {
-                          if (Validator.validateNullOrEmpty(value!))
-                            return "Chưa nhập đơn vị của vật tư";
-                          else
-                            return null;
-                        },
                       ),
                       SizedBox(
                         height: 20,
@@ -165,7 +166,7 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
                                     widget.onPressed(
                                         nameController.text,
                                         quantityController.text,
-                                        unitController.text);
+                                        materialController.materialEntity!.unit.toString());
                                   }
                                 }),
                           ),
@@ -189,6 +190,18 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
             style: AppTextStyle.blackS14,
           ),
         ]),
+      ),
+    );
+  }
+
+  Widget _buildMaterialPicker() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      child: AppPageMaterialPicker(
+        controller: materialController,
+        onChanged: (value) {},
       ),
     );
   }

@@ -196,7 +196,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
           splashSpeedInMilliseconds: 300,
           notchSmoothness: NotchSmoothness.defaultEdge,
           gapLocation: GapLocation.center,
-          onTap: (index) => setState(() => index == 0 ? Application.router?.navigateTo(context, Routes.seasonManagement): Application.router?.navigateTo(context, Routes.tabTask)),
+          onTap: (index) => setState(() => index == 0 ? Application.router?.navigateTo(context, Routes.seasonManagement): Application.router?.navigateTo(context, Routes.seasonListTask)),
           hideAnimationController: _hideBottomBarAnimationController,
           shadow: BoxShadow(
             offset: Offset(0, 1),

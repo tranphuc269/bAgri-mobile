@@ -11,6 +11,8 @@ import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/season_d
 import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/season_detail_page.dart';
 import 'package:flutter_base/ui/pages/seasons_management/update_season/season_updating_cubit.dart';
 import 'package:flutter_base/ui/pages/seasons_management/update_season/season_updating_page.dart';
+import 'package:flutter_base/ui/pages/task/task_season_list/season_list_management_cubit.dart';
+import 'package:flutter_base/ui/pages/task/task_season_list/season_list_management_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Handler seasonManagementHandler = new Handler(
@@ -72,3 +74,15 @@ Handler seasonUpdatingHandler = new Handler(
     child: SeasonUpdatingPage(seasonId: seasonId),
   );
 });
+
+
+Handler seasonListTaskHandler = new Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return BlocProvider(
+        create: (context) {
+          SeasonRepository seasonRepository =
+          RepositoryProvider.of<SeasonRepository>(context);
+          return SeasonListForTaskCubit(seasonRepository: seasonRepository);},
+        child: SeasonListForTaskPage(),
+      );
+    });

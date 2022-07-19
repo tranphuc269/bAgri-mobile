@@ -25,6 +25,7 @@ import 'package:flutter_base/ui/widgets/b_agri/page_picker/multiple_tree_picker/
 
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class UpdateProcessSeasonPage extends StatefulWidget {
   final String? seasonId;
@@ -306,6 +307,7 @@ class PhaseProcess extends StatefulWidget {
 }
 
 class _PhaseProcessState extends State<PhaseProcess> {
+  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
   @override
   Widget build(BuildContext context) {
     int sumStart = 0;
@@ -373,40 +375,51 @@ class _PhaseProcessState extends State<PhaseProcess> {
                       ),
                       child: Row(
                         children: [
-                          Text(
-                            'Giai đoạn ${widget.phase}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Thời gian: ',
-                            style: TextStyle(
-                              color: Color(0xFFBBB5D4),
-                              fontSize: 14,
-                            ),
-                          ),
-                          BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
-                              buildWhen: (prev, current) =>
-                                  prev.actionWithStepStatus !=
-                                  current.actionWithStepStatus,
-                              builder: (context, state) {
-                                if (widget.startDate != null) {
-                                  return Text(
-                                    widget.startDate!.substring(0, 10),
+                          Flexible(
+                            flex: 5,
+                              child: Text(
+                                    'Giai đoạn:  ${widget.phase}',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 14,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  );
-                                }
-                                return Text("");
-                              }),
+                                    overflow: TextOverflow.ellipsis,
+                              ),
+                            fit: FlexFit.tight,
+                          ),
+                         Flexible(
+                           flex: 5,
+                           fit: FlexFit.tight,
+                           child:Row(
+                             children: [
+                               Text(
+                                 'Thời gian: ',
+                                 style: TextStyle(
+                                   color: Color(0xFFBBB5D4),
+                                   fontSize: 14,
+                                 ),
+                               ),
+                               BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
+                                   buildWhen: (prev, current) =>
+                                   prev.actionWithStepStatus !=
+                                       current.actionWithStepStatus,
+                                   builder: (context, state) {
+                                     if (widget.startDate != null) {
+                                       return Text(
+                                         _dateFormat.format(DateTime.parse(widget.startDate.toString())),
+                                         // widget.startDate!.substring(0, 10),
+                                         style: TextStyle(
+                                           color: Colors.white,
+                                           fontSize: 14,
+                                         ),
+                                       );
+                                     }
+                                     return Text("");
+                                   }),
+                             ],
+                           ),
+                         )
                         ],
                       ),
                     ),
@@ -556,6 +569,7 @@ class StepWidget extends StatefulWidget {
 }
 
 class _StepWidgetState extends State<StepWidget> {
+  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -650,7 +664,7 @@ class _StepWidgetState extends State<StepWidget> {
               children: [
                 Text(
                   (widget.step!.start) != null
-                      ? 'Thời gian bắt đầu ${widget.step!.start!.substring(0, 10)}'
+                      ? 'Thời gian bắt đầu ${ _dateFormat.format(DateTime.parse( widget.step!.start.toString()))}'
                       : 'Chưa có thời gian bắt đầu',
                   style: TextStyle(
                     color: Color(0xFF9E7F2F),
