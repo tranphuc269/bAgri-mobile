@@ -3,6 +3,7 @@ import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/contract_task_responsitory.dart';
@@ -23,7 +24,9 @@ import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:intl/intl.dart';
 
 class TabListContractTask extends StatelessWidget {
-  const TabListContractTask({Key? key}) : super(key: key);
+  SeasonEntity seasonEntity;
+
+  TabListContractTask({Key? key,required this.seasonEntity }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +37,14 @@ class TabListContractTask extends StatelessWidget {
         return ContractTaskListCubit(
             contractTaskRepositoy: contractTaskRepository);
       },
-      child: ContractTaskListPage(),
+      child: ContractTaskListPage(seasonEntity: seasonEntity,),
     );
   }
 }
 
 class ContractTaskListPage extends StatefulWidget {
+  SeasonEntity seasonEntity;
+  ContractTaskListPage({required this.seasonEntity});
   @override
   _ContractTaskListState createState() => _ContractTaskListState();
 }
@@ -57,7 +62,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
   void initState() {
     super.initState();
     _cubit = BlocProvider.of<ContractTaskListCubit>(context);
-    _cubit!.fetchListContractTask();
+    _cubit!.fetchListContractTask(seasonId: widget.seasonEntity.seasonId);
     _scrollController.addListener(_onScroll);
   }
 
@@ -169,8 +174,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
       {required ContractTask contractTask,
       String? avatarUrl,
       VoidCallback? onDelete,
-      VoidCallback? onPressed,
-      VoidCallback? onUpdate}) {
+      VoidCallback? onPressed}) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -181,32 +185,9 @@ class _ContractTaskListState extends State<ContractTaskListPage>
         ),
         child: Slidable(
           endActionPane: ActionPane(
-            extentRatio: 1 / 3,
+            extentRatio: 1 / 5,
             motion: BehindMotion(),
             children: [
-              CustomSlidableAction(
-                  backgroundColor: AppColors.blueSlideButton,
-                  foregroundColor: Colors.white,
-                  onPressed: (BuildContext context) {
-                    onUpdate?.call();
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: Image.asset(AppImages.icSlideEdit),
-                      ),
-                      SizedBox(height: 4),
-                      FittedBox(
-                        child: Text(
-                          'Sửa',
-                          style: AppTextStyle.whiteS16,
-                        ),
-                      )
-                    ],
-                  )),
               CustomSlidable(
                   backgroundColor: AppColors.redSlideButton,
                   foregroundColor: Colors.white,
@@ -331,7 +312,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
   }
 
   Future<void> _onRefreshData() async {
-    await _cubit!.fetchListContractTask();
+    await _cubit!.fetchListContractTask(seasonId: widget.seasonEntity.seasonId);
   }
 
   void showSnackBar(String message) {

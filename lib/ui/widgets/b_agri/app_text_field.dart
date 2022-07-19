@@ -18,6 +18,8 @@ class AppTextField extends StatelessWidget {
   final AutovalidateMode? autoValidateMode;
   final String? initialValue;
   final bool? obscureText;
+  final String? suffixText;
+  final TextStyle? suffixTextStyle;
 
   const AppTextField({
     Key? key,
@@ -34,6 +36,8 @@ class AppTextField extends StatelessWidget {
     this.labelStyle,
     this.enable,
     this.obscureText = false,
+    this.suffixText,
+    this.suffixTextStyle,
   }) : super(key: key);
 
   @override
@@ -46,8 +50,10 @@ class AppTextField extends StatelessWidget {
 
 
       decoration: InputDecoration(
-        // labelText: labelText,
-        // labelStyle: AppTextStyle.green,
+
+        suffixText: suffixText,
+        suffixStyle: suffixTextStyle,
+
         hintText: hintText,
         contentPadding: const EdgeInsets.only(
           left: 20,

@@ -26,7 +26,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   late ContractTaskAddingCubit _cubit;
 
-  final treeQuantityController = TextEditingController(text: "");
+  var treeQuantityController = TextEditingController(text: "");
   late GardenPickerController gardenController;
   late WorkPickerController workPickerController;
   final _formKey = GlobalKey<FormState>();
@@ -128,11 +128,9 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 title: 'Xác nhận',
                 onPressed: () async {
                   if(_formKey.currentState!.validate()){
-                    _cubit.createContractTask(treeQuantityController.text);
+                   await _cubit.createContractTask(treeQuantityController.text);
                     Navigator.of(context).pop(true);
                   }
-
-
                 },
               ),
             )
@@ -177,6 +175,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
   }
 
   Widget _buildTreeQuantity() {
+    treeQuantityController = TextEditingController(text: gardenController.gardenEntity?.treePlaceQuantity.toString());
     return Container(
             margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
             decoration: BoxDecoration(
@@ -186,9 +185,11 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
               hintText: "Nhập số lượng bầu cây",
               keyboardType: TextInputType.number,
               controller: treeQuantityController,
-             validator: (value){
+              validator: (value){
                 if(Validator.validateNullOrEmpty(value!))
                   return "Chưa nhập số lượng bầu cây";
+                if(num.parse(treeQuantityController.text) > (gardenController.gardenEntity?.treePlaceQuantity)!.toInt())
+                  return "Số lượng đã lớn hơn số lượng bầu của vườn";
                 else
                   return null;
              },
@@ -205,7 +206,11 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
       ),
       child: AppPageGardenPicker(
         controller: gardenController,
-        onChanged: (value) {},
+        onChanged: (value) {
+          setState(() {
+
+          });
+        },
       ),
     );
   }

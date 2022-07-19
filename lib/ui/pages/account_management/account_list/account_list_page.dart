@@ -194,9 +194,11 @@ class _AccountListState extends State<AccountListPage> {
   }) {
     return StatefulBuilder(builder: (context, setState) {
       return AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15.0))),
         title: const Text("Thông tin tài khoản"),
         content: Container(
-            height: MediaQuery.of(context).size.height / 3.7,
+            height: 195,
             width: MediaQuery.of(context).size.width,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

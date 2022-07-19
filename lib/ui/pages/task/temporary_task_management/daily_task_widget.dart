@@ -56,26 +56,31 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
               ),
               child: Row(
                 children: [
-                  Text(
-                    'Nhiệm vụ ${widget.dailyTask?.title}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      'Nhiệm vụ ${widget.dailyTask?.title}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
+                    fit: FlexFit.tight,
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    widget.dailyTask?.date?.substring(0, 10) != null
-                        ? 'Thời gian: ${widget.dailyTask?.date?.substring(0, 10)}'
-                        : "",
-                    style: TextStyle(
-                      color: Color(0xFFBBB5D4),
-                      fontSize: 14,
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Text(
+                      widget.dailyTask?.date?.substring(0, 10) != null
+                          ? 'Thời gian: ${widget.dailyTask?.date?.substring(0, 10)}'
+                          : "",
+                      style: TextStyle(
+                        color: Color(0xFFBBB5D4),
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -169,7 +174,8 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                               children: [
                                 Text(
                                   "Tên vật tư: " +
-                                      (widget.dailyTask!.materials![index].name ??
+                                      (widget.dailyTask!.materials![index]
+                                              .name ??
                                           ''),
                                   style: TextStyle(
                                     color: Colors.black54,
@@ -179,7 +185,9 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                                 ),
                                 Text(
                                   "Số lượng: " +
-                                      (widget.dailyTask!.materials![index].quantity?.toString() ??
+                                      (widget.dailyTask!.materials![index]
+                                              .quantity
+                                              ?.toString() ??
                                           ''),
                                   style: TextStyle(
                                     color: Colors.black54,

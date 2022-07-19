@@ -155,7 +155,7 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
                                 onChanged: (value){
                                   setState(() {
                                     areaUnit = value as AreaUnit;
-                                    print(value.name);
+                                    // print(value.name);
                                   });
                                 },
                               ),
@@ -169,7 +169,7 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
                                 onChanged: (value){
                                   setState(() {
                                     areaUnit = value as AreaUnit;
-                                    print(areaUnit.name);
+                                    // print(areaUnit.name);
                                   });
                                   },
                             )

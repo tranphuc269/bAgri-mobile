@@ -32,7 +32,7 @@ Handler taskCreateHandler = new Handler(
 
 Handler gardenTaskHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  GardenTaskArgument args = context!.settings!.arguments as GardenTaskArgument;
+  GardenTaskArgument args = context?.settings?.arguments as GardenTaskArgument;
   return BlocProvider(
     create: (context) {
       final taskRepository = RepositoryProvider.of<TaskRepository>(context);

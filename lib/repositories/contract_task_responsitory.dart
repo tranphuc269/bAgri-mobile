@@ -9,6 +9,7 @@ abstract class ContractTaskRepository{
 
   Future<dynamic> createContractTask({CreateContractTaskParam? param});
   Future<dynamic> getListContractTask();
+  Future<dynamic> getListContractTaskBySeason({String? seasonId});
   Future<dynamic> deleteContractTask({String? contractTaskId});
   Future<dynamic> getContractTaskDetail({String? contractTaskId});
   Future <dynamic> updateContractTask({CreateContractTaskParam? param, String? contractTaskId});
@@ -38,6 +39,9 @@ class ContractTaskRepositoryImpl extends ContractTaskRepository{
   Future <List<ContractTask>>getListContractTask() {
     return _apiClientBagri!.getListContractTask("application/json", "Bearer ${accessToken}");
   }
+  Future<List<ContractTask>> getListContractTaskBySeason({String? seasonId}){
+    return _apiClientBagri!.getListContractTaskBySeason("application/json", "Bearer ${accessToken}", seasonId);
+}
 
   Future <dynamic> deleteContractTask({String? contractTaskId}){
     return _apiClientBagri!.deleteContractTask("application/json", "Bearer ${accessToken}", contractTaskId);
