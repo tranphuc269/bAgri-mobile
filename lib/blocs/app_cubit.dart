@@ -11,6 +11,7 @@ import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/entities/weather/weather_response.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
 import 'package:flutter_base/repositories/material_repository.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
+import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/task_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
@@ -44,6 +46,7 @@ class AppCubit extends Cubit<AppState> {
   WeatherRepository weatherRepository;
   ZoneRepository zoneRepository;
   ContractWorkRepositoy contractWorkRepositoy;
+  SeasonRepository seasonRepository;
 
   AppCubit({
     required this.treeRepository,
@@ -52,13 +55,13 @@ class AppCubit extends Cubit<AppState> {
     required this.gardenRepository,
     required this.taskRepository,
     required this.userRepository,
-    // required this.farmerRepository,
     required this.weatherRepository,
     required this.zoneRepository,
     required this.contractWorkRepository,
     required this.materialRepository,
     required this.temporaryTaskRepository,
-    required this.contractWorkRepositoy
+    required this.contractWorkRepositoy,
+    required this.seasonRepository,
   }) : super(AppState());
 
 
@@ -152,6 +155,24 @@ class AppCubit extends Cubit<AppState> {
       emit(state.copyWith(getGardenStatus: LoadStatus.SUCCESS));
     } catch (error) {
       emit(state.copyWith(getGardenStatus: LoadStatus.FAILURE));
+    }
+  }
+
+  fetchListSeason() async {
+    emit(state.copyWith(getSeasonStatus: LoadStatus.LOADING));
+    try {
+      final response = await seasonRepository.getListSeasonData();
+      if (response != null) {
+        emit(state.copyWith(
+          getSeasonStatus: LoadStatus.SUCCESS,
+          seasons: response /*.data!*/ /*.gardens*/,
+        ));
+      } else {
+        emit(state.copyWith(getSeasonStatus: LoadStatus.FAILURE));
+      }
+      emit(state.copyWith(getSeasonStatus: LoadStatus.SUCCESS));
+    } catch (error) {
+      emit(state.copyWith(getSeasonStatus: LoadStatus.FAILURE));
     }
   }
   fetchListMaterials() async {

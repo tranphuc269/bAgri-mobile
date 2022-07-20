@@ -248,7 +248,7 @@ class _HomePageState extends State<HomePage> {
     Application.router?.navigateTo(context, Routes.contractWorkList);
   }
   void redirectTabTask(){
-    Application.router?.navigateTo(context, Routes.tabTask);
+    Application.router?.navigateTo(context, Routes.seasonListTask);
   }
 }
 

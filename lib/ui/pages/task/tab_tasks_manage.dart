@@ -73,7 +73,7 @@ class _TaskTabPageState extends State<TaskTabPage>
                  controller: _controller,
                  children: [
                    TabListContractTask(seasonEntity: widget.seasonEntity,),
-                   TabListTemporaryTask(),
+                   TabListTemporaryTask(seasonEntity: widget.seasonEntity,),
                  ],
                ),
              ),

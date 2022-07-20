@@ -11,6 +11,7 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/garden_picker/app_garden_picker.dart';
+import 'package:flutter_base/ui/widgets/b_agri/page_picker/season_picker/app_season_picker.dart';
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,16 +29,21 @@ class _TemporaryTaskAddPageState extends State<TemporaryTaskAddPage> {
   late TextEditingController nameController;
   late TextEditingController descriptionController;
   late GardenPickerController gardenController;
+  late SeasonPickerController seasonPickerController;
   late TemporaryTaskAddCubit _cubit;
 
   @override
   void initState() {
     nameController = TextEditingController();
     gardenController = GardenPickerController();
+    seasonPickerController = SeasonPickerController();
     descriptionController = TextEditingController();
     _cubit = BlocProvider.of<TemporaryTaskAddCubit>(context);
     gardenController.addListener(() {
       _cubit.changeGarden(gardenController.gardenEntity!);
+    });
+    seasonPickerController.addListener(() {
+      _cubit.changeSeason(seasonPickerController.seasonEntity!);
     });
     super.initState();
   }
@@ -86,16 +92,20 @@ class _TemporaryTaskAddPageState extends State<TemporaryTaskAddPage> {
                   );
                 },
               ),
-              _buildTextLabel("Chọn vườn:"),
+              _buildTextLabel("Chọn mùa vụ:"),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25.0),
                 ),
-                child: AppPageGardenPicker(
-                  controller: gardenController,
+                child: AppPageSeasonPicker(
+                  controller: seasonPickerController,
                   onChanged: (value) {},
-                ),
+                )
+                // AppPageGardenPicker(
+                //   controller: gardenController,
+                //   onChanged: (value) {},
+                // ),
               ),
               // SizedBox(
               //   height: 10,

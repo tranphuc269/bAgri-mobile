@@ -365,6 +365,13 @@ abstract class ApiClient {
   @GET("/temporary-tasks")
   Future<List<TemporaryTask>> getListTemporaryTasks();
 
+  @GET("/temporary-tasks?seasonId={season_id}")
+  Future<List<TemporaryTask>> getListTemporaryTasksBySeason(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("season_id") String? seasonId);
+
+
   @POST("/temporary-tasks")
   Future<dynamic> createTemporaryTask(@Body() Map<String, dynamic> body);
 

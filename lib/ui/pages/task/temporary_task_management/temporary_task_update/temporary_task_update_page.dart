@@ -74,7 +74,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                 }, builder: (context, state) {
                   return _buildInformation(
                       title: "Vườn: ",
-                      information: state.temporaryTask?.garden ?? "");
+                      information: state.temporaryTask?.season ?? "");
                 }),
                 SizedBox(
                   height: 10,

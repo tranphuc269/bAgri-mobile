@@ -1,8 +1,12 @@
+import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class TemporaryTaskRepository {
+
+  final accessToken = SharedPreferencesHelper.getToken().toString();
   Future<List<TemporaryTask>> getListTemporaryTask();
+  Future<List<TemporaryTask>> getListTemporaryTaskBySeason({String? seasonId});
   Future<dynamic> deleteTemporaryTask(String id);
   Future<dynamic> createTemporaryTask(TemporaryTask temporaryTask);
   Future<dynamic> updateTemporaryTask(TemporaryTask temporaryTask,  String? temporaryTaskId);
@@ -19,6 +23,11 @@ class TemporaryTaskRepositoryImpl extends TemporaryTaskRepository {
   @override
   Future<List<TemporaryTask>> getListTemporaryTask() {
     return _apiClientBagri!.getListTemporaryTasks();
+  }
+
+  @override
+  Future<List<TemporaryTask>> getListTemporaryTaskBySeason({String? seasonId}) {
+    return _apiClientBagri!.getListTemporaryTasksBySeason("application/json", "Bearer ${accessToken}", seasonId);
   }
 
   @override

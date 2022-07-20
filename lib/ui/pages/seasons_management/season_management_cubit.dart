@@ -13,13 +13,18 @@ class SeasonManagementCubit extends Cubit<SeasonManagementState> {
 
   Future<void> getListSeason() async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
-    try {
-      final  result =
-          await seasonRepository.getListSeasonData();
 
-      emit(state.copyWith(
-          seasonList: result/*.data!.seasons*/, loadStatus: LoadStatus.SUCCESS));
+    try {
+      final result = await seasonRepository.getListSeasonData();
+      if(result != null){
+        emit(state.copyWith(
+            seasonList: result/*.data!.seasons*/, loadStatus: LoadStatus.SUCCESS));
+      }
+      else{
+        emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+      }
     } catch (e) {
+      print("error");
       emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
       print(e);
     }

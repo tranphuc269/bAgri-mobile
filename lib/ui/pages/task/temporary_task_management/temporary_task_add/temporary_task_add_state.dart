@@ -5,6 +5,7 @@ class TemporaryTaskAddState extends Equatable {
   TemporaryTask? temporaryTask;
   String? treePlaceQuantityMax;
   GardenEntity? gardenEntity;
+  SeasonEntity? seasonEntity;
   String? startTime;
   String? name;
   List<DailyTask>? dailyTasks;
@@ -21,6 +22,7 @@ class TemporaryTaskAddState extends Equatable {
       this.gardenEntity,
       this.treePlaceQuantityMax,
       this.temporaryTask,
+      this.seasonEntity,
       this.startTime,
       this.name,
       this.dailyTasks});
@@ -29,6 +31,7 @@ class TemporaryTaskAddState extends Equatable {
       {LoadStatus? loadStatus,
       GardenEntity? gardenEntity,
       TemporaryTask? temporaryTask,
+      SeasonEntity? seasonEntity,
       LoadStatus? addContractTaskStatus,
       String? treePlaceQuantityMax,
       String? startTime,
@@ -39,11 +42,12 @@ class TemporaryTaskAddState extends Equatable {
         gardenEntity: gardenEntity ?? this.gardenEntity,
         treePlaceQuantityMax: treePlaceQuantityMax ?? this.treePlaceQuantityMax,
         name: name ?? this.name,
+        seasonEntity: seasonEntity ?? this.seasonEntity,
         startTime: startTime ?? this.startTime,
         dailyTasks: dailyTasks ?? this.dailyTasks);
   }
 
   @override
   List<Object?> get props =>
-      [loadStatus, gardenEntity, temporaryTask, name, dailyTasks];
+      [loadStatus, gardenEntity, temporaryTask, name, dailyTasks, seasonEntity];
 }

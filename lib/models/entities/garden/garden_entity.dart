@@ -103,7 +103,8 @@ class GardenEntityResponseFromZoneId {
   String? managerId;
   @JsonKey()
   int? treePlaceQuantity;
-  ZoneEntity? zone;
+  @JsonKey(name: "zone")
+  String? zoneId;
 
 
   factory GardenEntityResponseFromZoneId.fromJson(Map<String, dynamic> json) =>
@@ -132,7 +133,7 @@ class GardenEntityResponseFromZoneId {
     this.areaUnit,
     this.managerId,
     this.treePlaceQuantity,
-    this.zone,
+    this.zoneId,
   });
 
   GardenEntityResponseFromZoneId copyWith({
@@ -143,7 +144,7 @@ class GardenEntityResponseFromZoneId {
     String? areaUnit,
     String? managerId,
     int? treePlaceQuantity,
-    ZoneEntity? zone
+    String? zoneId
 
   }) {
     return GardenEntityResponseFromZoneId(
@@ -153,7 +154,7 @@ class GardenEntityResponseFromZoneId {
         areaUnit: areaUnit ?? this.areaUnit,
         managerId: managerId ?? this.managerId,
         treePlaceQuantity: treePlaceQuantity ?? this.treePlaceQuantity,
-        zone: zone ?? this.zone
+        zoneId: zoneId ?? this.zoneId
     );
   }
 }

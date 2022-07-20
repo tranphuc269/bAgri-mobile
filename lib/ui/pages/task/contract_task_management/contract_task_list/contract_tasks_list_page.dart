@@ -75,7 +75,10 @@ class _ContractTaskListState extends State<ContractTaskListPage>
                 backgroundColor: AppColors.main,
                 onPressed: () async {
                   bool isAdd = await Application.router
-                      ?.navigateTo(context, Routes.addContractTask);
+                      ?.navigateTo(context, Routes.addContractTask,
+                    routeSettings: RouteSettings(
+                    arguments: widget.seasonEntity
+                  ),);
                   if (isAdd) {
                     _onRefreshData();
                     showSnackBar('Thêm mới thành công!');
@@ -145,7 +148,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
                                   Routes.contractTaskDetailAdmin,
                                   routeSettings: RouteSettings(
                                     arguments: ContractTaskDetailArgument(
-                                        contractTask_id: contractTask.id),
+                                        contractTask: contractTask),
                                   ),
                                 );
                               });
@@ -245,7 +248,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
                           flex: 3,
                           child: Container(
                             // width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text("Vườn: ${contractTask.gardenName}",
+                            child: Text("Số lượng: ${contractTask.treeQuantity} cây",
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ),

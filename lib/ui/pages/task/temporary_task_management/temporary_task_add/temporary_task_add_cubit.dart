@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
@@ -16,7 +17,7 @@ class TemporaryTaskAddCubit extends Cubit<TemporaryTaskAddState>{
     try{
       final param = TemporaryTask(
         title: state.name,
-        garden: state.gardenEntity?.name,
+        season: state.seasonEntity!.seasonId,
         dailyTasks: state.dailyTasks,
       );
       final response = await temporaryTaskRepository!.createTemporaryTask(param);
@@ -37,6 +38,9 @@ class TemporaryTaskAddCubit extends Cubit<TemporaryTaskAddState>{
 
   changeGarden(GardenEntity gardenEntity){
     emit(state.copyWith(gardenEntity: gardenEntity));
+  }
+  changeSeason(SeasonEntity seasonEntity){
+    emit(state.copyWith(seasonEntity: seasonEntity));
   }
 
   changeName(String name){

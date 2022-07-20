@@ -77,7 +77,7 @@ class TemporaryTaskUpdateCubit extends Cubit<TemporaryTaskUpdateState> {
         temporaryTaskId: state.temporaryTask?.temporaryTaskId,
         title: state.temporaryTask?.title,
         description: state.temporaryTask?.description,
-        garden: state.temporaryTask?.garden
+        season: state.temporaryTask?.season
       );
       var response = temporaryTaskRepository!.updateTemporaryTask(temp, temporaryTaskId);
       if (response != null) {

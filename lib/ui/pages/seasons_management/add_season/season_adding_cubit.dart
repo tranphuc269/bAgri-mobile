@@ -77,7 +77,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
     try {
       SeasonEntity param = SeasonEntity(
           name: state.seasonName,
-          gardenId: state.gardenEntity!.garden_id,
+           //gardenId: state.gardenEntity!.garden_id,
           process: calculateStartDay(),
           tree: state.treeEntity!,
           // start_date: state.startTime,

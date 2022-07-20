@@ -7,6 +7,8 @@ import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
+import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
@@ -31,7 +33,8 @@ class HomeGardenManagerPage extends StatefulWidget {
   }
 }
 
-class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with TickerProviderStateMixin {
+class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
+    with TickerProviderStateMixin {
   HomeGardenManagerCubit? _cubit;
   AppCubit? _appCubit;
 
@@ -45,7 +48,6 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
 
   final _scrollController = ScrollController();
 
-
   // Bottom navigation
   final autoSizeGroup = AutoSizeGroup();
   var _bottomNavIndex = 0; //default index of a first screen
@@ -57,10 +59,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
   late CurvedAnimation fabCurve;
   late CurvedAnimation borderRadiusCurve;
   late AnimationController _hideBottomBarAnimationController;
-  final iconList = <String>[
-    AppImages.icCrop,
-    AppImages.icDialyWork
-  ];
+  final iconList = <String>[AppImages.icCrop, AppImages.icDialyWork];
 
   final kToday = DateTime.now();
 
@@ -103,11 +102,11 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
 
     Future.delayed(
       Duration(seconds: 1),
-          () => _fabAnimationController.forward(),
+      () => _fabAnimationController.forward(),
     );
     Future.delayed(
       Duration(seconds: 1),
-          () => _borderRadiusAnimationController.forward(),
+      () => _borderRadiusAnimationController.forward(),
     );
   }
 
@@ -133,7 +132,6 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
     _cubit!.fetchStepOfDay(_selectedDay);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -146,7 +144,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _buildHeader(),
-              Expanded(flex: 4, child:_buildCalendar()),
+              Expanded(flex: 4, child: _buildCalendar()),
               Expanded(flex: 4, child: _buildEvents()),
             ],
           ),
@@ -154,11 +152,27 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
         drawer: MainDrawer(),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            bool isAdd =
-            await Application.router?.navigateTo(context, Routes.addContractTask);
-            if (isAdd) {
-              _onRefreshData();
-            }
+            showDialog(
+                context: context,
+                builder: (context) => selectTypeTask(contractTask: () {
+                      Application.router
+                          ?.navigateTo(context, Routes.addContractTask,
+                        routeSettings: RouteSettings(
+                        arguments: SeasonEntity()
+                      ),);
+                    }, temporaryTasks: () {
+                      Application.router
+                          ?.navigateTo(context, Routes.addTemporaryTask);
+                    },
+                  close:(){
+                    Navigator.pop(context);
+                  }
+                    ));
+            // bool isAdd =
+            // await Application.router?.navigateTo(context, Routes.addContractTask);
+            // if (isAdd) {
+            //   _onRefreshData();
+            // }
           },
           backgroundColor: AppColors.main,
           child: Icon(
@@ -166,29 +180,34 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
             size: 40,
           ),
         ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-            itemCount: iconList.length,
-            tabBuilder: (int index, bool isActive) {
-              final color = isActive ? AppColors.mainDarker : AppColors.mainDarker;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(iconList[index], width: 30, height: 30,),
-                  const SizedBox(height: 4),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: AutoSizeText(
-                      index == 0 ? "Mùa vụ" : "Công việc",
-                      maxLines: 1,
-                      style: TextStyle(color: color),
-                      group: autoSizeGroup,
-                    ),
-                  )
-                ],
-              );
-            },
+          itemCount: iconList.length,
+          tabBuilder: (int index, bool isActive) {
+            final color =
+                isActive ? AppColors.mainDarker : AppColors.mainDarker;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  iconList[index],
+                  width: 30,
+                  height: 30,
+                ),
+                const SizedBox(height: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: AutoSizeText(
+                    index == 0 ? "Mùa vụ" : "Công việc",
+                    maxLines: 1,
+                    style: TextStyle(color: color),
+                    group: autoSizeGroup,
+                  ),
+                )
+              ],
+            );
+          },
           backgroundColor: Colors.white,
           activeIndex: _bottomNavIndex,
           splashColor: AppColors.mainDarker,
@@ -196,7 +215,13 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
           splashSpeedInMilliseconds: 300,
           notchSmoothness: NotchSmoothness.defaultEdge,
           gapLocation: GapLocation.center,
-          onTap: (index) => setState(() => index == 0 ? Application.router?.navigateTo(context, Routes.seasonManagement): Application.router?.navigateTo(context, Routes.seasonListTask)),
+          onTap: (index) => setState(() {
+            if(index == 0){
+              Application.router?.navigateTo(context, Routes.seasonManagement);
+            }else{
+              Application.router?.navigateTo(context, Routes.seasonListTask);
+            }
+          }),
           hideAnimationController: _hideBottomBarAnimationController,
           shadow: BoxShadow(
             offset: Offset(0, 1),
@@ -204,13 +229,14 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
             spreadRadius: 0.5,
             color: Colors.grey,
           ),
-            ),
+        ),
       ),
     );
   }
-  Widget _buildCalendar(){
+
+  Widget _buildCalendar() {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: TableCalendar(
         firstDay: DateTime(kToday.year, kToday.month - 3, kToday.day),
         lastDay: DateTime(kToday.year, kToday.month + 3, kToday.day),
@@ -231,14 +257,11 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
             shape: BoxShape.circle,
           ),
           selectedDecoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.mainDarker
-          ),
+              shape: BoxShape.circle, color: AppColors.mainDarker),
           todayTextStyle: TextStyle(color: Color(0xFF5A5A5A)),
           markerSize: 0,
         ),
         onDaySelected: _onDaySelected,
-
         locale: "vi",
         onPageChanged: (focusedDay) {
           _focusedDay = focusedDay;
@@ -247,37 +270,35 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
             formatButtonVisible: false,
             titleCentered: true,
             titleTextStyle:
-            TextStyle(color: AppColors.mainDarker, fontSize: 17)),
+                TextStyle(color: AppColors.mainDarker, fontSize: 17)),
       ),
     );
   }
 
-
   Widget _buildEvents() {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-         child: BlocBuilder<HomeGardenManagerCubit, HomeGardenManagerState>(
-                bloc: _cubit,
-                buildWhen: (previous, current) =>
-                previous.getEventStatus != current.getEventStatus,
-                builder: (context, state) {
-                  if (state.getEventStatus == LoadStatus.LOADING) {
-                    return Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.main,
-                        ));
-                  } else if (state.getEventStatus == LoadStatus.FAILURE) {
-                    return Center(
-                      child: Text("Co loi xay ra"),
-                    );
-                  } else if (state.getEventStatus == LoadStatus.SUCCESS) {
-                    return state.eventsOfDays!.length != 0
-                        ? RefreshIndicator(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: BlocBuilder<HomeGardenManagerCubit, HomeGardenManagerState>(
+          bloc: _cubit,
+          buildWhen: (previous, current) =>
+              previous.getEventStatus != current.getEventStatus,
+          builder: (context, state) {
+            if (state.getEventStatus == LoadStatus.LOADING) {
+              return Center(
+                  child: CircularProgressIndicator(
+                color: AppColors.main,
+              ));
+            } else if (state.getEventStatus == LoadStatus.FAILURE) {
+              return Center(
+                child: Text("Co loi xay ra"),
+              );
+            } else if (state.getEventStatus == LoadStatus.SUCCESS) {
+              return state.eventsOfDays!.length != 0
+                  ? RefreshIndicator(
                       color: AppColors.main,
                       onRefresh: _onRefreshData,
                       child: ListView.separated(
-                        padding: EdgeInsets.only(
-                            left: 10, right: 10, top: 10),
+                        padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                         physics: AlwaysScrollableScrollPhysics(),
                         itemCount: state.eventsOfDays!.length,
                         // itemCount: 100,
@@ -285,27 +306,31 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
                         primary: false,
                         controller: _scrollController,
                         itemBuilder: (context, index) {
-                         StepEntityResponseByDay step =
-                         state.eventsOfDays![index];
-                         return _buildEvent(gardenName: step.garden, step: step.name, season: step.season);
+                          StepEntityResponseByDay step =
+                              state.eventsOfDays![index];
+                          return _buildEvent(
+                              gardenName: step.garden,
+                              treeQuantity: step.treeQuantity.toString(),
+                              step: step.name,
+                              season: step.season);
                         },
                         separatorBuilder: (context, index) {
                           return SizedBox(height: 10);
                         },
                       ),
-                      ) : Container(
+                    )
+                  : Container(
                       height: 60,
                       child: Center(
                         child: Text("Không có công việc"),
                       ),
                     );
-
-                  }else{
-                    return Container();
-                  }
-                }),
-        // ],
-        );
+            } else {
+              return Container();
+            }
+          }),
+      // ],
+    );
   }
 
   Widget _buildHeader() {
@@ -336,64 +361,66 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
           }),
           Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 7),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                          width: 50,
-                          height: 46,
-                          child: Image.asset(
-                            AppImages.icCloudBA,
-                            fit: BoxFit.fill,
-                          )),
-                      Container(
-                        height: 30,
-                        child: BlocBuilder<AppCubit, AppState>(
-                          builder: (context, state) {
-                            if (state.weather != null) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${state.weather!.main!.temp!.toInt()}℃',
-                                    style: AppTextStyle.whiteS12
-                                        .copyWith(fontSize: 20),
-                                  ),
-                                  Text(
-                                    '  |  ',
-                                    style: AppTextStyle.whiteS12
-                                        .copyWith(fontSize: 20),
-                                  ),
-                                  Image.asset(
-                                    AppImages.icHumidity,
-                                    width: 10,
-                                    height: 15,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  Text(
-                                    ' ${state.weather!.main!.humidity!
-                                        .toInt()}%',
-                                    style: AppTextStyle.whiteS12
-                                        .copyWith(fontSize: 20),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                    ]),
-              )),
-
+            padding: const EdgeInsets.only(top: 7),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      width: 50,
+                      height: 46,
+                      child: Image.asset(
+                        AppImages.icCloudBA,
+                        fit: BoxFit.fill,
+                      )),
+                  Container(
+                    height: 30,
+                    child: BlocBuilder<AppCubit, AppState>(
+                      builder: (context, state) {
+                        if (state.weather != null) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${state.weather!.main!.temp!.toInt()}℃',
+                                style: AppTextStyle.whiteS12
+                                    .copyWith(fontSize: 20),
+                              ),
+                              Text(
+                                '  |  ',
+                                style: AppTextStyle.whiteS12
+                                    .copyWith(fontSize: 20),
+                              ),
+                              Image.asset(
+                                AppImages.icHumidity,
+                                width: 10,
+                                height: 15,
+                                fit: BoxFit.fill,
+                              ),
+                              Text(
+                                ' ${state.weather!.main!.humidity!.toInt()}%',
+                                style: AppTextStyle.whiteS12
+                                    .copyWith(fontSize: 20),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    ),
+                  ),
+                ]),
+          )),
         ],
       ),
     );
   }
 
-  Widget _buildEvent({String? gardenName, String? season, String? step}) {
+  Widget _buildEvent(
+      {String? gardenName,
+      String? treeQuantity,
+      String? season,
+      String? step}) {
     return Container(
         margin: const EdgeInsets.symmetric(
           horizontal: 12.0,
@@ -404,11 +431,10 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: ListTile(
-          onTap: (){
-            Application.router!.navigateTo(context,
-              Routes.tabTask);
+          onTap: () {
+            // Application.router!.navigateTo(context,
+            //   Routes.tabTask);
           },
-
           title: Text(
             "Vườn: ${gardenName}",
             style: AppTextStyle.blackS16Bold,
@@ -416,6 +442,10 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                "Số lượng cây: ${treeQuantity} cây",
+                style: AppTextStyle.greyS14,
+              ),
               Text(
                 "Mùa vụ: ${season}",
                 style: AppTextStyle.greyS14,
@@ -427,6 +457,56 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>  with Tic
   }
 }
 
+Widget selectTypeTask(
+    {VoidCallback? contractTask, VoidCallback? temporaryTasks, VoidCallback? close}) {
+  return AlertDialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10)
+    ),
+    title: Center(
+      child: Text("Loại công việc"),
+    ),
+    content: Container(
+
+      width: 50,
+      height: 60,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+              child: Container(
+                  width: double.infinity,
+                  child: Text(
+                    "Công khoán",
+                    style: AppTextStyle.blackS16,
+                  )),
+              onTap: contractTask),
+          Divider(
+            thickness: 1,
+          ),
+          InkWell(
+            child: Container(
+                width: double.infinity,
+                child: Text(
+                  "Công nhật",
+                  style: AppTextStyle.blackS16,
+                )),
+            onTap: temporaryTasks,
+          )
+        ],
+      ),
+    ),
+    actions: [
+      TextButton(
+          onPressed: close,
+          child: Text(
+            "Đóng",
+            style: AppTextStyle.redS16,
+          ))
+    ],
+  );
+}
+
 class MainDrawer extends StatefulWidget {
   @override
   _MainDrawerState createState() => _MainDrawerState();
@@ -435,6 +515,7 @@ class MainDrawer extends StatefulWidget {
 class _MainDrawerState extends State<MainDrawer> {
   AppCubit? _appCubit;
   UserEntity? _userInfo;
+
   @override
   void initState() {
     super.initState();

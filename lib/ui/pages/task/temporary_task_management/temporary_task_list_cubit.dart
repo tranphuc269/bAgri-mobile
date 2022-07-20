@@ -10,10 +10,10 @@ class TemporaryTaskListCubit extends Cubit<TemporaryTaskListState>{
 
   TemporaryTaskListCubit({this.temporaryTaskRepository}): super(TemporaryTaskListState());
 
-  Future<void> getListTemporaryTasks() async{
+  Future<void> getListTemporaryTasks(String? seasonId) async{
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      final response = await temporaryTaskRepository!.getListTemporaryTask();
+      final response = await temporaryTaskRepository!.getListTemporaryTaskBySeason(seasonId: seasonId);
       if (response != null) {
         emit(state.copyWith(
           loadStatus: LoadStatus.SUCCESS,

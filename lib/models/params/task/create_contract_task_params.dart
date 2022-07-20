@@ -1,30 +1,35 @@
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
+import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'create_contract_task_params.g.dart';
 @JsonSerializable()
 class CreateContractTaskParam {
   ContractWorkEntity ? work;
-  String? gardenName;
+  String? seasonId;
+  GardenEntityResponseFromZoneId? garden;
   num? treeQuantity;
   String? description;
 
   CreateContractTaskParam({
     this.work,
-    this.gardenName,
+    this.seasonId,
+    this.garden,
     this.treeQuantity,
     this.description
   });
 
   CreateContractTaskParam copyWith({
     ContractWorkEntity? work,
-    String? gardenName,
+    String? seasonId,
+    GardenEntityResponseFromZoneId? garden,
     num? treeQuantity,
     String? description
   }) {
     return CreateContractTaskParam(
       work: work ?? this.work,
-      gardenName: gardenName ?? this.gardenName,
+      seasonId: seasonId ?? this.seasonId,
+      garden: garden ?? this.garden,
       treeQuantity: treeQuantity ?? this.treeQuantity,
       description: description ?? this.description
     );

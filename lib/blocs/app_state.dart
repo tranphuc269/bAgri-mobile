@@ -7,6 +7,9 @@ class AppState extends Equatable {
   List<GardenEntity>? gardens;
   final LoadStatus? getGardenStatus;
 
+  List<SeasonEntity>? seasons;
+  final LoadStatus? getSeasonStatus;
+
   List<ProcessEntity>? processes;
   final LoadStatus? getProcessStatus;
 
@@ -47,6 +50,7 @@ class AppState extends Equatable {
         this.weather,
         this.weatherStatus,
         this.listMaterials,
+    this.getSeasonStatus,
     this.getMaterialsStatus
       ];
 
@@ -66,6 +70,8 @@ class AppState extends Equatable {
     this.contractWorks,
     this.contractWorkStatus,
     this.weather,
+    this.getSeasonStatus,
+    this.seasons,
     this.weatherStatus,
     this.listMaterials,}
    );
@@ -75,6 +81,8 @@ class AppState extends Equatable {
     LoadStatus? getTreeStatus,
     List<GardenEntity>? gardens,
     LoadStatus? getGardenStatus,
+    List<SeasonEntity>? seasons,
+    LoadStatus? getSeasonStatus,
     List<ProcessEntity>? processes,
     LoadStatus? getProcessStatus,
     List<TaskEntity>? tasks,
@@ -110,7 +118,9 @@ class AppState extends Equatable {
       weather: weather ?? this.weather,
       weatherStatus: weatherStatus ?? this.weatherStatus,
       listMaterials: listMaterials ?? this.listMaterials,
-      getMaterialsStatus: getMaterialsStatus ?? this.getMaterialsStatus
+      getMaterialsStatus: getMaterialsStatus ?? this.getMaterialsStatus,
+      seasons: seasons ?? this.seasons,
+      getSeasonStatus: getSeasonStatus ?? this.getSeasonStatus
 
     );
   }

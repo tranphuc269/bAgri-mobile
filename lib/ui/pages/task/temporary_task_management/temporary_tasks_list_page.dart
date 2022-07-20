@@ -3,6 +3,7 @@ import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
@@ -20,7 +21,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../../main.dart';
 
 class TabListTemporaryTask extends StatelessWidget {
-  const TabListTemporaryTask({Key? key}) : super(key: key);
+  SeasonEntity seasonEntity;
+  TabListTemporaryTask({Key? key,required this.seasonEntity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +33,14 @@ class TabListTemporaryTask extends StatelessWidget {
         return TemporaryTaskListCubit(
             temporaryTaskRepository: temporaryTaskRepository);
       },
-      child: TemporaryTaskListPage(),
+      child: TemporaryTaskListPage(seasonEntity: seasonEntity,),
     );
   }
 }
 
 class TemporaryTaskListPage extends StatefulWidget {
+  SeasonEntity seasonEntity;
+  TemporaryTaskListPage({required this.seasonEntity});
   @override
   _TemporaryTaskListPageState createState() => _TemporaryTaskListPageState();
 }
@@ -50,7 +54,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   @override
   void initState() {
     _cubit = BlocProvider.of<TemporaryTaskListCubit>(context);
-    _cubit!.getListTemporaryTasks();
+    _cubit!.getListTemporaryTasks(widget.seasonEntity.seasonId);
     super.initState();
   }
 
@@ -183,7 +187,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   }
 
   Future<void> _onRefreshData() async {
-    _cubit!.getListTemporaryTasks();
+    _cubit!.getListTemporaryTasks(widget.seasonEntity.seasonId);
   }
 
   Widget _buildItem(
@@ -273,13 +277,6 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                           fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Vườn: ${temporaryTask.garden}",
-                      style: AppTextStyle.blackS14,
-                    )
                   ],
                 )),
                 Icon(

@@ -6,6 +6,7 @@ import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
+import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
@@ -22,10 +23,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ContractTaskDetailPage extends StatefulWidget {
-  final String? contractTaskId;
+  final ContractTask? contractTask;
+ // final String? seasonId;
 
-  const ContractTaskDetailPage({Key? key, this.contractTaskId})
-      : super(key: key);
+  const ContractTaskDetailPage({Key? key, this.contractTask}) : super(key: key);
 
   @override
   _ContractTaskDetailPageState createState() => _ContractTaskDetailPageState();
@@ -43,7 +44,8 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
   void initState() {
     super.initState();
     _cubit = BlocProvider.of<ContractTaskDetailCubit>(context);
-    _cubit!.getContractTaskDetail(widget.contractTaskId!);
+    _cubit!.getContractTaskDetail(widget.contractTask!.id!);
+    _cubit!.getSeasonDetail(widget.contractTask!.season!);
     _descriptionController.addListener(() {
       // _cubit!.changeName(nameController.text);
     });
@@ -69,7 +71,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                   } else {
                     return GlobalData.instance.role == "GARDEN_MANAGER"
                         ? _buildButtonByGardenManager(
-                            widget.contractTaskId, _cubit!.state.materials)
+                            widget.contractTask!.id, _cubit!.state.materials)
                         : _buildButtonByAdmin();
                   }
                 }),
@@ -86,12 +88,12 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
     return BlocBuilder<ContractTaskDetailCubit, ContractTaskDetailState>(
         bloc: _cubit,
         builder: (context, state) {
-          if (state.loadStatus == LoadStatus.LOADING) {
+          if (state.loadStatus == LoadStatus.LOADING || state.getSeasonStatus == LoadStatus.LOADING) {
             return Center(
                 child: CircularProgressIndicator(
               color: AppColors.main,
             ));
-          } else if (state.loadStatus == LoadStatus.FAILURE) {
+          } else if (state.loadStatus == LoadStatus.FAILURE || state.getSeasonStatus == LoadStatus.FAILURE) {
             return Expanded(
                 child: Center(
               child: Text("Đã có lỗi xảy ra!"),
@@ -117,7 +119,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                       ),
                       _buildInformation(
                           title: "Vườn: ",
-                          information: "${state.contractTask!.gardenName}"),
+                          information: "${state.seasonEntity!.gardenEntity!.name}"),
                       SizedBox(
                         height: 10,
                       ),
@@ -357,7 +359,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
               if (isAddMaterial == true) {
                 setState(() async {
                   await _cubit!.finishContractTask(contractTaskId, materials!);
-                  _cubit!.getContractTaskDetail(widget.contractTaskId!);
+                  _cubit!.getContractTaskDetail(widget.contractTask!.id!);
                 });
                 showSnackBarSuccess("Hoàn thành công viêc");
               }
@@ -543,9 +545,9 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
 }
 
 class ContractTaskDetailArgument {
-  String? contractTask_id;
+  ContractTask? contractTask;
 
   ContractTaskDetailArgument({
-    this.contractTask_id,
+    this.contractTask,
   });
 }
