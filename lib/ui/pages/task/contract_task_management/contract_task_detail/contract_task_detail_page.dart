@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_cubit.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/modal_add_material_widget.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/modal_modify_material_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
@@ -304,14 +306,46 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
               child: ModalAddMaterialWidget(
                 onPressed: (String name, String quantity, String unit) {
                   setState(() {
+                    print(name);
                     _cubit!.state.materials!.add(MaterialUsedByTask(
                         name: name,
                         quantity: int.parse(quantity.toString()),
                         unit: unit));
-                  });
+                  })
+                  ;
                 },
               ),
             ));
+  }
+  modifyMaterial({String? name, int? quantity, String? unit, int? index}) {
+    showModalBottomSheet(
+        isDismissible: false,
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20))),
+        builder: (context) => Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(20),
+                  topRight: const Radius.circular(20))),
+          child: ModalModifyMaterialWidget(
+            materialEntity: MaterialEntity(name: name, quantity: quantity, unit: unit),
+            onPressed: (String name, String quantity, String unit) {
+              setState(() {
+                _cubit!.state.materials!.removeAt(index!.toInt());
+                _cubit!.state.materials!.insert(index,MaterialUsedByTask(
+                    name: name,
+                    quantity: int.parse(quantity.toString()),
+                    unit: unit));
+              });
+            },
+          ),
+        ));
   }
   Widget _buildInformation({String? title, String? information}) {
     return Row(
@@ -485,18 +519,23 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
 
   Widget materialItem(MaterialUsedByTask? material, int? index) {
     return GestureDetector(
+      onLongPress: (){
+        _cubit!.state.getFinishStatus == LoadStatus.SUCCESS ? null :
+        showDialog(
+            context: context,
+            builder: (context) => AppDeleteDialog(
+              onConfirm: () {
+                setState(() {
+                  _cubit!.state.materials!.removeAt(index!);
+                });
+                Navigator.pop(context, true);
+              },
+            ));
+      },
+
         onTap: () {
           _cubit!.state.getFinishStatus == LoadStatus.SUCCESS ? null :
-          showDialog(
-              context: context,
-              builder: (context) => AppDeleteDialog(
-                    onConfirm: () {
-                      setState(() {
-                        _cubit!.state.materials!.removeAt(index!);
-                      });
-                      Navigator.pop(context, true);
-                    },
-                  ));
+         modifyMaterial(name: material!.name, unit: material.unit, quantity: material.quantity, index: index);
         },
         child: Container(
           height: 60,
@@ -511,7 +550,8 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Tên vật tư: ${material!.name}",
+                "Tên vật tư:  ${material!.name}",
+                // "Tên vật tư: Phân bón",
                 style: TextStyle(
                   color: Colors.black87,
                   fontSize: 16,

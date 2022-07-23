@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker.dart';
 import 'package:flutter_base/utils/validators.dart';
 
-class ModalAddMaterialWidget extends StatefulWidget {
-  const ModalAddMaterialWidget(
+class ModalModifyMaterialWidget extends StatefulWidget {
+  MaterialEntity? materialEntity;
+  ModalModifyMaterialWidget(
       {Key? key,
-      this.name,
-      this.quantity,
-      this.unit,
-      required this.onPressed,
-      this.onDelete})
+        this.name,
+        this.quantity,
+        this.unit,
+        required this.onPressed,
+        required this.materialEntity,
+        this.onDelete})
       : super(key: key);
   final void Function(String name, String quantity, String unit) onPressed;
   final String? name;
@@ -23,10 +26,10 @@ class ModalAddMaterialWidget extends StatefulWidget {
   final VoidCallback? onDelete;
 
   @override
-  State<ModalAddMaterialWidget> createState() => _ModalAddMaterialWidgetState();
+  State<ModalModifyMaterialWidget> createState() => _ModalModifyMaterialWidgetState();
 }
 
-class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
+class _ModalModifyMaterialWidgetState extends State<ModalModifyMaterialWidget> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController(text: '');
@@ -38,6 +41,7 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
   @override
   void initState() {
     super.initState();
+    materialController = MaterialPickerController(materialEntity: widget.materialEntity);
   }
 
   @override
@@ -53,6 +57,7 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
         heightResize = 0.95;
       });
     }
+
     return Container(
       height: MediaQuery.of(context).size.height * heightResize,
       decoration: BoxDecoration(
@@ -74,7 +79,7 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
                 Container(
                     height: 40,
                     padding: EdgeInsets.all(10),
-                    child: Text('Thêm vật tư đã sử dụng')),
+                    child: Text('Thay đổi thông tin vật tư đã sử dụng')),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   child: Align(
@@ -134,19 +139,6 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
                             return null;
                         },
                       ),
-
-                      // AppTextField(
-                      //   autoValidateMode: AutovalidateMode.onUserInteraction,
-                      //   hintText: 'Nhập số lượng vật tư',
-                      //   keyboardType: TextInputType.number,
-                      //   controller: quantityController,
-                      //   validator: (value) {
-                      //     if (Validator.validateNullOrEmpty(value!))
-                      //       return "Chưa nhập số lương vật tư";
-                      //     else
-                      //       return null;
-                      //   },
-                      // ),
                       SizedBox(
                         height: 20,
                       ),

@@ -16,6 +16,7 @@ import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/utils/dialog_utils.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -152,27 +153,32 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
         drawer: MainDrawer(),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            showDialog(
+            bool isAdd = await showDialog(
                 context: context,
-                builder: (context) => selectTypeTask(contractTask: () {
-                      Application.router
+                builder: (context) =>
+                    selectTypeTask(contractTask: ()  async {
+                     bool isAdd = await Application.router
                           ?.navigateTo(context, Routes.addContractTask,
                         routeSettings: RouteSettings(
                         arguments: SeasonEntity()
                       ),);
-                    }, temporaryTasks: () {
-                      Application.router
+                     if (isAdd) {
+                       Navigator.pop(context, true);
+                     }
+                    }, temporaryTasks: () async {
+                      bool isAdd = await   Application.router
                           ?.navigateTo(context, Routes.addTemporaryTask);
+                      if (isAdd) {
+                        Navigator.pop(context, true);
+                      }
                     },
                   close:(){
-                    Navigator.pop(context);
+                    Navigator.pop(context, false);
                   }
                     ));
-            // bool isAdd =
-            // await Application.router?.navigateTo(context, Routes.addContractTask);
-            // if (isAdd) {
-            //   _onRefreshData();
-            // }
+            if (isAdd) {
+              showSnackBar('Thêm công việc thành công!');
+            }
           },
           backgroundColor: AppColors.main,
           child: Icon(
@@ -455,6 +461,13 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
           ),
         ));
   }
+  void showSnackBar(String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: "success",
+      message: message,
+    ));
+  }
 }
 
 Widget selectTypeTask(
@@ -640,4 +653,5 @@ class _MainDrawerState extends State<MainDrawer> {
       },
     );
   }
+
 }

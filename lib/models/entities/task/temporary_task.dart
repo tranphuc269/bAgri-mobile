@@ -7,6 +7,7 @@ part 'temporary_task.g.dart';
 class TemporaryTask {
   @JsonKey(name: '_id')
   String? temporaryTaskId;
+  @JsonKey(name: 'seasonId')
   String? season;
   String? description;
   String? title;
