@@ -50,7 +50,7 @@ class _ModalModifyMaterialWidgetState extends State<ModalModifyMaterialWidget> {
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.45;
+        heightResize = 0.5;
       });
     } else {
       setState(() {

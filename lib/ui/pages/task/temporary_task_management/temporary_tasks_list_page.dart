@@ -9,6 +9,7 @@ import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
+import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_detail/temporary_task_detail_page.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_list_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
@@ -130,7 +131,9 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                             appNavigatorKey.currentContext!,
                             Routes.temporaryTaskDetail,
                             routeSettings: RouteSettings(
-                              arguments: temporaryTask.temporaryTaskId,
+                              arguments: TemporaryTaskDetailArgument(
+                                temporaryTask: temporaryTask,
+                              )
                             ),
                           );
                         },

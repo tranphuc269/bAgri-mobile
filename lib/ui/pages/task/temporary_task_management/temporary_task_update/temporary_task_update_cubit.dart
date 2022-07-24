@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/entities/material/material_task.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
+import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,8 +11,9 @@ part 'temporary_task_update_state.dart';
 
 class TemporaryTaskUpdateCubit extends Cubit<TemporaryTaskUpdateState> {
   TemporaryTaskRepository? temporaryTaskRepository;
+  SeasonRepository? seasonRepository;
 
-  TemporaryTaskUpdateCubit({this.temporaryTaskRepository})
+  TemporaryTaskUpdateCubit({this.temporaryTaskRepository, this.seasonRepository})
       : super(TemporaryTaskUpdateState());
 
   Future<void> getTemporaryDetail(String? temporaryId) async {
@@ -25,6 +28,18 @@ class TemporaryTaskUpdateCubit extends Cubit<TemporaryTaskUpdateState> {
           dailyTasks: result?.dailyTasks /*.data!.season!*/));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+    }
+  }
+  Future<void> getSeasonDetail(String? seasonId) async {
+    emit(state.copyWith(getSeasonStatus: LoadStatus.LOADING));
+    try {
+      SeasonEntity result =
+      await seasonRepository!.getSeasonById(seasonId.toString());
+      print("result)");
+      emit(state.copyWith(
+          getSeasonStatus: LoadStatus.SUCCESS, seasonEntity: result/*.data!.season!*/));
+    } catch (e) {
+      emit(state.copyWith(getSeasonStatus: LoadStatus.FAILURE));
     }
   }
 
@@ -72,7 +87,7 @@ class TemporaryTaskUpdateCubit extends Cubit<TemporaryTaskUpdateState> {
   Future<void> updateTemporaryTask(String temporaryTaskId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      final temp = TemporaryTask(
+      final temp = TemporaryTaskUpdate(
         dailyTasks: state.dailyTasks,
         temporaryTaskId: state.temporaryTask?.temporaryTaskId,
         title: state.temporaryTask?.title,

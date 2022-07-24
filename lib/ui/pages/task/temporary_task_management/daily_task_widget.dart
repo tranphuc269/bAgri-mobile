@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
+import 'package:flutter_base/models/entities/material/material.dart';
+import 'package:flutter_base/models/entities/material/material_task.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
+import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/modal_modify_material_widget.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -157,70 +161,41 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                       Column(
                         children: List.generate(
                             widget.dailyTask!.materials?.length ?? 0, (index) {
-                          return Container(
-                            // width: double.infinity,
-                            // height: 40,
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.only(bottom: 10),
-                            width: MediaQuery.of(context).size.width - 20,
-                            // color: AppColors.grayC4,
-                            decoration: BoxDecoration(
-                                color: Color(0xFFDDDAEA),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Tên vật tư: " +
-                                      (widget.dailyTask!.materials![index]
-                                              .name ??
-                                          ''),
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  "Số lượng: " +
-                                      (widget.dailyTask!.materials![index]
-                                              .quantity
-                                              ?.toString() ??
-                                          ''),
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                          return materialItem(widget.dailyTask!.materials![index].name,widget.dailyTask!.materials![index].quantity, widget.dailyTask!.materials![index].unit, index);
+                            // Column(
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Text(
+                            //       "Tên vật tư: " +
+                            //           (widget.dailyTask!.materials![index]
+                            //                   .name ??
+                            //               ''),
+                            //       style: TextStyle(
+                            //         color: Colors.black54,
+                            //         fontSize: 16,
+                            //         fontWeight: FontWeight.w500,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       "Số lượng: " +
+                            //           (widget.dailyTask!.materials![index]
+                            //                   .quantity
+                            //                   ?.toString() ??
+                            //               '') +
+                            //           (widget.dailyTask!.materials![index].unit
+                            //                   ?.toString() ??
+                            //               ''),
+                            //       style: TextStyle(
+                            //         color: Colors.black54,
+                            //         fontSize: 16,
+                            //         fontWeight: FontWeight.w500,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // )
                         }),
                       ),
-                      // BlocBuilder<AddProcessCubit, AddProcessState>(
-                      //   buildWhen: (prev, current) =>
-                      //   prev.actionWithStepStatus !=
-                      //       current.actionWithStepStatus,
-                      //   builder: (context, state) {
-                      //     return Column(
-                      //       children: List.generate(
-                      //           state.stages![widget.index!].steps
-                      //               ?.length ??
-                      //               0, (index) {
-                      //         return StepWidget(
-                      //             index: index,
-                      //             indexStages: widget.index!,
-                      //             phase: widget.phase,
-                      //             cubitProcess: widget.cubitProcess,
-                      //             step: state.stages![widget.index!]
-                      //                 .steps![index]);
-                      //       }),
-                      //     );
-                      //   },
-                      // ),
                       if (widget.isUpdate == true)
                         Padding(
                           padding: const EdgeInsets.only(left: 180),
@@ -240,8 +215,8 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                               height: 37,
                               border: 10,
                               width: double.infinity,
-                              onPressed: /*() {*/
-                                  widget.onAddMaterial
+                              onPressed: widget.onAddMaterial,
+
                               // showModalBottomSheet(
                               //   isDismissible: false,
                               //   context: context,
@@ -282,5 +257,85 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
         // )
       ],
     );
+  }
+  Widget materialItem(String? name, int? quantity, String? unit, int? index) {
+    return GestureDetector(
+        onLongPress: (){
+          showDialog(
+              context: context,
+              builder: (context) => AppDeleteDialog(
+                onConfirm: () {
+                  setState(() {
+                    widget.dailyTask?.materials!.removeAt(index!);
+                  });
+                  Navigator.pop(context, true);
+                },
+              ));
+        },
+        onTap: () {
+          modifyMaterial(name: name, unit: unit, quantity: quantity, index: index);
+        },
+        child: Container(
+          height: 60,
+          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+              color: Color(0xFFF1F7E7),
+              border: Border.all(color:Color(0xFF9D9D9D) ),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Tên vật tư:  ${name}",
+                // "Tên vật tư: Phân bón",
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Row(
+                children: [
+                  Text('Số lượng: ${quantity} ${unit}'),
+                  SizedBox(
+                    width: 3,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ));
+  }
+  modifyMaterial({String? name, int? quantity, String? unit, int? index}) {
+    showModalBottomSheet(
+        isDismissible: false,
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20))),
+        builder: (context) => Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(20),
+                  topRight: const Radius.circular(20))),
+          child: ModalModifyMaterialWidget(
+            materialEntity: MaterialEntity(name: name, quantity: quantity, unit: unit),
+            onPressed: (String name, String quantity, String unit) {
+              setState(() {
+                widget.dailyTask?.materials!.removeAt(index!.toInt());
+                widget.dailyTask?.materials!.insert(index!, MaterialTask(
+                    name: name,
+                    quantity: int.parse(quantity.toString()),
+                    unit: unit));
+              });
+            },
+          ),
+        ));
   }
 }

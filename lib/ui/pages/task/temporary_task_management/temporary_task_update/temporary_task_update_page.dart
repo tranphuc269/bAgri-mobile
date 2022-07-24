@@ -20,9 +20,9 @@ import '../../../../../main.dart';
 import '../daily_task_widget.dart';
 
 class TemporaryTaskUpdatePage extends StatefulWidget {
-  String? temporaryTaskId;
+  TemporaryTask? temporaryTask;
 
-  TemporaryTaskUpdatePage({Key? key, required this.temporaryTaskId})
+  TemporaryTaskUpdatePage({Key? key, required this.temporaryTask})
       : super(key: key);
 
   @override
@@ -37,7 +37,8 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
   @override
   void initState() {
     cubit = BlocProvider.of<TemporaryTaskUpdateCubit>(context);
-    cubit?.getTemporaryDetail(widget.temporaryTaskId);
+    cubit?.getTemporaryDetail(widget.temporaryTask!.temporaryTaskId);
+    cubit?.getSeasonDetail(widget.temporaryTask!.season);
     super.initState();
   }
 
@@ -59,7 +60,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
               children: [
                 BlocConsumer<TemporaryTaskUpdateCubit,
                     TemporaryTaskUpdateState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS) {}
+                  if (state.loadStatus == LoadStatus.SUCCESS && state.getSeasonStatus == LoadStatus.SUCCESS) {}
                 }, builder: (context, state) {
                   return _buildInformation(
                       title: "Công việc: ",
@@ -70,11 +71,11 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                 ),
                 BlocConsumer<TemporaryTaskUpdateCubit,
                     TemporaryTaskUpdateState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS) {}
+                  if (state.loadStatus == LoadStatus.SUCCESS && state.getSeasonStatus == LoadStatus.SUCCESS) {}
                 }, builder: (context, state) {
                   return _buildInformation(
                       title: "Vườn: ",
-                      information: state.temporaryTask?.season ?? "");
+                      information: state.seasonEntity?.gardenEntity!.name ?? "");
                 }),
                 SizedBox(
                   height: 10,
@@ -249,7 +250,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                 ? 'Cập nhật mô tả công việc'
                 : 'Chỉnh sửa công việc',
             onPressed: () async {
-              cubit?.updateTemporaryTask(widget.temporaryTaskId!);
+              cubit?.updateTemporaryTask(widget.temporaryTask!.temporaryTaskId!);
               Navigator.of(context).pop(true);
             },
           ),
@@ -257,6 +258,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
       ],
     );
   }
+
   addMaterial(int index) {
     showModalBottomSheet(
         isDismissible: false,
@@ -275,11 +277,20 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                   topRight: const Radius.circular(20))),
           child: ModalAddMaterialWidget(
             onPressed: (String name, String quantity, String unit) {
-              cubit?.createMaterial(index, MaterialTask( name: name,
-                        quantity: int.parse(quantity.toString()),
-                        unit: unit));
+              setState(() {
+                cubit?.createMaterial(index, MaterialTask( name: name,
+                    quantity: int.parse(quantity.toString()),
+                    unit: unit));
+              });
             },
           ),
         ));
   }
+}
+class TemporaryTaskUpdateArgument {
+  TemporaryTask? temporaryTask;
+
+  TemporaryTaskUpdateArgument({
+    this.temporaryTask,
+  });
 }

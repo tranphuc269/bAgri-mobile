@@ -9,7 +9,7 @@ abstract class TemporaryTaskRepository {
   Future<List<TemporaryTask>> getListTemporaryTaskBySeason({String? seasonId});
   Future<dynamic> deleteTemporaryTask(String id);
   Future<dynamic> createTemporaryTask(TemporaryTask temporaryTask);
-  Future<dynamic> updateTemporaryTask(TemporaryTask temporaryTask,  String? temporaryTaskId);
+  Future<dynamic> updateTemporaryTask(TemporaryTaskUpdate temporaryTask,  String? temporaryTaskId);
   Future<TemporaryTask> getTemporaryTaskById(String? id);
 }
 
@@ -41,7 +41,7 @@ class TemporaryTaskRepositoryImpl extends TemporaryTaskRepository {
   }
 
   @override
-  Future updateTemporaryTask(TemporaryTask temporaryTask, String? temporaryTaskId) {
+  Future updateTemporaryTask(TemporaryTaskUpdate temporaryTask, String? temporaryTaskId) {
     return _apiClientBagri!.updateTemporaryTask(temporaryTask.toJson(), temporaryTaskId);
   }
 
