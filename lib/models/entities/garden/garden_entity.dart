@@ -157,3 +157,64 @@ class GardenEntityResponseFromZoneId {
     );
   }
 }
+
+@JsonSerializable()
+class GardenEntityInSeason {
+  @JsonKey(name: "_id")
+  String? garden_id;
+  @JsonKey()
+  String? name;
+  @JsonKey()
+  int? area;
+  String? areaUnit;
+  String? manager;
+  int? treePlaceQuantity;
+  String? zone;
+
+  factory GardenEntityInSeason.fromJson(Map<String, dynamic> json) =>
+      _$GardenEntityInSeasonFromJson(json);
+  // GardenEntityInSeason(
+  //   garden_id: json['_id'] as String?,
+  //   name: json['name'] as String?,
+  //   area: json['area'] as int?,
+  //   manager: json['manager'] as String?,
+  //   treePlaceQuantity: json['treePlaceQuantity'] as int?,
+  //   zone: json['zone'] == null
+  //       ? null
+  //       : ZoneEntity.fromJson(json['zone'] as Map<String, dynamic>),
+  // );
+  Map<String, dynamic> toJson() => _$GardenEntityInSeasonToJson(this);
+
+  GardenEntityInSeason({
+    this.garden_id,
+    this.name,
+    this.area,
+    this.areaUnit,
+    this.manager,
+    this.treePlaceQuantity,
+    this.zone,
+  });
+
+  GardenEntityInSeason copyWith({
+    String? id,
+    String? garden_id,
+    String? name,
+    int? area,
+    String? areaUnit,
+    String? manager,
+    int? treePlaceQuantity,
+    String? zone
+
+  }) {
+    return GardenEntityInSeason(
+        garden_id: garden_id ?? this.garden_id,
+        name: name ?? this.name,
+        area: area ?? this.area,
+        areaUnit: areaUnit ?? this.areaUnit,
+        manager: manager?? manager,
+        treePlaceQuantity: treePlaceQuantity ?? this.treePlaceQuantity,
+        zone: zone ?? this.zone
+    );
+  }
+}
+

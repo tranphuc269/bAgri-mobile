@@ -79,7 +79,7 @@ class _ModalShowStageSeasonWidgetState extends State<ModalShowStageSeasonWidget>
                 Container(
                     height: 40,
                     padding: EdgeInsets.all(10),
-                    child: Text('Chỉnh sửa giai đoạn')),
+                    child: Text('Xem giai đoạn')),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   child: Align(
@@ -125,7 +125,7 @@ class _ModalShowStageSeasonWidgetState extends State<ModalShowStageSeasonWidget>
                   ),
                   AppTextAreaField(
                     hintText: 'Mô tả',
-                    maxLines: 8,
+                    // maxLines: 8,
                     enable: true,
                     controller: descriptionController,
                   ),

@@ -9,12 +9,14 @@ class TemporaryTask {
   String? temporaryTaskId;
   String? garden;
   String? description;
+  String? seasonId;
   String? title;
   List<DailyTask>? dailyTasks;
 
   TemporaryTask(
       {this.garden,
       this.title,
+        this.seasonId,
       this.description,
       this.temporaryTaskId,
       this.dailyTasks});
@@ -23,21 +25,30 @@ class TemporaryTask {
       {String? temporaryTaskId,
       String? garden,
       String? title,
-
+      String? seasonId,
       String? description,
       List<DailyTask>? dailyTasks}) {
     return TemporaryTask(
         temporaryTaskId: temporaryTaskId ?? this.temporaryTaskId,
         garden: garden ?? this.garden,
         title: title ?? this.title,
-
+        seasonId: seasonId ?? this.seasonId,
         description: description ?? this.description,
         dailyTasks: dailyTasks ?? this.dailyTasks,
       );
   }
 
   factory TemporaryTask.fromJson(Map<String, dynamic> json) =>
-      _$TemporaryTaskFromJson(json);
+      TemporaryTask(
+        garden: json['garden'] as String?,
+        title: json['title'] as String?,
+        seasonId: json['season'] as String?,
+        description: json['description'] as String?,
+        temporaryTaskId: json['_id'] as String?,
+        dailyTasks: (json['dailyTasks'] as List<dynamic>?)
+            ?.map((e) => DailyTask.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
 
   Map<String, dynamic> toJson() => _$TemporaryTaskToJson(this);
 }

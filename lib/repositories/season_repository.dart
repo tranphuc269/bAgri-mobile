@@ -12,7 +12,7 @@ abstract class SeasonRepository {
   Future<SeasonEntity> getSeasonById(String seasonId);
 
   Future createSeason(
-      SeasonEntity param);
+      NewSeasonEntity param);
 
   Future<TreeDeleteResponse> deleteSeason(String seasonId);
   Future<SeasonEntity> addPhase(StageSeason phaseSeason, String seasonId);
@@ -23,7 +23,7 @@ abstract class SeasonRepository {
   Future<dynamic> deleteStep(String stepId, String phaseId);
   Future<dynamic> endStep(String phaseId, String stepId);
   Future<dynamic> endPhase(String phaseId);
-  Future<dynamic> endSeason(String seasonId);
+  Future<dynamic> endSeason(String seasonId, int turnover);
   Future<GardenEntity> getGardenById(String gardenId);
   Future<TreeEntity> getTreeById(String treeId);
   
@@ -63,7 +63,7 @@ class SeasonRepositoryImpl extends SeasonRepository {
 
   @override
   Future createSeason(
-      SeasonEntity param) async {
+      NewSeasonEntity param) async {
     return await _apiClientBagri!.createSeason(param.toJson());
   }
 
@@ -125,8 +125,11 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future endSeason(String seasonId) async{
-    return await _apiClientBagri!.endSeason(seasonId);
+  Future endSeason(String seasonId, int turnover) async{
+    final data = {
+      "turnover": turnover
+    };
+    return await _apiClientBagri!.endSeason(seasonId, data);
   }
 
   @override

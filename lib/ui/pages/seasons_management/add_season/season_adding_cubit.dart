@@ -58,7 +58,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
               steps: listSteps,
               name: phase.name,
               description: phase.description,
-              start: startPhase
+              start: listSteps.first.start
           );
           listStages.add(stageSeason);
         }
@@ -75,7 +75,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
   Future<void> createSeason(int treeQuantity) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      SeasonEntity param = SeasonEntity(
+      NewSeasonEntity param = NewSeasonEntity(
           name: state.seasonName,
           gardenId: state.gardenEntity!.garden_id,
           process: calculateStartDay(),

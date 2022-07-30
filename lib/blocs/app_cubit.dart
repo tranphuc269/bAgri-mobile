@@ -11,6 +11,7 @@ import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/entities/weather/weather_response.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
 import 'package:flutter_base/repositories/material_repository.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
+import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/task_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
@@ -38,6 +40,7 @@ class AppCubit extends Cubit<AppState> {
   AuthRepository authRepository;
   TaskRepository taskRepository;
   UserRepository userRepository;
+  SeasonRepository seasonRepository;
   MaterialRepository materialRepository;
   ContractWorkRepositoy contractWorkRepository;
   TemporaryTaskRepository temporaryTaskRepository;
@@ -48,6 +51,7 @@ class AppCubit extends Cubit<AppState> {
   AppCubit({
     required this.treeRepository,
     required this.authRepository,
+    required this.seasonRepository,
     required this.processRepository,
     required this.gardenRepository,
     required this.taskRepository,
@@ -68,6 +72,7 @@ class AppCubit extends Cubit<AppState> {
     fetchListProcess();
     fetchListTree();
     fetchListTask();
+    fetchListSeason();
     fetchListManager();
     // getListFarmerByManager();
     getWeather();
@@ -112,6 +117,26 @@ class AppCubit extends Cubit<AppState> {
       emit(state.copyWith(getTreeStatus: LoadStatus.SUCCESS));
     } catch (error) {
       emit(state.copyWith(getTreeStatus: LoadStatus.FAILURE));
+    }
+  }
+
+  void fetchListSeason() async {
+    emit(state.copyWith(getTreeStatus: LoadStatus.LOADING));
+    try {
+      var response = await seasonRepository.getListSeasonData();
+      response = response.where((element) => element.end_date == null).toList();
+      print(response.first.seasonId);
+      if (response != null) {
+        emit(state.copyWith(
+          getStatusSeason: LoadStatus.SUCCESS,
+          seasons: response,
+        ));
+      } else {
+        emit(state.copyWith(getStatusSeason: LoadStatus.FAILURE));
+      }
+      emit(state.copyWith(getStatusSeason: LoadStatus.SUCCESS));
+    } catch (error) {
+      emit(state.copyWith(getStatusSeason: LoadStatus.FAILURE));
     }
   }
 

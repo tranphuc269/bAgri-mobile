@@ -280,21 +280,21 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                       ),
                     ],
                   ),
-                  // SizedBox(height: 10),
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: AppButton(
-                  //         color: AppColors.redButton,
-                  //         title: 'Kết thúc',
-                  //         onPressed: () {
-                  //           widget.onEnd();
-                  //           Navigator.of(context).pop();
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppButton(
+                          color: AppColors.redButton,
+                          title: 'Kết thúc',
+                          onPressed: () {
+                            widget.onEnd();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ]),
               ),
             ),

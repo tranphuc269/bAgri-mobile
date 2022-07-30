@@ -68,10 +68,10 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
     }
   }
 
-  Future<void> endSeason(String seasonId) async{
+  Future<void> endSeason(String seasonId, int turnover) async{
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try{
-      var result = await seasonRepository.endSeason(seasonId);
+      var result = await seasonRepository.endSeason(seasonId, turnover);
       emit(state.copyWith(
           loadStatus: LoadStatus.SUCCESS, /*season: result*//*.data!.season!*/));
     } catch (e) {

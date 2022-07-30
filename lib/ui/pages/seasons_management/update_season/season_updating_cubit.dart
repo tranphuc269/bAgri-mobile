@@ -3,15 +3,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
-import 'package:flutter_base/models/entities/process/process_detail.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
-import 'package:flutter_base/models/entities/season/season_update_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/models/params/season/create_season_param.dart';
-import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
@@ -28,7 +24,7 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
   Future<void> updateSeason(String seasonId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      SeasonEntity param = SeasonEntity(
+      NewSeasonEntity param = NewSeasonEntity(
         name: state.seasonName,
         gardenId: state.gardenEntity!.garden_id,
         // process: state.processEntity!,

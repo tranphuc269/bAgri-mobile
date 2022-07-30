@@ -2,33 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 
 
-import 'app_process_picker_page.dart';
+import 'app_season_picker_page.dart';
 
-class ProcessPickerController extends ValueNotifier<ProcessEntity?> {
-  ProcessPickerController({ProcessEntity? processEntity})
-      : super(processEntity);
+class SeasonPickerController extends ValueNotifier<SeasonEntity?> {
+  SeasonPickerController({SeasonEntity? seasonEntity})
+      : super(seasonEntity);
 
-  ProcessEntity? get processEntity => value;
+  SeasonEntity? get seasonEntity => value;
 
-  set processEntity(ProcessEntity? processValue) {
-    value = processValue;
-
+  set seasonEntity(SeasonEntity? seasonValue) {
+    value = seasonValue;
     notifyListeners();
   }
 }
 
-class AppPageProcessPicker extends StatelessWidget {
-  final ProcessPickerController controller;
-  final ValueChanged<ProcessEntity?>? onChanged;
-  final String? treeId;
+class AppPageSeasonPicker extends StatelessWidget {
+  final SeasonPickerController controller;
+  final ValueChanged<SeasonEntity?>? onChanged;
+  final String? seasonId;
   final bool enabled;
 
-  AppPageProcessPicker({
+  AppPageSeasonPicker({
     required this.controller,
     this.onChanged,
-    this.treeId,
+    this.seasonId,
     this.enabled = true,
   });
 
@@ -36,14 +36,14 @@ class AppPageProcessPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: controller,
-      builder: (context, ProcessEntity? processEntity, child) {
-        String text = processEntity?.name ?? "";
+      builder: (context, SeasonEntity? seasonEntity, child) {
+        String text = seasonEntity?.name ?? "";
 
         return GestureDetector(
           onTap: enabled
               ? () {
-                  _showMyProjectPicker(context: context);
-                }
+            _showMyProjectPicker(context: context);
+          }
               : null,
           child: Stack(
             children: [
@@ -57,12 +57,12 @@ class AppPageProcessPicker extends StatelessWidget {
                 enabled: false,
                 controller: TextEditingController(text: text),
                 decoration: InputDecoration(
-                  hintText: 'Chọn quy trình chăm sóc',
+                  hintText: 'Chọn mùa vụ',
                   suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: Icon(Icons.keyboard_arrow_down)),
                   suffixIconConstraints:
-                      BoxConstraints(maxHeight: 32, maxWidth: 32),
+                  BoxConstraints(maxHeight: 32, maxWidth: 32),
                   contentPadding: const EdgeInsets.only(
                     left: 20,
                     right: 15,
@@ -107,15 +107,15 @@ class AppPageProcessPicker extends StatelessWidget {
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return AppProcessPickerPage(
-            selectedProcessId: controller.processEntity?.process_id ?? "",
-            selectedTreeId: treeId,
+          return AppSeasonPickerPage(
+            selectedSeasonId: controller.seasonEntity?.seasonId ?? "",
+
           );
         },
       ),
     );
-    if (result is ProcessEntity) {
-      controller.processEntity = result;
+    if (result is SeasonEntity) {
+      controller.seasonEntity = result;
       onChanged?.call(result);
     }
   }

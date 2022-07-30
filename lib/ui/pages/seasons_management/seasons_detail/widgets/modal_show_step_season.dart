@@ -100,7 +100,7 @@ class _ModalShowStepSeasonWidgetState extends State<ModalShowStepSeasonWidget> {
                   child: Container(
                       height: 40,
                       padding: EdgeInsets.all(10),
-                      child: Text('Chỉnh sửa bước', style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic), textAlign: TextAlign.center,)),
+                      child: Text('Xem bước', style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic), textAlign: TextAlign.center,)),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),

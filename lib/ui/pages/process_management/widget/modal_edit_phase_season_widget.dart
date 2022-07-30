@@ -101,7 +101,7 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Expanded(
             child: Container(
@@ -121,16 +121,16 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                     },
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   AppTextAreaField(
                     hintText: 'Mô tả',
-                    maxLines: 8,
+                    // maxLines: 8,
                     enable: true,
                     controller: descriptionController,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -138,7 +138,7 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                         'Ngày bắt đầu:',
                         style: AppTextStyle.greyS18,
                       ),
-                      SizedBox(width: 15),
+                      SizedBox(width: 10),
                       Text(
                         startTime,
                         style: AppTextStyle.blackS16.copyWith(
@@ -188,22 +188,22 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Expanded(
-                      //   child: AppButton(
-                      //     color: AppColors.redButton,
-                      //     title: 'Kết thúc',
-                      //     onPressed: () {
-                      //       widget.onEnd();
-                      //       Navigator.of(context).pop();
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(width: 20),
+                      Expanded(
+                        child: AppButton(
+                          color: AppColors.redButton,
+                          title: 'Kết thúc',
+                          onPressed: () {
+                            widget.onEnd();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 20),
                       Expanded(
                         child: AppButton(
                             color: AppColors.main,

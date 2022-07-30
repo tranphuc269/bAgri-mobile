@@ -18,7 +18,7 @@ class ContractTaskListCubit extends Cubit<ContractTaskListState> {
   Future <void> fetchListContractTask({String? seasonId}) async {
     emit(state.copyWith(getListContractTaskStatus: LoadStatus.LOADING));
     try {
-     final response = await contractTaskRepositoy!.getListContractTaskBySeason(seasonId: seasonId);
+     final response = await contractTaskRepositoy!.getListContractTask/*BySeason*/(/*seasonId: seasonId*/);
      print("response contract task: ");
    //  print(response.toString());
       if (response != null) {

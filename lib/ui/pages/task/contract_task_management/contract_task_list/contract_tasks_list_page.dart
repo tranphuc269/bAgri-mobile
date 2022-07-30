@@ -24,9 +24,9 @@ import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:intl/intl.dart';
 
 class TabListContractTask extends StatelessWidget {
-  SeasonEntity seasonEntity;
+  // SeasonEntity seasonEntity;
 
-  TabListContractTask({Key? key,required this.seasonEntity }) : super(key: key);
+  TabListContractTask({Key? key/*,required this.seasonEntity */}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +37,14 @@ class TabListContractTask extends StatelessWidget {
         return ContractTaskListCubit(
             contractTaskRepositoy: contractTaskRepository);
       },
-      child: ContractTaskListPage(seasonEntity: seasonEntity,),
+      child: ContractTaskListPage(/*seasonEntity: seasonEntity,*/),
     );
   }
 }
 
 class ContractTaskListPage extends StatefulWidget {
-  SeasonEntity seasonEntity;
-  ContractTaskListPage({required this.seasonEntity});
+  // SeasonEntity seasonEntity;
+  // ContractTaskListPage({/*required this.seasonEntity*/});
   @override
   _ContractTaskListState createState() => _ContractTaskListState();
 }
@@ -62,7 +62,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
   void initState() {
     super.initState();
     _cubit = BlocProvider.of<ContractTaskListCubit>(context);
-    _cubit!.fetchListContractTask(seasonId: widget.seasonEntity.seasonId);
+    _cubit!.fetchListContractTask(/*seasonId: widget.seasonEntity.seasonId*/);
     _scrollController.addListener(_onScroll);
   }
 
@@ -312,7 +312,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
   }
 
   Future<void> _onRefreshData() async {
-    await _cubit!.fetchListContractTask(seasonId: widget.seasonEntity.seasonId);
+    await _cubit!.fetchListContractTask(/*seasonId: widget.seasonEntity.seasonId*/);
   }
 
   void showSnackBar(String message) {

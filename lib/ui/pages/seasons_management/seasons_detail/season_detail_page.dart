@@ -136,6 +136,11 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
+                                  'Vườn: ${state.season?.garden?.name ?? ""}',
+                                  style: AppTextStyle.greyS16,
+                                ),
+                                SizedBox(height: 5),
+                                Text(
                                   'Số lượng: ${state.season?.treeQuantity.toString() ?? ""}',
                                   style: AppTextStyle.greyS16,
                                 ),
@@ -151,6 +156,11 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                   SizedBox(height: 5),
                                   Text(
                                     'Ngày kết thúc: ${_dateFormat.format(DateTime.parse((state.season?.start_date).toString()))}',
+                                    style: AppTextStyle.greyS16,
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    'Doanh thu: ${state.season?.turnover?.toString() ?? ""}',
                                     style: AppTextStyle.greyS16,
                                   ),
                                 ],
@@ -235,7 +245,10 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           (state.season!.end_date == null &&
-                                  GlobalData.instance.role == 'GARDEN_MANAGER')
+                                  (GlobalData.instance.role == 'GARDEN_MANAGER' ||
+                                      GlobalData.instance.role ==
+                                          'SUPER_ADMIN' ||
+                                      GlobalData.instance.role == 'ADMIN'))
                               ? AppButton(
                                   color: Color(0xFF01A560),
                                   title: 'Kết thúc mùa vụ',
@@ -247,9 +260,14 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                         builder: (context) =>
                                             AppConfirmedDialog(
                                               onConfirm: () async {
-                                                _cubit.endSeason(
+
+                                                final result =await _cubit.endSeason(
                                                     state.season?.seasonId ??
-                                                        "");
+                                                        "", 1000000000);
+
+                                                  Navigator.pop(context, true);
+                                                  refreshData();
+
                                               },
                                               // onConfirm: () async {
                                               //   final result =
@@ -408,6 +426,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
                           borderRadius: BorderRadius.circular(3),
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Flexible(
                               flex: 6,
@@ -429,30 +448,31 @@ class _PhaseProcessState extends State<PhaseProcess> {
                               child: Row(
                                 children: [
                                   Text(
-                                    'Thời gian: ',
+                                    '',
                                     style: TextStyle(
                                       color: Color(0xFFBBB5D4),
                                       fontSize: 14,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                   BlocBuilder<SeasonDetailCubit,
-                                            SeasonDetailState>(
-                                        buildWhen: (prev, current) =>
-                                            prev.loadStatus !=
-                                            current.loadStatus,
-                                        builder: (context, state) {
-                                          return Text(
-                                            _dateFormat.format(DateTime.parse(
-                                                widget.startDate.toString())),
-                                            // 'Chưa có thời gian bắt đầu',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                            ),
-                                            maxLines: 1,
-                                          );
-                                        }),
+                                  BlocBuilder<SeasonDetailCubit,
+                                          SeasonDetailState>(
+                                      buildWhen: (prev, current) =>
+                                          prev.loadStatus != current.loadStatus,
+                                      builder: (context, state) {
+                                        return Text(
+                                          _dateFormat.format(DateTime.parse(
+                                              widget.startDate.toString())),
+                                          // 'Chưa có thời gian bắt đầu',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
+                                          maxLines: 1,
+                                          softWrap: true,
+                                          overflow: TextOverflow.ellipsis,
+                                        );
+                                      }),
                                   Expanded(
                                     child: BlocBuilder<SeasonDetailCubit,
                                             SeasonDetailState>(
@@ -578,6 +598,7 @@ class StepWidget extends StatefulWidget {
 }
 
 class _StepWidgetState extends State<StepWidget> {
+  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -656,7 +677,7 @@ class _StepWidgetState extends State<StepWidget> {
               children: [
                 Text(
                   (widget.step?.start != null)
-                      ? 'Thời gian bắt đầu ${widget.step?.start?.substring(0, 10)}'
+                      ? 'Thời gian bắt đầu ${ _dateFormat.format(DateTime.parse( widget.step!.start.toString()))}'
                       : 'Chưa có thời gian bắt đầu',
                   style: TextStyle(
                     color: Color(0xFF9E7F2F),
@@ -669,7 +690,7 @@ class _StepWidgetState extends State<StepWidget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'Thời gian kết thúc ${widget.step?.start?.substring(0, 10)}',
+                    'Thời gian kết thúc ${ _dateFormat.format(DateTime.parse( widget.step!.end.toString()))}',
                     style: TextStyle(
                       color: Color(0xFF9E7F2F),
                     ),

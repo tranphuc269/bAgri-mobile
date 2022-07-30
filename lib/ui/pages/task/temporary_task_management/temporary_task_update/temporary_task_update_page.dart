@@ -68,17 +68,17 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                 SizedBox(
                   height: 10,
                 ),
-                BlocConsumer<TemporaryTaskUpdateCubit,
-                    TemporaryTaskUpdateState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS) {}
-                }, builder: (context, state) {
-                  return _buildInformation(
-                      title: "Vườn: ",
-                      information: state.temporaryTask?.garden ?? "");
-                }),
-                SizedBox(
-                  height: 10,
-                ),
+                // BlocConsumer<TemporaryTaskUpdateCubit,
+                //     TemporaryTaskUpdateState>(listener: (context, state) {
+                //   if (state.loadStatus == LoadStatus.SUCCESS) {}
+                // }, builder: (context, state) {
+                //   return _buildInformation(
+                //       title: "Vườn: ",
+                //       information: state.temporaryTask?.garden ?? "");
+                // }),
+                // SizedBox(
+                //   height: 10,
+                // ),
 
                 Text("Mô tả công việc từ kĩ thuật viên: ",
                     style: AppTextStyle.greyS16),

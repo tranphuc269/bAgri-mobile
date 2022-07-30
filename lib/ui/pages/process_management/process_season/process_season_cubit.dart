@@ -27,18 +27,23 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
     return super.close();
   }
 
-  void addList(StageSeason value, String? seasonId) async{
+  void addList(StageSeason value, String? seasonId) async {
     // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     try {
-      var result =await seasonRepository?.addPhase(value, seasonId!);
-      print(result?.process?.stages?.firstWhere((element) => element.name == value.name).name?? "");
+      var result = await seasonRepository?.addPhase(value, seasonId!);
+      print(result?.process?.stages
+              ?.firstWhere((element) => element.name == value.name)
+              .name ??
+          "");
       if (result == null) {
         emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
       } else {
         emit(
             state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING_MORE));
         List<StageSeason> stages = state.stages!;
-        stages.add(result.process?.stages?.firstWhere((element) => element.name == value.name) ?? value) ;
+        stages.add(result.process?.stages
+                ?.firstWhere((element) => element.name == value.name) ??
+            value);
         List<StageSeason> newList = stages;
         emit(state.copyWith(
             stages: newList,
@@ -100,37 +105,37 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
 
   void editSteps(int index, int indexStages, StepSeason value) {
     List<StageSeason> stages = state.stages!;
-    seasonRepository?.putStep(value.step_id!, stages[indexStages].stage_id!, value);
+    seasonRepository?.putStep(
+        value.step_id!, stages[indexStages].stage_id!, value);
     stages[indexStages].steps![index] = value;
     List<StageSeason> newList = stages;
     emit(state.copyWith(
         stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
   }
 
-  void createStep(int index, StepSeason value) async{
+  void createStep(int index, StepSeason value) async {
     List<StageSeason> stages = state.stages!;
     try {
-      var result =await seasonRepository?.addStep(stages[index].stage_id!, value);
+      var result =
+          await seasonRepository?.addStep(stages[index].stage_id!, value);
       if (stages[index].steps == null) {
         stages[index].steps = [];
       }
-      stages[index].steps!.add(result!.process!.stages![index].steps!.firstWhere((element) => element.name == value.name));
+      stages[index].steps!.add(result!.process!.stages![index].steps!
+          .firstWhere((element) => element.name == value.name));
       List<StageSeason> newList = stages;
       emit(state.copyWith(
           stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
     } catch (e) {
       emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
     }
-
   }
 
-  void endStep(int index, int indexStage) async{
+  void endStep(int index, int indexStage) async {
     List<StageSeason> stages = state.stages!;
     try {
-      var result = await seasonRepository?.endStep(
-          stages[indexStage].steps![index].step_id!,
-          stages[indexStage].stage_id!);
-
+      var result = await seasonRepository?.endStep(stages[indexStage].stage_id!,
+          stages[indexStage].steps![index].step_id!);
 
       final stage = stages[indexStage];
       stage.steps?[index].end = DateTime.now().toString().substring(0, 10);

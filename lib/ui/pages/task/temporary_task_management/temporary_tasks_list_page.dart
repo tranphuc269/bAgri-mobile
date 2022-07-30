@@ -273,13 +273,13 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                           fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Vườn: ${temporaryTask.garden}",
-                      style: AppTextStyle.blackS14,
-                    )
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Text(
+                    //   "Vườn: ${temporaryTask.garden}",
+                    //   style: AppTextStyle.blackS14,
+                    // )
                   ],
                 )),
                 Icon(

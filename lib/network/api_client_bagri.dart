@@ -209,7 +209,7 @@ abstract class ApiClient {
       @Path("season_id") String seasonId, @Body() Map<String, dynamic> param);
 
   @PATCH("/seasons/{season_id}/end")
-  Future<dynamic> endSeason(@Path('season_id') String seasonId);
+  Future<dynamic> endSeason(@Path('season_id') String seasonId, @Body() Map<String, dynamic> param);
 
   ///phase-season
   @POST("/phases/{season_id}")

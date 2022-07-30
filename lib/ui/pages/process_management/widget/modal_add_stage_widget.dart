@@ -114,7 +114,7 @@ class _ModalAddStageWidgetState extends State<ModalAddStageWidget> {
                   ),
                   AppTextAreaField(
                     hintText: 'Mô tả',
-                    maxLines: 8,
+                    // maxLines: 8,
                     enable: true,
                     controller: descriptionController,
                   ),

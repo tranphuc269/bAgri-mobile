@@ -5,9 +5,9 @@ import 'package:flutter_base/ui/pages/task/tab_tasks_manage.dart';
 
 Handler tabTaskHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-      SeasonEntity argument = context!.settings!.arguments as SeasonEntity;
+      // SeasonEntity argument = context!.settings!.arguments as SeasonEntity;
       return TaskTabPage(
-        seasonEntity: argument,
+        // seasonEntity: argument,
       );
     });
 

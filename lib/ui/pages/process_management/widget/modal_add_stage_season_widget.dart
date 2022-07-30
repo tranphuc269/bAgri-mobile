@@ -125,7 +125,7 @@ class _ModalAddStageSeasonWidgetState extends State<ModalAddStageSeasonWidget> {
                     controller: descriptionController,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -133,7 +133,7 @@ class _ModalAddStageSeasonWidgetState extends State<ModalAddStageSeasonWidget> {
                         'Ngày bắt đầu:',
                         style: AppTextStyle.greyS18,
                       ),
-                      SizedBox(width: 15),
+                      SizedBox(width: 10),
                       Text(
                         startTime,
                         style: AppTextStyle.blackS16.copyWith(

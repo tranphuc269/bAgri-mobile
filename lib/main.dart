@@ -203,6 +203,8 @@ class _MyAppState extends State<MyApp> {
                 RepositoryProvider.of<AuthRepository>(context);
             final _taskRepository =
                 RepositoryProvider.of<TaskRepository>(context);
+            final _seasonRepository =
+                RepositoryProvider.of<SeasonRepository>(context);
             final _userRepository =
                 RepositoryProvider.of<UserRepository>(context);
             final _weatherRepository =
@@ -218,7 +220,6 @@ class _MyAppState extends State<MyApp> {
             final _materialRepository =
                 RepositoryProvider.of<MaterialRepository>(context);
 
-
             return AppCubit(
                 treeRepository: _treeRepository,
                 authRepository: _authRepository,
@@ -227,6 +228,7 @@ class _MyAppState extends State<MyApp> {
                 processRepository: _processRepository,
                 userRepository: _userRepository,
                 weatherRepository: _weatherRepository,
+                seasonRepository: _seasonRepository,
                 zoneRepository: _zoneRepository,
                 materialRepository: _materialRepository,
                 temporaryTaskRepository: _temporaryTaskRepository,
@@ -264,7 +266,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
-       // home: LineChartSample1(),
+      // home: LineChartSample1(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],
