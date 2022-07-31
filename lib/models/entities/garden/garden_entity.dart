@@ -39,6 +39,8 @@ class GardenEntity {
   @JsonKey()
   int? area;
   @JsonKey()
+  String? areaUnit;
+  @JsonKey()
   String? manager;
   @JsonKey()
   int? treePlaceQuantity;
@@ -51,6 +53,7 @@ class GardenEntity {
     garden_id: json['_id'] as String?,
     name: json['name'] as String?,
     area: json['area'] as int?,
+    areaUnit: json['areaUnit'] as String?,
     manager: json['manager'] as String?,
     treePlaceQuantity: json['treePlaceQuantity'] as int?,
     zone: json['zone'] == null
@@ -63,6 +66,7 @@ class GardenEntity {
     this.garden_id,
     this.name,
     this.area,
+    this.areaUnit,
     this.manager,
     this.treePlaceQuantity,
     this.zone,
@@ -73,6 +77,7 @@ class GardenEntity {
     String? garden_id,
     String? name,
     int? area,
+    String? areaUnit,
     String? manager,
     int? treePlaceQuantity,
     ZoneEntity? zone
@@ -82,6 +87,7 @@ class GardenEntity {
       garden_id: garden_id ?? this.garden_id,
       name: name ?? this.name,
       area: area ?? this.area,
+      areaUnit: areaUnit ?? this.areaUnit,
       manager: manager?? manager,
       treePlaceQuantity: treePlaceQuantity ?? this.treePlaceQuantity,
       zone: zone ?? this.zone

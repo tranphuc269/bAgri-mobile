@@ -107,7 +107,7 @@ abstract class ApiClient {
       @Header("Authorization") String? auth, @Path("zone_id") String? zoneId);
 
   @GET("/gardens?zone={zone_id}")
-  Future<List<GardenEntityResponseFromZoneId>> getListGardenByZone(
+  Future<List<GardenEntity>> getListGardenByZone(
       @Header('accept') String? accept,
       @Header("Authorization") String? auth,
       @Path("zone_id") String? zone_id);
