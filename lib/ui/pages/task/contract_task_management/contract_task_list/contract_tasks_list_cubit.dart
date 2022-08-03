@@ -12,6 +12,7 @@ part 'contract_tasks_list_state.dart';
 class ContractTaskListCubit extends Cubit<ContractTaskListState> {
   ContractTaskRepository? contractTaskRepositoy;
 
+
   ContractTaskListCubit({this.contractTaskRepositoy})
       : super(ContractTaskListState());
 

@@ -31,6 +31,7 @@ import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/router/navigation_observer.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
+import 'package:flutter_base/ui/pages/qr_manager/qr_generator/qr_show_page.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -217,6 +218,8 @@ class _MyAppState extends State<MyApp> {
                 RepositoryProvider.of<TemporaryTaskRepository>(context);
             final _materialRepository =
                 RepositoryProvider.of<MaterialRepository>(context);
+            final _seasonRepository =
+            RepositoryProvider.of<SeasonRepository>(context);
 
 
             return AppCubit(
@@ -231,7 +234,8 @@ class _MyAppState extends State<MyApp> {
                 materialRepository: _materialRepository,
                 temporaryTaskRepository: _temporaryTaskRepository,
                 contractWorkRepository: _contractWorkRepository,
-                contractWorkRepositoy: _contractWorkRepository);
+                seasonRepository: _seasonRepository,
+                contractWorkRepositoy: _contractWorkRepository,);
           }),
           BlocProvider<NavigationCubit>(create: (context) => _navigationCubit!),
           BlocProvider(create: (context) {
@@ -264,7 +268,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
-       // home: LineChartSample1(),
+       // home: QRShowPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

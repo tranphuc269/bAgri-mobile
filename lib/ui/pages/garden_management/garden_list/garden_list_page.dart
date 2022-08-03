@@ -98,7 +98,7 @@ class _GardenListState extends State<GardenListPage> {
                         primary: false,
                         controller: _scrollController,
                         itemBuilder: (context, index) {
-                          GardenEntityResponseFromZoneId garden =
+                          GardenEntity garden =
                               state.listGarden![index];
                           return _buildItem(
                               gardenName: garden.name ?? "",

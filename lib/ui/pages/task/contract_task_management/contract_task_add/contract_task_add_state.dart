@@ -5,12 +5,12 @@ class ContractTaskAddingState extends Equatable {
   ContractWorkEntity? contractWorkEntity;
   LoadStatus? addContractTaskStatus;
   String? treePlaceQuantityMax;
-  GardenEntity? gardenEntity;
+  SeasonEntity? seasonEntity;
   String? startTime;
 
   bool get buttonEnabled {
     if (startTime == null ||
-        gardenEntity == null || contractWorkEntity == null)
+        seasonEntity == null || contractWorkEntity == null)
       return false;
     else
       return true;
@@ -18,7 +18,7 @@ class ContractTaskAddingState extends Equatable {
 
   @override
   List<dynamic> get props => [
-    gardenEntity,
+    seasonEntity,
     contractWorkEntity,
     addContractTaskStatus,
     startTime,
@@ -28,7 +28,7 @@ class ContractTaskAddingState extends Equatable {
 
   ContractTaskAddingState resetDuration({
     LoadStatus? loadStatus,
-    GardenEntity? gardenEntity,
+    SeasonEntity? seasonEntity,
     ContractWorkEntity? contractWorkEntity,
     LoadStatus? addContractTaskStatus,
     String? treePlaceQuantityMax,
@@ -36,7 +36,7 @@ class ContractTaskAddingState extends Equatable {
   }) {
     return ContractTaskAddingState(
       loadStatus: loadStatus ?? this.loadStatus,
-      gardenEntity: gardenEntity ?? this.gardenEntity,
+      seasonEntity: seasonEntity ?? this.seasonEntity,
       treePlaceQuantityMax: treePlaceQuantityMax ?? this.treePlaceQuantityMax,
       addContractTaskStatus: addContractTaskStatus ?? this.addContractTaskStatus,
       contractWorkEntity: contractWorkEntity ?? this.contractWorkEntity,
@@ -46,7 +46,7 @@ class ContractTaskAddingState extends Equatable {
 
   ContractTaskAddingState({
     this.loadStatus,
-    this.gardenEntity,
+    this.seasonEntity,
     this.treePlaceQuantityMax,
     this.addContractTaskStatus,
     this.contractWorkEntity,
@@ -55,7 +55,7 @@ class ContractTaskAddingState extends Equatable {
 
   ContractTaskAddingState copyWith({
     LoadStatus? loadStatus,
-    GardenEntity? gardenEntity,
+    SeasonEntity? seasonEntity,
     ContractWorkEntity? contractWorkEntity,
     LoadStatus? addContractTaskStatus,
     String? treePlaceQuantityMax,
@@ -63,7 +63,7 @@ class ContractTaskAddingState extends Equatable {
   }) {
     return ContractTaskAddingState(
         loadStatus: loadStatus ?? this.loadStatus,
-        gardenEntity: gardenEntity ?? this.gardenEntity,
+        seasonEntity: seasonEntity ?? this.seasonEntity,
         contractWorkEntity: contractWorkEntity ?? this.contractWorkEntity,
         addContractTaskStatus: addContractTaskStatus ?? this.addContractTaskStatus,
         treePlaceQuantityMax: treePlaceQuantityMax ?? this.treePlaceQuantityMax,

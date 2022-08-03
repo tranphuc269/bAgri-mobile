@@ -337,8 +337,8 @@ class Routes {
         handler: contractTaskDetailByAdminHandler);
     router.define(updateTemporaryTask, handler: updateTemporaryTaskHandler);
 
-    router.define(addTemporaryTask, handler: temporaryTaskAddHandler);
-    router.define(temporaryTaskDetail, handler: temporaryTaskDetailHandler);
+    router.define(addTemporaryTask, handler: temporaryTaskAddHandler, transitionType: TransitionType.fadeIn);
+    router.define(temporaryTaskDetail, handler: temporaryTaskDetailHandler, transitionType: TransitionType.fadeIn);
     ///manage Storage
     router.define(manageStorage,
         handler: storageManagementHandler,

@@ -12,17 +12,19 @@ class ContractTask{
   ContractWorkEntity? work;
   @JsonKey(name: 'garden')
   String? gardenName;
+  String? season;
   num? treeQuantity;
   String? start;
   String? end;
   String? description;
   List<MaterialUsedByTask>? materials;
 
-  ContractTask({this.id, this.work, this.gardenName, this.treeQuantity, this.start, this.end, this.description, this.materials});
+  ContractTask({this.id, this.work, this.gardenName, this.treeQuantity, this.start, this.end, this.description, this.materials, this.season});
   ContractTask copyWith({
     String? id,
     ContractWorkEntity? work,
     String? gardenName,
+    String? season,
     num? treeQuantity,
     String? start,
     String? end,
@@ -34,6 +36,7 @@ class ContractTask{
       work: work ?? this.work,
       gardenName: gardenName ?? gardenName,
       treeQuantity: treeQuantity ?? this.treeQuantity,
+      season: season ?? this.season,
       start: start ?? this.start,
       description:  description ?? this.description,
         materials: materials ?? this.materials

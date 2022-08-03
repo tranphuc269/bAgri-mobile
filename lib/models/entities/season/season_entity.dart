@@ -1,3 +1,4 @@
+import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/season/process_season.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -9,6 +10,8 @@ class SeasonEntity {
   @JsonKey(name: '_id')
   String? seasonId;
   String? name;
+  @JsonKey(name: 'garden')
+  GardenEntityResponseFromZoneId? gardenEntity;
   String? gardenId;
   ProcessSeason? process;
   TreeEntity? tree;
@@ -23,6 +26,9 @@ class SeasonEntity {
         seasonId: json['_id'] as String?,
         name: json['name'] as String?,
         gardenId: json['gardenId'] as String?,
+        gardenEntity: json['garden'] == null
+            ? null
+            : GardenEntityResponseFromZoneId.fromJson(json['garden'] as Map<String, dynamic>),
         process: json['process'] == null
             ? null
             : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
@@ -45,6 +51,7 @@ class SeasonEntity {
   SeasonEntity copyWith({
     String? seasonId,
     String? name,
+    GardenEntityResponseFromZoneId? gardenEntity,
     String? gardenId,
     ProcessSeason? process,
     TreeEntity? tree,
@@ -55,6 +62,7 @@ class SeasonEntity {
     return SeasonEntity(
       seasonId: seasonId ?? this.seasonId,
       name: name ?? this.name,
+      gardenEntity: gardenEntity ?? this.gardenEntity,
       gardenId: gardenId ?? this.gardenId,
       process: process ?? this.process,
       tree: tree ?? this.tree,
@@ -67,6 +75,7 @@ class SeasonEntity {
   SeasonEntity({
     this.seasonId,
     this.name,
+    this.gardenEntity,
     this.gardenId,
     this.process,
     this.tree,

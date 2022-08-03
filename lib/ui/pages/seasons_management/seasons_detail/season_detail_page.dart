@@ -578,6 +578,7 @@ class StepWidget extends StatefulWidget {
 }
 
 class _StepWidgetState extends State<StepWidget> {
+  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -656,7 +657,7 @@ class _StepWidgetState extends State<StepWidget> {
               children: [
                 Text(
                   (widget.step?.start != null)
-                      ? 'Thời gian bắt đầu ${widget.step?.start?.substring(0, 10)}'
+                      ? 'Thời gian bắt đầu  ${_dateFormat.format(DateTime.parse((widget.step?.start)!.toString()))}'
                       : 'Chưa có thời gian bắt đầu',
                   style: TextStyle(
                     color: Color(0xFF9E7F2F),
@@ -669,7 +670,7 @@ class _StepWidgetState extends State<StepWidget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'Thời gian kết thúc ${widget.step?.start?.substring(0, 10)}',
+                    'Thời gian kết thúc ${_dateFormat.format(DateTime.parse((widget.step?.end)!.toString()))}',
                     style: TextStyle(
                       color: Color(0xFF9E7F2F),
                     ),

@@ -25,12 +25,12 @@ class ContractTaskRepositoryImpl extends ContractTaskRepository{
   @override
   Future <void> createContractTask({CreateContractTaskParam? param}){
     final body = {
+      "seasonId": param?.seasonId ?? "",
       "work": {
         "title": param?.work!.title ?? "",
         "unit": param?.work!.unit ?? "",
         "unitPrice": param?.work!.unitPrice ?? "",
       },
-      "garden": param?.gardenName ?? "",
       "treeQuantity" :param?.treeQuantity ?? ""
     };
     return _apiClientBagri!.createContractTask("application/json", "Bearer ${accessToken}", "application/json", body);
@@ -57,7 +57,7 @@ class ContractTaskRepositoryImpl extends ContractTaskRepository{
         "unit": param?.work!.unit ?? "",
         "unitPrice": param?.work!.unitPrice ?? "",
       },
-      "garden": param?.gardenName ?? "",
+      "seasonId": param?.seasonId ?? "",
       "description": param?.description ?? "",
       "treeQuantity" :param?.treeQuantity ?? ""
     };

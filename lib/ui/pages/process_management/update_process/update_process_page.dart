@@ -186,7 +186,9 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                                           (index) => PhaseProcess(
                                                 index: index,
                                                 cubitProcess: _cubit!,
-                                                phase: state.stages![index].name ?? '${index + 1}',
+                                                phase:
+                                                    state.stages![index].name ??
+                                                        '${index + 1}',
                                                 onRemove: () {
                                                   _cubit!.removeList(index);
                                                 },
@@ -213,7 +215,8 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
       ),
     );
   }
-  changeNameDesStage(){
+
+  changeNameDesStage() {
     showModalBottomSheet(
         isDismissible: false,
         context: context,
@@ -224,15 +227,21 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                 topLeft: const Radius.circular(20),
                 topRight: const Radius.circular(20))),
         builder: (context) => Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(20),
-                  topRight: const Radius.circular(20))),
-          child: ModalAddStageWidget( onDelete: (){}, onPressed: (String name, String description) { _cubit!.addList(StageEntity(name: name, description: description)); },),
-        )
-    );
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20))),
+              child: ModalAddStageWidget(
+                onDelete: () {},
+                onPressed: (String name, String description) {
+                  _cubit!.addList(
+                      StageEntity(name: name, description: description));
+                },
+              ),
+            ));
   }
+
   Widget buildActionCreate(BuildContext context) {
     return BlocConsumer<UpdateProcessCubit, UpdateProcessState>(
       bloc: _cubit,
@@ -290,7 +299,8 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
   void showSnackBar(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      message: message, typeSnackBar: '',
+      message: message,
+      typeSnackBar: '',
     ));
   }
 }
@@ -351,7 +361,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
                       borderRadius: BorderRadius.circular(3),
                     ),
                     child: GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         showModalBottomSheet(
                           isDismissible: false,
                           context: context,
@@ -359,47 +369,49 @@ class _PhaseProcessState extends State<PhaseProcess> {
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                  topLeft:
-                                  const Radius.circular(20),
-                                  topRight:
-                                  const Radius.circular(20))),
+                                  topLeft: const Radius.circular(20),
+                                  topRight: const Radius.circular(20))),
                           builder: (context) => ModalAddStageWidget(
-                            name: widget.cubitProcess.state.stages![widget.index!].name ?? '',
-                            onPressed:
-                                (name, description ) {
+                            name: widget.cubitProcess.state
+                                    .stages![widget.index!].name ??
+                                '',
+                            onPressed: (name, description) {
                               // widget.cubitProcess.state.stages![widget.index!].name = name;
                               // stageName = name;
                               // widget.cubitProcess.state.stages![widget.index!].description = description;
-                                  widget.cubitProcess.editStage(widget.index!, name, description);
+                              widget.cubitProcess
+                                  .editStage(widget.index!, name, description);
                             },
                           ),
                         );
                       },
                       child: Row(
                         children: [
-                          Text(
-                            'Giai đoạn ${widget.phase}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          Flexible(
+                            flex: 6,
+                            fit: FlexFit.tight,
+                            child: Text(
+                              'Giai đoạn ${widget.phase}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Thời gian: ',
-                            style: TextStyle(
-                              color: Color(0xFFBBB5D4),
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            '$sumStart - $sumEnd ngày',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+                          Flexible(
+                            flex: 5,
+                            fit: FlexFit.tight,
+                              child:  Text(
+                                  'Thời gian: $sumStart - $sumEnd ngày',
+                                  style: TextStyle(
+                                    color: Color(0xFFBBB5D4),
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                             ),
                           ),
                         ],
@@ -585,7 +597,8 @@ class _StepWidgetState extends State<StepWidget> {
                 } else {
                   id = stepId;
                 }
-              }              StepEntity step = StepEntity(
+              }
+              StepEntity step = StepEntity(
                   name: name,
                   step_id: id,
                   from_day: int.parse(startDate),

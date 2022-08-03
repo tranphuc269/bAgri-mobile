@@ -30,7 +30,7 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
     try {
       SeasonEntity param = SeasonEntity(
         name: state.seasonName,
-        gardenId: state.gardenEntity!.garden_id,
+        //gardenId: state.gardenEntity!.garden_id,
         // process: state.processEntity!,
         tree: state.treeEntity!,
         start_date: state.startTime?.replaceAll('/', '-'),

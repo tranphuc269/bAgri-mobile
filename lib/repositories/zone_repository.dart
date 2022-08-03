@@ -50,7 +50,7 @@ class ZoneRepositoryImpl extends ZoneRepository {
   }
 
 
-  Future<List<GardenEntityResponseFromZoneId>> getAmountOfGardenOfZone(String? accessToken, String? zoneId) async {
+  Future<List<GardenEntity>> getAmountOfGardenOfZone(String? accessToken, String? zoneId) async {
    return _apiClientBagri!.getListGardenByZone("application/json", accessToken!, zoneId);
   }
 

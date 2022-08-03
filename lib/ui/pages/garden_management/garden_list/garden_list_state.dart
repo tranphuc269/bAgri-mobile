@@ -4,7 +4,7 @@ class GardenListState extends Equatable {
   LoginStatusBagri? getGardenStatus;
   LoadStatus? deleteGardenStatus;
   List<GardenEntity>? listGardenData;
-  List<GardenEntityResponseFromZoneId>? listGarden;
+  List<GardenEntity>? listGarden;
   LoadStatus? getGardenDetailStatus;
 
   GardenListState(
@@ -14,7 +14,7 @@ class GardenListState extends Equatable {
     LoginStatusBagri? getGardenStatus,
     List<GardenEntity>? listGardenData,
     LoadStatus? deleteGardenStatus,
-    List<GardenEntityResponseFromZoneId>? listGarden,
+    List<GardenEntity>? listGarden,
 
 
   }) {

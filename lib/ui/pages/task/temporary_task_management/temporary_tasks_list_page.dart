@@ -3,11 +3,13 @@ import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
+import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_detail/temporary_task_detail_page.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_list_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
@@ -20,7 +22,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../../../../main.dart';
 
 class TabListTemporaryTask extends StatelessWidget {
-  const TabListTemporaryTask({Key? key}) : super(key: key);
+  SeasonEntity seasonEntity;
+  TabListTemporaryTask({Key? key,required this.seasonEntity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +34,14 @@ class TabListTemporaryTask extends StatelessWidget {
         return TemporaryTaskListCubit(
             temporaryTaskRepository: temporaryTaskRepository);
       },
-      child: TemporaryTaskListPage(),
+      child: TemporaryTaskListPage(seasonEntity: seasonEntity,),
     );
   }
 }
 
 class TemporaryTaskListPage extends StatefulWidget {
+  SeasonEntity seasonEntity;
+  TemporaryTaskListPage({required this.seasonEntity});
   @override
   _TemporaryTaskListPageState createState() => _TemporaryTaskListPageState();
 }
@@ -50,7 +55,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   @override
   void initState() {
     _cubit = BlocProvider.of<TemporaryTaskListCubit>(context);
-    _cubit!.getListTemporaryTasks();
+    _cubit!.getListTemporaryTasks(widget.seasonEntity.seasonId);
     super.initState();
   }
 
@@ -126,7 +131,9 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                             appNavigatorKey.currentContext!,
                             Routes.temporaryTaskDetail,
                             routeSettings: RouteSettings(
-                              arguments: temporaryTask.temporaryTaskId,
+                              arguments: TemporaryTaskDetailArgument(
+                                temporaryTask: temporaryTask,
+                              )
                             ),
                           );
                         },
@@ -183,7 +190,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   }
 
   Future<void> _onRefreshData() async {
-    _cubit!.getListTemporaryTasks();
+    _cubit!.getListTemporaryTasks(widget.seasonEntity.seasonId);
   }
 
   Widget _buildItem(
@@ -273,13 +280,6 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                           fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Vườn: ${temporaryTask.garden}",
-                      style: AppTextStyle.blackS14,
-                    )
                   ],
                 )),
                 Icon(

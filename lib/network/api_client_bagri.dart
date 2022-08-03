@@ -107,7 +107,7 @@ abstract class ApiClient {
       @Header("Authorization") String? auth, @Path("zone_id") String? zoneId);
 
   @GET("/gardens?zone={zone_id}")
-  Future<List<GardenEntityResponseFromZoneId>> getListGardenByZone(
+  Future<List<GardenEntity>> getListGardenByZone(
       @Header('accept') String? accept,
       @Header("Authorization") String? auth,
       @Path("zone_id") String? zone_id);
@@ -364,6 +364,13 @@ abstract class ApiClient {
   ///temporary task
   @GET("/temporary-tasks")
   Future<List<TemporaryTask>> getListTemporaryTasks();
+
+  @GET("/temporary-tasks?seasonId={season_id}")
+  Future<List<TemporaryTask>> getListTemporaryTasksBySeason(
+      @Header('accept') String accept,
+      @Header("Authorization") String? auth,
+      @Path("season_id") String? seasonId);
+
 
   @POST("/temporary-tasks")
   Future<dynamic> createTemporaryTask(@Body() Map<String, dynamic> body);

@@ -21,7 +21,7 @@ abstract class GardenRepository {
 
   Future<ObjectResponse<GardenListResponse>> getGardensByManagerId(
       String managerId);
-  Future<List<GardenEntityResponseFromZoneId>> getListGardenByZone(String? accessToken, String? zoneId);
+  Future<List<GardenEntity>> getListGardenByZone(String? accessToken, String? zoneId);
 
   Future<List<UserEntity>> getListAcounts();
 }
@@ -80,7 +80,7 @@ class GardenRepositoryImpl extends GardenRepository {
     return await _apiClientBagri!.getGardensByManagerId(managerId);
   }
 
-  Future<List<GardenEntityResponseFromZoneId>> getListGardenByZone(String? accessToken, String? zoneId) async {
+  Future<List<GardenEntity>> getListGardenByZone(String? accessToken, String? zoneId) async {
     return _apiClientBagri!.getListGardenByZone("application/json", accessToken, zoneId);
   }
   Future <List<UserEntity>>getListAcounts()  async {

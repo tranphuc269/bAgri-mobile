@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
+import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_add/temporary_task_add_cubit.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_add/temporary_task_add_page.dart';
@@ -36,29 +37,39 @@ Handler temporaryTaskAddHandler = new Handler(
 });
 Handler updateTemporaryTaskHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-  String args = context!.settings!.arguments as String;
+  TemporaryTaskUpdateArgument args = context!.settings!.arguments as TemporaryTaskUpdateArgument;
   return BlocProvider(
     create: (context) {
       TemporaryTaskRepository temporaryTaskRepository =
           RepositoryProvider.of<TemporaryTaskRepository>(context);
+      SeasonRepository seasonRepository =
+      RepositoryProvider.of<SeasonRepository>(context);
       return TemporaryTaskUpdateCubit(
-          temporaryTaskRepository: temporaryTaskRepository);
+          temporaryTaskRepository: temporaryTaskRepository,
+        seasonRepository: seasonRepository,
+      );
     },
     child: TemporaryTaskUpdatePage(
-      temporaryTaskId: args,
+      temporaryTask: args.temporaryTask,
     ),
   );
 });
 Handler temporaryTaskDetailHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-      String args = context!.settings!.arguments as String;
-      return BlocProvider(
-        create: (context) {
-          TemporaryTaskRepository temporaryTaskRepository =
+  TemporaryTaskDetailArgument args =
+      context!.settings!.arguments as TemporaryTaskDetailArgument;
+  return BlocProvider(
+    create: (context) {
+      TemporaryTaskRepository temporaryTaskRepository =
           RepositoryProvider.of<TemporaryTaskRepository>(context);
-          return TemporaryTaskDetailCubit(
-              temporaryTaskRepository: temporaryTaskRepository);
-        },
-        child: TemporaryTaskDetailPage(temporaryTaskId: args),
-      );
-    });
+      SeasonRepository seasonRepository =
+          RepositoryProvider.of<SeasonRepository>(context);
+      return TemporaryTaskDetailCubit(
+          temporaryTaskRepository: temporaryTaskRepository,
+          seasonRepository: seasonRepository);
+    },
+    child: TemporaryTaskDetailPage(
+      temporaryTask: args.temporaryTask,
+    ),
+  );
+});

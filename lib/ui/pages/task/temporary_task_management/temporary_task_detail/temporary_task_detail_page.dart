@@ -9,6 +9,7 @@ import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/daily_task_widget.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_detail/temporary_task_detail_cubit.dart';
+import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
@@ -17,9 +18,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../main.dart';
 
 class TemporaryTaskDetailPage extends StatefulWidget {
-  String? temporaryTaskId;
+  TemporaryTask? temporaryTask;
 
-  TemporaryTaskDetailPage({Key? key, this.temporaryTaskId}) : super(key: key);
+  TemporaryTaskDetailPage({Key? key, this.temporaryTask}) : super(key: key);
 
   @override
   _TemporaryTaskDetailPageState createState() {
@@ -34,7 +35,8 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
   @override
   void initState() {
     cubit = BlocProvider.of<TemporaryTaskDetailCubit>(context);
-    cubit?.getTemporaryDetail(widget.temporaryTaskId);
+    cubit?.getTemporaryDetail(widget.temporaryTask!.temporaryTaskId);
+    cubit!.getSeasonDetail(widget.temporaryTask!.season);
     super.initState();
   }
 
@@ -56,26 +58,50 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
               children: [
                 BlocConsumer<TemporaryTaskDetailCubit,
                     TemporaryTaskDetailState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS) {}
+                  if (state.loadStatus == LoadStatus.SUCCESS &&
+                      state.getSeasonStatus == LoadStatus.SUCCESS) {}
                 }, builder: (context, state) {
-                  return _buildInformation(
-                      title: "Công việc: ",
-                      information: state.temporaryTask?.title ?? "");
+                  return Column(
+                    children: [
+                      _buildInformation(
+                          title: "Công việc: ",
+                          information: state.temporaryTask?.title ?? ""),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _buildInformation(
+                          title: "Vườn: ",
+                          information:
+                              state.seasonEntity?.gardenEntity!.name ?? ""),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _buildInformation(
+                          title: "Diện tích: ",
+                          information: (state.seasonEntity?.gardenEntity!.area
+                                      .toString() ??
+                                  "") +
+                              " " +
+                              (state.seasonEntity?.gardenEntity!.areaUnit
+                                      .toString() ??
+                                  "")),
+                    ],
+                  );
                 }),
                 SizedBox(
                   height: 10,
                 ),
-                BlocConsumer<TemporaryTaskDetailCubit,
-                    TemporaryTaskDetailState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS) {}
-                }, builder: (context, state) {
-                  return _buildInformation(
-                      title: "Vườn: ",
-                      information: state.temporaryTask?.garden ?? "");
-                }),
-                SizedBox(
-                  height: 10,
-                ),
+                // BlocConsumer<TemporaryTaskDetailCubit,
+                //     TemporaryTaskDetailState>(listener: (context, state) {
+                //   if (state.loadStatus == LoadStatus.SUCCESS) {}
+                // }, builder: (context, state) {
+                //   return _buildInformation(
+                //       title: "Vườn: ",
+                //       information: state.temporaryTask?.garden ?? "");
+                // }),
+                // SizedBox(
+                //   height: 10,
+                // ),
                 // if (widget.temporaryTask?.description != null) ...[
                 Text("Mô tả công việc từ kĩ thuật viên: ",
                     style: AppTextStyle.greyS16),
@@ -84,17 +110,19 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
                     TemporaryTaskDetailState>(listener: (context, state) {
                   if (state.loadStatus == LoadStatus.SUCCESS) {}
                 }, builder: (context, state) {
-                      if(state.temporaryTask?.description != null){
-                        descriptionController = TextEditingController(text: state.temporaryTask?.description);
-                      }
+                  if (state.temporaryTask?.description != null) {
+                    descriptionController = TextEditingController(
+                        text: state.temporaryTask?.description);
+                  }
                   return Container(
                     margin: EdgeInsets.only(left: 10, right: 10, bottom: 0),
                     child: AppTextAreaField(
                       controller: descriptionController,
-                      onSaved: (value){
+                      onSaved: (value) {
                         cubit?.changeDescription(value);
                       },
-                      hintText: state.temporaryTask?.description ?? ' Hiện chưa có',
+                      hintText:
+                          state.temporaryTask?.description ?? ' Hiện chưa có',
                       keyboardType: TextInputType.multiline,
                       enable: (GlobalData.instance.role == "ADMIN" ||
                           GlobalData.instance.role == "SUPER_ADMIN"),
@@ -131,7 +159,9 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
                     itemCount: state.temporaryTask?.dailyTasks?.length ?? 0,
                   );
                 }),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 _buildActionUpdate()
               ],
             ),
@@ -170,20 +200,22 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
             width: 100,
             color: AppColors.main,
             title: (GlobalData.instance.role == "ADMIN" ||
-                GlobalData.instance.role == "SUPER_ADMIN") ? 'Cập nhật mô tả công việc' : 'Chỉnh sửa công việc',
+                    GlobalData.instance.role == "SUPER_ADMIN")
+                ? 'Cập nhật mô tả công việc'
+                : 'Chỉnh sửa công việc',
             onPressed: () async {
-
-              if(GlobalData.instance.role == "ADMIN" ||
-                  GlobalData.instance.role == "SUPER_ADMIN"){
+              if (GlobalData.instance.role == "ADMIN" ||
+                  GlobalData.instance.role == "SUPER_ADMIN") {
                 cubit?.changeDescription(descriptionController.text);
                 cubit?.updateTemporaryDetail();
                 Navigator.pop(context);
-              }
-              else {
+              } else {
                 bool isUpdate = await Application.router!.navigateTo(
                   appNavigatorKey.currentContext!,
                   Routes.updateTemporaryTask,
-                  routeSettings: RouteSettings(arguments: widget.temporaryTaskId),
+                  routeSettings: RouteSettings(
+                      arguments: TemporaryTaskUpdateArgument(
+                          temporaryTask: widget.temporaryTask)),
                 );
                 if (isUpdate) {
                   _refreshData();
@@ -197,6 +229,14 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
   }
 
   _refreshData() {
-    cubit?.getTemporaryDetail(widget.temporaryTaskId!);
+    cubit?.getTemporaryDetail(widget.temporaryTask!.temporaryTaskId!);
   }
+}
+
+class TemporaryTaskDetailArgument {
+  TemporaryTask? temporaryTask;
+
+  TemporaryTaskDetailArgument({
+    this.temporaryTask,
+  });
 }
