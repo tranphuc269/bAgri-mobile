@@ -32,7 +32,7 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
         name: state.seasonName,
         //gardenId: state.gardenEntity!.garden_id,
         // process: state.processEntity!,
-        tree: state.treeEntity!,
+        tree: state.treeEntity!.name,
         start_date: state.startTime?.replaceAll('/', '-'),
         end_date: state.endTime?.replaceAll('/', '-'),
       );
@@ -55,7 +55,7 @@ class SeasonUpdatingCubit extends Cubit<SeasonUpdatingState> {
       emit(state.copyWith(
           loadStatus: LoadStatus.SUCCESS,
           // gardenEntity: result.data!.season!.garden,
-          treeEntity: result/*.data!.season!*/.tree,
+          treeEntity: TreeEntity(name:result/*.data!.season!*/.tree ),
           // processEntity: result/*.data!.season!*/.process,
           // seasonDetail: result/*.data!*/.season!,
           seasonName: result./*data!.season!.*/name,

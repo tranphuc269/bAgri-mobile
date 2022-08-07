@@ -31,7 +31,7 @@ class ContractTaskRepositoryImpl extends ContractTaskRepository{
         "unit": param?.work!.unit ?? "",
         "unitPrice": param?.work!.unitPrice ?? "",
       },
-      "treeQuantity" :param?.treeQuantity ?? ""
+      "quantity" :param?.quantity ?? ""
     };
     return _apiClientBagri!.createContractTask("application/json", "Bearer ${accessToken}", "application/json", body);
   }
@@ -59,7 +59,7 @@ class ContractTaskRepositoryImpl extends ContractTaskRepository{
       },
       "seasonId": param?.seasonId ?? "",
       "description": param?.description ?? "",
-      "treeQuantity" :param?.treeQuantity ?? ""
+      "quantity" :param?.quantity ?? ""
     };
     return _apiClientBagri!.updateContractTask("application/json", "Bearer ${accessToken}", contractTaskId, "application/json", body);
   }

@@ -193,7 +193,7 @@ class _ModalShowStepSeasonWidgetState extends State<ModalShowStepSeasonWidget> {
 
                     ],
                   ),
-                  if(GlobalData.instance.role == "GARDEN_MANAGER") ...[
+                  // if(GlobalData.instance.role == "GARDEN_MANAGER") ...[
                     SizedBox(
                       height: 20,
                     ),
@@ -212,7 +212,7 @@ class _ModalShowStepSeasonWidgetState extends State<ModalShowStepSeasonWidget> {
                         ),
                       ],
                     ),
-                  ],
+                  // ],
                 ]),
               ),
             ),

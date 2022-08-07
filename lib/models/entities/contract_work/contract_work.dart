@@ -11,7 +11,7 @@ class ContractWorkEntity{
   @JsonKey()
   String? unit;
   @JsonKey()
-  num? unitPrice;
+  int? unitPrice;
 
   ContractWorkEntity({
     this.id,
@@ -24,7 +24,7 @@ class ContractWorkEntity{
     String? id,
     String? title,
     String? unit,
-    num? unitPrice
+    int? unitPrice
 
   }) {
     return ContractWorkEntity(

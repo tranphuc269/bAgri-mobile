@@ -3,11 +3,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'temporary_task.g.dart';
 
-@JsonSerializable()
+// @JsonSerializable()
 class TemporaryTask {
-  @JsonKey(name: '_id')
+  // @JsonKey(name: '_id')
   String? temporaryTaskId;
-  @JsonKey(name: 'season')
+  // String? seasonId;
   String? season;
   String? description;
   String? title;
@@ -15,6 +15,7 @@ class TemporaryTask {
 
   TemporaryTask(
       {this.season,
+      /*  this.seasonId,*/
       this.title,
       this.description,
       this.temporaryTaskId,
@@ -22,25 +23,40 @@ class TemporaryTask {
 
   TemporaryTask copyWith(
       {String? temporaryTaskId,
-      String? season,
+      // String? season,
+        String? seasonId,
       String? title,
-
       String? description,
       List<DailyTask>? dailyTasks}) {
     return TemporaryTask(
         temporaryTaskId: temporaryTaskId ?? this.temporaryTaskId,
-        season: season ?? this.season,
+        // season: season ?? this.season,
         title: title ?? this.title,
-
+        season: season ?? this.season,
         description: description ?? this.description,
         dailyTasks: dailyTasks ?? this.dailyTasks,
       );
   }
 
   factory TemporaryTask.fromJson(Map<String, dynamic> json) =>
-      _$TemporaryTaskFromJson(json);
+      TemporaryTask(
+        // season: json['season'] as String?,
+        season: json['season'] as String?,
+        title: json['title'] as String?,
+        description: json['description'] as String?,
+        temporaryTaskId: json['_id'] as String?,
+        dailyTasks: (json['dailyTasks'] as List<dynamic>?)
+            ?.map((e) => DailyTask.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
 
-  Map<String, dynamic> toJson() => _$TemporaryTaskToJson(this);
+  Map<String, dynamic> toJson() =>  <String, dynamic>{
+    '_id': this.temporaryTaskId,
+    'seasonId': this.season,
+    'description': this.description,
+    'title': this.title,
+    'dailyTasks': this.dailyTasks,
+  };
 }
 
 @JsonSerializable()
@@ -71,7 +87,6 @@ class TemporaryTaskUpdate{
       temporaryTaskId: temporaryTaskId ?? this.temporaryTaskId,
       season: season ?? this.season,
       title: title ?? this.title,
-
       description: description ?? this.description,
       dailyTasks: dailyTasks ?? this.dailyTasks,
     );

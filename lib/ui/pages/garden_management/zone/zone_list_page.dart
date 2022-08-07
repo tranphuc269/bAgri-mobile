@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -408,73 +407,72 @@ class _GardenListState extends State<ZoneListPage> {
       return AlertDialog(
         title: title,
         content: Container(
-            height: MediaQuery.of(context).size.height / 4 ,
+            height: MediaQuery.of(context).size.height / 4,
             width: MediaQuery.of(context).size.width,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  // Container(
-                  //   alignment: Alignment.centerLeft,
-                  //   // margin: EdgeInsets.symmetric(horizontal: 28),
-                  //   child: RichText(
-                  //     text: TextSpan(children: [
-                  //       TextSpan(
-                  //         text: spanText,
-                  //         style: AppTextStyle.blackS14,
-                  //       ),
-                  //     ]),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 15,),
-                  Container(
-                      // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                      decoration: BoxDecoration(
-
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      child: Form(
-                        key: _formKey,
-                        child: AppTextField(
-                          labelText: 'Tên khu',
-                          autoValidateMode: AutovalidateMode.onUserInteraction,
-                          hintText:'Tên khu' /*hintText.toString()*/,
-                          controller: textEditingController,
-                          validator: (value) {
-                            if (Validator.validateNullOrEmpty(value!))
-                              return "Chưa nhập tên khu";
-                            else if (value == zoneName) {
-                              return "Tên đã bị trùng!";
-                            } else
-                              return null;
-                          },
-                        ),
-                      )),
-                  SizedBox(
-                    height: 15,
+              // Container(
+              //   alignment: Alignment.centerLeft,
+              //   // margin: EdgeInsets.symmetric(horizontal: 28),
+              //   child: RichText(
+              //     text: TextSpan(children: [
+              //       TextSpan(
+              //         text: spanText,
+              //         style: AppTextStyle.blackS14,
+              //       ),
+              //     ]),
+              //   ),
+              // ),
+              // SizedBox(height: 15,),
+              Container(
+                  // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25.0),
                   ),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                    // FlatButton(
-                    //     height: 40,
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(16),
-                    //     ),
-                    //     color: AppColors.redButton,
-                    //     onPressed: (() => {Navigator.of(context).pop()}),
-                    //     child: Text("Hủy",
-                    //         style: TextStyle(color: Colors.white, fontSize: 14))),
-                    Expanded(
-                      child: AppButton(
-                          color: AppColors.redButton,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        title: 'Hủy',
-                          ),
+                  child: Form(
+                    key: _formKey,
+                    child: AppTextField(
+                      labelText: 'Tên khu',
+                      autoValidateMode: AutovalidateMode.onUserInteraction,
+                      hintText: 'Tên khu' /*hintText.toString()*/,
+                      controller: textEditingController,
+                      validator: (value) {
+                        if (Validator.validateNullOrEmpty(value!))
+                          return "Chưa nhập tên khu";
+                        else if (value == zoneName) {
+                          return "Tên đã bị trùng!";
+                        } else
+                          return null;
+                      },
                     ),
-                    SizedBox(
-                    width: 20,
-                    ),
-                    Expanded(child: _buildConfirmCreateButton())
-                  ])
+                  )),
+              SizedBox(
+                height: 15,
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                // FlatButton(
+                //     height: 40,
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(16),
+                //     ),
+                //     color: AppColors.redButton,
+                //     onPressed: (() => {Navigator.of(context).pop()}),
+                //     child: Text("Hủy",
+                //         style: TextStyle(color: Colors.white, fontSize: 14))),
+                Expanded(
+                  child: AppButton(
+                    color: AppColors.redButton,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    title: 'Hủy',
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Expanded(child: _buildConfirmCreateButton())
+              ])
             ])),
       );
     });
@@ -488,34 +486,33 @@ class _GardenListState extends State<ZoneListPage> {
       },
       builder: (context, state) {
         return AppButton(
-            color: AppColors.main,
-            title: "Thêm",
-            textStyle: AppTextStyle.whiteS16Bold,
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                await _cubit!.createZone(_nameZoneController.text);
-                //         .then(
-                //             (value) => {
-                //               if(state.createZoneStatus == LoadStatus.FAILURE){
-                //                 showSnackBar("Tên khu đã tồn tại", "error"),
-                //                 Navigator.pop(context),
-                //               } else {
-                //                 Navigator.pop(context),
-                //                 showSnackBar("Thêm khu thành công", "success"),
-                //                 _onRefreshData(),
-                //   }
-                // });
-                if (state.createZoneStatus == LoadStatus.FAILURE) {
-                  //showSnackBar("Tên khu đã tồn tại", "error");
-                  Navigator.pop(context, false);
-                } else {
-                  Navigator.pop(context, true);
-                  //showSnackBar("Thêm khu thành công", "success");
-                  // _onRefreshData();
-                }
+          color: AppColors.main,
+          title: "Thêm",
+          textStyle: AppTextStyle.whiteS16Bold,
+          onPressed: () async {
+            if (_formKey.currentState!.validate()) {
+              await _cubit!.createZone(_nameZoneController.text);
+              //         .then(
+              //             (value) => {
+              //               if(state.createZoneStatus == LoadStatus.FAILURE){
+              //                 showSnackBar("Tên khu đã tồn tại", "error"),
+              //                 Navigator.pop(context),
+              //               } else {
+              //                 Navigator.pop(context),
+              //                 showSnackBar("Thêm khu thành công", "success"),
+              //                 _onRefreshData(),
+              //   }
+              // });
+              if (state.createZoneStatus == LoadStatus.FAILURE) {
+                //showSnackBar("Tên khu đã tồn tại", "error");
+                Navigator.pop(context, false);
+              } else {
+                Navigator.pop(context, true);
+                //showSnackBar("Thêm khu thành công", "success");
+                // _onRefreshData();
               }
-            },
-
+            }
+          },
         );
       },
     );

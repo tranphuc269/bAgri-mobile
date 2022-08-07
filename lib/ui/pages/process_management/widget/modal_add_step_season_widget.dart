@@ -316,7 +316,7 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
             background: AppColors.main,
             onPrimary: Colors.white),
       ),
-      child: child!,
+      child: SingleChildScrollView(child: child!),
     );
   }
 }

@@ -58,7 +58,7 @@ class ContractTaskDetailCubit extends Cubit<ContractTaskDetailState>{
       work: contractTask!.work,
       seasonId: contractTask.season,
       description: description,
-      treeQuantity: contractTask.treeQuantity,
+      quantity: contractTask.quantity,
     );
     try{
       final response = contractTaskRepository.updateContractTask(param: param, contractTaskId: contractTask.id );

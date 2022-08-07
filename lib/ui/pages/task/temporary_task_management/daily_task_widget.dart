@@ -197,54 +197,57 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                         }),
                       ),
                       if (widget.isUpdate == true)
-                        Padding(
-                          padding: const EdgeInsets.only(left: 180),
-                          child: AppButton(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Thêm vật tư'),
-                                  FittedBox(
-                                      child: Icon(
-                                    Icons.add,
-                                    color: Color(0xFF373737),
-                                  )),
-                                ],
-                              ),
-                              color: Color(0xFFDDDAEA),
-                              height: 37,
-                              border: 10,
-                              width: double.infinity,
-                              onPressed: widget.onAddMaterial,
+                        Container(
+                          // padding: const EdgeInsets.only(left: 180),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: AppButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Thêm vật tư'),
+                                    FittedBox(
+                                        child: Icon(
+                                      Icons.add,
+                                      color: Color(0xFF373737),
+                                    )),
+                                  ],
+                                ),
+                                color: Color(0xFFF1F7E7),
+                                height: 30,
+                                // border: 10,
+                                width: 150,
+                                onPressed: widget.onAddMaterial,
 
-                              // showModalBottomSheet(
-                              //   isDismissible: false,
-                              //   context: context,
-                              //   isScrollControlled: true,
-                              //   backgroundColor: Colors.transparent,
-                              //   shape: RoundedRectangleBorder(
-                              //       borderRadius: BorderRadius.only(
-                              //           topLeft:
-                              //           const Radius.circular(20),
-                              //           topRight:
-                              //           const Radius.circular(20))),
-                              //   builder: (context) => ModalAddStepWidget(
-                              //     phase: widget.phase ?? "",
-                              //     onPressed:
-                              //         (name, startDate, endDate, stepId) {
-                              // StepEntity step = StepEntity(
-                              //     name: name,
-                              //     from_day: int.parse(startDate),
-                              //     to_day: int.parse(endDate));
-                              //
-                              // widget.cubitProcess
-                              //     .createStep(widget.index!, step);
-                              //       },
-                              //     ),
-                              //   );
-                              // }),
-                              // },
-                              ),
+                                // showModalBottomSheet(
+                                //   isDismissible: false,
+                                //   context: context,
+                                //   isScrollControlled: true,
+                                //   backgroundColor: Colors.transparent,
+                                //   shape: RoundedRectangleBorder(
+                                //       borderRadius: BorderRadius.only(
+                                //           topLeft:
+                                //           const Radius.circular(20),
+                                //           topRight:
+                                //           const Radius.circular(20))),
+                                //   builder: (context) => ModalAddStepWidget(
+                                //     phase: widget.phase ?? "",
+                                //     onPressed:
+                                //         (name, startDate, endDate, stepId) {
+                                // StepEntity step = StepEntity(
+                                //     name: name,
+                                //     from_day: int.parse(startDate),
+                                //     to_day: int.parse(endDate));
+                                //
+                                // widget.cubitProcess
+                                //     .createStep(widget.index!, step);
+                                //       },
+                                //     ),
+                                //   );
+                                // }),
+                                // },
+                                ),
+                          ),
                         ),
                     ],
                   ),
@@ -281,7 +284,7 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
           margin: EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
               color: Color(0xFFF1F7E7),
-              border: Border.all(color:Color(0xFF9D9D9D) ),
+              // border: Border.all(color:Color(0xFF9D9D9D) ),
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

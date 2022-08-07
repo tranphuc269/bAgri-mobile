@@ -19,6 +19,7 @@ import 'package:intl/intl.dart';
 
 class AddContractTaskPage extends StatefulWidget {
   final SeasonEntity? seasonEntity;
+
   AddContractTaskPage({Key? key, this.seasonEntity}) : super(key: key);
 
   @override
@@ -51,6 +52,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
       _cubit.changeWork(workPickerController.contractWorkEntity!);
     });
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -73,12 +75,12 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
             children: [
               _buildInput(),
               _buildButton(),
-              SizedBox(height: 30,)
+              SizedBox(
+                height: 30,
+              )
             ],
           ),
-        )
-
-    );
+        ));
   }
 
   Widget _buildInput() {
@@ -98,7 +100,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 _buildTextLabel("Chọn mùa:"),
                 _buildSeasonPicker(),
                 SizedBox(height: 3),
-                _buildTextLabel("Số bầu cây: "),
+                _buildTextLabel("Số lượng: "),
                 _buildTreeQuantity(),
               ],
             ),
@@ -131,17 +133,16 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 color: AppColors.main,
                 title: 'Xác nhận',
                 onPressed: () async {
-                  if(_formKey.currentState!.validate()){
-                   await _cubit.createContractTask(treeQuantityController.text);
+                  if (_formKey.currentState!.validate()) {
+                    await _cubit
+                        .createContractTask(treeQuantityController.text);
                     Navigator.of(context).pop(true);
                   }
                 },
               ),
             )
           ],
-        )
-
-    );
+        ));
   }
 
   Widget _buildTextLabel(String text) {
@@ -179,31 +180,37 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
   }
 
   Widget _buildTreeQuantity() {
-    treeQuantityController = TextEditingController(text:seasonPickerController.seasonEntity?.treeQuantity.toString());
+    if (workPickerController.contractWorkEntity?.unit == "Đồng/bầu") {
+      treeQuantityController = TextEditingController(
+          text: seasonPickerController.seasonEntity?.treeQuantity.toString());
+    } else {
+      treeQuantityController = TextEditingController();
+    }
     return Container(
-            margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25.0),
-            ),
-            child: AppTextField(
-              hintText: "Nhập số lượng bầu cây",
-              keyboardType: TextInputType.number,
-              controller: treeQuantityController,
-              validator: (value){
-                if(Validator.validateNullOrEmpty(value!))
-                  return "Chưa nhập số lượng bầu cây";
-                if(num.parse(treeQuantityController.text) > (seasonPickerController.seasonEntity?.treeQuantity)!.toInt())
-                  return "Số lượng đã lớn hơn số lượng bầu của vườn";
-                else
-                  return null;
-             },
-             // initialValue: ,
-            ),
-          );
+      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      child: AppTextField(
+        hintText: "Nhập số lượng ",
+        keyboardType: TextInputType.number,
+        controller: treeQuantityController,
+        validator: (value) {
+          if (Validator.validateNullOrEmpty(value!))
+            return "Chưa nhập số lượng ";
+          if (workPickerController.contractWorkEntity?.unit == "Đồng/bầu" &&
+              (int.parse(treeQuantityController.text) >
+                  (seasonPickerController.seasonEntity?.treeQuantity)!.toInt()))
+            return "Số lượng đã lớn hơn số lượng bầu của vườn";
+          else
+            return null;
+        },
+        // initialValue: ,
+      ),
+    );
   }
 
   Widget _buildSeasonPicker() {
-
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
       decoration: BoxDecoration(
@@ -212,9 +219,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
       child: AppPageSeasonPicker(
         controller: seasonPickerController,
         onChanged: (value) {
-          setState(() {
-
-          });
+          setState(() {});
         },
       ),
     );
@@ -239,7 +244,8 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
       style: AppTextStyle.greyS18,
     );
   }
-  void changeDate(DateTime value){
+
+  void changeDate(DateTime value) {
     selectedDate = value;
   }
 
@@ -253,7 +259,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
             background: AppColors.main,
             onPrimary: Colors.white),
       ),
-      child: child!,
+      child: SingleChildScrollView(child: child!),
     );
   }
 }

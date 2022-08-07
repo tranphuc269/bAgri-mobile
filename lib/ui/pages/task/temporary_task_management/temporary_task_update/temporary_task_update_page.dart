@@ -2,21 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
-import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/material/material_task.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/router/application.dart';
-import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/modal_add_material_widget.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_cubit.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/widget/modal_add_daily_task_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../main.dart';
 import '../daily_task_widget.dart';
 
 class TemporaryTaskUpdatePage extends StatefulWidget {
@@ -42,152 +37,173 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
     super.initState();
   }
 
+  onRefreshData(){
+    cubit?.getTemporaryDetail(widget.temporaryTask!.temporaryTaskId);
+    cubit?.getSeasonDetail(widget.temporaryTask!.season);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         context: context,
         title: 'Chỉnh sửa công việc',
+        onBackPressed: (){
+          Navigator.pop(context, true);
+        }
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-        child: Scrollbar(
-          isAlwaysShown: true,
-          child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocConsumer<TemporaryTaskUpdateCubit,
-                    TemporaryTaskUpdateState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS && state.getSeasonStatus == LoadStatus.SUCCESS) {}
-                }, builder: (context, state) {
-                  return _buildInformation(
-                      title: "Công việc: ",
-                      information: state.temporaryTask?.title ?? "");
-                }),
-                SizedBox(
-                  height: 10,
-                ),
-                BlocConsumer<TemporaryTaskUpdateCubit,
-                    TemporaryTaskUpdateState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS && state.getSeasonStatus == LoadStatus.SUCCESS) {}
-                }, builder: (context, state) {
-                  return _buildInformation(
-                      title: "Vườn: ",
-                      information: state.seasonEntity?.gardenEntity!.name ?? "");
-                }),
-                SizedBox(
-                  height: 10,
-                ),
+        child:  Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                  // physics: ClampingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BlocConsumer<TemporaryTaskUpdateCubit,
+                          TemporaryTaskUpdateState>(listener: (context, state) {
+                        if (state.loadStatus == LoadStatus.SUCCESS &&
+                            state.getSeasonStatus == LoadStatus.SUCCESS) {}
+                      }, builder: (context, state) {
+                        return _buildInformation(
+                            title: "Công việc: ",
+                            information: state.temporaryTask?.title ?? "");
+                      }),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      BlocConsumer<TemporaryTaskUpdateCubit,
+                          TemporaryTaskUpdateState>(listener: (context, state) {
+                        if (state.loadStatus == LoadStatus.SUCCESS &&
+                            state.getSeasonStatus == LoadStatus.SUCCESS) {}
+                      }, builder: (context, state) {
+                        return _buildInformation(
+                            title: "Vườn: ",
+                            information:
+                                state.seasonEntity?.gardenEntity!.name ?? "");
+                      }),
+                      SizedBox(
+                        height: 10,
+                      ),
 
-                Text("Mô tả công việc từ kĩ thuật viên: ",
-                    style: AppTextStyle.greyS16),
-                SizedBox(height: 10),
-                BlocConsumer<TemporaryTaskUpdateCubit,
-                    TemporaryTaskUpdateState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS) {}
-                }, builder: (context, state) {
-                  var description =
-                      state.temporaryTask?.description ?? 'Hiện chưa có';
-                  return Container(
-                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 0),
-                    child: Text(
-                      /* hintText:*/
-                      state.temporaryTask?.description ?? ' Hiện chưa có',
-                      // keyboardType: TextInputType.multiline,
-                      maxLines: 8,
-                      // enable: false,
-                      // textInputAction: TextInputAction.newline,
-                    ),
-                  );
-                }),
-                // Padding(
-                //     padding: EdgeInsets.symmetric(horizontal: 30),
-                //     child: Text(
-                //       widget.temporaryTask?.description ?? "",
-                //       style: AppTextStyle.greyS16Bold,
-                //     )),
+                      Text("Mô tả công việc từ kĩ thuật viên: ",
+                          style: AppTextStyle.greyS16),
+                      SizedBox(height: 10),
+                      BlocConsumer<TemporaryTaskUpdateCubit,
+                          TemporaryTaskUpdateState>(listener: (context, state) {
+                        if (state.loadStatus == LoadStatus.SUCCESS) {}
+                      }, builder: (context, state) {
+                        var description =
+                            state.temporaryTask?.description ?? 'Hiện chưa có';
+                        return Container(
+                          margin: EdgeInsets.only(left: 10, right: 10, bottom: 0),
+                          child: Text(
+                            /* hintText:*/
+                            state.temporaryTask?.description ?? ' Hiện chưa có',
+                            // keyboardType: TextInputType.multiline,
+                            maxLines: 8,
+                            // enable: false,
+                            // textInputAction: TextInputAction.newline,
+                          ),
+                        );
+                      }),
+                      // Padding(
+                      //     padding: EdgeInsets.symmetric(horizontal: 30),
+                      //     child: Text(
+                      //       widget.temporaryTask?.description ?? "",
+                      //       style: AppTextStyle.greyS16Bold,
+                      //     )),
 
-                // if (GlobalData.instance.role == "ADMIN" ||
-                //     GlobalData.instance.role == "SUPER_ADMIN")
-                //
-                SizedBox(
-                  height: 5,
-                ),
-                Text("Danh sách công việc: ", style: AppTextStyle.greyS16),
-                BlocBuilder<TemporaryTaskUpdateCubit, TemporaryTaskUpdateState>(
-                  builder: (context, state) {
-                    return Container(
-                      padding: const EdgeInsets.only(left: 160),
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      child: AppButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Thêm công việc'),
-                            FittedBox(
-                                child: Icon(
-                              Icons.add,
-                              color: Color(0xFF373737),
-                            )),
-                          ],
-                        ),
-                        color: Color(0xFF8FE192),
-                        height: 30,
-                        width: double.infinity,
-                        onPressed: () {
-                          addDailyTask();
+                      // if (GlobalData.instance.role == "ADMIN" ||
+                      //     GlobalData.instance.role == "SUPER_ADMIN")
+                      //
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text("Danh sách công việc: ", style: AppTextStyle.greyS16),
+                      BlocBuilder<TemporaryTaskUpdateCubit, TemporaryTaskUpdateState>(
+                        builder: (context, state) {
+                          return Container(
+                            // padding: const EdgeInsets.only(left: 100),
+                            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: AppButton(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Thêm công việc'),
+                                    FittedBox(
+                                        child: Icon(
+                                      Icons.add,
+                                      color: Color(0xFF373737),
+                                    )),
+                                  ],
+                                ),
+                                color: Color(0xFF8FE192),
+                                height: 30,
+                                width: 150,
+                                onPressed: () {
+                                  addDailyTask();
+                                  // onRefreshData();
+                                },
+                              ),
+                            ),
+                          );
                         },
                       ),
-                    );
-                  },
+                      SizedBox(height: 10),
+                      BlocConsumer<TemporaryTaskUpdateCubit,
+                          TemporaryTaskUpdateState>(listener: (context, state) {
+                        if (state.loadStatus == LoadStatus.SUCCESS) {}
+                      }, builder: (context, state) {
+                        // if (state.loadStatus == LoadStatus.LOADING) {
+                        return /*Center(
+                              child: CircularProgressIndicator(
+                              color: AppColors.main,
+                            ));
+                          } else if (state.loadStatus == LoadStatus.FAILURE) {
+                              return Container();
+                          } else if (state.loadStatus ==
+                          LoadStatus.SUCCESS) {
+                            return state.dailyTasks!.length != 0
+                                ? */
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) => DailyTaskWidget(
+                                cubit: cubit,
+                                onRemove: () {
+                                  cubit?.removeList(index);
+                                },
+                                onAddMaterial: () {
+                                  addMaterial(index);
+                                },
+                                dailyTask: state.dailyTasks![index],
+                                isUpdate: true,
+                                index: index),
+                                itemCount: state.dailyTasks?.length ?? 0,
+                          /* ): Container();
+                          }
+                          return Container(*/
+                        );
+                      }),
+
+                    ],
+                  ),
+
                 ),
-                SizedBox(height: 10),
-                BlocConsumer<TemporaryTaskUpdateCubit,
-                    TemporaryTaskUpdateState>(listener: (context, state) {
-                  if (state.loadStatus == LoadStatus.SUCCESS) {}
-                }, builder: (context, state) {
-                  // if (state.loadStatus == LoadStatus.LOADING) {
-                  return /*Center(
-                        child: CircularProgressIndicator(
-                        color: AppColors.main,
-                      ));
-                    } else if (state.loadStatus == LoadStatus.FAILURE) {
-                        return Container();
-                    } else if (state.loadStatus ==
-                    LoadStatus.SUCCESS) {
-                      return state.dailyTasks!.length != 0
-                          ? */
-                      ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => DailyTaskWidget(
-                        cubit: cubit,
-                        onRemove: () {
-                          cubit?.removeList(index);
-                        },
-                        onAddMaterial:(){
-                          addMaterial(index);
-                        },
-                        dailyTask: state.dailyTasks![index],
-                        isUpdate: true,
-                        index: index),
-                    itemCount: state.dailyTasks?.length ?? 0,
-                    /* ): Container();
-                    }
-                    return Container(*/
-                  );
-                }),
-                SizedBox(
-                  height: 15,
-                ),
-                _buildActionUpdate()
-              ],
             ),
-          ),
+            SizedBox(
+              height: 15,
+            ),
+            _buildActionUpdate(),
+            SizedBox(height: 10,
+            )
+          ],
         ),
-      ),
+        ),
     );
   }
 
@@ -222,6 +238,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                 onPressed: (String name, String fee, String workerQuantity,
                     String startTime) {
                   cubit?.addList(name, fee, workerQuantity, startTime);
+
                 },
               ),
             ));
@@ -236,7 +253,7 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
             color: AppColors.redButton,
             title: 'Quay lại',
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
             },
           ),
         ),
@@ -250,7 +267,8 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                 ? 'Cập nhật mô tả công việc'
                 : 'Chỉnh sửa công việc',
             onPressed: () async {
-              cubit?.updateTemporaryTask(widget.temporaryTask!.temporaryTaskId!);
+              await cubit
+                  ?.updateTemporaryTask(widget.temporaryTask!.temporaryTaskId!);
               Navigator.of(context).pop(true);
             },
           ),
@@ -270,23 +288,30 @@ class _TemporaryTaskUpdatePageState extends State<TemporaryTaskUpdatePage> {
                 topLeft: const Radius.circular(20),
                 topRight: const Radius.circular(20))),
         builder: (context) => Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(20),
-                  topRight: const Radius.circular(20))),
-          child: ModalAddMaterialWidget(
-            onPressed: (String name, String quantity, String unit) {
-              setState(() {
-                cubit?.createMaterial(index, MaterialTask( name: name,
-                    quantity: int.parse(quantity.toString()),
-                    unit: unit));
-              });
-            },
-          ),
-        ));
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20))),
+              child: ModalAddMaterialWidget(
+                onPressed: (String name, String quantity, String unit,
+                    int? unitPrice) {
+                  setState(() {
+                    cubit?.createMaterial(
+                        index,
+                        MaterialTask(
+                            name: name,
+                            quantity: int.parse(quantity.toString()),
+                            unitPrice: unitPrice,
+                            unit: unit));
+                  });
+                },
+              ),
+            ));
   }
+
 }
+
 class TemporaryTaskUpdateArgument {
   TemporaryTask? temporaryTask;
 
