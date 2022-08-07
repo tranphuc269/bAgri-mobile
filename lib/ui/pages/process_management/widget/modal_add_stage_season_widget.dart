@@ -230,7 +230,7 @@ class _ModalAddStageSeasonWidgetState extends State<ModalAddStageSeasonWidget> {
             background: AppColors.main,
             onPrimary: Colors.white),
       ),
-      child: child!,
+      child: SingleChildScrollView(child: child!),
     );
   }
 }

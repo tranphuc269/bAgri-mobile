@@ -126,8 +126,8 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                         height: 10,
                       ),
                       _buildInformation(
-                          title: "Số lượng bầu cây: ",
-                          information: "${state.contractTask!.treeQuantity}"),
+                          title: "Số lượng: ",
+                          information: "${state.contractTask!.quantity}"),
                       SizedBox(
                         height: 10,
                       ),
@@ -304,12 +304,13 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                       topLeft: const Radius.circular(20),
                       topRight: const Radius.circular(20))),
               child: ModalAddMaterialWidget(
-                onPressed: (String name, String quantity, String unit) {
+                onPressed: (String name, String quantity, String unit, int? unitPrice) {
                   setState(() {
-                    print(name);
+                    // print(name);
                     _cubit!.state.materials!.add(MaterialUsedByTask(
                         name: name,
                         quantity: int.parse(quantity.toString()),
+                        unitPrice: unitPrice,
                         unit: unit));
                   })
                   ;

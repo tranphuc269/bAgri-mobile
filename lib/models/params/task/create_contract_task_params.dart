@@ -8,14 +8,14 @@ class CreateContractTaskParam {
   ContractWorkEntity ? work;
   String? seasonId;
   GardenEntityResponseFromZoneId? garden;
-  num? treeQuantity;
+  int? quantity;
   String? description;
 
   CreateContractTaskParam({
     this.work,
     this.seasonId,
     this.garden,
-    this.treeQuantity,
+    this.quantity,
     this.description
   });
 
@@ -23,14 +23,14 @@ class CreateContractTaskParam {
     ContractWorkEntity? work,
     String? seasonId,
     GardenEntityResponseFromZoneId? garden,
-    num? treeQuantity,
+    int? quantity,
     String? description
   }) {
     return CreateContractTaskParam(
       work: work ?? this.work,
       seasonId: seasonId ?? this.seasonId,
       garden: garden ?? this.garden,
-      treeQuantity: treeQuantity ?? this.treeQuantity,
+      quantity: quantity ?? this.quantity,
       description: description ?? this.description
     );
   }

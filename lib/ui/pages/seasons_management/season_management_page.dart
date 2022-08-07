@@ -406,6 +406,7 @@ import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 import '../../../main.dart';
 
@@ -419,6 +420,7 @@ class SeasonListPage extends StatefulWidget {
 class _SeasonListPageState extends State<SeasonListPage> {
   SeasonManagementCubit? _cubit;
   final _scrollController = ScrollController();
+  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
 
   @override
   void initState() {
@@ -442,25 +444,27 @@ class _SeasonListPageState extends State<SeasonListPage> {
           },
         ),
       ),
+      floatingActionButton: (GlobalData.instance.role == 'ADMIN' ||
+              GlobalData.instance.role == 'SUPER_ADMIN')
+          ? FloatingActionButton(
+              heroTag: "btn2",
+              onPressed: () async {
+                bool isAdd = await Application.router!
+                    .navigateTo(context, Routes.seasonAdding);
 
-      floatingActionButton: (GlobalData.instance.role == 'ADMIN' || GlobalData.instance.role == 'SUPER_ADMIN') ? FloatingActionButton(
-        heroTag: "btn2",
-        onPressed: () async {
-          bool isAdd = await Application.router!
-              .navigateTo(context, Routes.seasonAdding);
-
-          if (isAdd) {
-            refreshData();
-            // if (_cubit?.state.loadStatus == LoadStatus.SUCCESS)
-              showSnackBar('Thêm mới mùa vụ thành công!');
-          }
-        },
-        backgroundColor: AppColors.main,
-        child: Icon(
-          Icons.add,
-          size: 40,
-        ),
-      ) : Container(),
+                if (isAdd) {
+                  refreshData();
+                  // if (_cubit?.state.loadStatus == LoadStatus.SUCCESS)
+                  showSnackBar('Thêm mới mùa vụ thành công!');
+                }
+              },
+              backgroundColor: AppColors.main,
+              child: Icon(
+                Icons.add,
+                size: 40,
+              ),
+            )
+          : Container(),
     );
   }
 
@@ -500,8 +504,7 @@ class _SeasonListPageState extends State<SeasonListPage> {
                       itemBuilder: (context, index) {
                         SeasonEntity seasonEntity = state.seasonList![index];
                         return _buildItem(
-                            seasonName: seasonEntity.name ?? "",
-                            treeName: seasonEntity.tree?.name ?? "",
+                            seasonEntity: seasonEntity,
                             onPressed: () {
                               Application.router!.navigateTo(
                                 appNavigatorKey.currentContext!,
@@ -568,15 +571,14 @@ class _SeasonListPageState extends State<SeasonListPage> {
   }
 
   _buildItem(
-      {required String seasonName,
-      required String treeName,
+      {required SeasonEntity seasonEntity,
       VoidCallback? onDelete,
       VoidCallback? onPressed,
       VoidCallback? onUpdate}) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: 80,
+        height: 85,
         decoration: BoxDecoration(
           color: AppColors.grayEC,
           borderRadius: BorderRadius.circular(10),
@@ -636,30 +638,57 @@ class _SeasonListPageState extends State<SeasonListPage> {
           ),
           child: Padding(
             padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 15),
+                const EdgeInsets.only(top: 20, bottom: 20, left: 15, right: 5),
             child: Row(
               children: [
                 SizedBox(
                     width: 40,
                     height: 40,
-                    child: Image.asset(
-                      AppImages.icCropNoColor
-                    )),
+                    child: Image.asset(AppImages.icCropNoColor)),
                 SizedBox(width: 15),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '$seasonName',
+                        seasonEntity.name ?? '',
                         style: AppTextStyle.greyS16Bold,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 5),
-                      Text(
-                        'Cây trồng: $treeName',
-                        style: AppTextStyle.greyS14,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Cây trồng: ${seasonEntity.tree}',
+                            style: AppTextStyle.greyS14,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(width: 15),
+                          seasonEntity.end_date == null
+                              ? Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    "Đang diễn ra",
+                                    style: TextStyle(
+                                        color: Color(0xFF5C5C5C),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                )
+                              : Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    "Đã kết thúc",
+                                    style: TextStyle(
+                                        color: AppColors.main,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                )
+                        ],
                       ),
                     ],
                   ),

@@ -12,7 +12,7 @@ abstract class SeasonRepository {
   Future<SeasonEntity> getSeasonById(String seasonId);
 
   Future createSeason(
-      SeasonEntity param);
+     SeasonEntity param);
 
   Future<TreeDeleteResponse> deleteSeason(String seasonId);
   Future<SeasonEntity> addPhase(StageSeason phaseSeason, String seasonId);
@@ -23,24 +23,24 @@ abstract class SeasonRepository {
   Future<dynamic> deleteStep(String stepId, String phaseId);
   Future<dynamic> endStep(String phaseId, String stepId);
   Future<dynamic> endPhase(String phaseId);
-  Future<dynamic> endSeason(String seasonId);
+  Future<dynamic> endSeason(String seasonId, int turnover);
   Future<GardenEntity> getGardenById(String gardenId);
   Future<TreeEntity> getTreeById(String treeId);
-  
 
-  // Future<SeasonEntity> updateSeason(
-  //     String seasonId, SeasonEntity param);
 
-  // Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
-  //     String seasonId, String date);
-  //
-  // Future<ObjectResponse<SeasonTaskDetailResponse>> getSeasonTaskDetail(
-  //     String taskId);
-  //
-  // Future<ObjectResponse<SeasonStepsResponse>> getListSeasonSteps(
-  //     String seasonId);
+// Future<SeasonEntity> updateSeason(
+//     String seasonId, SeasonEntity param);
 
-  // Future<ObjectResponse<QREntity>> generateQRCode(String seasonId);
+// Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
+//     String seasonId, String date);
+//
+// Future<ObjectResponse<SeasonTaskDetailResponse>> getSeasonTaskDetail(
+//     String taskId);
+//
+// Future<ObjectResponse<SeasonStepsResponse>> getListSeasonSteps(
+//     String seasonId);
+
+// Future<ObjectResponse<QREntity>> generateQRCode(String seasonId);
 }
 
 class SeasonRepositoryImpl extends SeasonRepository {
@@ -125,8 +125,11 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future endSeason(String seasonId) async{
-    return await _apiClientBagri!.endSeason(seasonId);
+  Future endSeason(String seasonId, int turnover) async{
+    final data = {
+      "turnover": turnover
+    };
+    return await _apiClientBagri!.endSeason(seasonId, data);
   }
 
   @override
@@ -144,34 +147,34 @@ class SeasonRepositoryImpl extends SeasonRepository {
 
 
 
-  // @override
-  // Future<SeasonEntity> updateSeason(
-  //     String seasonId, SeasonEntity param) async {
-  //   return await _apiClientBagri!.updateSeason(seasonId, param.toJson());
-  // }
+// @override
+// Future<SeasonEntity> updateSeason(
+//     String seasonId, SeasonEntity param) async {
+//   return await _apiClientBagri!.updateSeason(seasonId, param.toJson());
+// }
 
-  // @override
-  // Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
-  //     String seasonId, String date) async {
-  //   return await _apiClientBagri!.getSeasonTaskByDay(seasonId, date);
-  // }
-  //
-  // @override
-  // Future<ObjectResponse<SeasonTaskDetailResponse>> getSeasonTaskDetail(
-  //     String taskId) async {
-  //   return await _apiClientBagri!.getSeasonTaskDetail(taskId);
-  // }
-  //
-  // @override
-  // Future<ObjectResponse<SeasonStepsResponse>> getListSeasonSteps(
-  //     String seasonId) async {
-  //   return await _apiClientBagri!.getListSeasonSteps(seasonId);
-  // }
+// @override
+// Future<ObjectResponse<SeasonTaskResponse>> getSeasonTaskByDay(
+//     String seasonId, String date) async {
+//   return await _apiClientBagri!.getSeasonTaskByDay(seasonId, date);
+// }
+//
+// @override
+// Future<ObjectResponse<SeasonTaskDetailResponse>> getSeasonTaskDetail(
+//     String taskId) async {
+//   return await _apiClientBagri!.getSeasonTaskDetail(taskId);
+// }
+//
+// @override
+// Future<ObjectResponse<SeasonStepsResponse>> getListSeasonSteps(
+//     String seasonId) async {
+//   return await _apiClientBagri!.getListSeasonSteps(seasonId);
+// }
 
-  // @override
-  // Future<ObjectResponse<QREntity>> generateQRCode(String seasonId) async {
-  //   return await _apiClientBagri!.generateQRCode(seasonId);
-  // }
+// @override
+// Future<ObjectResponse<QREntity>> generateQRCode(String seasonId) async {
+//   return await _apiClientBagri!.generateQRCode(seasonId);
+// }
 
-  
+
 }

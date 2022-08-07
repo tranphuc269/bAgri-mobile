@@ -248,7 +248,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
                           flex: 3,
                           child: Container(
                             // width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text("Số lượng: ${contractTask.treeQuantity} cây",
+                            child: Text("Số lượng: ${contractTask.quantity} ",
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ),

@@ -45,20 +45,24 @@ class MaterialUsedByTask{
   String? name;
   String? unit;
   int? quantity;
+  int? unitPrice;
   MaterialUsedByTask({
     this.name,
     this.unit,
-    this.quantity
+    this.quantity,
+    this.unitPrice
   });
   MaterialUsedByTask copyWith({
     String? unit,
     String? name,
-    int? quantity
+    int? quantity,
+    int? unitPrice
   }) {
     return MaterialUsedByTask(
         unit: unit ?? this.unit,
         name: name ?? this.name,
-        quantity: quantity ?? this.quantity
+        quantity: quantity ?? this.quantity,
+        unitPrice: unitPrice ?? this.unitPrice
     );
   }
 

@@ -14,12 +14,15 @@ class SeasonEntity {
   GardenEntityResponseFromZoneId? gardenEntity;
   String? gardenId;
   ProcessSeason? process;
-  TreeEntity? tree;
+  String? tree;
   @JsonKey(name: 'start')
   String? start_date;
   @JsonKey(name: 'end')
   String? end_date;
   int? treeQuantity;
+  String? startUrl;
+  String? endUrl;
+  int? turnover;
 
   factory SeasonEntity.fromJson(Map<String, dynamic> json) =>
       SeasonEntity(
@@ -32,20 +35,22 @@ class SeasonEntity {
         process: json['process'] == null
             ? null
             : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
-        tree:TreeEntity(name: json['tree']),
+        tree:json['tree'] as String?,
         start_date: json['start'] as String?,
         end_date: json['end'] as String?,
         treeQuantity: json['treeQuantity'] as int?,
+        turnover: json['turnover'] as int?
       );
   Map<String, dynamic> toJson() => <String, dynamic>{
     if(this.seasonId != null) '_id': this.seasonId,
     'name': this.name,
-    'gardenId': this.gardenId,
+    'gardenId': this.gardenId ?? this.gardenEntity?.garden_id,
     'process': this.process,
-    'tree': this.tree?.name,
+    'tree': this.tree,
     'start': this.start_date,
     'end': this.end_date,
     'treeQuantity': this.treeQuantity,
+    if(this.turnover != null) 'turnover': this.turnover
   };
 
   SeasonEntity copyWith({
@@ -54,10 +59,11 @@ class SeasonEntity {
     GardenEntityResponseFromZoneId? gardenEntity,
     String? gardenId,
     ProcessSeason? process,
-    TreeEntity? tree,
+    String? tree,
     String? start_date,
     String? end_date,
     int? treeQuantity,
+    int? turnover,
   }) {
     return SeasonEntity(
       seasonId: seasonId ?? this.seasonId,
@@ -69,6 +75,7 @@ class SeasonEntity {
       start_date: start_date ?? this.start_date,
       end_date: end_date ?? this.end_date,
       treeQuantity: treeQuantity ?? this.treeQuantity,
+      turnover:turnover?? this.turnover
     );
   }
 
@@ -82,5 +89,6 @@ class SeasonEntity {
     this.start_date,
     this.end_date,
     this.treeQuantity,
+    this.turnover
   });
 }

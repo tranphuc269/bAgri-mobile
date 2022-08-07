@@ -4,30 +4,29 @@ part 'work.g.dart';
 
 @JsonSerializable()
 class Work{
-  @JsonKey(name: '_id')
-  String? workId;
   String? unit;
   int? unitPrice;
   String? title;
+  int? quantity;
 
   Work({
     this.unit,
     this.title,
     this.unitPrice,
-    this.workId
+    this.quantity
 });
 
   Work copyWith({
-    String? workId,
     String? unit,
     String? title,
-    int? unitPrice
+    int? unitPrice,
+    int? quantity
   }) {
     return Work(
-      workId: workId ?? this.workId,
       unit: unit ?? this.unit,
       title: title ?? this.title,
-      unitPrice: unitPrice ?? this.unitPrice
+      unitPrice: unitPrice ?? this.unitPrice,
+      quantity: quantity ?? this.quantity
     );
   }
 

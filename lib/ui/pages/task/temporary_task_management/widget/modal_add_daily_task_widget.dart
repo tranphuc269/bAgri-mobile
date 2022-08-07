@@ -65,7 +65,7 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.6;
+        heightResize = 0.75;
       });
     } else {
       setState(() {
@@ -81,7 +81,7 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
     },
     child: SafeArea(
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: MediaQuery.of(context).size.height * 0.75,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: new BorderRadius.only(
@@ -122,7 +122,7 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             Expanded(
               child: Container(
@@ -150,7 +150,7 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
                           },
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         Text(
                           'Số nông dân thực hiện:',
@@ -170,7 +170,7 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
                           },
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         Text(
                           'Chi phí:',
@@ -189,7 +189,7 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
                               return null;
                           },
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 5),
                       /*  BlocBuilder<TemporaryTaskAddCubit,
                                 TemporaryTaskAddState>(
                             buildWhen: (prev, current) =>
@@ -305,11 +305,11 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
         colorScheme: ColorScheme.light(
             primary: AppColors.main,
             surface: AppColors.main,
-            // onSurface: AppColors.main,
+            onSurface: AppColors.main,
             background: AppColors.main,
             onPrimary: Colors.white),
       ),
-      child: child!,
+      child: SingleChildScrollView(child: child!),
     );
   }
 }

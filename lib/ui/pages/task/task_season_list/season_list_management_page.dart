@@ -91,8 +91,7 @@ class _SeasonListForTaskPageState extends State<SeasonListForTaskPage> {
                       itemBuilder: (context, index) {
                         SeasonEntity seasonEntity = state.seasonList![index];
                         return _buildItem(
-                            seasonName: seasonEntity.name ?? "",
-                            treeName: seasonEntity.tree?.name ?? "",
+                            seasonEntity: seasonEntity,
                             onPressed: () {
                               Application.router!.navigateTo(
                                 appNavigatorKey.currentContext!,
@@ -133,15 +132,14 @@ class _SeasonListForTaskPageState extends State<SeasonListForTaskPage> {
   }
 
   _buildItem(
-      {required String seasonName,
-      required String treeName,
+      {required SeasonEntity seasonEntity,
       VoidCallback? onDelete,
       VoidCallback? onPressed,
       VoidCallback? onUpdate}) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: 80,
+        height: 85,
         decoration: BoxDecoration(
           color: AppColors.grayEC,
           borderRadius: BorderRadius.circular(10),
@@ -163,15 +161,44 @@ class _SeasonListForTaskPageState extends State<SeasonListForTaskPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '$seasonName',
+                        seasonEntity.name ?? '',
                         style: AppTextStyle.greyS16Bold,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 5),
-                      Text(
-                        'Cây trồng: $treeName',
-                        style: AppTextStyle.greyS14,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Cây trồng: ${seasonEntity.tree}',
+                            style: AppTextStyle.greyS14,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(width: 15),
+                          seasonEntity.end_date == null
+                              ? Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Đang diễn ra",
+                              style: TextStyle(
+                                  color: Color(0xFF5C5C5C),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                              : Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Đã kết thúc",
+                              style: TextStyle(
+                                  color: AppColors.main,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),

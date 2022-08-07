@@ -282,7 +282,7 @@ class _SeasonUpdatingPageState extends State<SeasonUpdatingPage> {
             background: AppColors.main,
             onPrimary: Colors.white),
       ),
-      child: child!,
+      child: SingleChildScrollView(child: child!),
     );
   }
 }

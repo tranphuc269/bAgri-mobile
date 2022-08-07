@@ -39,7 +39,7 @@ class ContractTaskAddingCubit extends Cubit<ContractTaskAddingState> {
       CreateContractTaskParam param = CreateContractTaskParam(
           work: state.contractWorkEntity,
           seasonId: state.seasonEntity!.seasonId,
-          treeQuantity: num.parse(treeQuantity.toString()));
+          quantity: int.tryParse(treeQuantity.toString()));
       final response =
           await contractTaskRepository.createContractTask(param: param);
       print(response);

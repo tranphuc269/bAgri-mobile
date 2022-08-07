@@ -1,8 +1,12 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
+import 'package:flutter_base/models/entities/task/temporary_task.dart';
+import 'package:flutter_base/repositories/contract_task_responsitory.dart';
+import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
+import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/ui/pages/seasons_management/add_season/season_adding_cubit.dart';
 import 'package:flutter_base/ui/pages/seasons_management/add_season/season_adding_page.dart';
 import 'package:flutter_base/ui/pages/seasons_management/season_management_cubit.dart';
@@ -50,7 +54,14 @@ Handler seasonDetailHandler = new Handler(
     create: (context) {
       SeasonRepository seasonRepository =
           RepositoryProvider.of<SeasonRepository>(context);
-      return SeasonDetailCubit(seasonRepository: seasonRepository);
+      TemporaryTaskRepository temporaryTaskRepository =
+          RepositoryProvider.of<TemporaryTaskRepository>(context);
+      ContractTaskRepository contractTaskRepository =
+          RepositoryProvider.of<ContractTaskRepository>(context);
+      return SeasonDetailCubit(
+          seasonRepository: seasonRepository,
+          temporaryTaskRepository: temporaryTaskRepository,
+          contractTaskRepository: contractTaskRepository);
     },
     child: SeasonDetailPage(
       thisSeason: argument,
@@ -75,14 +86,14 @@ Handler seasonUpdatingHandler = new Handler(
   );
 });
 
-
 Handler seasonListTaskHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-      return BlocProvider(
-        create: (context) {
-          SeasonRepository seasonRepository =
+  return BlocProvider(
+    create: (context) {
+      SeasonRepository seasonRepository =
           RepositoryProvider.of<SeasonRepository>(context);
-          return SeasonListForTaskCubit(seasonRepository: seasonRepository);},
-        child: SeasonListForTaskPage(),
-      );
-    });
+      return SeasonListForTaskCubit(seasonRepository: seasonRepository);
+    },
+    child: SeasonListForTaskPage(),
+  );
+});

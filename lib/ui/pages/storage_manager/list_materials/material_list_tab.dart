@@ -67,11 +67,6 @@ class _MaterialListPageState extends State<MaterialListPage> {
         body: SafeArea(
           child:
               _buildBody(),
-              // Padding(
-              //   padding:
-              //       EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 25),
-              //   child: _buildItem(name: "Vật tư"),
-              // ),
 
 
         ),
@@ -83,8 +78,6 @@ class _MaterialListPageState extends State<MaterialListPage> {
 
             if (isAdd) {
               _onRefreshData();
-              // if (_cubit!.loadingStatus == LoadStatus.SUCCESS)
-              //   showSnackBar('Thêm mới mùa vụ thành công!');
             }
           },
           child: Icon(

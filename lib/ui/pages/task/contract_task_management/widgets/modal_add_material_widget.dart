@@ -13,13 +13,15 @@ class ModalAddMaterialWidget extends StatefulWidget {
       this.name,
       this.quantity,
       this.unit,
+        this.unitPrice,
       required this.onPressed,
       this.onDelete})
       : super(key: key);
-  final void Function(String name, String quantity, String unit) onPressed;
+  final void Function(String name, String quantity, String unit, int? unitPrice) onPressed;
   final String? name;
   final String? quantity;
   final String? unit;
+  final int? unitPrice;
   final VoidCallback? onDelete;
 
   @override
@@ -46,7 +48,7 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.5;
+        heightResize = 0.6;
       });
     } else {
       setState(() {
@@ -95,7 +97,7 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Expanded(
             child: Container(
@@ -107,15 +109,15 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
                     children: [
                       _buildTextLabel("Vật tư"),
                       SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       _buildMaterialPicker(),
                       SizedBox(
-                        height: 20,
+                        height: 5,
                       ),
                       _buildTextLabel("Số lượng: "),
                       SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       AppTextField(
                         autoValidateMode: AutovalidateMode.onUserInteraction,
@@ -166,7 +168,9 @@ class _ModalAddMaterialWidgetState extends State<ModalAddMaterialWidget> {
                                     widget.onPressed(
                                         materialController.materialEntity!.name.toString(),
                                         quantityController.text,
-                                        materialController.materialEntity!.unit.toString());
+                                        materialController.materialEntity!.unit.toString(),
+                                      materialController.materialEntity?.unitPrice
+                                    );
                                   }
                                 }),
                           ),

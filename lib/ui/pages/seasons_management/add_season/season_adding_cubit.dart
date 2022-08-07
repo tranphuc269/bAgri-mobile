@@ -44,12 +44,12 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
               var start = DateFormat('yyyy-MM-dd')
                   .format((dateStart.add(Duration(days: afterDay))));
               StepSeason stepSeason = StepSeason(
-                  start: start,
-                  name: phase.steps![index].name,
-                  description: phase.steps![index].description,
-                  from_day: phase.steps![index].from_day,
-                  to_day: phase.steps![index].to_day,
-                  /*actual_day: phase.steps![index].actual_day*/);
+                start: start,
+                name: phase.steps![index].name,
+                description: phase.steps![index].description,
+                from_day: phase.steps![index].from_day,
+                to_day: phase.steps![index].to_day,
+                /*actual_day: phase.steps![index].actual_day*/);
               afterDay += phase.steps![index].to_day ?? 7;
               listSteps.add(stepSeason);
             }
@@ -58,7 +58,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
               steps: listSteps,
               name: phase.name,
               description: phase.description,
-              start: startPhase
+              start: listSteps.first.start
           );
           listStages.add(stageSeason);
         }
@@ -66,8 +66,8 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
       }
     }
     ProcessSeason processSeason = ProcessSeason(
-      name: state.processEntity!.name,
-      stages: listStages
+        name: state.processEntity!.name,
+        stages: listStages
     );
     return processSeason;
   }
@@ -75,11 +75,11 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
   Future<void> createSeason(int treeQuantity) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      SeasonEntity param = SeasonEntity(
+     SeasonEntity param = SeasonEntity(
           name: state.seasonName,
-           //gardenId: state.gardenEntity!.garden_id,
+          gardenId: state.gardenEntity!.garden_id,
           process: calculateStartDay(),
-          tree: state.treeEntity!,
+          tree: state.treeEntity?.name,
           // start_date: state.startTime,
           // end_date: state.endTime ,
           treeQuantity: treeQuantity);
@@ -95,7 +95,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
     try {
       // ObjectResponse<ProcessDetailResponse> result =
       ProcessEntity processResult = /* result.data!.process!;*/
-          await processRepository.getProcessById(processId);
+      await processRepository.getProcessById(processId);
       int duration = 0;
       if (processResult.stages != null) {
         for (StageEntity stage in processResult.stages!) {

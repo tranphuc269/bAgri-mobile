@@ -9,25 +9,29 @@ class MaterialTask{
   String? unit;
   String? name;
   int? quantity;
+  int? unitPrice;
 
   MaterialTask({
     this.unit,
     this.name,
     this.materialId,
-    this.quantity
+    this.quantity,
+    this.unitPrice
   });
 
   MaterialTask copyWith({
     String? materialId,
     String? unit,
     String? name,
-    int? quantity
+    int? quantity,
+    int? unitPrice,
   }) {
     return MaterialTask(
         materialId: materialId ?? this.materialId,
         unit: unit ?? this.unit,
         name: name ?? this.name,
-        quantity: quantity ?? this.quantity
+        quantity: quantity ?? this.quantity,
+        unitPrice: unitPrice ?? this.unitPrice
     );
   }
 

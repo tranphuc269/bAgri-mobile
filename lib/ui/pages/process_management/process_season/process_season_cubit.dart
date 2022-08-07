@@ -128,8 +128,8 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
     List<StageSeason> stages = state.stages!;
     try {
       var result = await seasonRepository?.endStep(
-          stages[indexStage].steps![index].step_id!,
-          stages[indexStage].stage_id!);
+
+          stages[indexStage].stage_id!,stages[indexStage].steps![index].step_id!);
 
 
       final stage = stages[indexStage];
@@ -230,7 +230,7 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
           loadDetailStatus: LoadStatus.SUCCESS,
           // name: result./*data?.*/process?.name!,
           name: result?.name,
-          trees: response.tree,
+          trees: TreeEntity(name: response.tree),
           stages: result?.stages));
       // trees: result.data?.process?.trees!,
       // stages: result./*data?.process?.*/stages!));
