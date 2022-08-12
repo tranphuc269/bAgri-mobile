@@ -339,7 +339,7 @@ class _GardenListState extends State<ZoneListPage> {
       return AlertDialog(
         title: title,
         content: Container(
-            height: MediaQuery.of(context).size.height / 4,
+            // height: MediaQuery.of(context).size.height / 4,
             width: MediaQuery.of(context).size.width,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -356,7 +356,7 @@ class _GardenListState extends State<ZoneListPage> {
                 ),
               ),
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                  // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                   ),
@@ -370,20 +370,20 @@ class _GardenListState extends State<ZoneListPage> {
                     ),
                   )),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                FlatButton(
+                AppButton(
                     height: 40,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(16),
+                    // ),
                     color: AppColors.redButton,
                     onPressed: (() => {Navigator.of(context).pop()}),
                     child: Text("Hủy",
                         style: TextStyle(color: Colors.white, fontSize: 14))),
-                FlatButton(
+                AppButton(
                     height: 40,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(16),
+                    // ),
                     color: AppColors.main,
                     onPressed: onConfirm,
                     child: Text(

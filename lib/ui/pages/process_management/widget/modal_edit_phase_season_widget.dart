@@ -52,7 +52,7 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.7;
+        heightResize = 0.75;
       });
     } else {
       setState(() {
@@ -193,17 +193,17 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Expanded(
-                      //   child: AppButton(
-                      //     color: AppColors.redButton,
-                      //     title: 'Kết thúc',
-                      //     onPressed: () {
-                      //       widget.onEnd();
-                      //       Navigator.of(context).pop();
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(width: 20),
+                      Expanded(
+                        child: AppButton(
+                          color: AppColors.redButton,
+                          title: 'Kết thúc',
+                          onPressed: () {
+                            widget.onEnd();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 20),
                       Expanded(
                         child: AppButton(
                             color: AppColors.main,

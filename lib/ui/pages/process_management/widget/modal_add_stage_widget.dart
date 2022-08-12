@@ -41,7 +41,7 @@ class _ModalAddStageWidgetState extends State<ModalAddStageWidget> {
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.6;
+        heightResize = 0.75;
       });
     } else {
       setState(() {
@@ -141,7 +141,7 @@ class _ModalAddStageWidgetState extends State<ModalAddStageWidget> {
                             title: 'Xác nhận',
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).pop();
+                                Navigator.of(context).pop(true);
                                 widget.onPressed(nameController.text, descriptionController.text);
                               }
                             }),
