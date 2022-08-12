@@ -215,7 +215,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    SizedBox(width: 10),
+                                    SizedBox(width: 5),
                                     (state.season?.end_date == null &&
                                             GlobalData.instance.role !=
                                                 'GARDEN_MANAGER')
@@ -371,7 +371,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.0),
             ),
-            height: MediaQuery.of(context).size.height / 4,
+            // height: MediaQuery.of(context).size.height / 4,
             width: MediaQuery.of(context).size.width,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -389,7 +389,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
               // ),
               // SizedBox(height: 15,),
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                  // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
@@ -643,7 +643,14 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                             current.loadStatus,
                                         builder: (context, state) {
                                           return Text(
-                                            '-${state.season?.process?.stages![widget.index!].end?.substring(0, 10) ?? ''}',
+                                            (state
+                                                        .season
+                                                        ?.process
+                                                        ?.stages![widget.index!]
+                                                        .end !=
+                                                    null)
+                                                ? '-${_dateFormat.format(DateTime.parse(state.season!.process!.stages![widget.index!].end!))}'
+                                                : '',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 14,

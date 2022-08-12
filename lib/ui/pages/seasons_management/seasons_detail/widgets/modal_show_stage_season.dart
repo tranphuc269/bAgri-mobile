@@ -51,7 +51,7 @@ class _ModalShowStageSeasonWidgetState extends State<ModalShowStageSeasonWidget>
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.7;
+        heightResize = 0.75;
       });
     } else {
       setState(() {

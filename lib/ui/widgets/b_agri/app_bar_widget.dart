@@ -27,7 +27,7 @@ class AppBarWidget extends AppBar {
               ? IconButton(
                   onPressed: onBackPressed ??
                       () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(true);
                       },
                   icon: const Icon(
                     Icons.keyboard_backspace,

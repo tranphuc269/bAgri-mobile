@@ -27,11 +27,11 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
     return super.close();
   }
 
-  void addList(StageSeason value, String? seasonId) async{
-    // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
+  Future<void> addList(StageSeason value, String? seasonId) async{
+    emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     try {
       var result =await seasonRepository?.addPhase(value, seasonId!);
-      print(result?.process?.stages?.firstWhere((element) => element.name == value.name).name?? "");
+      // print(result?.process?.stages?.firstWhere((element) => element.name == value.name).name?? "");
       if (result == null) {
         emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
       } else {
@@ -100,11 +100,13 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
 
   void editSteps(int index, int indexStages, StepSeason value) {
     List<StageSeason> stages = state.stages!;
+    emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     seasonRepository?.putStep(value.step_id!, stages[indexStages].stage_id!, value);
     stages[indexStages].steps![index] = value;
     List<StageSeason> newList = stages;
     emit(state.copyWith(
         stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
+    emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
   }
 
   void createStep(int index, StepSeason value) async{
@@ -145,6 +147,7 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
   void removeStep(int index, int indexStages) {
     print("remove");
     List<StageSeason> stages = state.stages!;
+    emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     try {
       seasonRepository!.deleteStep(stages[indexStages].steps![index].step_id!,
           stages[indexStages].stage_id!);
@@ -152,6 +155,7 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
       List<StageSeason> newList = stages;
       emit(state.copyWith(
           stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
+      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
     } catch (e) {
       emit(state.copyWith(loadDetailStatus: LoadStatus.FAILURE));
     }
@@ -159,6 +163,7 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
 
   void editStage(int index, String? phaseId, String? name, String? description,
       String? start) {
+    emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     try {
       var result = seasonRepository?.putPhase(
           StageSeason(name: name, description: description, start: start),
@@ -174,6 +179,7 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
         emit(state.copyWith(
             stages: newList,
             actionWithStepStatus: state.actionWithStepStatus++));
+        emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
       }
     } catch (e) {
       emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
@@ -181,7 +187,7 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
   }
 
   void updateProcess() async {
-    emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
+    // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
     // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     // try {
     //   List<StageSeason> listStages = [];

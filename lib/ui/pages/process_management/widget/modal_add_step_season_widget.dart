@@ -68,7 +68,7 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.6;
+        heightResize = 0.75;
       });
     } else {
       setState(() {

@@ -72,7 +72,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBarWidget(
         onBackPressed: () {
-          // Navigator.of(context).pop(true);
+          Navigator.of(context).pop(true);
         },
         context: context,
         title: 'Sửa quy trình',
@@ -136,8 +136,8 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                                     color: Color(0xFF8FE192),
                                     height: 30,
                                     width: double.infinity,
-                                    onPressed: () {
-                                      changeNameDesStage();
+                                    onPressed: () async{
+                                      await changeNameDesStage();
                                       // _cubit?.addList(StageSeason());
                                     },
                                   ),
@@ -201,7 +201,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
     );
   }
 
-  changeNameDesStage() {
+  changeNameDesStage() async{
     showModalBottomSheet(
         isDismissible: false,
         context: context,
@@ -219,8 +219,8 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                       topRight: const Radius.circular(20))),
               child: ModalAddStageSeasonWidget(
                 onDelete: () {},
-                onPressed: (String name, String description, String start) {
-                  _cubit?.addList(
+                onPressed: (String name, String description, String start) async {
+                  await _cubit!.addList(
                       StageSeason(
                           name: name, description: description, start: start),
                       widget.seasonId);
@@ -256,8 +256,8 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                 color: AppColors.main,
                 title: 'Hoàn tất chỉnh sửa',
                 onPressed: () {
-                  _cubit?.updateProcess();
-                  // Navigator.of(context).pop(true);
+                  // _cubit?.updateProcess();
+                  Navigator.of(context).pop(true);
                 },
                 isLoading: isLoading,
               ),
@@ -368,7 +368,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
                     child: Container(
                       height: 40,
                       width: double.infinity,
-                      padding: EdgeInsets.all(5),
+                      // padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: AppColors.colors[widget.index!],
                         borderRadius: BorderRadius.circular(3),
@@ -390,7 +390,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
                           ),
                          Flexible(
                            flex: 5,
-                           fit: FlexFit.tight,
+                           // fit: FlexFit.tight,
                            child:Row(
                              children: [
                                Text(

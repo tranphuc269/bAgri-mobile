@@ -38,7 +38,7 @@ class _ModalAddStepWidgetState extends State<ModalAddStepWidget> {
   TextEditingController endDateController = TextEditingController(text: '');
   TextEditingController stepController = TextEditingController(text: '');
   TextEditingController actualDayController = TextEditingController(text: '');
-  late double heightResize = 0.5;
+  late double heightResize = 0.75;
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _ModalAddStepWidgetState extends State<ModalAddStepWidget> {
     final viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (viewInsetsBottom == 0 || currentScope.hasPrimaryFocus == true) {
       setState(() {
-        heightResize = 0.5;
+        heightResize = 0.75;
       });
     } else {
       setState(() {
