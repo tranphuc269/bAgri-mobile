@@ -134,7 +134,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                       RefreshIndicator(
                         color: AppColors.main,
                         onRefresh: () async {
-                          refreshData();
+                          await refreshData();
                         },
                         child: SingleChildScrollView(
                           physics: AlwaysScrollableScrollPhysics(),
@@ -232,7 +232,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                                 ),
                                               );
                                               if (isUpdate) {
-                                                refreshData();
+                                                await refreshData();
                                               }
                                             },
                                             child: SizedBox(
@@ -294,22 +294,6 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                   height: 40,
                                   width: 200,
                                   onPressed: () async {
-                                    // bool isConfirmed = await showDialog(
-                                    //     context: context,
-                                    //     builder: (context) =>
-                                    //         AppConfirmedDialog(
-                                    //           onConfirm: () async {
-                                    //             final result =
-                                    //                 await _cubit.endSeason(
-                                    //                     state.season
-                                    //                             ?.seasonId ??
-                                    //                         "",
-                                    //                     1000000000);
-                                    //
-                                    //             Navigator.pop(context, true);
-                                    //             refreshData();
-                                    //           },
-                                    //         ));
                                     bool isAddSuccess = await showDialog(
                                         context: context,
                                         builder: (context) => _dialogCreate(
@@ -375,19 +359,6 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
             width: MediaQuery.of(context).size.width,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              // Container(
-              //   alignment: Alignment.centerLeft,
-              //   // margin: EdgeInsets.symmetric(horizontal: 28),
-              //   child: RichText(
-              //     text: TextSpan(children: [
-              //       TextSpan(
-              //         text: spanText,
-              //         style: AppTextStyle.blackS14,
-              //       ),
-              //     ]),
-              //   ),
-              // ),
-              // SizedBox(height: 15,),
               Container(
                   // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
                   decoration: BoxDecoration(

@@ -128,7 +128,7 @@ class _ModalEditStepWidgetState extends State<ModalEditStepWidget> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Expanded(
             child: Container(
@@ -155,7 +155,7 @@ class _ModalEditStepWidgetState extends State<ModalEditStepWidget> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -182,7 +182,7 @@ class _ModalEditStepWidgetState extends State<ModalEditStepWidget> {
                     ],
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -30,35 +30,34 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
   Future<void> addList(StageSeason value, String? seasonId) async{
     emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     try {
-      var result =await seasonRepository?.addPhase(value, seasonId!);
-      // print(result?.process?.stages?.firstWhere((element) => element.name == value.name).name?? "");
+      var result = await seasonRepository?.addPhase(value, seasonId!);
       if (result == null) {
         emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
       } else {
         emit(
             state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING_MORE));
-        List<StageSeason> stages = state.stages!;
-        stages.add(result.process?.stages?.firstWhere((element) => element.name == value.name) ?? value) ;
-        List<StageSeason> newList = stages;
+        // List<StageSeason> stages = state.stages!;
+        // stages.add(result.process?.stages?.firstWhere((element) => element.name == value.name) ?? value) ;
+        // List<StageSeason> newList = stages;
         emit(state.copyWith(
-            stages: newList,
+            stages: result.process?.stages,
             updateProcessSeasonStatus: LoadStatus.FORMAT_EXTENSION_FILE));
       }
-      // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
+      // emit(state.copyWith(loadDetailStatus: LoadStatus.SUCCESS));
     } catch (e) {
-      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
+      emit(state.copyWith(loadDetailStatus: LoadStatus.FAILURE));
     }
   }
 
-  void endStage(int index, String? phaseId) {
+  Future<void> endStage(int index, String? phaseId) async{
     try {
-      var result = seasonRepository?.endPhase(phaseId!);
+      var result = await seasonRepository?.endPhase(phaseId!);
       if (result != null) {
-        List<StageSeason> stages = state.stages!;
-        stages[index].end = DateTime.now().toString();
-        List<StageSeason> newList = stages;
+        // List<StageSeason> stages = state.stages!;
+        // stages[index].end = DateTime.now().toString();
+        // List<StageSeason> newList = stages;
         emit(state.copyWith(
-            stages: newList,
+            stages: result.process?.stages,
             actionWithStepStatus: state.actionWithStepStatus++));
       }
     } catch (e) {
@@ -67,25 +66,29 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
     emit(state.copyWith(actionWithStepStatus: state.actionWithStepStatus++));
   }
 
-  void removeList(int index, String? phaseId) {
-    try {
-      var result = seasonRepository?.deletePhase(phaseId!);
-      if (result != null) {
-        emit(
-            state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING_MORE));
-        List<StageSeason> stages = state.stages!;
-        stages.removeAt(index);
-        List<StageSeason> newList = stages;
-        emit(state.copyWith(
-            stages: newList,
-            updateProcessSeasonStatus: LoadStatus.FORMAT_EXTENSION_FILE));
-      } else {
-        emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
-      }
+  Future<void> removeList(int index, String? phaseId) async{
+    // try {
+      var result = await seasonRepository?.deletePhase(phaseId!).then((value) {
+        if (value != null) {
+          emit(
+              state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING_MORE));
+          // List<StageSeason> stages = state.stages!;
+          // stages.removeAt(index);
+          // List<StageSeason> newList = stages;
+          emit(state.copyWith(
+              stages:value.process?.stages,
+              updateProcessSeasonStatus: LoadStatus.FORMAT_EXTENSION_FILE));
+        } else {
+          emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
+        }
+      });
+      // if(result == null){
+      //   emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
+      // }
       // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
-    } catch (e) {
-      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
-    }
+    // } catch (e) {
+    //   emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
+    // }
 
     // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
   }
@@ -98,31 +101,38 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
     emit(state.copyWith(trees: value));
   }
 
-  void editSteps(int index, int indexStages, StepSeason value) {
+  Future<void> editSteps(int index, int indexStages, StepSeason value) async{
     List<StageSeason> stages = state.stages!;
     emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
-    seasonRepository?.putStep(value.step_id!, stages[indexStages].stage_id!, value);
-    stages[indexStages].steps![index] = value;
-    List<StageSeason> newList = stages;
+    var result = await seasonRepository!.putStep(value.step_id!, stages[indexStages].stage_id!, value);
+    // stages[indexStages].steps![index] = value;
+    // List<StageSeason> newList = stages;
     emit(state.copyWith(
-        stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
-    emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
+        stages: result.process?.stages, actionWithStepStatus: state.actionWithStepStatus++));
+    emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS, actionWithStepStatus: state.actionWithStepStatus++));
   }
 
-  void createStep(int index, StepSeason value) async{
+  Future<void> createStep(int index, StepSeason value) async{
+    print("Create step");
     List<StageSeason> stages = state.stages!;
-    try {
+    // try {
       var result =await seasonRepository?.addStep(stages[index].stage_id!, value);
-      if (stages[index].steps == null) {
-        stages[index].steps = [];
+      if(result != null){
+        emit(state.copyWith(stages: result.process?.stages, updateProcessSeasonStatus: LoadStatus.SUCCESS, /*actionWithStepStatus: state.actionWithStepStatus++*/));
+      } else{
+        print("error");
+        emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE, /*actionWithStepStatus: state.actionWithStepStatus++*/));
       }
-      stages[index].steps!.add(result!.process!.stages![index].steps!.firstWhere((element) => element.name == value.name));
-      List<StageSeason> newList = stages;
-      emit(state.copyWith(
-          stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
-    } catch (e) {
-      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
-    }
+      // if (stages[index].steps == null) {
+      //   stages[index].steps = [];
+      // }
+      // stages[index].steps!.add(result!.process!.stages![index].steps!.firstWhere((element) => element.name == value.name));
+      // List<StageSeason> newList = stages;
+      // emit(state.copyWith(
+      //     stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
+    // } catch (e) {
+    //   emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE, /*actionWithStepStatus: state.actionWithStepStatus++*/));
+    // }
 
   }
 
@@ -130,54 +140,51 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
     List<StageSeason> stages = state.stages!;
     try {
       var result = await seasonRepository?.endStep(
-
           stages[indexStage].stage_id!,stages[indexStage].steps![index].step_id!);
-
-
-      final stage = stages[indexStage];
-      stage.steps?[index].end = DateTime.now().toString().substring(0, 10);
-      List<StageSeason> newList = stages;
+      // final stage = stages[indexStage];
+      // stage.steps?[index].end = DateTime.now().toString().substring(0, 10);
+      // List<StageSeason> newList = stages;
       emit(state.copyWith(
-          stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
+          stages: result?.process?.stages, actionWithStepStatus: state.actionWithStepStatus++));
     } catch (e) {
-      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
+      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE, actionWithStepStatus: state.actionWithStepStatus++));
     }
   }
 
-  void removeStep(int index, int indexStages) {
+  Future<void> removeStep(int index, int indexStages) async{
     print("remove");
     List<StageSeason> stages = state.stages!;
     emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     try {
-      seasonRepository!.deleteStep(stages[indexStages].steps![index].step_id!,
+      var result = await seasonRepository!.deleteStep(stages[indexStages].steps![index].step_id!,
           stages[indexStages].stage_id!);
-      stages[indexStages].steps?.removeAt(index);
-      List<StageSeason> newList = stages;
+      // stages[indexStages].steps?.removeAt(index);
+      // List<StageSeason> newList = stages;
       emit(state.copyWith(
-          stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
-      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
+          stages: result.process?.stages, actionWithStepStatus: state.actionWithStepStatus++));
+      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS, actionWithStepStatus: state.actionWithStepStatus++));
     } catch (e) {
-      emit(state.copyWith(loadDetailStatus: LoadStatus.FAILURE));
+      emit(state.copyWith(loadDetailStatus: LoadStatus.FAILURE, actionWithStepStatus: state.actionWithStepStatus++));
     }
   }
 
-  void editStage(int index, String? phaseId, String? name, String? description,
-      String? start) {
+  Future<void> editStage(int index, String? phaseId, String? name, String? description,
+      String? start) async{
     emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     try {
-      var result = seasonRepository?.putPhase(
+      var result =await seasonRepository?.putPhase(
           StageSeason(name: name, description: description, start: start),
           phaseId!);
       if (result == null) {
         emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
       } else {
-        List<StageSeason> stages = state.stages!;
-        stages[index].name = name;
-        stages[index].description = description;
-        stages[index].start = start;
-        List<StageSeason> newList = stages;
+        // List<StageSeason> stages = state.stages!;
+        // stages[index].name = name;
+        // stages[index].description = description;
+        // stages[index].start = start;
+        // List<StageSeason> newList = stages;
         emit(state.copyWith(
-            stages: newList,
+            stages: result.process?.stages,
             actionWithStepStatus: state.actionWithStepStatus++));
         emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
       }
@@ -234,12 +241,9 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
       final ProcessSeason? result = response.process;
       emit(state.copyWith(
           loadDetailStatus: LoadStatus.SUCCESS,
-          // name: result./*data?.*/process?.name!,
           name: result?.name,
           trees: TreeEntity(name: response.tree),
           stages: result?.stages));
-      // trees: result.data?.process?.trees!,
-      // stages: result./*data?.process?.*/stages!));
     } catch (e) {
       emit(state.copyWith(loadDetailStatus: LoadStatus.FAILURE));
     }

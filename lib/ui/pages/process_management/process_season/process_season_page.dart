@@ -22,7 +22,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/multiple_tree_picker/app_tree_picker.dart';
-
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -109,9 +108,13 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                           style: AppTextStyle.greyS14,
                         ),
                         SizedBox(height: 10),
-                        if (GlobalData.instance.role == "ADMIN" ||
-                            GlobalData.instance.role == "SUPER_ADMIN")
+                        // if (GlobalData.instance.role == "ADMIN" ||
+                        //     GlobalData.instance.role == "SUPER_ADMIN")
                           BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
+                            // buildWhen: (prev, current) {
+                            //   return prev.updateProcessSeasonStatus !=
+                            //       current.updateProcessSeasonStatus;
+                            // },
                             builder: (context, state) {
                               return Visibility(
                                 visible: state.stages!.length >=
@@ -137,8 +140,12 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                                     height: 30,
                                     width: double.infinity,
                                     onPressed: () async{
-                                      await changeNameDesStage();
-                                      // _cubit?.addList(StageSeason());
+                                      bool isBool = await changeNameDesStage();
+                                      print(isBool);
+                                      if(isBool){
+                                        await _cubit!.getProcessDetail(widget.seasonId!);
+                                      }
+
                                     },
                                   ),
                                 ),
@@ -147,6 +154,10 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                           ),
                         SizedBox(height: 20),
                         BlocBuilder<ProcessSeasonCubit, ProcessSeasonState>(
+                          // buildWhen:  (prev, current) {
+                          //   return prev.updateProcessSeasonStatus !=
+                          //       current.updateProcessSeasonStatus;
+                          // },
                           builder: (context, state) {
                             if (state.loadDetailStatus == LoadStatus.LOADING) {
                               return Center(
@@ -171,12 +182,12 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                                                 phase:
                                                     state.stages![index].name ??
                                                         '${index + 1}',
-                                                onRemove: () {
-                                                  _cubit!.removeList(
+                                                onRemove: () async{
+                                                  await _cubit!.removeList(
                                                       index,
                                                       state.stages![index]
                                                           .stage_id);
-                                                },
+                                                }, seasonId: widget.seasonId!,
                                               )),
                                     )
                                   : Container();
@@ -202,7 +213,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
   }
 
   changeNameDesStage() async{
-    showModalBottomSheet(
+    bool isAddSuccess = await showModalBottomSheet(
         isDismissible: false,
         context: context,
         isScrollControlled: true,
@@ -227,6 +238,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                 },
               ),
             ));
+    return isAddSuccess;
   }
 
   Widget buildActionCreate(BuildContext context) {
@@ -246,7 +258,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
       },
       builder: (context, state) {
         final isLoading =
-            (state.updateProcessSeasonStatus == LoadStatus.LOADING);
+            (state.loadDetailStatus == LoadStatus.LOADING);
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -283,6 +295,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
 }
 
 class PhaseProcess extends StatefulWidget {
+  String seasonId;
   int? index;
   String? phase;
   StageSeason? stage;
@@ -293,6 +306,7 @@ class PhaseProcess extends StatefulWidget {
 
   PhaseProcess(
       {Key? key,
+        required this.seasonId,
       this.index,
       this.phase,
       this.stage,
@@ -482,8 +496,8 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                     height: 37,
                                     border: 10,
                                     width: double.infinity,
-                                    onPressed: () {
-                                      showModalBottomSheet(
+                                    onPressed: () async{
+                                      bool isAddStep = await showModalBottomSheet(
                                         isDismissible: false,
                                         context: context,
                                         isScrollControlled: true,
@@ -498,7 +512,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                             ModalAddStepSeasonWidget(
                                           phase: widget.phase ?? "",
                                           onPressed: (name, from_day, to_day,
-                                              startTime, description) {
+                                              startTime, description) async {
                                             StepSeason step = StepSeason(
                                                 name: name,
                                                 description: description,
@@ -507,11 +521,14 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                                     int.tryParse(from_day),
                                                 to_day: int.tryParse(to_day));
 
-                                            widget.cubitProcess.createStep(
+                                            await widget.cubitProcess.createStep(
                                                 widget.index!, step);
                                           },
                                         ),
                                       );
+                                      if(isAddStep){
+                                        await widget.cubitProcess.getProcessDetail(widget.seasonId);
+                                      }
                                     },
                                   ),
                                 ),
@@ -523,7 +540,8 @@ class _PhaseProcessState extends State<PhaseProcess> {
                   )
                 ]),
             GestureDetector(
-              onTap: widget.onRemove,
+              onTap:
+                 widget.onRemove,
               child: Align(
                 alignment: Alignment.topRight,
                 child: Container(
@@ -592,8 +610,8 @@ class _StepWidgetState extends State<StepWidget> {
             from_day: widget.step!.from_day,
             to_day: widget.step!.to_day,
             end: widget.step!.end,
-            onPressed: (name, description, startTime, from_day, to_day) {
-              print("step_id" + (widget.step?.step_id ?? ''));
+            start: widget.step!.start!,
+            onPressed: (name, description, startTime, from_day, to_day) async{
               StepSeason step = StepSeason(
                   step_id: widget.step!.step_id,
                   name: name,
@@ -602,11 +620,11 @@ class _StepWidgetState extends State<StepWidget> {
                   start: startTime,
                   description: description);
               //
-              widget.cubitProcess
+              await widget.cubitProcess
                   .editSteps(widget.index!, widget.indexStages!, step);
             },
-            onDelete: () {
-              widget.cubitProcess
+            onDelete: () async{
+              await widget.cubitProcess
                   .removeStep(widget.index!, widget.indexStages!);
             },
           ),
@@ -676,5 +694,9 @@ class _StepWidgetState extends State<StepWidget> {
         ),
       ),
     );
+  }
+  Future<void> deleteStep() async{
+    await widget.cubitProcess
+        .removeStep(widget.index!, widget.indexStages!);
   }
 }

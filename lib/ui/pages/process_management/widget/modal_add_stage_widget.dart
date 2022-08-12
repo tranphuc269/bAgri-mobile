@@ -119,7 +119,7 @@ class _ModalAddStageWidgetState extends State<ModalAddStageWidget> {
                     controller: descriptionController,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -127,10 +127,10 @@ class _ModalAddStageWidgetState extends State<ModalAddStageWidget> {
                       Expanded(
                         child: AppButton(
                           color: AppColors.redButton,
-                          title: 'Xóa giai đoạn',
+                          title: 'Hủy',
                           onPressed: () {
                             Navigator.of(context).pop();
-                            widget.onDelete!();
+                            // widget.onDelete!();
                           },
                         ),
                       ),

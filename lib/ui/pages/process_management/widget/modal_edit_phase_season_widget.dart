@@ -7,6 +7,7 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
+import 'package:intl/intl.dart';
 
 class ModalEditStageSeasonWidget extends StatefulWidget {
   const ModalEditStageSeasonWidget(
@@ -32,16 +33,16 @@ class ModalEditStageSeasonWidget extends StatefulWidget {
 
 class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget> {
   final _formKey = GlobalKey<FormState>();
-
+  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
   TextEditingController nameController = TextEditingController(text: '');
   TextEditingController descriptionController = TextEditingController(text: '');
   late double heightResize = 0.5;
-  String startTime = DateTime.now().toString().substring(0,10);
+  late String startTime; /*= DateTime.now().toString().substring(0,10);*/
 
   @override
   void initState() {
     super.initState();
-    startTime = widget.start?.substring(0,10) ?? startTime;
+    startTime = _dateFormat.format(DateTime.parse(widget.start!/*.substring(0,10)*/) )/*?? startTime*/;
     nameController = TextEditingController(text: widget.name);
     descriptionController = TextEditingController(text: widget.description ?? '');
   }
@@ -101,7 +102,7 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Expanded(
             child: Container(
@@ -121,7 +122,7 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                     },
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   AppTextAreaField(
                     hintText: 'Mô tả',
@@ -188,7 +189,7 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

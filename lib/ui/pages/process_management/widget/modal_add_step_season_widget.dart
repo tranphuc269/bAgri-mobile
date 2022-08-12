@@ -20,7 +20,7 @@ class ModalAddStepSeasonWidget extends StatefulWidget {
     this.onDelete,
     this.actualDay,
   }) : super(key: key);
-  final void Function(String name, String from_day, String to_day, String start,
+  final Future<void> Function(String name, String from_day, String to_day, String start,
       String description) onPressed;
   final String? phase;
   final String? name;
@@ -109,7 +109,7 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                     alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(true);
                       },
                       child: Image.asset(
                         AppImages.icCloseCircleShadow,
@@ -263,7 +263,7 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                   // ),
 
                   SizedBox(
-                    height: 40,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -271,10 +271,10 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                       Expanded(
                         child: AppButton(
                           color: AppColors.redButton,
-                          title: 'Xóa bước',
+                          title: 'Hủy',
                           onPressed: () {
-                            Navigator.of(context).pop();
-                            widget.onDelete!();
+                            Navigator.of(context).pop(true);
+                            // widget.onDelete!();
                           },
                         ),
                       ),
@@ -283,15 +283,15 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                         child: AppButton(
                             color: AppColors.main,
                             title: 'Xác nhận',
-                            onPressed: () {
+                            onPressed: () async{
                               if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).pop();
-                                widget.onPressed(
+                                await widget.onPressed(
                                     nameController.text,
                                     startDateController.text,
                                     endDateController.text,
                                     startTime,
                                     descriptionController.text);
+                                // Navigator.of(context).pop(true);
                               }
                             }),
                       ),

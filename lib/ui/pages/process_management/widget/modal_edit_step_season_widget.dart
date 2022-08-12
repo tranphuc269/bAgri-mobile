@@ -7,13 +7,14 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
+import 'package:intl/intl.dart';
 
 class ModalEditStepSeasonWidget extends StatefulWidget {
   const ModalEditStepSeasonWidget(
       {Key? key,
       this.name,
       this.description,
-      this.start,
+      required this.start,
       this.end,
       this.from_day,
       this.to_day,
@@ -21,16 +22,16 @@ class ModalEditStepSeasonWidget extends StatefulWidget {
       required this.onEnd,
       required this.onDelete})
       : super(key: key);
-  final void Function(String name, String description, String start,
+  final Future<void> Function(String name, String description, String start,
       String to_day, String from_day) onPressed;
   final void Function() onEnd;
   final String? name;
-  final String? start;
+  final String start;
   final String? end;
   final int? from_day;
   final int? to_day;
   final String? description;
-  final Function() onDelete;
+  final Future<void> Function() onDelete;
 
   @override
   State<ModalEditStepSeasonWidget> createState() =>
@@ -39,18 +40,18 @@ class ModalEditStepSeasonWidget extends StatefulWidget {
 
 class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
   final _formKey = GlobalKey<FormState>();
-
+  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
   TextEditingController nameController = TextEditingController(text: '');
   TextEditingController descriptionController = TextEditingController(text: '');
   TextEditingController fromDayController = TextEditingController(text: '');
   TextEditingController toDayController = TextEditingController(text: '');
   late double heightResize = 0.5;
-  String startTime = DateTime.now().toString().substring(0, 10);
+  late String startTime = DateTime.now().toString().substring(0, 10);
 
   @override
   void initState() {
     super.initState();
-    startTime = widget.start?.substring(0, 10) ?? startTime;
+    startTime = _dateFormat.format(DateTime.parse(widget.start/*.substring(0,10)*/) )/*?? startTime*/;
     nameController = TextEditingController(text: widget.name);
     descriptionController =
         TextEditingController(text: widget.description ?? '');
@@ -110,7 +111,7 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                     alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(true);
                       },
                       child: Image.asset(
                         AppImages.icCloseCircleShadow,
@@ -124,7 +125,7 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Expanded(
             child: Container(
@@ -144,7 +145,7 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                     },
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   AppTextAreaField(
                     hintText: 'Mô tả',
@@ -153,7 +154,7 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                     controller: descriptionController,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -198,7 +199,7 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     children: [
@@ -246,7 +247,7 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -255,9 +256,9 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                         child: AppButton(
                           color: AppColors.green28,
                           title: 'Xóa bước',
-                          onPressed: () {
-                            widget.onDelete();
-                            Navigator.of(context).pop(true);
+                          onPressed: () async{
+                            await widget.onDelete();
+                            // Navigator.of(context).pop(true);
                           },
                         ),
                       ),
@@ -266,10 +267,9 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                         child: AppButton(
                             color: AppColors.main,
                             title: 'Xác nhận',
-                            onPressed: () {
+                            onPressed: () async{
                               if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).pop(true);
-                                widget.onPressed(
+                                await widget.onPressed(
                                     nameController.text,
                                     descriptionController.text,
                                     startTime,

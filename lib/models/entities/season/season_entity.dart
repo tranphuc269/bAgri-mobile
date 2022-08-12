@@ -31,7 +31,7 @@ class SeasonEntity {
         gardenId: json['gardenId'] as String?,
         gardenEntity: json['garden'] == null
             ? null
-            : GardenEntityResponseFromZoneId.fromJson(json['garden'] as Map<String, dynamic>),
+            :  GardenEntityResponseFromZoneId.fromJson(json['garden'] as Map<String, dynamic>),
         process: json['process'] == null
             ? null
             : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
@@ -84,6 +84,85 @@ class SeasonEntity {
     this.name,
     this.gardenEntity,
     this.gardenId,
+    this.process,
+    this.tree,
+    this.start_date,
+    this.end_date,
+    this.treeQuantity,
+    this.turnover
+  });
+}
+@JsonSerializable()
+class OtherSeasonEntity {
+  @JsonKey(name: '_id')
+  String? seasonId;
+  String? name;
+  String? garden;
+  ProcessSeason? process;
+  String? tree;
+  @JsonKey(name: 'start')
+  String? start_date;
+  @JsonKey(name: 'end')
+  String? end_date;
+  int? treeQuantity;
+  String? startUrl;
+  String? endUrl;
+  int? turnover;
+
+  factory OtherSeasonEntity.fromJson(Map<String, dynamic> json) =>
+      OtherSeasonEntity(
+          seasonId: json['_id'] as String?,
+          name: json['name'] as String?,
+          garden: json['garden'] as String?,
+          process: json['process'] == null
+              ? null
+              : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
+          tree:json['tree'] as String?,
+          start_date: json['start'] as String?,
+          end_date: json['end'] as String?,
+          treeQuantity: json['treeQuantity'] as int?,
+          turnover: json['turnover'] as int?
+      );
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    if(this.seasonId != null) '_id': this.seasonId,
+    'name': this.name,
+    'garden': this.garden ?? this.garden,
+    'process': this.process,
+    'tree': this.tree,
+    'start': this.start_date,
+    'end': this.end_date,
+    'treeQuantity': this.treeQuantity,
+    if(this.turnover != null) 'turnover': this.turnover
+  };
+
+  OtherSeasonEntity copyWith({
+    String? seasonId,
+    String? name,
+    String? garden,
+    ProcessSeason? process,
+    String? tree,
+    String? start_date,
+    String? end_date,
+    int? treeQuantity,
+    int? turnover,
+  }) {
+    return OtherSeasonEntity(
+        seasonId: seasonId ?? this.seasonId,
+        name: name ?? this.name,
+        garden: garden ?? this.garden,
+        process: process ?? this.process,
+        tree: tree ?? this.tree,
+        start_date: start_date ?? this.start_date,
+        end_date: end_date ?? this.end_date,
+        treeQuantity: treeQuantity ?? this.treeQuantity,
+        turnover:turnover?? this.turnover
+    );
+  }
+
+  OtherSeasonEntity({
+    this.seasonId,
+    this.name,
+    this.garden,
     this.process,
     this.tree,
     this.start_date,

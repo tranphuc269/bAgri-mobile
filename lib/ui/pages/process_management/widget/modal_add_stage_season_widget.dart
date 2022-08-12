@@ -16,7 +16,7 @@ class ModalAddStageSeasonWidget extends StatefulWidget {
         required this.onPressed,
         this.onDelete})
       : super(key: key);
-  final void Function(String name, String description, String start) onPressed;
+  final Future<void> Function(String name, String description, String start) onPressed;
   final String? name;
   final String? start;
   final String? description;
@@ -183,7 +183,7 @@ class _ModalAddStageSeasonWidgetState extends State<ModalAddStageSeasonWidget> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -193,7 +193,6 @@ class _ModalAddStageSeasonWidgetState extends State<ModalAddStageSeasonWidget> {
                           color: AppColors.redButton,
                           title: 'Hủy bỏ',
                           onPressed: () {
-
                             Navigator.of(context).pop();
                           },
                         ),
@@ -203,10 +202,10 @@ class _ModalAddStageSeasonWidgetState extends State<ModalAddStageSeasonWidget> {
                         child: AppButton(
                             color: AppColors.main,
                             title: 'Xác nhận',
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).pop(true);
-                                widget.onPressed(nameController.text, descriptionController.text, startTime);
+                                await widget.onPressed(nameController.text, descriptionController.text, startTime);
+                                Navigator.pop(context, true);
                               }
                             }),
                       ),
