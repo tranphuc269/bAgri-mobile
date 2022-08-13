@@ -223,15 +223,23 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                               builder: (context, child) {
                                 return _buildCalendarTheme(child);
                               },
-                              fieldHintText: "yyyy/mm/dd",
-                              initialDate: widget.start != null
-                                  ? Util.DateUtils.fromString(widget.start,
-                                      format: AppConfig.dateDisplayFormat)!
+                              fieldHintText: "dd-MM-yyyy",
+                              initialDate: widget.start!= null
+                                  ? Util.DateUtils.fromString(
+                                  widget.start,
+                                  format: AppConfig
+                                      .dateDisplayFormat)!
                                   : DateTime.now(),
-                              firstDate: DateTime.now(),
+                              firstDate: widget.start!= null
+                                  ? Util.DateUtils.fromString(
+                                  widget.start,
+                                  format: AppConfig
+                                      .dateDisplayFormat)!
+                                  : DateTime.now(),
                               lastDate: DateTime(2024));
                           if (result != null) {
-                            startTime = Util.DateUtils.toDateString(result);
+                            startTime = Util.DateUtils.toDateString(
+                                result, format: AppConfig.dateAPIFormatStrikethrough);
                             setState(() {});
                           }
                         },
@@ -269,6 +277,12 @@ class _ModalEditStepSeasonWidgetState extends State<ModalEditStepSeasonWidget> {
                             title: 'Xác nhận',
                             onPressed: () async{
                               if (_formKey.currentState!.validate()) {
+                                DateTime time = Util.DateUtils.fromString(
+                                    startTime,
+                                    format: AppConfig
+                                        .dateAPIFormatStrikethrough)!;
+                                startTime = Util.DateUtils.toDateString(
+                                    time, format: AppConfig.dateDisplayFormat);
                                 await widget.onPressed(
                                     nameController.text,
                                     descriptionController.text,

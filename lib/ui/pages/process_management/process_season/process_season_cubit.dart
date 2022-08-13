@@ -138,7 +138,7 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
 
   void endStep(int index, int indexStage) async{
     List<StageSeason> stages = state.stages!;
-    try {
+    // try {
       var result = await seasonRepository?.endStep(
           stages[indexStage].stage_id!,stages[indexStage].steps![index].step_id!);
       // final stage = stages[indexStage];
@@ -146,9 +146,9 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
       // List<StageSeason> newList = stages;
       emit(state.copyWith(
           stages: result?.process?.stages, actionWithStepStatus: state.actionWithStepStatus++));
-    } catch (e) {
-      emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE, actionWithStepStatus: state.actionWithStepStatus++));
-    }
+    // } catch (e) {
+    //   emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE, actionWithStepStatus: state.actionWithStepStatus++));
+    // }
   }
 
   Future<void> removeStep(int index, int indexStages) async{

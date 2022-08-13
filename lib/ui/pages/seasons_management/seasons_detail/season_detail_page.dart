@@ -545,8 +545,8 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                 description: widget.stageSeason!.description,
                                 start: widget.startDate,
                                 end: widget.stageSeason!.end,
-                                onEnd: () {
-                                  widget.cubit.endStage(widget.index!,
+                                onEnd: () async{
+                                  await widget.cubit.endStage(widget.index!,
                                       widget.stageSeason!.stage_id!);
                                 }));
                       },
