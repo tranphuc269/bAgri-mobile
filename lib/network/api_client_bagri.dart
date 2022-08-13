@@ -213,15 +213,15 @@ abstract class ApiClient {
 
   ///phase-season
   @POST("/phases/{season_id}")
-  Future<SeasonEntity> createPhase(
+  Future<OtherSeasonEntity> createPhase(
       @Body() Map<String, dynamic> body, @Path('season_id') String seasonId);
 
   @PUT("/phases/{phase_id}")
-  Future<SeasonEntity> putPhase(
+  Future<OtherSeasonEntity> putPhase(
       @Body() Map<String, dynamic> body, @Path('phase_id') String phaseId);
 
   @PATCH("/phases/{phase_id}/end")
-  Future<SeasonEntity> endPhase(@Path('phase_id') String phaseId);
+  Future<OtherSeasonEntity> endPhase(@Path('phase_id') String phaseId);
 
   @DELETE("/phases/{phase_id}")
   Future<OtherSeasonEntity> deletePhase(@Path('phase_id') String phaseId);
@@ -236,7 +236,7 @@ abstract class ApiClient {
       @Path('step_id') String stepId, @Body() Map<String, dynamic> body);
 
   @PATCH('/steps/{phase_id}/{step_id}/end')
-  Future<SeasonEntity> endStep(
+  Future<OtherSeasonEntity> endStep(
       @Path('phase_id') String phaseId, @Path('step_id') String stepId);
 
   @DELETE('/steps/{phase_id}/{step_id}')

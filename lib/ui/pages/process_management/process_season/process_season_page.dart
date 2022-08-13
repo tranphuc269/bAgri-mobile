@@ -364,6 +364,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                   widget.cubitProcess.endStage(
                                       widget.index!, widget.stage?.stage_id);
                                 },
+                                end: widget.stage?.end,
                                 start: widget.startDate,
                                 onPressed: (String name, String description,
                                     String start) {

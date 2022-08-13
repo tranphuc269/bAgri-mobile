@@ -7,6 +7,7 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
+import 'package:intl/intl.dart';
 
 class ModalAddStepSeasonWidget extends StatefulWidget {
   const ModalAddStepSeasonWidget({
@@ -37,17 +38,19 @@ class ModalAddStepSeasonWidget extends StatefulWidget {
 
 class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
   final _formKey = GlobalKey<FormState>();
-
+  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
   TextEditingController nameController = TextEditingController(text: '');
   TextEditingController startDateController = TextEditingController(text: '');
   TextEditingController endDateController = TextEditingController(text: '');
   TextEditingController descriptionController = TextEditingController(text: '');
   late double heightResize = 0.5;
-  String startTime = DateTime.now().toString().substring(0, 10);
+  late String startTime;
+
 
   @override
   void initState() {
     super.initState();
+    startTime = _dateFormat.format(DateTime.now());
     nameController = TextEditingController(text: widget.name);
     startDateController = TextEditingController(text: widget.startDate);
     endDateController = TextEditingController(text: widget.endDate);
@@ -220,19 +223,27 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                               builder: (context, child) {
                                 return _buildCalendarTheme(child);
                               },
-                              fieldHintText: "yyyy/mm/dd",
-                              initialDate: widget.startDate != null
-                                  ? Util.DateUtils.fromString(widget.startDate,
-                                      format: AppConfig.dateDisplayFormat)!
+                              fieldHintText: "dd-MM-yyyy",
+                              initialDate: widget.startDate!= null
+                                  ? Util.DateUtils.fromString(
+                                  widget.startDate,
+                                  format: AppConfig
+                                      .dateDisplayFormat)!
                                   : DateTime.now(),
-                              firstDate: DateTime.now(),
+                              firstDate: /*widget.startDate!= null
+                                  ? Util.DateUtils.fromString(
+                                  widget.startDate,
+                                  format: AppConfig
+                                      .dateDisplayFormat)!
+                                  :*/ DateTime.now(),
                               lastDate: DateTime(2024));
                           if (result != null) {
                             // widget.start =
                             //     Util.DateUtils.toDateString(
                             //         result);
 
-                            startTime = Util.DateUtils.toDateString(result);
+                            startTime = Util.DateUtils.toDateString(
+                                result, format: AppConfig.dateAPIFormatStrikethrough);
                             setState(() {});
                           }
                         },
@@ -285,6 +296,12 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                             title: 'Xác nhận',
                             onPressed: () async{
                               if (_formKey.currentState!.validate()) {
+                                DateTime time = Util.DateUtils.fromString(
+                                    startTime,
+                                    format: AppConfig
+                                        .dateAPIFormatStrikethrough)!;
+                                startTime = Util.DateUtils.toDateString(
+                                    time, format: AppConfig.dateDisplayFormat);
                                 await widget.onPressed(
                                     nameController.text,
                                     startDateController.text,

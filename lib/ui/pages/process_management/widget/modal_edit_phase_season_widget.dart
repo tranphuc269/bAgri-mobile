@@ -127,7 +127,7 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                   AppTextAreaField(
                     hintText: 'Mô tả',
                     maxLines: 8,
-                    enable: true,
+                    enable: widget.end == null,
                     controller: descriptionController,
                   ),
                   SizedBox(
@@ -146,6 +146,10 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                             decoration: TextDecoration.underline),
                       ),
                       SizedBox(width: 10),
+                      if(Util.DateUtils.fromString(
+                          widget.start,
+                          format: AppConfig
+                              .dateDisplayFormat)!.isAfter(DateTime.now()))
                       GestureDetector(
                         onTap: () async {
                           final result = await showDatePicker(
@@ -156,14 +160,19 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                               builder: (context, child) {
                                 return _buildCalendarTheme(child);
                               },
-                              fieldHintText: "yyyy/mm/dd",
+                              fieldHintText: "dd-MM-yyyy",
                               initialDate: widget.start!= null
                                   ? Util.DateUtils.fromString(
                                   widget.start,
                                   format: AppConfig
                                       .dateDisplayFormat)!
                                   : DateTime.now(),
-                              firstDate: DateTime.now(),
+                              firstDate: /*widget.start!= null
+                                  ? Util.DateUtils.fromString(
+                                  widget.start,
+                                  format: AppConfig
+                                      .dateDisplayFormat)!
+                                  : */DateTime.now(),
                               lastDate: DateTime(2024));
                           if (result != null) {
                             // widget.start =
@@ -171,7 +180,7 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                             //         result);
 
                             startTime = Util.DateUtils.toDateString(
-                                result);
+                                result, format: AppConfig.dateAPIFormatStrikethrough);
                             setState(() {
 
                             });
@@ -191,12 +200,15 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                   SizedBox(
                     height: 10,
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // if(widget.end == null)
                       Expanded(
                         child: AppButton(
                           color: AppColors.redButton,
+                          isEnabled: widget.end == null,
                           title: 'Kết thúc',
                           onPressed: () {
                             widget.onEnd();
@@ -204,18 +216,30 @@ class _ModalEditStageSeasonWidgetState extends State<ModalEditStageSeasonWidget>
                           },
                         ),
                       ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: AppButton(
-                            color: AppColors.main,
-                            title: 'Xác nhận',
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).pop(true);
-                                widget.onPressed(nameController.text, descriptionController.text, startTime);
-                              }
-                            }),
-                      ),
+
+                      if(Util.DateUtils.fromString(
+                          widget.start,
+                          format: AppConfig
+                              .dateDisplayFormat)!.isAfter(DateTime.now())) ...[
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: AppButton(
+                              color: AppColors.main,
+                              title: 'Xác nhận',
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  // Navigator.of(context).pop(true);
+                                  DateTime time = Util.DateUtils.fromString(
+                                      startTime,
+                                      format: AppConfig
+                                          .dateAPIFormatStrikethrough)!;
+                                  startTime = Util.DateUtils.toDateString(
+                                      time, format: AppConfig.dateDisplayFormat);
+                                  widget.onPressed(nameController.text, descriptionController.text, startTime);
+                                }
+                              }),
+                        ),
+                      ]
                     ],
                   ),
                 ]),

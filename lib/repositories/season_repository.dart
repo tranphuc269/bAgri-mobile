@@ -15,14 +15,14 @@ abstract class SeasonRepository {
      SeasonEntity param);
 
   Future<TreeDeleteResponse> deleteSeason(String seasonId);
-  Future<SeasonEntity> addPhase(StageSeason phaseSeason, String seasonId);
-  Future<SeasonEntity> putPhase(StageSeason phageSeason, String phaseId);
+  Future<OtherSeasonEntity> addPhase(StageSeason phaseSeason, String seasonId);
+  Future<OtherSeasonEntity> putPhase(StageSeason phageSeason, String phaseId);
   Future<OtherSeasonEntity> putStep(String stepSeasonId, String phaseId, StepSeason stepSeason);
   Future<OtherSeasonEntity> addStep(String phaseId, StepSeason stepSeason);
   Future<OtherSeasonEntity> deletePhase(String phaseId);
   Future<OtherSeasonEntity> deleteStep(String stepId, String phaseId);
-  Future<SeasonEntity> endStep(String phaseId, String stepId);
-  Future<SeasonEntity> endPhase(String phaseId);
+  Future<OtherSeasonEntity> endStep(String phaseId, String stepId);
+  Future<OtherSeasonEntity> endPhase(String phaseId);
   Future<dynamic> endSeason(String seasonId, int turnover);
   Future<GardenEntity> getGardenById(String gardenId);
   Future<TreeEntity> getTreeById(String treeId);
@@ -73,7 +73,7 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future<SeasonEntity> addPhase(StageSeason phaseSeason, String seasonId) async{
+  Future<OtherSeasonEntity> addPhase(StageSeason phaseSeason, String seasonId) async{
     return await _apiClientBagri!.createPhase(phaseSeason.toJson(), seasonId);
   }
 
@@ -83,7 +83,7 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future<SeasonEntity> putPhase(StageSeason phaseSeason, String phaseId) async{
+  Future<OtherSeasonEntity> putPhase(StageSeason phaseSeason, String phaseId) async{
     var data = {
       'name': phaseSeason.name,
       'descriptiton': phaseSeason.description,
@@ -115,12 +115,12 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future<SeasonEntity> endPhase(String phaseId) async{
+  Future<OtherSeasonEntity> endPhase(String phaseId) async{
     return await _apiClientBagri!.endPhase(phaseId);
   }
 
   @override
-  Future<SeasonEntity> endStep(String phaseId, String stepId) async{
+  Future<OtherSeasonEntity> endStep(String phaseId, String stepId) async{
     return await _apiClientBagri!.endStep(phaseId, stepId);
   }
 

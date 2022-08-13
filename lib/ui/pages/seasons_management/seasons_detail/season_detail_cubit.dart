@@ -29,10 +29,10 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
       required this.contractTaskRepository})
       : super(SeasonDetailState());
 
-  void endStage(int index, String? phaseId) {
+  Future<void> endStage(int index, String? phaseId) async{
     // emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      var result = seasonRepository.endPhase(phaseId!);
+      var result =await seasonRepository.endPhase(phaseId!);
       getSeasonDetail(state.season!.seasonId!);
     } catch (e) {
       // emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
