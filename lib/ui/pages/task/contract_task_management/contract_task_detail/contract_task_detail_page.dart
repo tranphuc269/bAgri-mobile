@@ -351,8 +351,8 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
   Widget _buildInformation({String? title, String? information}) {
     return Row(
       children: [
-        Text(title!, style: AppTextStyle.greyS16),
-        Text(information!, style: AppTextStyle.blackS16)
+        Flexible(child: Text(
+          "${title!} ${information}", style: AppTextStyle.blackS16, overflow: TextOverflow.ellipsis, maxLines: 1,))
       ],
     );
   }
