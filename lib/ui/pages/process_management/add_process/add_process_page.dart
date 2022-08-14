@@ -233,6 +233,7 @@ class _ProcessAddingPageState extends State<ProcessAddingPage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _cubit.createProcess();
+                    print("tao thanh cong");
                   }
                 },
                 isLoading: isLoading,
@@ -336,31 +337,27 @@ class _PhaseProcessState extends State<PhaseProcess> {
                       },
                       child: Row(
                         children: [
-                          Text(
-                            'Giai đoạn ${widget.phase}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Thời gian: ',
-                            style: TextStyle(
-                              color: Color(0xFFBBB5D4),
-                              fontSize: 14,
-                            ),
-                          ),
-                          Text(
-                            '$sumStart - $sumEnd ngày',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
+                          Flexible(
+                            fit: FlexFit.tight,
+                              child: Text(
+                                'Giai đoạn ${widget.phase}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),),
+                          Flexible(
+                            fit: FlexFit.tight,
+                              child:  Text(
+                                'Thời gian:$sumStart - $sumEnd ngày ',
+                                style: TextStyle(
+                                  color: Color(0xFFBBB5D4),
+                                  fontSize: 14,
+                                ),
+                              ),),
                         ],
                       ),
                     ),

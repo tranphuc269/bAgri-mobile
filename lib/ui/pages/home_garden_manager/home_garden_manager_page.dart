@@ -166,7 +166,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
                        Navigator.pop(context, true);
                      }
                     }, temporaryTasks: () async {
-                      bool isAdd = await   Application.router
+                      bool isAdd = await Application.router
                           ?.navigateTo(context, Routes.addTemporaryTask);
                       if (isAdd) {
                         Navigator.pop(context, true);

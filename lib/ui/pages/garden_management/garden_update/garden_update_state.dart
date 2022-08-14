@@ -6,6 +6,8 @@ class GardenUpdateState extends Equatable {
   String? treePlaceQuantity;
   String? areaUnit;
   String? managerUsername;
+  String? managerPhone;
+
   LoadStatus? updateGardenStatus;
   GardenDetailEntityResponse? gardenData;
   LoadStatus? getGardenDataStatus;
@@ -19,6 +21,7 @@ class GardenUpdateState extends Equatable {
         this.treePlaceQuantity,
         this.areaUnit,
         this.managerUsername,
+        this.managerPhone,
         this.updateGardenStatus,
         this.listManager,
         this.gardenData,
@@ -30,6 +33,7 @@ class GardenUpdateState extends Equatable {
       {String? name,
         String? area,
         String? managerUsername,
+        String? managerPhone,
         String? treePlaceQuantity,
         String? areaUnit,
         LoadStatus? updateGardenStatus,
@@ -41,6 +45,7 @@ class GardenUpdateState extends Equatable {
     return GardenUpdateState(
         name: name ?? this.name,
         area: area ?? this.area,
+        managerPhone: managerPhone ?? this.managerPhone,
         managerUsername: managerUsername ?? this.managerUsername,
         treePlaceQuantity: treePlaceQuantity ?? this.treePlaceQuantity,
         areaUnit: areaUnit ?? this.areaUnit,
@@ -58,6 +63,7 @@ class GardenUpdateState extends Equatable {
     this.name,
     this.area,
     this.managerUsername,
+    this.managerPhone,
     this.updateGardenStatus,
     this.getListManagerStatus,
     this.getGardenDataStatus,

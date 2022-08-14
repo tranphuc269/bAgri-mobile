@@ -67,6 +67,9 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
         resizeToAvoidBottomInset: true,
         key: _scaffoldKey,
         appBar: AppBarWidget(
+          onBackPressed: (){
+            Navigator.of(context).pop(false);
+          },
           title: 'Thêm công việc hằng ngày',
           context: context,
         ),
