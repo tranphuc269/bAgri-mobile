@@ -58,7 +58,7 @@ class GardenRepositoryImpl extends GardenRepository {
 
   Future<dynamic> updateGarden({String? gardenId, UpdateGardenParam? param}) {
     final body = {
-      "managerUsername": param?.managerUsername ?? "",
+      "managerPhone": param?.managerPhone ?? "",
       "name": param?.name ?? "",
       "area": param?.area ?? "",
       "areaUnit": param?.areaUnit ?? "",

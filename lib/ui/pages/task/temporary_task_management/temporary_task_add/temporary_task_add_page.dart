@@ -54,6 +54,9 @@ class _TemporaryTaskAddPageState extends State<TemporaryTaskAddPage> {
       resizeToAvoidBottomInset: true,
       appBar: AppBarWidget(
         title: 'Tạo công nhật',
+        onBackPressed: (){
+          Navigator.of(context).pop(false);
+        },
         context: context,
       ),
       body: SafeArea(

@@ -294,8 +294,8 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
   Widget _buildSelectManager() {
    var index = _cubit!.state.listManager!.indexWhere((element) => element.id == _cubit!.state.gardenData!.managerId);
     UserEntity? defaultValue = _cubit!.state.listManager![index];
-
     _managerValue = defaultValue;
+    _cubit!.changeManagerPhone(_managerValue!.phone.toString());
     return DropdownButtonFormField(
               style: AppTextStyle.blackS16,
               value: defaultValue,
@@ -303,7 +303,11 @@ class _UpdateGardenPageState extends State<UpdateGardenPage> {
                   padding: const EdgeInsets.only(right: 10),
                   child: Icon(Icons.keyboard_arrow_down)),
               onChanged: (value) {
-               _managerValue = value as UserEntity?;
+                setState(() {
+                  _managerValue = value as UserEntity?;
+                  _cubit!.changeManagerPhone(_managerValue!.phone.toString());
+                });
+
                 // _cubit.changeManagerUsername()
                // _cubit!.state.listManager!.indexWhere((element) => element.id == _cubit!.state.gardenData!.manager["id"])
               },

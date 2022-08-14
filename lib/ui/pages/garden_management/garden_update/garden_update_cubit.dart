@@ -45,6 +45,9 @@ class GardenUpdateCubit extends Cubit<GardenUpdateState> {
   void changeManagerUsername(String managerUsername){
     emit(state.copyWith(managerUsername: managerUsername));
   }
+  void changeManagerPhone(String managerPhone){
+    emit(state.copyWith(managerPhone: managerPhone));
+  }
 
 
   void changeManagerId(String value) {
@@ -82,7 +85,7 @@ class GardenUpdateCubit extends Cubit<GardenUpdateState> {
       areaUnit: unit,
       area: num.parse(gardenArea!),
       treePlaceQuantity: num.parse(treePlaceQuantity!),
-      managerUsername: state.managerUsername,
+      managerPhone: state.managerPhone,
       zoneName: zoneName,
     );
       try{
