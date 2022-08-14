@@ -241,38 +241,39 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
                 Expanded(
                     child: Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Nội dung: ${title}",
-                          style: AppTextStyle.greyS16Bold,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-
-                            children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: Text(
-                              'Đơn giá: ${formatCurrency.format(num.parse(unitPrice))}',
-                              style: AppTextStyle.greyS14,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Nội dung: ${title}",
+                            style: AppTextStyle.greyS16Bold,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: Text(
-                              'Đơn vị: ${unit}',
-                              style: AppTextStyle.greyS14,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          SizedBox(
+                            height: 10,
                           ),
-                        ])
-                      ],
+                          Row(children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: Text(
+                                'Đơn giá: ${formatCurrency.format(num.parse(unitPrice))}',
+                                style: AppTextStyle.greyS14,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: Text(
+                                'Đơn vị: ${unit}',
+                                style: AppTextStyle.greyS14,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ])
+                        ],
+                      ),
+                      fit: FlexFit.tight,
                     ),
                   ],
                 )),

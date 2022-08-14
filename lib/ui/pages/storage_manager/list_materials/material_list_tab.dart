@@ -272,7 +272,7 @@ class _MaterialListPageState extends State<MaterialListPage> {
                     Container(
                       // width: MediaQuery.of(context).size.width * 0.2,
                       child:
-                          Text("Số lượng: ${quantity.toString()}  Đơn vị: ${unitPrice.toString()} $unit", overflow: TextOverflow.ellipsis),
+                          Text("Số lượng: ${quantity.toString()} $unit  Đơn giá: ${unitPrice.toString()} VND", overflow: TextOverflow.ellipsis),
                     ),
                   ],
                 )),
