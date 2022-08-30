@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -18,6 +17,7 @@ import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 enum Unit { Cong, Dong }
 
@@ -37,9 +37,11 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
 
   final _unitPriceController = TextEditingController(text: '');
   final _contentController = TextEditingController(text: '');
+  final _unitController = TextEditingController(text: '');
 
   var _contentModifyController = TextEditingController(text: '');
   var _unitPriceModifyController = TextEditingController(text: '');
+  var _unitModifyController = TextEditingController(text: '');
   final _scrollController = ScrollController();
 
   @override
@@ -246,7 +248,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Nội dung: ${title}",
+                            "Nội dung: $title",
                             style: AppTextStyle.greyS16Bold,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -265,7 +267,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.3,
                               child: Text(
-                                'Đơn vị: ${unit}',
+                                'Đơn vị: $unit',
                                 style: AppTextStyle.greyS14,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -290,112 +292,10 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
     );
   }
 
-  Widget _dialogModify({
-    ContractWorkEntity? contractWork,
-    Text? title,
-  }) {
-    _contentModifyController = TextEditingController(text: contractWork!.title);
-    _unitPriceModifyController =
-        TextEditingController(text: contractWork.unitPrice.toString());
-    String? unitResponse = contractWork.unit;
-    Unit unitModify = contractWork.unit == "Công" ? Unit.Cong : Unit.Dong;
-    return StatefulBuilder(builder: (context, setState) {
-      return AlertDialog(
-        title: title,
-        content: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Container(
-            constraints: BoxConstraints(
-              maxHeight: double.infinity,
-            ),
-            // width: MediaQuery.of(context).size.width +20,
-            child: Form(
-                key: _formKey,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildTextLabel("Nội dung:"),
-                      _buildContentInput(_contentModifyController),
-                      _buildTextLabel("Đơn giá:"),
-                      _buildUnitPriceInput(_unitPriceModifyController),
-                      _buildTextLabel("Đơn vị:"),
-                      Theme(
-                        data: Theme.of(context)
-                            .copyWith(unselectedWidgetColor: AppColors.main),
-                        child: Row(
-                          children: [
-                            Flexible(
-                              flex: 1,
-                              child: RadioListTile(
-                                activeColor: AppColors.main,
-                                title: Text("Đồng/bầu",
-                                    style: AppTextStyle.greyS16Bold),
-                                value: Unit.Dong,
-                                groupValue: unitModify,
-                                onChanged: (value) {
-                                  setState(() {
-                                    unitModify = value as Unit;
-                                    unitResponse = "Đồng/bầu";
-                                  });
-                                },
-                              ),
-                            ),
-                            Flexible(
-                                flex: 1,
-                                child: RadioListTile(
-                                  activeColor: AppColors.main,
-                                  title: Text("Công",
-                                      style: AppTextStyle.greyS16Bold),
-                                  value: Unit.Cong,
-                                  groupValue: unitModify,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      unitModify = value as Unit;
-                                      unitResponse = "Công";
-                                    });
-                                  },
-                                )),
-                          ],
-                        ),
-                      )
-                    ])),
-          ),
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Hủy", style: AppTextStyle.redS16)),
-          TextButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  await _cubit!.modifyContractWork(
-                      contractWork.id,
-                      _contentModifyController.text,
-                      unitResponse,
-                      _unitPriceModifyController.text);
-                  if (_cubit!.state.modifyContractWorKStatus ==
-                      LoadStatus.SUCCESS) {
-                    Navigator.pop(context, true);
-                  } else {
-                    Navigator.pop(context, false);
-                  }
-                }
-              },
-              child: Text(
-                "Thay đổi",
-                style: AppTextStyle.greenS16,
-              ))
-        ],
-      );
-    });
-  }
-
   Widget _buildTextLabel(String text) {
     return Container(
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(horizontal: 28),
+      margin: EdgeInsets.symmetric(horizontal: 10),
       child: RichText(
         text: TextSpan(children: [
           TextSpan(
@@ -409,7 +309,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
 
   Widget _buildContentInput(TextEditingController? controller) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+      margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
       ),
@@ -429,7 +329,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
 
   Widget _buildUnitPriceInput(TextEditingController controller) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+      margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
       ),
@@ -437,6 +337,16 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
         autoValidateMode: AutovalidateMode.onUserInteraction,
         hintText: "Nhập vào đơn giá",
         controller: controller,
+        suffixText: "VND",
+        suffixTextStyle: TextStyle(
+          color: AppColors.mainDarker,
+        ),
+        inputFormatters: [
+          CurrencyTextInputFormatter(
+            locale: 'vi',
+            symbol: '',
+          ),
+        ],
         keyboardType: TextInputType.number,
         validator: (value) {
           if (Validator.validateNullOrEmpty(value!))
@@ -448,168 +358,121 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
     );
   }
 
+  Widget _buildUnitInput(TextEditingController controller) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      child: AppTextField(
+        autoValidateMode: AutovalidateMode.onUserInteraction,
+        hintText: "Nhập vào đơn vị",
+        controller: controller,
+        validator: (value) {
+          if (Validator.validateNullOrEmpty(value!))
+            return "Chưa nhập đơn vị";
+          else
+            return null;
+        },
+      ),
+    );
+  }
+
   void showCreateDialog() {
     showGeneralDialog(
         context: context,
-        barrierDismissible: true,
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 200),
         pageBuilder: (BuildContext buildContext, Animation animation,
             Animation secondaryAnimation) {
           return StatefulBuilder(builder: (context, setState) {
-            return Center(
-              child: Container(
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)
+              ),
+              title: Text("Thêm công việc khoán",
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      fontStyle: FontStyle.italic,
+                      fontFamily: "Helvetica")),
+              content: Container(
                 padding: EdgeInsets.all(7),
-                height: 430,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      Form(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Container(
-                              height: 60,
-                              width: MediaQuery.of(context).size.width,
-                              child: Center(
-                                  child: Text("Thêm công việc khoán",
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20,
-                                          fontStyle: FontStyle.italic,
-                                          fontFamily: "Helvetica"))),
+                constraints: BoxConstraints(
+                  maxHeight: double.infinity,
+                ),
+                width: MediaQuery.of(context).size.width,
+                child: Form(
+                  child: SingleChildScrollView(
+                    physics: ClampingScrollPhysics(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.zero,
+                          child: Container(
+                              child: Form(
+                                  key: _formKey,
+                                  child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        _buildTextLabel("Nội dung:"),
+                                        _buildContentInput(_contentController),
+                                        _buildTextLabel("Đơn giá:"),
+                                        _buildUnitPriceInput(
+                                            _unitPriceController),
+                                        _buildTextLabel("Đơn vị:"),
+                                        _buildUnitInput(_unitController),
+                                      ])),
                             ),
-                            Padding(
-                              padding: EdgeInsets.zero,
-                              child: Container(
-                                  child: SingleChildScrollView(
-                                physics: ClampingScrollPhysics(),
-                                child: Container(
-                                  child: Form(
-                                      key: _formKey,
-                                      child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            _buildTextLabel("Nội dung:"),
-                                            _buildContentInput(
-                                                _contentController),
-                                            _buildTextLabel("Đơn giá:"),
-                                            _buildUnitPriceInput(
-                                                _unitPriceController),
-                                            _buildTextLabel("Đơn vị:"),
-                                            Theme(
-                                              data: Theme.of(context).copyWith(
-                                                  unselectedWidgetColor:
-                                                      AppColors.main),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Flexible(
-                                                    flex: 1,
-                                                    child: RadioListTile(
-                                                      activeColor:
-                                                          AppColors.main,
-                                                      title: Text("Đồng/bầu",
-                                                          style: AppTextStyle
-                                                              .greyS16Bold),
-                                                      value: Unit.Dong,
-                                                      groupValue: unit,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          unit = value as Unit;
-                                                          handleUnitChange(
-                                                              "Đồng/bầu");
-                                                          print(_unitValue);
-                                                        });
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Flexible(
-                                                      flex: 1,
-                                                      child: RadioListTile(
-                                                        activeColor:
-                                                            AppColors.main,
-                                                        title: Text("Công",
-                                                            style: AppTextStyle
-                                                                .greyS16Bold),
-                                                        value: Unit.Cong,
-                                                        groupValue: unit,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            unit =
-                                                                value as Unit;
-                                                            handleUnitChange(
-                                                                "Công");
-                                                            print(_unitValue);
-                                                          });
-                                                        },
-                                                      )),
-                                                ],
-                                              ),
-                                            )
-                                          ])),
+                          ),
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  color: AppColors.redButton,
+                                  title: 'Hủy bỏ',
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
-                              )),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Expanded(
-                                    child: AppButton(
-                                      color: AppColors.redButton,
-                                      title: 'Hủy bỏ',
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Expanded(
-                                    child: AppButton(
-                                        color: AppColors.main,
-                                        title: 'Xác nhận',
-                                        onPressed: () async {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            await _cubit!
-                                                .createContractWork(_unitValue);
-                                            if (_cubit!.state
-                                                    .createContractWorkStatus ==
-                                                LoadStatus.SUCCESS) {
-                                              Navigator.pop(context, true);
-                                              showSnackBar(
-                                                  "Tạo công việc thành công");
-                                              _onRefreshData();
-                                              _contentController.clear();
-                                              _unitPriceController.clear();
-                                            } else {
-                                              Navigator.pop(context, false);
-                                              showErrorSnackBar(
-                                                  "Công việc đã tồn tại");
-                                            }
-                                          }
-                                        }),
-                                  ),
-                                ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: AppButton(
+                                    color: AppColors.main,
+                                    title: 'Xác nhận',
+                                    onPressed: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        await _cubit!
+                                            .createContractWork(_unitValue);
+                                        if (_cubit!
+                                                .state.createContractWorkStatus ==
+                                            LoadStatus.SUCCESS) {
+                                          Navigator.pop(context, true);
+                                          showSnackBar(
+                                              "Tạo công việc thành công");
+                                          _onRefreshData();
+                                          _contentController.clear();
+                                          _unitPriceController.clear();
+                                        } else {
+                                          Navigator.pop(context, false);
+                                          showErrorSnackBar(
+                                              "Công việc đã tồn tại");
+                                        }
+                                      }
+                                    }),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -625,8 +488,7 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
     _contentModifyController = TextEditingController(text: contractWork!.title);
     _unitPriceModifyController =
         TextEditingController(text: contractWork.unitPrice.toString());
-    String? unitResponse = contractWork.unit;
-    Unit unitModify = contractWork.unit == "Công" ? Unit.Cong : Unit.Dong;
+    _unitModifyController = TextEditingController(text: contractWork.unit);
     showGeneralDialog(
         context: context,
         barrierDismissible: true,
@@ -637,165 +499,103 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
         pageBuilder: (BuildContext buildContext, Animation animation,
             Animation secondaryAnimation) {
           return StatefulBuilder(builder: (context, setState) {
-            return Center(
-              child: Container(
-                padding: EdgeInsets.all(7),
-                height: 430,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      Form(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Container(
-                              height: 60,
-                              width: MediaQuery.of(context).size.width,
-                              child: Center(
-                                  child: Text("Thay đổi thông tin",
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20,
-                                          fontStyle: FontStyle.italic,
-                                          fontFamily: "Helvetica"))),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.zero,
+            return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                title: Text("Thay đổi thông tin",
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic,
+                        fontFamily: "Helvetica")),
+                content: Container(
+                  width: MediaQuery.of(context).size.width,
+                  // padding: EdgeInsets.all(7),
+                  constraints: BoxConstraints(maxHeight: double.infinity),
+                  child: Form(
+                    child: SingleChildScrollView(
+                      physics: ClampingScrollPhysics(),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                                child: SingleChildScrollView(
+                              physics: ClampingScrollPhysics(),
                               child: Container(
-                                  child: SingleChildScrollView(
-                                physics: ClampingScrollPhysics(),
-                                child: Container(
-                                  child: Form(
-                                      key: _formKey,
-                                      child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            _buildTextLabel("Nội dung:"),
-                                            _buildContentInput(
-                                                _contentModifyController),
-                                            _buildTextLabel("Đơn giá:"),
-                                            _buildUnitPriceInput(
-                                                _unitPriceModifyController),
-                                            _buildTextLabel("Đơn vị:"),
-                                            Theme(
-                                              data: Theme.of(context).copyWith(
-                                                  unselectedWidgetColor:
-                                                      AppColors.main),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Flexible(
-                                                    flex: 1,
-                                                    child: RadioListTile(
-                                                      activeColor:
-                                                          AppColors.main,
-                                                      title: Text("Đồng/bầu",
-                                                          style: AppTextStyle
-                                                              .greyS16Bold),
-                                                      value: Unit.Dong,
-                                                      groupValue: unitModify,
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          unitModify =
-                                                              value as Unit;
-                                                          unitResponse =
-                                                              "Đồng/bầu";
-                                                        });
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Flexible(
-                                                      flex: 1,
-                                                      child: RadioListTile(
-                                                        activeColor:
-                                                            AppColors.main,
-                                                        title: Text("Công",
-                                                            style: AppTextStyle
-                                                                .greyS16Bold),
-                                                        value: Unit.Cong,
-                                                        groupValue: unitModify,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            unitModify =
-                                                                value as Unit;
-                                                            unitResponse =
-                                                                "Công";
-                                                          });
-                                                        },
-                                                      )),
-                                                ],
-                                              ),
-                                            )
-                                          ])),
-                                ),
-                              )),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Expanded(
-                                    child: AppButton(
-                                      color: AppColors.redButton,
-                                      title: 'Hủy bỏ',
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Expanded(
-                                    child: AppButton(
-                                        color: AppColors.main,
-                                        title: 'Xác nhận',
-                                        onPressed: () async {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            await _cubit!.modifyContractWork(
-                                                contractWork.id,
-                                                _contentModifyController.text,
-                                                unitResponse,
-                                                _unitPriceModifyController
-                                                    .text);
-                                            if (_cubit!.state
-                                                    .modifyContractWorKStatus ==
-                                                LoadStatus.SUCCESS) {
-                                              Navigator.pop(context, true);
-                                              _onRefreshData();
-                                              showSnackBar(
-                                                  "Thay đổi thông tin thành công");
-                                              _contentModifyController.clear();
-                                              _unitPriceModifyController
-                                                  .clear();
-                                            } else {
-                                              Navigator.pop(context, false);
-                                              showErrorSnackBar(
-                                                  "Thông tin đã trùng");
-                                            }
-                                          }
-                                        }),
-                                  ),
-                                ],
+                                child: Form(
+                                    key: _formKey,
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          _buildTextLabel("Nội dung:"),
+                                          _buildContentInput(
+                                              _contentModifyController),
+                                          _buildTextLabel("Đơn giá:"),
+                                          _buildUnitPriceInput(
+                                              _unitPriceModifyController),
+                                          _buildTextLabel("Đơn vị:"),
+                                          _buildUnitInput(
+                                              _unitModifyController),
+                                        ])),
                               ),
-                            )
-                          ],
-                        ),
+                            )),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: AppButton(
+                                    color: AppColors.redButton,
+                                    title: 'Hủy bỏ',
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                Expanded(
+                                  child: AppButton(
+                                      color: AppColors.main,
+                                      title: 'Xác nhận',
+                                      onPressed: () async {
+                                        if (_formKey.currentState!.validate()) {
+                                          await _cubit!.modifyContractWork(
+                                              contractWork.id,
+                                              _contentModifyController.text,
+                                              _unitModifyController.text,
+                                              _unitPriceModifyController.text);
+                                          if (_cubit!.state
+                                                  .modifyContractWorKStatus ==
+                                              LoadStatus.SUCCESS) {
+                                            Navigator.pop(context, true);
+                                            _onRefreshData();
+                                            showSnackBar(
+                                                "Thay đổi thông tin thành công");
+                                            _contentModifyController.clear();
+                                            _unitPriceModifyController.clear();
+                                          } else {
+                                            Navigator.pop(context, false);
+                                            showErrorSnackBar(
+                                                "Thông tin đã trùng");
+                                          }
+                                        }
+                                      }),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            );
+                ));
           });
         });
   }

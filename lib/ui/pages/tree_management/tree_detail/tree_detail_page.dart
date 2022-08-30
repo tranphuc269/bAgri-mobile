@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
-import 'package:flutter_base/main.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/router/application.dart';
-import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/tree_management/tree_detail/tree_detail_cubit.dart';
-import 'package:flutter_base/ui/pages/tree_management/update_tree/update_tree_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';

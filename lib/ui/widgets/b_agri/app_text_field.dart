@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_shadow.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 
 class AppTextField extends StatelessWidget {
@@ -20,6 +19,7 @@ class AppTextField extends StatelessWidget {
   final bool? obscureText;
   final String? suffixText;
   final TextStyle? suffixTextStyle;
+  final List<TextInputFormatter>? inputFormatters;
 
   const AppTextField({
     Key? key,
@@ -38,6 +38,7 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.suffixText,
     this.suffixTextStyle,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -46,9 +47,8 @@ class AppTextField extends StatelessWidget {
       obscureText: obscureText!,
       obscuringCharacter: "*",
       enabled: enable,
+      inputFormatters: inputFormatters,
       controller: controller,
-
-
       decoration: InputDecoration(
 
         suffixText: suffixText,

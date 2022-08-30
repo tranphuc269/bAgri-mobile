@@ -53,7 +53,7 @@ class GardenRepositoryImpl extends GardenRepository {
   }
 
   Future<GardenDetailEntityResponse> getGardenDataById({String? gardenId}) async {
-    return await _apiClientBagri!.getGardenDataById(accept: "application/json",auth:"Bearer ${accessToken}",gardenId: gardenId);
+    return await _apiClientBagri!.getGardenDataById(accept: "application/json",auth:"Bearer $accessToken",gardenId: gardenId);
   }
 
   Future<dynamic> updateGarden({String? gardenId, UpdateGardenParam? param}) {
@@ -67,7 +67,7 @@ class GardenRepositoryImpl extends GardenRepository {
         "name" : param!.zoneName
       }
     };
-    return _apiClientBagri!.updateGarden("application/json", "Bearer ${accessToken}", "application/json", gardenId, body);
+    return _apiClientBagri!.updateGarden("application/json", "Bearer $accessToken", "application/json", gardenId, body);
   }
 
   Future<GardenDeleteResponse> deleteGarden({String? gardenId}) async {
@@ -84,6 +84,6 @@ class GardenRepositoryImpl extends GardenRepository {
     return _apiClientBagri!.getListGardenByZone("application/json", accessToken, zoneId);
   }
   Future <List<UserEntity>>getListAcounts()  async {
-    return _apiClientBagri!.getListAccounts("application/json", "Bearer ${accessToken}");
+    return _apiClientBagri!.getListAccounts("application/json", "Bearer $accessToken");
   }
 }

@@ -6,10 +6,6 @@ import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/main.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
-import 'package:flutter_base/models/entities/process/list_process.dart';
-import 'package:flutter_base/models/entities/process/stage_entity.dart';
-import 'package:flutter_base/models/entities/process/step_entity.dart';
-import 'package:flutter_base/models/entities/season/process_season.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/season/stage_season.dart';
 import 'package:flutter_base/models/entities/season/step_season.dart';
@@ -17,16 +13,13 @@ import 'package:flutter_base/models/entities/task/work.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
-import 'package:flutter_base/ui/pages/process_management/process_season/process_season_page.dart';
 import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/season_detail_cubit.dart';
 import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/widgets/detail_fee_tab.dart';
-import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/widgets/detail_fee_widget.dart';
 import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/widgets/modal_show_stage_season.dart';
 import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/widgets/modal_show_step_season.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_circular_progress_indicator.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_confirmed_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
@@ -178,14 +171,6 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                     style: AppTextStyle.greyS16,
                                   ),
                                   SizedBox(height: 5),
-                                  Text(
-                                    'Doanh thu: ${state.season?.turnover?.toString() ?? "0"}',
-                                    style: AppTextStyle.greyS16,
-                                  ),
-                                  Text(
-                                    'Chi phí: ${((state.fee ?? 0) + (state.feeWorker ?? 0) + (state.feeMaterial ?? 0)).toString()}',
-                                    style: AppTextStyle.greyS16,
-                                  ),
                                   Align(
                                       alignment: Alignment.topRight,
                                       child: AppButton(
@@ -194,12 +179,19 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                         height: 30,
                                         width: 110,
                                         onPressed: () async {
-                                          showPopUpDetailFee(
-                                              listWork: state.listWork,
-                                              listMaterial: state.listMaterial,
-                                              feeWorker: state.feeWorker,
-                                              fee: state.fee,
-                                              feeMaterial: state.feeMaterial);
+                                          Application.router!.navigateTo(
+                                            appNavigatorKey.currentContext!,
+                                            Routes.seasonDetailForTurnover,
+                                            routeSettings: RouteSettings(
+                                              arguments: widget.thisSeason,
+                                            ),
+                                          );
+                                          // showPopUpDetailFee(
+                                          //     listWork: state.listWork,
+                                          //     listMaterial: state.listMaterial,
+                                          //     feeWorker: state.feeWorker,
+                                          //     fee: state.fee,
+                                          //     feeMaterial: state.feeMaterial);
                                         },
                                       )),
                                 ],
@@ -375,6 +367,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                       validator: (value) {
                         if (Validator.validateNullOrEmpty(value!))
                           return "Chưa nhập doanh thu";
+                        return null;
                         // else
                         //   return null;
                       },
@@ -483,6 +476,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
             feeMaterial: feeMaterial,
             fee: fee,
             feeWorker: feeWorker,
+            index: 0,
           );
         });
   }

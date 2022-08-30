@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/global/global_data.dart';
@@ -10,14 +9,12 @@ import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
-import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/entities/weather/weather_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
-import 'package:flutter_base/repositories/contract_task_responsitory.dart';
 import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
 import 'package:flutter_base/repositories/material_repository.dart';
@@ -29,7 +26,6 @@ import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';
 import 'package:flutter_base/repositories/weather_repository.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
-import 'package:intl/intl.dart';
 
 part 'app_state.dart';
 
@@ -67,12 +63,11 @@ class AppCubit extends Cubit<AppState> {
 
   void getData() async {
     // await LoadJsonHelper.shared.load();
-    fetchListGarden();
-    fetchListProcess();
-    fetchListTree();
-    fetchListTask();
-    fetchListManager();
-    // getListFarmerByManager();
+    // fetchListGarden();
+    // fetchListProcess();
+    // fetchListTree();
+    // fetchListTask();
+    // fetchListManager();
     getWeather();
   }
 

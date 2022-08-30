@@ -1,7 +1,4 @@
-import 'dart:developer';
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
@@ -9,8 +6,6 @@ import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/router/application.dart';
-import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_cubit.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/modal_add_material_widget.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/modal_modify_material_widget.dart';
@@ -19,8 +14,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
-import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker.dart';
-import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -107,7 +100,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
                 child: Padding(
               padding: EdgeInsets.only(top: 20, left: 20, right: 20),
               child: Scrollbar(
-                isAlwaysShown: true,
+                // thumbVisibility: true,
                 child: SingleChildScrollView(
                   physics: ClampingScrollPhysics(),
                   child: Column(
@@ -352,7 +345,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
     return Row(
       children: [
         Flexible(child: Text(
-          "${title!} ${information}", style: AppTextStyle.blackS16, overflow: TextOverflow.ellipsis, maxLines: 1,))
+          "${title!} $information", style: AppTextStyle.blackS16, overflow: TextOverflow.ellipsis, maxLines: 1,))
       ],
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
-import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'create_contract_task_params.g.dart';
 @JsonSerializable()

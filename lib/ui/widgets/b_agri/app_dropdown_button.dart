@@ -9,8 +9,6 @@ import 'package:flutter_base/models/entities/role/role_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_create/garden_create_cubit.dart';
-import 'package:flutter_base/ui/pages/garden_management/garden_list/garden_list_cubit.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppDropDownButton extends StatelessWidget {
@@ -490,9 +488,7 @@ class _AppManagerPickerState extends State<AppManagerPicker> {
 
   @override
   Widget build(BuildContext context) {
-    if (_managerList != null) {
-      value = _managerList.first;
-    }
+    value = _managerList.first;
     return Stack(
       children: [
         Container(

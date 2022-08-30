@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_base/main.dart';
 import 'package:flutter_base/models/entities/garden/garden_detail.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 
-import 'package:flutter_base/models/enums/load_status.dart';
 
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
@@ -292,7 +290,7 @@ class _GardenListState extends State<GardenListPage> {
                       ),
                       SizedBox(height: 5,),
                       Text(
-                        "Diện tích: ${area} ${areaUnit}",
+                        "Diện tích: $area $areaUnit",
                         style: AppTextStyle.greyS16,
                         overflow: TextOverflow.ellipsis,
                       )

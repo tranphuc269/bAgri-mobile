@@ -1,11 +1,8 @@
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/generated/l10n.dart';
-import 'package:flutter_base/models/entities/garden/garden_detail.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
@@ -13,7 +10,6 @@ import 'package:flutter_base/repositories/zone_repository.dart';
 import 'package:flutter_base/ui/pages/auth/login/login_cubit.dart';
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 
-import 'package:flutter_base/utils/logger.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'garden_list_state.dart';

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
-import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/seasons_management/add_season/season_adding_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
@@ -11,7 +9,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/garden_picker/app_garden_picker.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/process_picker/app_process_picker.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/tree_picker/app_single_tree_picker.dart';
-import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SeasonAddingPage extends StatefulWidget {
@@ -72,6 +69,9 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
     return Scaffold(
       appBar: AppBarWidget(
         context: context,
+        onBackPressed: (){
+          Navigator.of(context).pop();
+        },
         title: 'Thêm mùa vụ',
       ),
       body: SafeArea(

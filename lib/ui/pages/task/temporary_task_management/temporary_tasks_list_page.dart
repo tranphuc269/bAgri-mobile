@@ -63,7 +63,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(child: _buildBody()),
-        floatingActionButton: (GlobalData.instance.role != 'ACCOUNTANT')
+        floatingActionButton: (GlobalData.instance.role != 'ACCOUNTANT' && widget.seasonEntity.end_date == null)
             ? FloatingActionButton(
                 heroTag: 'btnadd',
                 backgroundColor: AppColors.main,
@@ -133,6 +133,7 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                             routeSettings: RouteSettings(
                               arguments: TemporaryTaskDetailArgument(
                                 temporaryTask: temporaryTask,
+                                seasonEntity: widget.seasonEntity
                               )
                             ),
                           );

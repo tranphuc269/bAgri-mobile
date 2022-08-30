@@ -1,6 +1,4 @@
-import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/season/stage_season.dart';
-import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'process_season.g.dart';

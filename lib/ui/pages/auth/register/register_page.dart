@@ -1,18 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/generated/l10n.dart';
-import 'package:flutter_base/models/entities/role/role_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 
-import 'package:flutter_base/ui/components/app_button.dart';
 import 'package:flutter_base/ui/pages/auth/register/registry_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 
-import 'package:flutter_base/ui/widgets/b_agri/app_dropdown_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/utils/validators.dart';
@@ -97,7 +93,7 @@ class _RegistryPageState extends State<RegistryPage> {
   Widget _buildInput() {
     return Expanded(
       child: Scrollbar(
-        isAlwaysShown: true,
+        // thumbVisibility: true,
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
           child: Form(
@@ -140,7 +136,7 @@ class _RegistryPageState extends State<RegistryPage> {
           _showCreateSuccess();
         }
         if (state.RegisterStatus == LoadStatus.FAILURE) {
-          showSnackBar('${state.messageError}');
+          showSnackBar('${_cubit!.state.messageError}');
         }
       },
       builder: (context, state) {

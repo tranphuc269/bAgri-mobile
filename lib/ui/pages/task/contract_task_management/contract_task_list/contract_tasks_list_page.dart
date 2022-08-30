@@ -9,10 +9,8 @@ import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/contract_task_responsitory.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
-import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_add/contract_task_add_page.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_page.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_list/contract_tasks_list_cubit.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
@@ -20,7 +18,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:intl/intl.dart';
 
 class TabListContractTask extends StatelessWidget {
@@ -70,7 +67,7 @@ class _ContractTaskListState extends State<ContractTaskListPage>
   Widget build(BuildContext context) {
     return Scaffold(
         body: _buildBody(),
-        floatingActionButton: (GlobalData.instance.role != 'ACCOUNTANT')
+        floatingActionButton: (GlobalData.instance.role != 'ACCOUNTANT' && widget.seasonEntity.end_date == null)
             ? FloatingActionButton(
                 backgroundColor: AppColors.main,
                 onPressed: () async {

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_base/repositories/notification_repository.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_detail/notification_detail_cubit.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_detail/notification_detail_page.dart';
-import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

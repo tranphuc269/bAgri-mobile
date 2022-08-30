@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
 import 'package:flutter_base/commons/app_colors.dart';
@@ -8,8 +7,6 @@ import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/main.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 
-import 'package:flutter_base/models/entities/garden/season_entity.dart';
-import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 
 import 'package:flutter_base/router/application.dart';
@@ -45,7 +42,7 @@ class _GardenListByQVLState extends State<GardenListByQVLPage> {
     _appCubit = BlocProvider.of<AppCubit>(context);
     _notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
 
-    _appCubit!.getData();
+   // _appCubit!.getData();
     _cubit!.fetchGardensByManagerId();
     _notificationCubit.getListNotification();
     _scrollController.addListener(_onScroll);

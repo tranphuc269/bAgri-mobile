@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 // part 'stage_entity.g.dart';
 

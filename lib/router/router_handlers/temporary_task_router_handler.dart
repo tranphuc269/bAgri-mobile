@@ -1,6 +1,5 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_add/temporary_task_add_cubit.dart';
@@ -70,6 +69,7 @@ Handler temporaryTaskDetailHandler = new Handler(
     },
     child: TemporaryTaskDetailPage(
       temporaryTask: args.temporaryTask,
+      seasonEntity: args.seasonEntity,
     ),
   );
 });

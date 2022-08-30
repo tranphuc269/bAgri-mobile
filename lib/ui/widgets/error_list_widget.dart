@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/generated/l10n.dart';
 
 class ErrorListWidget extends StatelessWidget {

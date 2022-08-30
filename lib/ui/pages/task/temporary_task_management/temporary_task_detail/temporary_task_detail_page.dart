@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/router/application.dart';
@@ -18,9 +18,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../main.dart';
 
 class TemporaryTaskDetailPage extends StatefulWidget {
+  SeasonEntity? seasonEntity;
   TemporaryTask? temporaryTask;
 
-  TemporaryTaskDetailPage({Key? key, this.temporaryTask}) : super(key: key);
+  TemporaryTaskDetailPage({Key? key, this.temporaryTask, this.seasonEntity}) : super(key: key);
 
   @override
   _TemporaryTaskDetailPageState createState() {
@@ -184,51 +185,54 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
   }
 
   Widget _buildActionUpdate() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          child: AppButton(
-            color: AppColors.redButton,
-            title: 'Quay lại',
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-        SizedBox(width: 5),
-        if (GlobalData.instance.role != 'ACCOUNTANT')
+    return Container(
+      padding: (GlobalData.instance.role != 'ACCOUNTANT' && widget.seasonEntity!.end_date == null) ? EdgeInsets.symmetric(horizontal: 30) :EdgeInsets.symmetric(horizontal: 50) ,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
           Expanded(
             child: AppButton(
-              width: 100,
-              color: AppColors.main,
-              title: (GlobalData.instance.role == "ADMIN" ||
-                      GlobalData.instance.role == "SUPER_ADMIN")
-                  ? 'Cập nhật mô tả công việc'
-                  : 'Chỉnh sửa công việc',
-              onPressed: () async {
-                if (GlobalData.instance.role == "ADMIN" ||
-                    GlobalData.instance.role == "SUPER_ADMIN") {
-                  cubit?.changeDescription(descriptionController.text);
-                  cubit?.updateTemporaryDetail();
-                  Navigator.pop(context);
-                } else {
-                  bool isUpdate = await Application.router!.navigateTo(
-                    appNavigatorKey.currentContext!,
-                    Routes.updateTemporaryTask,
-                    routeSettings: RouteSettings(
-                        arguments: TemporaryTaskUpdateArgument(
-                            temporaryTask: widget.temporaryTask)),
-                  );
-                  print(isUpdate);
-                  if (isUpdate) {
-                    await _refreshData();
-                  }
-                }
+              color: AppColors.redButton,
+              title: 'Quay lại',
+              onPressed: () {
+                Navigator.of(context).pop();
               },
             ),
           ),
-      ],
+          (GlobalData.instance.role != 'ACCOUNTANT' && widget.seasonEntity!.end_date == null) ? SizedBox(width: 20)  : Container(),
+          if (GlobalData.instance.role != 'ACCOUNTANT' && widget.seasonEntity!.end_date == null )
+            Expanded(
+              child: AppButton(
+                width: 100,
+                color: AppColors.main,
+                title: (GlobalData.instance.role == "ADMIN" ||
+                        GlobalData.instance.role == "SUPER_ADMIN")
+                    ? 'Cập nhật mô tả công việc'
+                    : 'Chỉnh sửa công việc',
+                onPressed: () async {
+                  if (GlobalData.instance.role == "ADMIN" ||
+                      GlobalData.instance.role == "SUPER_ADMIN") {
+                    cubit?.changeDescription(descriptionController.text);
+                    cubit?.updateTemporaryDetail();
+                    Navigator.pop(context);
+                  } else {
+                    bool isUpdate = await Application.router!.navigateTo(
+                      appNavigatorKey.currentContext!,
+                      Routes.updateTemporaryTask,
+                      routeSettings: RouteSettings(
+                          arguments: TemporaryTaskUpdateArgument(
+                              temporaryTask: widget.temporaryTask)),
+                    );
+                    print(isUpdate);
+                    if (isUpdate) {
+                      await _refreshData();
+                    }
+                  }
+                },
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -239,8 +243,11 @@ class _TemporaryTaskDetailPageState extends State<TemporaryTaskDetailPage> {
 
 class TemporaryTaskDetailArgument {
   TemporaryTask? temporaryTask;
+  SeasonEntity? seasonEntity;
+
 
   TemporaryTaskDetailArgument({
     this.temporaryTask,
+    this.seasonEntity,
   });
 }

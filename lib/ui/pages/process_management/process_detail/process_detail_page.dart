@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
-import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/main.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/process_management/process_detail/process_detail_cubit.dart';
 import 'package:flutter_base/ui/pages/process_management/update_process/update_process_page.dart';
-import 'package:flutter_base/ui/pages/process_management/widget/modal_add_stage_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -35,7 +34,7 @@ class _SplashPageState extends State<SplashPage> {
     );
     super.initState();
     Utils.determinePosition();
-
+    final stopwatch = Stopwatch()..start();
     _navigationSubscription = _cubit.navigatorController.stream.listen((event) {
       Future.delayed(const Duration(seconds: 2), () {
         switch (event) {
@@ -56,8 +55,11 @@ class _SplashPageState extends State<SplashPage> {
             break;
         }
       });
+      final stopwatch = Stopwatch()..start();
     });
+
     _setup();
+
   }
 
   void _setup() async {

@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:collection/collection.dart' show IterableExtension;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_images.dart';
 
@@ -12,7 +10,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:tiengviet/tiengviet.dart';
 
 class DialogUtils {
   static Future<FileInfo?> pickFile(BuildContext context,

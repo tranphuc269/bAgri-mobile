@@ -1,12 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_base/blocs/app_cubit.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/role/role_entity.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
-import 'package:flutter_base/models/response/object_response.dart';
 
 import 'package:flutter_base/repositories/auth_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';

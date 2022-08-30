@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
-import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
-import 'package:flutter_base/models/entities/task/temporary_task.dart';
-import 'package:flutter_base/models/entities/task/work.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 class DetailFeeWidget extends StatelessWidget {
   // final List<DailyTask>? listDailyTask;
@@ -16,6 +12,7 @@ class DetailFeeWidget extends StatelessWidget {
   // final int? fee;
   // final int? feeWorker;
   final int? feeMaterial;
+  final formatCurrency = new NumberFormat.currency(locale: 'vi');
 
   DetailFeeWidget(
       {/*this.listDailyTask,*/
@@ -32,7 +29,8 @@ class DetailFeeWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(child: Text("Tổng chi phí vật tư: ${feeMaterial.toString()}"),
+
+            Container(child: Text("Tổng chi phí vật tư: ${formatCurrency.format((feeMaterial ?? 0))}"),
               padding: EdgeInsets.all(10),
             ),
             Divider(),
@@ -98,7 +96,7 @@ class DetailFeeWidget extends StatelessWidget {
                     ),
                     Container(
                       // width: MediaQuery.of(context).size.width * 0.2,
-                      child: Text("Số lượng: ${quantity.toString()} Đơn vị: ${unit}",
+                      child: Text("Số lượng: ${quantity.toString()} Đơn vị: $unit",
                           overflow: TextOverflow.ellipsis),
                     ),
                   ],

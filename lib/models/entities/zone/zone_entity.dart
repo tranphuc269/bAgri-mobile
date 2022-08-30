@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:json_annotation/json_annotation.dart';
 

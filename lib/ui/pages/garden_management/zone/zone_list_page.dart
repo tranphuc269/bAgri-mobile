@@ -150,31 +150,21 @@ class _GardenListState extends State<ZoneListPage> {
                                               return null;
                                           },
                                           onConfirm: (() async => {
-                                                if (_formKey.currentState!
-                                                    .validate())
+                                                if (_formKey.currentState!.validate())
                                                   {
-                                                    await _cubit!.modifyZone(
-                                                        zone.zone_id,
-                                                        _nameModifyController
-                                                            .text),
-                                                    if (state
-                                                            .modifyZoneStatus ==
-                                                        LoadStatus.SUCCESS)
-                                                      {
-                                                        Navigator.pop(
-                                                            context, true),
-                                                        // _nameZoneController.clear(),
+                                                    await _cubit!.modifyZone(zone.zone_id,_nameModifyController.text),
+                                                    if (_cubit!.state.modifyZoneStatus == LoadStatus.SUCCESS){
+                                                        Navigator.pop(context, true),
+                                                        _nameModifyController.clear(),
                                                       }
-                                                    else
-                                                      {
-                                                        Navigator.pop(
-                                                            context, false),
+                                                    else {
+                                                      _nameModifyController.clear(),
+                                                        Navigator.pop(context, false),
                                                       }
                                                   }
                                               }),
                                         ));
-                                if (state.modifyZoneStatus ==
-                                    LoadStatus.SUCCESS) {
+                                if (_cubit!.state.modifyZoneStatus == LoadStatus.SUCCESS) {
                                   _onRefreshData();
                                   showSnackBar(
                                       'Thay đổi tên thành công!', "success");
@@ -212,12 +202,6 @@ class _GardenListState extends State<ZoneListPage> {
                       spanText: "Tên khu",
                       textEditingController: _nameZoneController,
                     ));
-            if (isAddSuccess) {
-              _onRefreshData();
-              showSnackBar("Thêm khu thành công", "success");
-            } else {
-              showSnackBar("Tên khu đã tồn tại", "error");
-            }
           },
           backgroundColor: AppColors.main,
           child: Icon(
@@ -336,64 +320,241 @@ class _GardenListState extends State<ZoneListPage> {
     String? zoneName,
   }) {
     return StatefulBuilder(builder: (context, setState) {
-      return AlertDialog(
-        title: title,
-        content: Container(
-            height: MediaQuery.of(context).size.height / 4,
-            width: MediaQuery.of(context).size.width,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.symmetric(horizontal: 28),
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: spanText,
-                      style: AppTextStyle.blackS14,
-                    ),
-                  ]),
+      return Center(
+        child: Container(
+            padding: EdgeInsets.all(7),
+            constraints: BoxConstraints(
+              maxHeight: double.infinity,
+            ),
+            child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children:<Widget> [
+                    Form(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            height: 60,
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(
+                                child: Text("Thay đổi tên khu",
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20,
+                                        fontStyle: FontStyle.italic,
+                                        fontFamily: "Helvetica"))),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.zero,
+                            child: Container(
+                              child: SingleChildScrollView(
+                                physics: ClampingScrollPhysics(),
+                                child: Container(
+                                  child: Form(
+                                      key: _formKey,
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            _buildTextLabel("Tên khu:"),
+                                            Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 28, vertical: 12),
+                                              child: AppTextField(
+                                                labelText: 'Tên khu',
+                                                autoValidateMode:
+                                                AutovalidateMode
+                                                    .onUserInteraction,
+                                                hintText:
+                                                'Tên khu' /*hintText.toString()*/,
+                                                controller: textEditingController,
+                                                validator: (value) {
+                                                  if (Validator
+                                                      .validateNullOrEmpty(
+                                                      value!))
+                                                    return "Chưa nhập tên khu";
+                                                  else
+                                                    return null;
+                                                },
+                                              ),
+                                            ),
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(
+                                                        horizontal: 20, vertical: 20),
+                                                    child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                        children: [
+                                                          AppButton(
+                                                              height: 40,
+                                                              color: AppColors.redButton,
+                                                              onPressed: (() =>
+                                                                  {Navigator.of(context).pop()}),
+                                                              child: Text("Hủy",
+                                                                  style: TextStyle(
+                                                                      color: Colors.white, fontSize: 14))),
+                                                          AppButton(
+                                                              height: 40,
+                                                              color: AppColors.main,
+                                                              onPressed: onConfirm,
+                                                              child: Text(
+                                                                "Xác nhận",
+                                                                style: TextStyle(
+                                                                    color: Colors.white, fontSize: 14),
+                                                              ))
+                                                        ]),
+                                                  )
+                                          ])),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              Container(
-                  // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: AppTextField(
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                      hintText: hintText.toString(),
-                      controller: textEditingController,
-                      validator: validator,
-                    ),
-                  )),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                AppButton(
-                    height: 40,
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(16),
-                    // ),
-                    color: AppColors.redButton,
-                    onPressed: (() => {Navigator.of(context).pop()}),
-                    child: Text("Hủy",
-                        style: TextStyle(color: Colors.white, fontSize: 14))),
-                AppButton(
-                    height: 40,
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(16),
-                    // ),
-                    color: AppColors.main,
-                    onPressed: onConfirm,
-                    child: Text(
-                      "Thêm",
-                      style: TextStyle(color: Colors.white, fontSize: 14),
-                    ))
-              ])
-            ])),
+            )),
       );
     });
+  }
+
+  void showCreateDialog() {
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (BuildContext buildContext, Animation animation,
+            Animation secondaryAnimation) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Center(
+              child: Container(
+                padding: EdgeInsets.all(7),
+                constraints: BoxConstraints(
+                  maxHeight: double.infinity,
+                ),
+                // height: 480,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: <Widget>[
+                      Form(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                              height: 60,
+                              width: MediaQuery.of(context).size.width,
+                              child: Center(
+                                  child: Text("Thêm khu mới",
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20,
+                                          fontStyle: FontStyle.italic,
+                                          fontFamily: "Helvetica"))),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.zero,
+                              child: Container(
+                                  child: SingleChildScrollView(
+                                physics: ClampingScrollPhysics(),
+                                child: Container(
+                                  child: Form(
+                                      key: _formKey,
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            _buildTextLabel("Tên khu:"),
+                                            Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 28, vertical: 12),
+                                              child: AppTextField(
+                                                labelText: 'Tên khu',
+                                                autoValidateMode:
+                                                    AutovalidateMode
+                                                        .onUserInteraction,
+                                                hintText:
+                                                    'Tên khu' /*hintText.toString()*/,
+                                                controller: _nameZoneController,
+                                                validator: (value) {
+                                                  if (Validator
+                                                      .validateNullOrEmpty(
+                                                          value!))
+                                                    return "Chưa nhập tên khu";
+                                                  // else if (value == zoneName) {
+                                                  //   return "Tên đã bị trùng!";
+                                                  // }
+                                                  else
+                                                    return null;
+                                                },
+                                              ),
+                                            )
+                                          ])),
+                                ),
+                              )),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    child: AppButton(
+                                      color: AppColors.redButton,
+                                      title: 'Hủy bỏ',
+                                      width: 80,
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(width: 20),
+                                  Expanded(
+                                    child: _buildConfirmCreateButton(
+                                        _nameZoneController),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  Widget _buildTextLabel(String text) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.symmetric(horizontal: 28),
+      child: RichText(
+        text: TextSpan(children: [
+          TextSpan(
+            text: text,
+            style: AppTextStyle.blackS14,
+          ),
+        ]),
+      ),
+    );
   }
 
   Widget _dialogCreate({
@@ -404,81 +565,110 @@ class _GardenListState extends State<ZoneListPage> {
     String? zoneName,
   }) {
     return StatefulBuilder(builder: (context, state) {
-      return AlertDialog(
-        title: title,
-        content: Container(
-            height: MediaQuery.of(context).size.height / 4,
-            width: MediaQuery.of(context).size.width,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              // Container(
-              //   alignment: Alignment.centerLeft,
-              //   // margin: EdgeInsets.symmetric(horizontal: 28),
-              //   child: RichText(
-              //     text: TextSpan(children: [
-              //       TextSpan(
-              //         text: spanText,
-              //         style: AppTextStyle.blackS14,
-              //       ),
-              //     ]),
-              //   ),
-              // ),
-              // SizedBox(height: 15,),
-              Container(
-                  // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: AppTextField(
-                      labelText: 'Tên khu',
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                      hintText: 'Tên khu' /*hintText.toString()*/,
-                      controller: textEditingController,
-                      validator: (value) {
-                        if (Validator.validateNullOrEmpty(value!))
-                          return "Chưa nhập tên khu";
-                        else if (value == zoneName) {
-                          return "Tên đã bị trùng!";
-                        } else
-                          return null;
-                      },
-                    ),
-                  )),
-              SizedBox(
-                height: 15,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                // FlatButton(
-                //     height: 40,
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(16),
-                //     ),
-                //     color: AppColors.redButton,
-                //     onPressed: (() => {Navigator.of(context).pop()}),
-                //     child: Text("Hủy",
-                //         style: TextStyle(color: Colors.white, fontSize: 14))),
-                Expanded(
-                  child: AppButton(
-                    color: AppColors.redButton,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    title: 'Hủy',
+      return Center(
+        child: Container(
+          padding: EdgeInsets.all(7),
+          constraints: BoxConstraints(
+            maxHeight: double.infinity,
+          ),
+          child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                Form(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        height: 60,
+                        width: MediaQuery.of(context).size.width,
+                        child: Center(
+                            child: Text("Thêm khu mới",
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 20,
+                                    fontStyle: FontStyle.italic,
+                                    fontFamily: "Helvetica"))),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.zero,
+                        child: Container(
+                            child: SingleChildScrollView(
+                          physics: ClampingScrollPhysics(),
+                          child: Container(
+                            child: Form(
+                                key: _formKey,
+                                child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _buildTextLabel("Tên khu:"),
+                                      Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 28, vertical: 12),
+                                        child: AppTextField(
+                                          labelText: 'Tên khu',
+                                          autoValidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          hintText:
+                                              'Tên khu' /*hintText.toString()*/,
+                                          controller: _nameZoneController,
+                                          validator: (value) {
+                                            if (Validator.validateNullOrEmpty(
+                                                value!))
+                                              return "Chưa nhập tên khu";
+                                            // else if (value == zoneName) {
+                                            //   return "Tên đã bị trùng!";
+                                            // }
+                                            else
+                                              return null;
+                                          },
+                                        ),
+                                      )
+                                    ])),
+                          ),
+                        )),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: AppButton(
+                                color: AppColors.redButton,
+                                title: 'Hủy bỏ',
+                                width: 80,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Expanded(
+                              child: _buildConfirmCreateButton(
+                                  _nameZoneController),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                SizedBox(
-                  width: 20,
-                ),
-                Expanded(child: _buildConfirmCreateButton())
-              ])
-            ])),
+              ],
+            ),
+          ),
+        ),
       );
     });
   }
 
-  Widget _buildConfirmCreateButton() {
+  Widget _buildConfirmCreateButton(TextEditingController? editingController) {
     return BlocBuilder<ZoneListCubit, ZoneListState>(
       bloc: _cubit,
       buildWhen: (prev, current) {
@@ -487,29 +677,20 @@ class _GardenListState extends State<ZoneListPage> {
       builder: (context, state) {
         return AppButton(
           color: AppColors.main,
-          title: "Thêm",
+          title: "Xác nhận",
           textStyle: AppTextStyle.whiteS16Bold,
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               await _cubit!.createZone(_nameZoneController.text);
-              //         .then(
-              //             (value) => {
-              //               if(state.createZoneStatus == LoadStatus.FAILURE){
-              //                 showSnackBar("Tên khu đã tồn tại", "error"),
-              //                 Navigator.pop(context),
-              //               } else {
-              //                 Navigator.pop(context),
-              //                 showSnackBar("Thêm khu thành công", "success"),
-              //                 _onRefreshData(),
-              //   }
-              // });
-              if (state.createZoneStatus == LoadStatus.FAILURE) {
-                //showSnackBar("Tên khu đã tồn tại", "error");
+              print(state.createZoneStatus);
+              if (_cubit!.state.createZoneStatus == LoadStatus.FAILURE) {
+                showSnackBar("Tên khu đã tồn tại", "error");
                 Navigator.pop(context, false);
               } else {
                 Navigator.pop(context, true);
-                //showSnackBar("Thêm khu thành công", "success");
-                // _onRefreshData();
+                showSnackBar("Thêm khu thành công", "success");
+                _onRefreshData();
+                editingController!.clear();
               }
             }
           },

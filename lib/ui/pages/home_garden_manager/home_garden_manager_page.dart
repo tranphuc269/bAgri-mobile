@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -8,13 +6,11 @@ import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
-import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
-import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/utils/dialog_utils.dart';
@@ -71,7 +67,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
     _cubit = BlocProvider.of<HomeGardenManagerCubit>(context);
     _appCubit = BlocProvider.of<AppCubit>(context);
     _appCubit!.getData();
-    _selectedDay = _focusedDay;
+      _selectedDay = _focusedDay;
     _cubit!.fetchStepOfDay(_selectedDay);
 
     _fabAnimationController = AnimationController(
@@ -442,21 +438,21 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
             //   Routes.tabTask);
           },
           title: Text(
-            "Vườn: ${gardenName}",
+            "Vườn: $gardenName",
             style: AppTextStyle.blackS16Bold,
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Số lượng cây: ${treeQuantity} cây",
+                "Số lượng cây: $treeQuantity cây",
                 style: AppTextStyle.greyS14,
               ),
               Text(
-                "Mùa vụ: ${season}",
+                "Mùa vụ: $season",
                 style: AppTextStyle.greyS14,
               ),
-              Text("Bước: ${step}")
+              Text("Bước: $step")
             ],
           ),
         ));

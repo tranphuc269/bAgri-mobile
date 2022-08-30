@@ -9,7 +9,6 @@ import 'package:flutter_base/blocs/navigation/navigation_cubit.dart';
 
 import 'package:flutter_base/commons/app_themes.dart';
 import 'package:flutter_base/configs/app_config.dart';
-import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/network/api_weather.dart';
 
 import 'package:flutter_base/repositories/auth_repository.dart';
@@ -30,10 +29,9 @@ import 'package:flutter_base/repositories/weather_repository.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
 
 import 'package:flutter_base/router/navigation_observer.dart';
+import 'package:flutter_base/ui/pages/home_insect_manager/home_insect_manager_page.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
-import 'package:flutter_base/ui/pages/qr_manager/qr_generator/qr_show_page.dart';
-import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_detail/contract_task_detail_page.dart';
-import 'package:flutter_base/ui/widgets/b_agri/page_picker/material_picker/app_material_picker_page.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -268,7 +266,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
-       // home: QRShowPage(),
+       // home: HomeInsectManagerPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

@@ -3,26 +3,19 @@ import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/global/global_data.dart';
-import 'package:flutter_base/models/entities/process/stage_entity.dart';
-import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/stage_season.dart';
 import 'package:flutter_base/models/entities/season/step_season.dart';
-import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/process_management/process_season/process_season_cubit.dart';
 import 'package:flutter_base/ui/pages/process_management/widget/modal_add_stage_season_widget.dart';
-import 'package:flutter_base/ui/pages/process_management/widget/modal_add_stage_widget.dart';
 import 'package:flutter_base/ui/pages/process_management/widget/modal_add_step_season_widget.dart';
-import 'package:flutter_base/ui/pages/process_management/widget/modal_add_step_widget.dart';
 import 'package:flutter_base/ui/pages/process_management/widget/modal_edit_phase_season_widget.dart';
 import 'package:flutter_base/ui/pages/process_management/widget/modal_edit_step_season_widget.dart';
-import 'package:flutter_base/ui/pages/process_management/widget/modal_edit_step_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/multiple_tree_picker/app_tree_picker.dart';
-import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -512,15 +505,15 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                         builder: (context) =>
                                             ModalAddStepSeasonWidget(
                                           phase: widget.phase ?? "",
-                                          onPressed: (name, from_day, to_day,
+                                          onPressed: (name, fromDay, toDay,
                                               startTime, description) async {
                                             StepSeason step = StepSeason(
                                                 name: name,
                                                 description: description,
                                                 start: startTime,
                                                 from_day:
-                                                    int.tryParse(from_day),
-                                                to_day: int.tryParse(to_day));
+                                                    int.tryParse(fromDay),
+                                                to_day: int.tryParse(toDay));
 
                                             await widget.cubitProcess.createStep(
                                                 widget.index!, step);
@@ -612,12 +605,12 @@ class _StepWidgetState extends State<StepWidget> {
             to_day: widget.step!.to_day,
             end: widget.step!.end,
             start: widget.step!.start!,
-            onPressed: (name, description, startTime, from_day, to_day) async{
+            onPressed: (name, description, startTime, fromDay, toDay) async{
               StepSeason step = StepSeason(
                   step_id: widget.step!.step_id,
                   name: name,
-                  from_day: int.parse(from_day),
-                  to_day: int.parse(to_day),
+                  from_day: int.parse(fromDay),
+                  to_day: int.parse(toDay),
                   start: startTime,
                   description: description);
               //

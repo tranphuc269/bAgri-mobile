@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -14,6 +13,7 @@ import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../main.dart';
 
@@ -37,6 +37,7 @@ class _MaterialListPageState extends State<MaterialListPage> {
   StorageManagementCubit? _cubit;
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
+  final formatCurrency = new NumberFormat.currency(locale: 'vi');
 
   @override
   void initState() {
@@ -272,7 +273,7 @@ class _MaterialListPageState extends State<MaterialListPage> {
                     Container(
                       // width: MediaQuery.of(context).size.width * 0.2,
                       child:
-                          Text("Số lượng: ${quantity.toString()} $unit  Đơn giá: ${unitPrice.toString()} VND", overflow: TextOverflow.ellipsis),
+                          Text("Số lượng: ${quantity.toString()} $unit  Đơn giá: ${formatCurrency.format(unitPrice)}", overflow: TextOverflow.ellipsis),
                     ),
                   ],
                 )),

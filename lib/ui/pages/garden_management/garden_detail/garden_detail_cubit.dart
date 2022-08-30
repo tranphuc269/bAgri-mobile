@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/entities/garden/garden_detail.dart';
-import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 
 import 'package:flutter_base/models/enums/load_status.dart';
 

@@ -1,10 +1,7 @@
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
@@ -12,10 +9,8 @@ import 'package:flutter_base/models/entities/zone/zone_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/models/params/zone/create_zone_params.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
-import 'package:flutter_base/ui/pages/auth/login/login_cubit.dart';
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 
-import 'package:flutter_base/utils/logger.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'zone_list_state.dart';
@@ -62,15 +57,16 @@ class ZoneListCubit extends Cubit<ZoneListState> {
         print(response);
         emit(state.copyWith(createZoneStatus: LoadStatus.SUCCESS));
       } else {
+        print("error");
         emit(state.copyWith(createZoneStatus: LoadStatus.FAILURE));
       }
     } catch (error) {
+      print("error2");
       if (error is DioError) {
         emit(state.copyWith(createZoneStatus: LoadStatus.FAILURE));
         print("stattus code: " + (error.response!.statusCode).toString());
-        if(error.response!.statusCode == 500){
+        if(error.response!.statusCode == 400){
           emit(state.copyWith(createZoneStatus: LoadStatus.FAILURE));
-          // print("Tên khu đã bị trùng");
           emit(state.copyWith(
                         messageError: "Tên khu vực đã được sử dụng!",
                         createZoneStatus: LoadStatus.FAILURE
@@ -79,10 +75,6 @@ class ZoneListCubit extends Cubit<ZoneListState> {
           }
 
         }
-        // logger.e(error.response!.data['error']['message']);
-        // emit(state.copyWith(
-        //     messageError: error.response!.data['error']['message'],
-        //     RegisterStatus: LoadStatus.FAILURE));
       }
       return;
     }

@@ -16,22 +16,15 @@ import 'package:flutter_base/models/entities/notification/notification.dart';
 import 'package:flutter_base/models/entities/notification/notification_detail.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/process_delete.dart';
-import 'package:flutter_base/models/entities/process/process_detail.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/qr_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
-import 'package:flutter_base/models/entities/season/season_steps_response.dart';
-import 'package:flutter_base/models/entities/season/season_task_detail_entity.dart';
-import 'package:flutter_base/models/entities/season/season_task_entity.dart';
-import 'package:flutter_base/models/entities/season/season_update_entity.dart';
-import 'package:flutter_base/models/entities/season/stage_season.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/entities/task/task.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/entities/token/login_model.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_delete_response.dart';
-import 'package:flutter_base/models/entities/tree/tree_detail_response.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/entities/zone/zone_entity.dart';
 import 'package:flutter_base/models/response/object_response.dart';
@@ -61,7 +54,7 @@ abstract class ApiClient {
   Future<dynamic> setRoleAccount(
       @Header('accept') String accept,
       @Header("Authorization") String auth,
-      @Header("Content-Type") String content_type,
+      @Header("Content-Type") String contentType,
       @Path("id") String? id,
       @Body() Map<String, dynamic> body);
 
@@ -69,7 +62,7 @@ abstract class ApiClient {
   Future<dynamic> changePassword(
       @Header("accept") String? accept,
       @Header("Authorization") String auth,
-      @Header("Content-Type") String content_type,
+      @Header("Content-Type") String contentType,
       @Body() Map<String, dynamic> body);
 
   /// reset-password
@@ -81,14 +74,14 @@ abstract class ApiClient {
   @POST("/accounts/reset-password/finish")
   Future<dynamic> AuthOtp(
       @Header("accept") String? accept,
-      @Header("Content-Type") String content_type,
+      @Header("Content-Type") String contentType,
       @Body() Map<String, dynamic> body);
 
   /// Zone
   @POST("/zones")
   Future<dynamic> createZone(
       @Header('accept') String accept,
-      @Header('Content-Type') String content_type,
+      @Header('Content-Type') String contentType,
       @Body() Map<String, dynamic> body);
 
   @GET("/zones")
@@ -98,7 +91,7 @@ abstract class ApiClient {
   @PUT("/zones/{zone_id}")
   Future<ZoneEntity> modifyZone(
       @Header('accept') String accept,
-      @Header('Content-Type') String content_type,
+      @Header('Content-Type') String contentType,
       @Path("zone_id") String? zoneId,
       @Body() Map<String, dynamic> body);
 
@@ -110,7 +103,7 @@ abstract class ApiClient {
   Future<List<GardenEntity>> getListGardenByZone(
       @Header('accept') String? accept,
       @Header("Authorization") String? auth,
-      @Path("zone_id") String? zone_id);
+      @Path("zone_id") String? zoneId);
 
   /// Garden
   @GET("/gardens")
@@ -124,7 +117,7 @@ abstract class ApiClient {
   Future<dynamic> createGarden(
       @Header("accept") String? accept,
       @Header("Authorization") String? auth,
-      @Header('Content-Type') String content_type,
+      @Header('Content-Type') String contentType,
       @Body() Map<String, dynamic> body);
 
   @GET("/gardens/{garden_id}")
@@ -137,7 +130,7 @@ abstract class ApiClient {
   Future<dynamic> updateGarden(
       @Header("accept") String? accept,
       @Header("Authorization") String? auth,
-      @Header("Content-Type") String? content_type,
+      @Header("Content-Type") String? contentType,
       @Path("garden_id") String? gardenId,
       @Body() Map<String, dynamic> body);
 
@@ -291,7 +284,7 @@ abstract class ApiClient {
   Future<dynamic> createContractWork(
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
-      @Header('Content-Type') String content_type,
+      @Header('Content-Type') String contentType,
       @Body() Map<String, dynamic> body);
 
   @GET("/contract-tasks")
@@ -314,7 +307,7 @@ abstract class ApiClient {
   Future<dynamic> modifyContractWork(
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
-      @Header('Content-Type') String content_type,
+      @Header('Content-Type') String contentType,
       @Path("work_id") String? workId,
       @Body() Map<String, dynamic> body);
 
@@ -323,7 +316,7 @@ abstract class ApiClient {
   Future<dynamic> createContractTask(
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
-      @Header('Content-Type') String content_type,
+      @Header('Content-Type') String contentType,
       @Body() Map<String, dynamic> body);
 
   @GET("/contract-tasks/{contract_task_id}")
@@ -343,14 +336,14 @@ abstract class ApiClient {
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
       @Path("contract_task_id") String? contractTaskId,
-      @Header('Content-Type')String content_type,
+      @Header('Content-Type')String contentType,
       @Body() Map<String, dynamic> body);
   @PATCH("/contract-tasks/{contract_task_id}/end")
   Future <dynamic> finishContractTask(
       @Header('accept') String accept,
       @Header("Authorization") String? auth,
       @Path("contract_task_id") String? contractTaskId,
-      @Header('Content-Type')String content_type,
+      @Header('Content-Type')String contentType,
       @Body() Map<String, dynamic> body);
 
   /// Upload File

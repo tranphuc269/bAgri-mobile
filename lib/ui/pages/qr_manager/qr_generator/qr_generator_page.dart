@@ -1,10 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/ui/components/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
@@ -33,7 +30,7 @@ class _QRGeneratorPageState extends State<QRGeneratorPage> {
   List<XFile> _imageList = [];
   var search = false;
 
-  PickedFile? imageFile = null;
+  PickedFile? imageFile;
 
   // Get from gallery
   void _openGallery(BuildContext context) async {
@@ -329,10 +326,10 @@ class _QRGeneratorPageState extends State<QRGeneratorPage> {
         children: [
           Flexible(
               fit: FlexFit.tight,
-              child: Text("${title}", style: AppTextStyle.greyS16)),
+              child: Text("$title", style: AppTextStyle.greyS16)),
           Flexible(
               fit: FlexFit.tight,
-              child: Text("${subtitle}", style: AppTextStyle.greyS16))
+              child: Text("$subtitle", style: AppTextStyle.greyS16))
         ],
       ),
       value: selectValue,
@@ -485,7 +482,7 @@ class _QRGeneratorPageState extends State<QRGeneratorPage> {
             print(title);
           },
           child: Text(
-            "${title}",
+            "$title",
             style: TextStyle(
               color: color,
             ),

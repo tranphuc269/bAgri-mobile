@@ -1,7 +1,6 @@
 
 
 import 'package:flutter_base/database/share_preferences_helper.dart';
-import 'package:flutter_base/models/entities/task/work.dart';
 import 'package:flutter_base/models/params/contractWork/create_contract_work_param.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
@@ -22,7 +21,7 @@ class ContractWorkRepositoryImpl extends ContractWorkRepositoy{
   }
   @override
   Future getListContractWorks() {
-   return _apiClientBagri!.getListContractWork("application/json","Bearer ${accessToken}");
+   return _apiClientBagri!.getListContractWork("application/json","Bearer $accessToken");
   }
 
   Future <void>createContractWork({CreateContractWorkParam? param}){
@@ -31,10 +30,10 @@ class ContractWorkRepositoryImpl extends ContractWorkRepositoy{
       "unit" : param?.unit ?? "",
       "unitPrice": param?.unitPrice ?? ""
     };
-    return _apiClientBagri!.createContractWork("application/json", "Bearer ${accessToken}", "application/json", body);
+    return _apiClientBagri!.createContractWork("application/json", "Bearer $accessToken", "application/json", body);
   }
   Future <void> deleteContractWork({String? workId})  {
-    return _apiClientBagri!.deleteContractWork("application/json", "Bearer ${accessToken}", workId);
+    return _apiClientBagri!.deleteContractWork("application/json", "Bearer $accessToken", workId);
   }
 
   Future <void> modifyContractWork({String? workId, CreateContractWorkParam? param}){
@@ -43,7 +42,7 @@ class ContractWorkRepositoryImpl extends ContractWorkRepositoy{
       "unit" : param?.unit ?? "",
       "unitPrice": param?.unitPrice ?? ""
     };
-    return _apiClientBagri!.modifyContractWork("application/json", "Bearer ${accessToken}", "application/json", workId, body);
+    return _apiClientBagri!.modifyContractWork("application/json", "Bearer $accessToken", "application/json", workId, body);
   }
 
 }

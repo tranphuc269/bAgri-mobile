@@ -1,9 +1,7 @@
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/models/params/task/finish_contract_task_param.dart';
 import 'package:flutter_base/repositories/contract_task_responsitory.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

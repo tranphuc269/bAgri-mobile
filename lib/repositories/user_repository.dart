@@ -1,6 +1,4 @@
-import 'package:flutter_base/models/entities/manager/manager_entity.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
-import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class UserRepository {

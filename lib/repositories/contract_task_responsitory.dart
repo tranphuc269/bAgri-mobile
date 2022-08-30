@@ -1,5 +1,4 @@
 import 'package:flutter_base/database/share_preferences_helper.dart';
-import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/params/task/create_contract_task_params.dart';
 import 'package:flutter_base/models/params/task/finish_contract_task_param.dart';
@@ -33,21 +32,21 @@ class ContractTaskRepositoryImpl extends ContractTaskRepository{
       },
       "quantity" :param?.quantity ?? ""
     };
-    return _apiClientBagri!.createContractTask("application/json", "Bearer ${accessToken}", "application/json", body);
+    return _apiClientBagri!.createContractTask("application/json", "Bearer $accessToken", "application/json", body);
   }
 
   Future <List<ContractTask>>getListContractTask() {
-    return _apiClientBagri!.getListContractTask("application/json", "Bearer ${accessToken}");
+    return _apiClientBagri!.getListContractTask("application/json", "Bearer $accessToken");
   }
   Future<List<ContractTask>> getListContractTaskBySeason({String? seasonId}){
-    return _apiClientBagri!.getListContractTaskBySeason("application/json", "Bearer ${accessToken}", seasonId);
+    return _apiClientBagri!.getListContractTaskBySeason("application/json", "Bearer $accessToken", seasonId);
 }
 
   Future <dynamic> deleteContractTask({String? contractTaskId}){
-    return _apiClientBagri!.deleteContractTask("application/json", "Bearer ${accessToken}", contractTaskId);
+    return _apiClientBagri!.deleteContractTask("application/json", "Bearer $accessToken", contractTaskId);
   }
   Future <ContractTask> getContractTaskDetail({String? contractTaskId}){
-    return _apiClientBagri!.getContractTaskDetail("application/json", "Bearer ${accessToken}", contractTaskId);
+    return _apiClientBagri!.getContractTaskDetail("application/json", "Bearer $accessToken", contractTaskId);
   }
 
   Future <dynamic> updateContractTask({CreateContractTaskParam? param, String? contractTaskId}){
@@ -61,7 +60,7 @@ class ContractTaskRepositoryImpl extends ContractTaskRepository{
       "description": param?.description ?? "",
       "quantity" :param?.quantity ?? ""
     };
-    return _apiClientBagri!.updateContractTask("application/json", "Bearer ${accessToken}", contractTaskId, "application/json", body);
+    return _apiClientBagri!.updateContractTask("application/json", "Bearer $accessToken", contractTaskId, "application/json", body);
   }
   Future <dynamic> finishContractTask({ FinishContractTaskParam? param,
     String? contractTaskId}){
@@ -69,6 +68,6 @@ class ContractTaskRepositoryImpl extends ContractTaskRepository{
       "materials": param?.materials ?? []
     };
 
-    return _apiClientBagri!.finishContractTask("application/json", "Bearer ${accessToken}", contractTaskId, "application/json", body);
+    return _apiClientBagri!.finishContractTask("application/json", "Bearer $accessToken", contractTaskId, "application/json", body);
   }
 }

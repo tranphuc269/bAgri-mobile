@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_shadow.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_circular_progress_indicator.dart';
 
 class AppButton extends StatelessWidget {
   Color color;

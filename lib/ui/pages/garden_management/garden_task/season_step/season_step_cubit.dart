@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
-import 'package:flutter_base/repositories/task_repository.dart';
 
 part 'season_step_state.dart';
 

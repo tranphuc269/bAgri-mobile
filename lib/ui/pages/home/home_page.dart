@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/blocs/app_cubit.dart';
 import 'package:flutter_base/commons/app_colors.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
-import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/auth_repository.dart';
 
 import 'package:flutter_base/router/application.dart';
@@ -123,7 +121,13 @@ class _HomePageState extends State<HomePage> {
                       color: Color(0xFF9FB4FF),
                       urlImage: AppImages.icStorage,
                       ridirectPage: redirectManageStorage,
-                    )
+                    ),
+                  CategoryItem(
+                    title: "Quản lý chi tiêu",
+                    color: Color(0xFF9A86A4),
+                    urlImage: AppImages.icTurnoverManagement,
+                    ridirectPage: redirectTurnOverManagement ,
+                  )
                 ],
               ),
             ),
@@ -249,6 +253,9 @@ class _HomePageState extends State<HomePage> {
   }
   void redirectTabTask(){
     Application.router?.navigateTo(context, Routes.seasonListTask);
+  }
+  void redirectTurnOverManagement() {
+    Application.router?.navigateTo(context, Routes.seasonListForTurnover);
   }
 }
 

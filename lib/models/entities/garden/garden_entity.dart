@@ -1,8 +1,4 @@
-import 'dart:async';
 
-import 'package:flutter_base/models/entities/garden/season_entity.dart';
-import 'package:flutter_base/models/entities/process/list_process.dart';
-import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/entities/zone/zone_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 

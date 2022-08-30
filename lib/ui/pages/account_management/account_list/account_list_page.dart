@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
@@ -13,8 +12,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_dropdown_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
-import 'package:flutter_base/utils/validators.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -170,7 +167,7 @@ class _AccountListState extends State<AccountListPage> {
                           height: 10,
                         ),
                         Text(
-                          'Số điện thoại: ${phoneNumber}',
+                          'Số điện thoại: $phoneNumber',
                           style: AppTextStyle.greyS14,
                           overflow: TextOverflow.ellipsis,
                         )

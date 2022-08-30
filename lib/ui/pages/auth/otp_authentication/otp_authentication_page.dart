@@ -1,5 +1,4 @@
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
@@ -17,7 +16,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 
 class OtpAuthenticationPage extends StatefulWidget {
   final String? email;

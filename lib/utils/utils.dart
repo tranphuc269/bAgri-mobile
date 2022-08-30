@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/commons/app_snackbar.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 
-import 'package:flutter_base/generated/l10n.dart';
-import 'package:flutter_base/utils/logger.dart';
-import 'package:flutter_base/utils/replacement_map.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart' as intl;
-import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
   static Size getTextSize(String text, TextStyle style) {

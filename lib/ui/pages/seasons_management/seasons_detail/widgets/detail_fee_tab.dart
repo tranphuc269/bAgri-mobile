@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/entities/task/work.dart';
-import 'package:flutter_base/ui/pages/process_management/process_listing/process_listing_page.dart';
 import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/widgets/detail_fee_widget.dart';
 import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/widgets/detail_work_widget.dart';
-import 'package:flutter_base/ui/pages/tree_management/tree_listing/tree_listing_page.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 
 class DetailFeeTabPage extends StatefulWidget {
@@ -15,6 +13,7 @@ class DetailFeeTabPage extends StatefulWidget {
   final int? fee;
   final int? feeWorker;
   final int? feeMaterial;
+  final int? index;
 
   DetailFeeTabPage(
       {this.listDailyTask,
@@ -22,7 +21,8 @@ class DetailFeeTabPage extends StatefulWidget {
         required this.fee,
         required this.feeWorker,
         required this.listWork,
-        required this.feeMaterial});
+        required this.feeMaterial,
+        required this.index});
   @override
   _DetailFeeTabPageState createState() => _DetailFeeTabPageState();
 }
@@ -34,7 +34,7 @@ class _DetailFeeTabPageState extends State<DetailFeeTabPage>
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 2, vsync: this);
+    _controller = TabController(length: 2, vsync: this, initialIndex: widget.index ?? 0);
     _controller.addListener(() {
       setState(() {});
     });

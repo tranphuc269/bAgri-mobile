@@ -27,7 +27,7 @@ class TemporaryTaskRepositoryImpl extends TemporaryTaskRepository {
 
   @override
   Future<List<TemporaryTask>> getListTemporaryTaskBySeason({String? seasonId}) {
-    return _apiClientBagri!.getListTemporaryTasksBySeason("application/json", "Bearer ${accessToken}", seasonId);
+    return _apiClientBagri!.getListTemporaryTasksBySeason("application/json", "Bearer $accessToken", seasonId);
   }
 
   @override

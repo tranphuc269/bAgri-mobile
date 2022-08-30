@@ -1,4 +1,3 @@
-import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'create_process_params.g.dart';

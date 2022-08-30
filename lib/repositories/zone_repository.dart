@@ -1,10 +1,6 @@
-import 'package:flutter_base/models/entities/garden/garden_delete.dart';
-import 'package:flutter_base/models/entities/garden/garden_detail.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/zone/zone_entity.dart';
-import 'package:flutter_base/models/params/garden/create_garden_params.dart';
 import 'package:flutter_base/models/params/zone/create_zone_params.dart';
-import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class ZoneRepository {

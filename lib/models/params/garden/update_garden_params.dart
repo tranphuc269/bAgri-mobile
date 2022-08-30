@@ -1,5 +1,3 @@
-import 'package:flutter_base/models/entities/zone/zone_entity.dart';
-import 'package:flutter_base/ui/pages/garden_management/zone/zone_list_cubit.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'update_garden_params.g.dart';
 

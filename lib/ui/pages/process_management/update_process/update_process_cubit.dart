@@ -1,14 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
-import 'package:flutter_base/models/entities/process/process_detail.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/models/params/process/create_process_params.dart';
-import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 import 'package:equatable/equatable.dart';

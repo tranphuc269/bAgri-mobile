@@ -1,8 +1,6 @@
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_delete_response.dart';
-import 'package:flutter_base/models/entities/tree/tree_detail_response.dart';
 import 'package:flutter_base/models/params/trees/create_tree_params.dart';
-import 'package:flutter_base/models/response/object_response.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class TreeRepository {

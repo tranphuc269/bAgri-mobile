@@ -58,8 +58,8 @@ class AddGardenTaskCubit extends Cubit<AddGardenTaskState> {
     emit(state.copyWith(endMinute: endMinute));
   }
 
-  void changeManager(String? manager_id) {
-    emit(state.copyWith(manager_id: manager_id));
+  void changeManager(String? managerId) {
+    emit(state.copyWith(manager_id: managerId));
   }
 
   void changeDescription(String description) {

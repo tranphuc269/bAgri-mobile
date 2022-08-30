@@ -1,21 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
-import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/ui/pages/task/contract_task_management/contract_task_add/contract_task_add_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
-import 'package:flutter_base/ui/widgets/b_agri/page_picker/garden_picker/app_garden_picker.dart';
-import 'package:flutter_base/ui/widgets/b_agri/page_picker/process_picker/app_process_picker.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/season_picker/app_season_picker.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/work_picker/app_work_picker.dart';
 import 'package:flutter_base/utils/validators.dart';
-import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class AddContractTaskPage extends StatefulWidget {
   final SeasonEntity? seasonEntity;
@@ -89,7 +83,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
   Widget _buildInput() {
     return Expanded(
       child: Scrollbar(
-        isAlwaysShown: true,
+        // thumbVisibility: true,
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
           child: Form(

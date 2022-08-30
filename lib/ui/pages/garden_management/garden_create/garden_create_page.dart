@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/blocs/app_cubit.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
@@ -304,7 +303,7 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
           _showCreateSuccess();
         }
         if (state.createGardenStatus == LoadStatus.FAILURE) {
-          showSnackBar('Có lỗi xảy ra!');
+          showSnackBar('Tên vườn đã bị trùng!',"error");
         }
       },
       builder: (context, state) {
@@ -349,14 +348,14 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
   }
 
   void _showCreateSuccess() async {
-    showSnackBar('Tạo mới vườn thành công!');
+    showSnackBar('Tạo mới vườn thành công!', "success");
     Navigator.of(context).pop(true);
   }
 
-  void showSnackBar(String message) {
+  void showSnackBar(String message, String typeMessage) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: "success",
+      typeSnackBar: typeMessage,
       message: message,
     ));
   }

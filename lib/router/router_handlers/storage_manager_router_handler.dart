@@ -1,6 +1,5 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/repositories/material_repository.dart';
 import 'package:flutter_base/ui/pages/storage_manager/add_material/add_material_cubit.dart';
 import 'package:flutter_base/ui/pages/storage_manager/add_material/add_material_page.dart';

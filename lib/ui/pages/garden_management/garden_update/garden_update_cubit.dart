@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/models/entities/garden/garden_detail.dart';
 import 'package:flutter_base/models/entities/user/user_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/models/params/garden/create_garden_params.dart';
 import 'package:flutter_base/models/params/garden/update_garden_params.dart';
 import 'package:flutter_base/repositories/garden_repository.dart';
 

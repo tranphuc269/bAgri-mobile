@@ -1,10 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
-import 'package:flutter_base/models/entities/garden_task/task_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/token/login_model.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
-import 'package:retrofit/dio.dart';
 
 abstract class AuthRepository {
   //
@@ -65,7 +62,7 @@ class AuthRepositoryImpl extends AuthRepository {
       "oldPassword": oldPass,
       "newPassword": newPass,
     };
-    return _apiClientBagri!.changePassword("*/*","Bearer ${accessToken}","application/json",param);
+    return _apiClientBagri!.changePassword("*/*","Bearer $accessToken","application/json",param);
   }
 
   @override
@@ -75,7 +72,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future getListAcounts()  async {
-    return _apiClientBagri!.getListAccounts("application/json", "Bearer ${accessToken}");
+    return _apiClientBagri!.getListAccounts("application/json", "Bearer $accessToken");
   }
 
   @override
@@ -83,10 +80,10 @@ class AuthRepositoryImpl extends AuthRepository {
     final param  = {
       "role": role
     };
-    return await _apiClientBagri!.setRoleAccount("application/json","Bearer ${accessToken}","application/json",id, param);
+    return await _apiClientBagri!.setRoleAccount("application/json","Bearer $accessToken","application/json",id, param);
   }
   Future <List<StepEntityResponseByDay>>getStepsByDay({String? day}) async {
-    return await _apiClientBagri!.getStepsByDay("application/json","Bearer ${accessToken}",day);
+    return await _apiClientBagri!.getStepsByDay("application/json","Bearer $accessToken",day);
   }
 
   @override

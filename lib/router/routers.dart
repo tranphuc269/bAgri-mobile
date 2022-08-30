@@ -99,6 +99,10 @@ class Routes {
   static String manageStorage = '/manageStorage';
   static String addMaterial = '/addMaterial';
   static String updateMaterial = '/updateMaterial';
+  /// turn-over Management
+  static String seasonListForTurnover = '/seasonListForTurnover';
+  static String seasonDetailForTurnover = '/seasonDetailForTurnover';
+
 
 
 
@@ -345,5 +349,15 @@ class Routes {
         transitionType: TransitionType.fadeIn);
     router.define(updateMaterial, handler: updateMaterialHandler, transitionType: TransitionType.fadeIn);
     router.define(addMaterial, handler: addMaterialHandler, transitionType: TransitionType.fadeIn);
+
+
+    /// Turn-over management
+    router.define(seasonListForTurnover,
+        handler: seasonListForTurnoverHandler,
+        transitionType: TransitionType.fadeIn);
+    router.define(seasonDetailForTurnover,
+        handler: seasonDetailForTurnoverHandler,
+        transitionType: TransitionType.fadeIn);
+
   }
 }

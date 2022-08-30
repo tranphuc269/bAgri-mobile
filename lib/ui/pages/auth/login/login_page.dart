@@ -1,26 +1,21 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
-import 'package:flutter_base/commons/screen_size.dart';
 import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/models/entities/role/role_entity.dart';
 
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 
-import 'package:flutter_base/ui/components/app_button.dart';
 
 import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_dropdown_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_base/repositories/auth_repository.dart';
 
 import 'login_cubit.dart';
 
@@ -201,6 +196,8 @@ class _LoginPageState extends State<LoginPage> {
         validator: (value) {
           if (Validator.validateNullOrEmpty(value!))
             return "Chưa nhập số điện thoại";
+          else if (!Validator.validatePhone(value)) {
+            return "Số điện thoại không đúng định dạng";}
           else
             return null;
         },

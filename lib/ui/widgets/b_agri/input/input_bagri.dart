@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/ui/widgets/b_agri/textfield/text_field_bagri.dart';
 import 'package:flutter_base/utils/validators.dart';
 

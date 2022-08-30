@@ -3,10 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/models/params/contractWork/create_contract_work_param.dart';
-import 'package:flutter_base/repositories/auth_repository.dart';
 import 'package:flutter_base/repositories/contract_work_reponsitory.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
 
 part 'contract_work_list_state.dart';
 

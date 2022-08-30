@@ -3,10 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_base/models/entities/role/role_entity.dart';
 
 import 'package:flutter_base/repositories/auth_repository.dart';
-import 'package:flutter_base/utils/logger.dart';
 part 'registry_state.dart';
 
 class RegistryCubit extends Cubit<RegistryState> {
@@ -36,6 +34,7 @@ class RegistryCubit extends Cubit<RegistryState> {
         emit(state.copyWith(RegisterStatus: LoadStatus.FAILURE));
         if(error.response!.statusCode == 400){
           print("message: ");
+          print(error.response!.data);
           if(error.response!.data['message'].toString().contains(phone)){
             emit(state.copyWith(
                 messageError: "Số điện thoại đã được sử dụng!",

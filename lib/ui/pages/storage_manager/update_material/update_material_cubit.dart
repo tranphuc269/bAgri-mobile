@@ -55,6 +55,26 @@ class UpdateMaterialCubit extends Cubit<UpdateMaterialState>{
       return;
     }
   }
+  Future <void> updateMaterialInformation(String materialId) async {
+    var material = {
+      'name': state.name,
+      'unitPrice': state.unitPrice,
+      'unit': state.unit,
+      'quantity': state.quantity
+    };
+    emit(state.copyWith(loadingStatus: LoadStatus.LOADING));
+    try {
+      final response = await materialRepository!.updateMaterial(materialId, material);
+      if (response != null) {
+        emit(state.copyWith(loadingStatus: LoadStatus.SUCCESS));
+      } else {
+        emit(state.copyWith(loadingStatus: LoadStatus.FAILURE));
+      }
+    } catch (e) {
+      emit(state.copyWith(loadingStatus: LoadStatus.FAILURE));
+      return;
+    }
+  }
   Future<void> getMaterialById(String? materialId) async{
     MaterialEntity material = await materialRepository!.getMaterialById(materialId);
     changeQuantity(material.quantity ?? 0);

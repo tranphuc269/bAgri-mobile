@@ -40,5 +40,5 @@ class ZoneListState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [this.zoneName, this.messageError, this.getZoneStatus, this.listZoneData, this.deleteZoneStatus, this.modifyZoneStatus, this.listGarden];
+      [this.zoneName, this.messageError, this.getZoneStatus, this.listZoneData, this.deleteZoneStatus, this.modifyZoneStatus, this.listGarden, this.createZoneStatus];
 }
