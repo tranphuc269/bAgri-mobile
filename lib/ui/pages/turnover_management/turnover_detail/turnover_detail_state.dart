@@ -3,6 +3,7 @@ part of 'turnover_detail_cubit.dart';
 class TurnoverDetailState extends Equatable {
   LoadStatus? loadStatus;
   SeasonEntity? season;
+  LoadStatus? exportExcelStatus;
   List<TemporaryTask>? listTemporaryTask;
   List<ContractTask>? listContractTask;
   int? fee;
@@ -11,6 +12,7 @@ class TurnoverDetailState extends Equatable {
   List<DailyTask>? listDailyTask;
   List<Work>? listWork;
   List<MaterialUsedByTask>? listMaterial;
+  List<TurnoverEntity>? listTurnover;
 
   // String? linkQR;
   // String? linkUrl;
@@ -18,6 +20,7 @@ class TurnoverDetailState extends Equatable {
   List<dynamic> get props => [
     loadStatus,
     season,
+    exportExcelStatus,
     listContractTask,
     listTemporaryTask,
     listDailyTask,
@@ -25,13 +28,15 @@ class TurnoverDetailState extends Equatable {
     feeMaterial,
     listMaterial,
     listWork,
-    feeWorker
+    feeWorker,
+    listTurnover,
     // linkQR,
     // linkUrl,
   ];
 
   TurnoverDetailState(
       {this.loadStatus,
+        this.exportExcelStatus,
         this.season,
         this.listTemporaryTask,
         this.listContractTask,
@@ -40,7 +45,8 @@ class TurnoverDetailState extends Equatable {
         this.feeMaterial,
         this.listDailyTask,
         this.listWork,
-        this.listMaterial
+        this.listMaterial,
+        this.listTurnover
         // this.linkQR,
         // this.linkUrl,
       });
@@ -48,6 +54,7 @@ class TurnoverDetailState extends Equatable {
   TurnoverDetailState copyWith(
       {LoadStatus? loadStatus,
         SeasonEntity? season,
+        LoadStatus? exportExcelStatus,
         List<ContractTask>? listContractTask,
         List<TemporaryTask>? listTemporaryTask,
         int? fee,
@@ -55,13 +62,15 @@ class TurnoverDetailState extends Equatable {
         int? feeWorker,
         int? feeMaterial,
         List<MaterialUsedByTask>? listMaterial,
-        List<Work>? listWork
+        List<Work>? listWork,
+        List<TurnoverEntity>? listTurnover,
         // String? linkQR,
         // String? linkUrl,
       }) {
     return TurnoverDetailState(
         loadStatus: loadStatus ?? this.loadStatus,
         season: season ?? this.season,
+        exportExcelStatus: exportExcelStatus ?? this.exportExcelStatus,
         listContractTask: listContractTask ?? this.listContractTask,
         listTemporaryTask: listTemporaryTask ?? this.listTemporaryTask,
         fee: fee ?? this.fee,
@@ -69,7 +78,8 @@ class TurnoverDetailState extends Equatable {
         feeMaterial: feeMaterial ?? this.feeMaterial,
         feeWorker: feeWorker ?? this.feeWorker,
         listWork: listWork ?? this.listWork,
-        listMaterial: listMaterial ?? this.listMaterial
+        listMaterial: listMaterial ?? this.listMaterial,
+        listTurnover: listTurnover ?? this.listTurnover,
     );
   }
 }

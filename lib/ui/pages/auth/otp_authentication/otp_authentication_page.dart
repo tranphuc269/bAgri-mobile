@@ -61,7 +61,7 @@ class _OtpAuthenticationPageState extends State<OtpAuthenticationPage> {
     super.dispose();
   }
 
-  // snackBar Widget
+  // snackBar widgets
   snackBar(String? message) {
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

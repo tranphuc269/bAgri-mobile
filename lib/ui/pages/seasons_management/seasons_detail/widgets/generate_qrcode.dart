@@ -34,7 +34,7 @@
 //   }
 //
 //   @override
-//   Widget build(BuildContext context) {
+//   widgets build(BuildContext context) {
 //     return Dialog(
 //       clipBehavior: Clip.hardEdge,
 //       shape: RoundedRectangleBorder(

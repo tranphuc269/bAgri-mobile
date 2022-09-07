@@ -136,7 +136,7 @@ class _RegistryPageState extends State<RegistryPage> {
           _showCreateSuccess();
         }
         if (state.RegisterStatus == LoadStatus.FAILURE) {
-          showSnackBar('${_cubit!.state.messageError}');
+          showSnackBar('${_cubit!.state.messageError}', "error");
         }
       },
       builder: (context, state) {
@@ -284,7 +284,7 @@ class _RegistryPageState extends State<RegistryPage> {
         ));
   }
   //
-  // Widget _buildRoleOption() {
+  // widgets _buildRoleOption() {
   //   return Container(
   //     margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
   //     decoration: BoxDecoration(
@@ -316,14 +316,14 @@ class _RegistryPageState extends State<RegistryPage> {
   }
 
   void _showCreateSuccess() async {
-    showSnackBar('Đăng ký thành công!');
+    showSnackBar('Đăng ký thành công!',"success");
     Navigator.of(context).pop(true);
   }
 
-  void showSnackBar(String message) async {
+  void showSnackBar(String message, String status) async {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: "success",
+      typeSnackBar: status,
       message: message,
     ));
     setState(() {

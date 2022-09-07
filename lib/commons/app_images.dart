@@ -70,4 +70,5 @@ class AppImages {
 
   /// ic turn-over management
   static final icTurnoverManagement = 'assets/images/IC_turnover.png';
+  static final icExcel = 'assets/images/ic_excel.png';
 }

@@ -35,14 +35,9 @@ class RegistryCubit extends Cubit<RegistryState> {
         if(error.response!.statusCode == 400){
           print("message: ");
           print(error.response!.data);
-          if(error.response!.data['message'].toString().contains(phone)){
+          if(error.response!.data['message'].toString().contains("Số điện thoại hoặc email đã tồn tại!")){
             emit(state.copyWith(
-                messageError: "Số điện thoại đã được sử dụng!",
-                RegisterStatus: LoadStatus.FAILURE
-            ));
-          } if(error.response!.data['message'].toString().contains(email)){
-            emit(state.copyWith(
-                messageError: "Email đã được sử dụng!",
+                messageError: "Số điện thoại hoặc email đã được sử dụng!",
                 RegisterStatus: LoadStatus.FAILURE
             ));
           }

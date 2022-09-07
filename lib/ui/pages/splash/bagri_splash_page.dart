@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -32,9 +31,12 @@ class _SplashPageState extends State<SplashPage> {
     _cubit = SplashCubit(
       authBagriRepository: authBagriRepository,
     );
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      await _setup();
+      await Utils.determinePosition();
+    });
     super.initState();
-    Utils.determinePosition();
-    final stopwatch = Stopwatch()..start();
     _navigationSubscription = _cubit.navigatorController.stream.listen((event) {
       Future.delayed(const Duration(seconds: 2), () {
         switch (event) {
@@ -55,22 +57,20 @@ class _SplashPageState extends State<SplashPage> {
             break;
         }
       });
-      final stopwatch = Stopwatch()..start();
     });
-
-    _setup();
-
   }
 
-  void _setup() async {
+  _setup() async {
     //Request permission
     var status = await Permission.storage.status;
+
     bool serviceEnabled;
     LocationPermission permission;
     if (status.isDenied) {
       // You can request multiple permissions at once.
       await Permission.storage.request();
     }
+
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
@@ -99,7 +99,7 @@ class _SplashPageState extends State<SplashPage> {
     }
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-     await Geolocator.getCurrentPosition();
+    await Geolocator.getCurrentPosition();
     _cubit.fetchInitialData();
   }
 
@@ -141,15 +141,16 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void showStorageByAccount() {
-    Application.router!
-        .navigateTo(context, Routes.home, clearStack: true);
+    Application.router!.navigateTo(context, Routes.home, clearStack: true);
   }
 
   void showLogin() {
     Application.router?.navigateTo(context, Routes.login, replace: true);
   }
-  void showHomeGardenManager(){
-    Application.router?.navigateTo(context,Routes.homeGardenManager, replace: true);
+
+  void showHomeGardenManager() {
+    Application.router
+        ?.navigateTo(context, Routes.homeGardenManager, replace: true);
   }
 
   void showErrorHapped() {

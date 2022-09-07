@@ -77,7 +77,6 @@ class TreeEntity {
 
   factory TreeEntity.fromJson(Map<String, dynamic> json){
     return TreeEntity(
-      id: json['__v'] as int?,
       tree_id: json['_id'] as String?,
       name: json['name'] as String?,
     );
@@ -85,7 +84,6 @@ class TreeEntity {
 
   Map<String, dynamic> toJson() =>
       <String, dynamic>{
-        '__v': this.id,
         '_id': this.tree_id,
         'name': this.name,
       };

@@ -285,27 +285,37 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                   title: 'Kết thúc mùa vụ',
                                   height: 40,
                                   width: 200,
-                                  onPressed: () async {
-                                    bool isAddSuccess = await showDialog(
-                                        context: context,
-                                        builder: (context) => _dialogCreate(
-                                              title: Text(
-                                                  "Thêm doanh thu để kết thúc mùa"),
-                                              hintText: "Doanh thu",
-                                              spanText: "Doanh thu",
-                                              textEditingController:
-                                                  _turnoverController,
-                                            ));
-                                    if (isAddSuccess) {
-                                      await _cubit.calculateFee(
-                                          widget.thisSeason.seasonId ?? "");
-                                      await refreshData();
-                                      showSnackBar(
-                                          "Kết thúc mùa thành công", "success");
-                                    } else {
-                                      showSnackBar("Có lỗi xảy ra", "error");
-                                    }
-                                  },
+                                  // onPressed: () async {
+                                  //
+                                  //   bool isAddSuccess = await showDialog(
+                                  //       context: context,
+                                  //       builder: (context) => _dialogCreate(
+                                  //             title: Text(
+                                  //                 "Thêm doanh thu để kết thúc mùa"),
+                                  //             hintText: "Doanh thu",
+                                  //             spanText: "Doanh thu",
+                                  //             textEditingController:
+                                  //                 _turnoverController,
+                                  //           ));
+                                  //   if (isAddSuccess) {
+                                  //     await _cubit.calculateFee(
+                                  //         widget.thisSeason.seasonId ?? "");
+                                  //     await refreshData();
+                                  //     showSnackBar(
+                                  //         "Kết thúc mùa thành công", "success");
+                                  //   } else {
+                                  //     showSnackBar("Có lỗi xảy ra", "error");
+                                  //   }
+                                  // },
+                            onPressed: () {
+                              Application.router!.navigateTo(
+                                appNavigatorKey.currentContext!,
+                                Routes.seasonEnding,
+                                routeSettings: RouteSettings(
+                                  arguments: state.season?.seasonId,
+                                ),
+                              );
+                            },
                                 )
                               : SizedBox(),
                         ],

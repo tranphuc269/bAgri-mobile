@@ -645,11 +645,11 @@ class _ContractWorkListState extends State<ContractWorkListPage> {
 //                     borderRadius:
 //                     BorderRadius.circular(20.0)),
 //                 child: Stack(
-//                   clipBehavior: Clip.none, children: <Widget>[
+//                   clipBehavior: Clip.none, children: <widgets>[
 //                     Form(
 //                       child: Column(
 //                         mainAxisSize: MainAxisSize.min,
-//                         children: <Widget>[
+//                         children: <widgets>[
 //                           Container(
 //                             height: 60,
 //                             width: MediaQuery.of(context).size.width,

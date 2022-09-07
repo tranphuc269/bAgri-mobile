@@ -63,6 +63,7 @@ class Routes {
   static String seasonAdding = "/seasonAdding";
   static String seasonDetail = "/seasonDetail";
   static String seasonUpdating = "/seasonUpdating";
+  static String seasonEnding = "/seasonEnding";
 
   ///Notification
   static String notificationManagement = "/notificationManagement";
@@ -270,6 +271,11 @@ class Routes {
     router.define(
       seasonUpdating,
       handler: seasonUpdatingHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      seasonEnding,
+      handler: seasonEndingHandler,
       transitionType: TransitionType.fadeIn,
     );
 

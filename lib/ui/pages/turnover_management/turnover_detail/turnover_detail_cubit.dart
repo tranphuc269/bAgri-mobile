@@ -1,26 +1,33 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
+import 'package:excel/excel.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/entities/task/work.dart';
+import 'package:flutter_base/models/entities/turnover/turnover_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/contract_task_responsitory.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'turnover_detail_state.dart';
 
-class TurnoverDetailCubit extends Cubit<TurnoverDetailState>{
+class TurnoverDetailCubit extends Cubit<TurnoverDetailState> {
   SeasonRepository seasonRepository;
   TemporaryTaskRepository temporaryTaskRepository;
   ContractTaskRepository contractTaskRepository;
 
   TurnoverDetailCubit(
       {required this.seasonRepository,
-        required this.temporaryTaskRepository,
-        required this.contractTaskRepository})
+      required this.temporaryTaskRepository,
+      required this.contractTaskRepository})
       : super(TurnoverDetailState());
 
   Future<void> getSeasonDetail(String seasonId) async {
@@ -52,7 +59,6 @@ class TurnoverDetailCubit extends Cubit<TurnoverDetailState>{
       return false;
     }
   }
-
 
   Future<void> getListContractTask(String seasonId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
@@ -99,40 +105,43 @@ class TurnoverDetailCubit extends Cubit<TurnoverDetailState>{
           for (var dailyFee in item.dailyTasks!) {
             feeWorker += dailyFee.fee ?? 0;
             var i = listWork.indexOf(listWork.firstWhere(
-                    (element) => element.title == dailyFee.title,
-                orElse: () =>Work(
+                (element) => element.title == dailyFee.title,
+                orElse: () => Work(
                     title: dailyFee.title,
                     unit: "${dailyFee.workerQuantity.toString()} Người",
                     unitPrice: dailyFee.fee,
                     quantity: dailyFee.workerQuantity)));
-            if(i == -1){
+            if (i == -1) {
               listWork.add(Work(
                   title: dailyFee.title,
                   unit: "${dailyFee.workerQuantity.toString()} Người",
                   unitPrice: dailyFee.fee,
                   quantity: dailyFee.workerQuantity));
-            }
-            else {
-              listWork[i].quantity = ((listWork[i].quantity ?? 0) + (dailyFee.workerQuantity ?? 0));
+            } else {
+              listWork[i].quantity = ((listWork[i].quantity ?? 0) +
+                  (dailyFee.workerQuantity ?? 0));
             }
             if (dailyFee.materials != null && dailyFee.materials!.length != 0) {
               for (var materialFee in dailyFee.materials!) {
                 feeMaterial += ((materialFee.quantity ?? 0) *
                     (materialFee.unitPrice ?? 0));
                 var index = listMaterial.indexOf(listMaterial.firstWhere(
-                        (element) => element.name == materialFee.name,
+                    (element) => element.name == materialFee.name,
                     orElse: () => MaterialUsedByTask(
                         name: materialFee.name,
                         unit: materialFee.unit,
+                        unitPrice: materialFee.unitPrice,
                         quantity: materialFee.quantity)));
-                if(index == -1){
+                if (index == -1) {
                   listMaterial.add(MaterialUsedByTask(
                       name: materialFee.name,
                       unit: materialFee.unit,
+                      unitPrice: materialFee.unitPrice,
                       quantity: materialFee.quantity));
-                }
-                else {
-                  listMaterial[index].quantity = (listMaterial[index].quantity?? 0) + (materialFee.quantity ?? 0);
+                } else {
+                  listMaterial[index].quantity =
+                      (listMaterial[index].quantity ?? 0) +
+                          (materialFee.quantity ?? 0);
                 }
               }
             }
@@ -143,41 +152,44 @@ class TurnoverDetailCubit extends Cubit<TurnoverDetailState>{
         if (item.work != null) {
           fee += (item.quantity ?? 0) * (item.work!.unitPrice ?? 0);
           var i = listWork.indexOf(listWork.firstWhere(
-                  (element) => element.title == item,
-              orElse: () =>Work(
+              (element) => element.title == item,
+              orElse: () => Work(
                   title: item.work?.title,
                   unit: item.work?.unit,
                   unitPrice: item.work?.unitPrice,
                   quantity: item.quantity)));
-          if(i == -1){
+          if (i == -1) {
             listWork.add(Work(
                 title: item.work?.title,
                 unit: item.work?.unit,
                 unitPrice: item.work?.unitPrice,
                 quantity: item.quantity));
-          }
-          else {
-            listWork[i].quantity = ((listWork[i].quantity ?? 0) + (item.quantity ?? 0));
+          } else {
+            listWork[i].quantity =
+                ((listWork[i].quantity ?? 0) + (item.quantity ?? 0));
           }
         }
         if (item.materials != null && item.materials!.length != 0) {
           for (var materialFee in item.materials!) {
             feeMaterial +=
-            ((materialFee.quantity ?? 0) * (materialFee.unitPrice ?? 0));
+                ((materialFee.quantity ?? 0) * (materialFee.unitPrice ?? 0));
             var index = listMaterial.indexOf(listMaterial.firstWhere(
-                    (element) => element.name == materialFee.name,
+                (element) => element.name == materialFee.name,
                 orElse: () => MaterialUsedByTask(
                     name: materialFee.name,
                     unit: materialFee.unit,
+                    unitPrice: materialFee.unitPrice,
                     quantity: materialFee.quantity)));
-            if(index == -1){
-              listMaterial.add( MaterialUsedByTask(
+            if (index == -1) {
+              listMaterial.add(MaterialUsedByTask(
                   name: materialFee.name,
                   unit: materialFee.unit,
+                  unitPrice: materialFee.unitPrice,
                   quantity: materialFee.quantity));
-            }
-            else {
-              listMaterial[index].quantity = (listMaterial[index].quantity?? 0) + (materialFee.quantity ?? 0);
+            } else {
+              listMaterial[index].quantity =
+                  (listMaterial[index].quantity ?? 0) +
+                      (materialFee.quantity ?? 0);
             }
           }
         }
@@ -188,10 +200,122 @@ class TurnoverDetailCubit extends Cubit<TurnoverDetailState>{
           feeWorker: feeWorker,
           feeMaterial: feeMaterial,
           listMaterial: listMaterial,
-          listWork: listWork
-      ));
+          listWork: listWork));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
+    }
+  }
+
+  Future<void> exportExcel(String? seasonId) async {
+    emit(state.copyWith(exportExcelStatus: LoadStatus.LOADING));
+    // print(state.listMaterial!.length);
+    try {
+      await getListContractTask(seasonId!);
+      await getListTemporaryTask(seasonId);
+      if (state.loadStatus == LoadStatus.SUCCESS) {
+        final excel = Excel.createExcel();
+        Sheet sheetObject = excel['Sheet1'];
+
+        //boldStyle
+        CellStyle boldStyle =
+            CellStyle(bold: true, fontFamily: 'TimesNewRoman');
+        CellStyle centerTitle = CellStyle(
+            horizontalAlign: HorizontalAlign.Center,
+            bold: true,
+            fontFamily: 'TimesNewRoman');
+
+        var cell = sheetObject.cell(CellIndex.indexByString("A1"));
+        cell.value = "CHI PHÍ SẢN XUẤT DƯA LÊ KIM HOÀNG HẬU VƯỜN A1 MÙA 2021/3";
+        sheetObject.cell(CellIndex.indexByString("A1")).cellStyle = boldStyle;
+        for (int i = 2; i <= 3; i++) {
+          sheetObject.cell(CellIndex.indexByString("A${i}")).value = '-';
+        }
+        sheetObject.cell(CellIndex.indexByString("B2")).value =
+            'Diện tích trồng';
+        sheetObject.cell(CellIndex.indexByString("B2")).cellStyle = boldStyle;
+
+        sheetObject.cell(CellIndex.indexByString("B3")).value =
+            'Tổng sản lượng';
+        sheetObject.cell(CellIndex.indexByString("B3")).cellStyle = boldStyle;
+
+        // title of column of table
+        List<String> dataList = [
+          "TT",
+          "Nội dung",
+          "ĐVT",
+          "Số lượng",
+          "Đơn giá",
+          "Thành tiền"
+        ];
+        sheetObject.insertRowIterables(dataList, 5);
+
+        // center title
+        int start = "A".codeUnitAt(0);
+        int end = "G".codeUnitAt(0);
+        while (start <= end) {
+          sheetObject
+              .cell(CellIndex.indexByString("${String.fromCharCode(start)}6"))
+              .cellStyle = centerTitle;
+          start++;
+        }
+
+        sheetObject.cell(CellIndex.indexByString("B7")).value =
+            "A.Chi phí vật tư";
+        sheetObject.cell(CellIndex.indexByString("B7")).cellStyle = boldStyle;
+        
+        // first row of Material in table
+        var firstRowOfMaterial = 8;
+        if (state.listMaterial!.length > 0) {
+          for (var i = firstRowOfMaterial; i < firstRowOfMaterial + state.listMaterial!.length; i++) {
+            sheetObject.cell(CellIndex.indexByString("B${i}")).value =
+                state.listMaterial![i - firstRowOfMaterial].name;
+            sheetObject.cell(CellIndex.indexByString("C${i}")).value =
+                state.listMaterial![i - firstRowOfMaterial].unit;
+            sheetObject.cell(CellIndex.indexByString("D${i}")).value =
+                state.listMaterial![i - firstRowOfMaterial].quantity;
+            print(state.listMaterial![i - firstRowOfMaterial].unitPrice);
+            sheetObject.cell(CellIndex.indexByString("E${i}")).value =
+                state.listMaterial![i - firstRowOfMaterial].unitPrice ?? 0;
+            sheetObject.cell(CellIndex.indexByString("F${i}")).value =
+                (state.listMaterial![i - firstRowOfMaterial].quantity ?? 0) *
+                    (state.listMaterial![i - firstRowOfMaterial].unitPrice ?? 0);
+          }
+        }
+
+        // frist
+        
+        int firstRowOfWork = firstRowOfMaterial + (state.listMaterial!.length);
+        sheetObject.cell(CellIndex.indexByString("B${firstRowOfWork}")).value =
+            "B. Chi phí công việc";
+        sheetObject.cell(CellIndex.indexByString("B${firstRowOfWork}")).cellStyle =
+            boldStyle;
+        for(int j = firstRowOfWork + 1; j < (firstRowOfWork + state.listWork!.length); j++){
+          sheetObject.cell(CellIndex.indexByString("B${j}")).value =
+              state.listWork![j - firstRowOfWork -1].title;
+          sheetObject.cell(CellIndex.indexByString("C${j}")).value =
+              state.listWork![j - firstRowOfWork -1].unit;
+          sheetObject.cell(CellIndex.indexByString("D${j}")).value =
+              state.listWork![j - firstRowOfWork -1].quantity;
+          sheetObject.cell(CellIndex.indexByString("E${j}")).value =
+              state.listWork![j - firstRowOfWork -1].unitPrice ?? 0;
+          sheetObject.cell(CellIndex.indexByString("F${j}")).value =
+              (state.listWork![j - firstRowOfWork -1].quantity ?? 0) *
+                  (state.listWork![j - firstRowOfWork -1].unitPrice ?? 0);
+        }
+        var fileBytes = excel.save();
+        File(join(
+        "/storage/emulated/0/Download/Chi phí sản xuất ${state.season?.gardenEntity!.name} ${state.season?.name}.xlsx"))
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(fileBytes!);
+        print(
+            "/storage/emulated/0/Download/Chi phí sản xuất ${state.season?.gardenEntity!.name} ${state.season?.name}.xlsx");
+      } else {
+        print("Export Excel Failure");
+      }
+    } catch (e) {
+      print("export Excel Failure");
+      print(e);
+      emit(state.copyWith(exportExcelStatus: LoadStatus.FAILURE));
     }
   }
 }

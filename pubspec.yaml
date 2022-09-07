@@ -100,6 +100,8 @@ dependencies:
       ref: master
   scrollable_positioned_list: ^0.2.0-nullsafety.0
 
+  excel: any
+
   expandable: ^5.0.1
   syncfusion_flutter_pdfviewer: ^19.3.44-beta
   #map
@@ -225,5 +227,9 @@ flutter:
         - asset: assets/fonts/Roboto-BoldItalic.ttf
         - asset: assets/fonts/Roboto-Black.ttf
         - asset: assets/fonts/Roboto-BlackItalic.ttf
+    - family: TimesNewRoman
+      fonts:
+        - asset: assets/fonts/times-new-roman.ttf
+        - asset: assets/fonts/times-new-roman-bold.ttf
 flutter_intl:
   enabled: true

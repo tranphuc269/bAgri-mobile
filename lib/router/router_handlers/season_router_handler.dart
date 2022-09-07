@@ -7,6 +7,8 @@ import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/ui/pages/seasons_management/add_season/season_adding_cubit.dart';
 import 'package:flutter_base/ui/pages/seasons_management/add_season/season_adding_page.dart';
+import 'package:flutter_base/ui/pages/seasons_management/end_season/end_season_cubit.dart';
+import 'package:flutter_base/ui/pages/seasons_management/end_season/end_season_page.dart';
 import 'package:flutter_base/ui/pages/seasons_management/season_management_cubit.dart';
 import 'package:flutter_base/ui/pages/seasons_management/season_management_page.dart';
 import 'package:flutter_base/ui/pages/seasons_management/seasons_detail/season_detail_cubit.dart';
@@ -87,6 +89,22 @@ Handler seasonUpdatingHandler = new Handler(
     child: SeasonUpdatingPage(seasonId: seasonId),
   );
 });
+
+Handler seasonEndingHandler = new Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      String seasonId = context!.settings!.arguments as String;
+      return BlocProvider(
+        create: (context) {
+          SeasonRepository seasonRepository =
+          RepositoryProvider.of<SeasonRepository>(context);
+          return EndSeasonCubit(
+              seasonRepository: seasonRepository);
+        },
+        child: EndSeasonPage(
+          seasonId: seasonId,
+        ),
+      );
+    });
 
 Handler seasonListTaskHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {

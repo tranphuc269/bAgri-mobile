@@ -31,6 +31,8 @@ import 'package:flutter_base/repositories/zone_repository.dart';
 import 'package:flutter_base/router/navigation_observer.dart';
 import 'package:flutter_base/ui/pages/home_insect_manager/home_insect_manager_page.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
+import 'package:flutter_base/ui/pages/seasons_management/end_season/end_season_page.dart';
+import 'package:flutter_base/ui/pages/turnover_management/export_excel.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -266,7 +268,7 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.theme,
       onGenerateRoute: Application.router!.generator,
       initialRoute: Routes.root,
-       // home: HomeInsectManagerPage(),
+       // home: EndSeasonPage(),
       navigatorObservers: <NavigatorObserver>[
         NavigationObserver(navigationCubit: _navigationCubit),
       ],

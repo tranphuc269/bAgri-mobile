@@ -80,7 +80,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
           gardenId: state.gardenEntity!.garden_id,
           process: calculateStartDay(),
           tree: state.treeEntity?.name,
-          // start_date: state.startTime,
+          start_date: state.startTime,
           // end_date: state.endTime ,
           treeQuantity: treeQuantity);
       var result = await seasonRepository.createSeason(param);

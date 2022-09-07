@@ -564,7 +564,7 @@ class _ContractTaskDetailPageState extends State<ContractTaskDetailPage> {
           ),
         ));
   }
-  // Widget _buildMaterialPicker() {
+  // widgets _buildMaterialPicker() {
   //   return Container(
   //     margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
   //     decoration: BoxDecoration(
