@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_add/temporary_task_add_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Handler temporaryTaskManagementRouterHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+
   return BlocProvider(
     create: (context) {
       TemporaryTaskRepository temporaryTaskRepository =
@@ -24,6 +26,7 @@ Handler temporaryTaskManagementRouterHandler = new Handler(
 });
 Handler temporaryTaskAddHandler = new Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      SeasonEntity season = context!.settings!.arguments as SeasonEntity;
   return BlocProvider(
     create: (context) {
       TemporaryTaskRepository temporaryTaskRepository =
@@ -31,7 +34,9 @@ Handler temporaryTaskAddHandler = new Handler(
       return TemporaryTaskAddCubit(
           temporaryTaskRepository: temporaryTaskRepository);
     },
-    child: TemporaryTaskAddPage(),
+    child: TemporaryTaskAddPage(
+      seasonEntity: season,
+    ),
   );
 });
 Handler updateTemporaryTaskHandler = new Handler(

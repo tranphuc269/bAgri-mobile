@@ -31,12 +31,12 @@ class ContractTaskAddingCubit extends Cubit<ContractTaskAddingState> {
     emit(state.copyWith(treePlaceQuantityMax: treePlaceQuantity));
   }
 
-  Future<void> createContractTask(String? treeQuantity) async {
+  Future<void> createContractTask(String? treeQuantity, String? seasonId) async {
     emit(state.copyWith(addContractTaskStatus: LoadStatus.LOADING));
     try {
       CreateContractTaskParam param = CreateContractTaskParam(
           work: state.contractWorkEntity,
-          seasonId: state.seasonEntity!.seasonId,
+          seasonId: seasonId,
           quantity: int.tryParse(treeQuantity.toString()));
       final response =
           await contractTaskRepository.createContractTask(param: param);

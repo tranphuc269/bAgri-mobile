@@ -12,12 +12,12 @@ class TemporaryTaskAddCubit extends Cubit<TemporaryTaskAddState>{
 
   TemporaryTaskAddCubit({this.temporaryTaskRepository}): super(TemporaryTaskAddState());
 
-  createTemporaryTask() async{
+  createTemporaryTask(String? seasonId) async{
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try{
       final param = TemporaryTask(
         title: state.name,
-        season: state.seasonEntity!.seasonId,
+        season: seasonId,
         dailyTasks: state.dailyTasks,
       );
       final response = await temporaryTaskRepository!.createTemporaryTask(param);

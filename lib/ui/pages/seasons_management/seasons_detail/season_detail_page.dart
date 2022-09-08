@@ -60,6 +60,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     if (widget.thisSeason.end_date != null) {
       _cubit.calculateFee(widget.thisSeason.seasonId ?? "");
     }
+    print(checkEndPharseAndStep());
   }
 
   Future<void> refreshData() async {
@@ -153,7 +154,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  'Số lượng: ${state.season?.treeQuantity.toString() ?? ""}',
+                                  'Số lượng cây: ${state.season?.treeQuantity.toString() ?? ""} cây',
                                   style: AppTextStyle.greyS16,
                                 ),
                                 SizedBox(height: 5),
@@ -285,37 +286,17 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                   title: 'Kết thúc mùa vụ',
                                   height: 40,
                                   width: 200,
-                                  // onPressed: () async {
-                                  //
-                                  //   bool isAddSuccess = await showDialog(
-                                  //       context: context,
-                                  //       builder: (context) => _dialogCreate(
-                                  //             title: Text(
-                                  //                 "Thêm doanh thu để kết thúc mùa"),
-                                  //             hintText: "Doanh thu",
-                                  //             spanText: "Doanh thu",
-                                  //             textEditingController:
-                                  //                 _turnoverController,
-                                  //           ));
-                                  //   if (isAddSuccess) {
-                                  //     await _cubit.calculateFee(
-                                  //         widget.thisSeason.seasonId ?? "");
-                                  //     await refreshData();
-                                  //     showSnackBar(
-                                  //         "Kết thúc mùa thành công", "success");
-                                  //   } else {
-                                  //     showSnackBar("Có lỗi xảy ra", "error");
-                                  //   }
-                                  // },
-                            onPressed: () {
-                              Application.router!.navigateTo(
-                                appNavigatorKey.currentContext!,
-                                Routes.seasonEnding,
-                                routeSettings: RouteSettings(
-                                  arguments: state.season?.seasonId,
-                                ),
-                              );
-                            },
+                                  onPressed: () async {
+                                    var endPharseStatus = await checkEndPharseAndStep();
+                                    endPharseStatus ?
+                                    Application.router!.navigateTo(
+                                      appNavigatorKey.currentContext!,
+                                      Routes.seasonEnding,
+                                      routeSettings: RouteSettings(
+                                        arguments: state.season?.seasonId,
+                                      ),
+                                    ) : showSnackBar("Vui lòng kết thúc các bước và các giai đoạn","error");
+                                  },
                                 )
                               : SizedBox(),
                         ],
@@ -342,96 +323,15 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
       message: message,
     ));
   }
-
-  Widget _dialogCreate({
-    Text? title,
-    String? hintText,
-    String? spanText,
-    TextEditingController? textEditingController,
-  }) {
-    return StatefulBuilder(builder: (context, state) {
-      return AlertDialog(
-        scrollable: true,
-        title: title,
-        content: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            // height: MediaQuery.of(context).size.height / 4,
-            width: MediaQuery.of(context).size.width,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                  // margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: AppTextField(
-                      labelText: 'Doanh thu',
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                      hintText: 'Doanh thu',
-                      controller: textEditingController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (Validator.validateNullOrEmpty(value!))
-                          return "Chưa nhập doanh thu";
-                        return null;
-                        // else
-                        //   return null;
-                      },
-                    ),
-                  )),
-              SizedBox(
-                height: 15,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                Expanded(
-                  child: AppButton(
-                    color: AppColors.redButton,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    title: 'Hủy',
-                    textStyle: AppTextStyle.whiteS16Bold,
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Expanded(child: _buildConfirmCreateButton())
-              ])
-            ])),
-      );
-    });
-  }
-
-  Widget _buildConfirmCreateButton() {
-    return BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
-      bloc: _cubit,
-      buildWhen: (prev, current) {
-        return (prev.loadStatus != current.loadStatus);
-      },
-      builder: (context, state) {
-        return AppButton(
-          color: AppColors.main,
-          title: "Kết thúc",
-          textStyle: AppTextStyle.whiteS16Bold,
-          onPressed: () async {
-            if (_formKey.currentState!.validate()) {
-              await _cubit.endSeason(widget.thisSeason.seasonId!,
-                  int.parse(_turnoverController.text));
-              if (state.loadStatus == LoadStatus.FAILURE) {
-                Navigator.pop(context, false);
-              } else {
-                Navigator.pop(context, true);
-              }
-            }
-          },
-        );
-      },
-    );
+  Future<bool> checkEndPharseAndStep() async {
+    for(var i = 0; i <  _cubit.state.season!.process!.stages!.length; i++){
+      if(_cubit.state.season!.process!.stages![i].end == null){
+        break;
+      }else{
+        return true;
+      }
+    }
+    return false;
   }
 
   Widget buildProcess() {
@@ -549,7 +449,7 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                 description: widget.stageSeason!.description,
                                 start: widget.startDate,
                                 end: widget.stageSeason!.end,
-                                onEnd: () async{
+                                onEnd: () async {
                                   await widget.cubit.endStage(widget.index!,
                                       widget.stageSeason!.stage_id!);
                                 }));

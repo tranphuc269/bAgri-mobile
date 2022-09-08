@@ -8,6 +8,7 @@ import 'package:flutter_base/ui/pages/seasons_management/end_season/end_season_c
 import 'package:flutter_base/ui/pages/turnover_management/widgets/modal_add_turnover_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -68,8 +69,14 @@ class _EndSeasonState extends State<EndSeasonPage> {
         child: FlatButton(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          onPressed: () {
-            print("Xác nhận");
+          onPressed: () async {
+            // print(widget.seasonId);
+           await _cubit!.endSeason(widget.seasonId, turnovers);
+           if(_cubit!.state.loadStatus == LoadStatus.SUCCESS){
+                showSnackBar("Kết thúc mùa thành công", "success");
+           }else{
+             showSnackBar("Đã có lỗi xảy ra11", "error");
+           }
           },
           color: AppColors.main,
           child: Text(
@@ -200,7 +207,7 @@ class _EndSeasonState extends State<EndSeasonPage> {
                                 fontFamily: "Roboto",
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500)),
-                        Text("${caculateTotalQuantity()} ${turnovers[0].unit ?? ""}",
+                        Text("${caculateTotalQuantity()} ${turnovers.length > 0 ? turnovers[0].unit : ""}",
                             style: TextStyle(
                                 color: AppColors.gray,
                                 fontFamily: "Roboto",
@@ -302,12 +309,20 @@ class _EndSeasonState extends State<EndSeasonPage> {
                     name: name,
                     quantity: quantity,
                     unit: unit,
-                    unitPrice: unitPrice,
+                    unitPrice: int.parse(unitPrice.toString().replaceAll(".", "")),
                   ));
                   caculateTotalTurnover();
                 });
               },
             )));
+  }
+
+  void showSnackBar(String message, String type) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: type,
+      message: message,
+    ));
   }
 
   caculateTotalTurnover(){

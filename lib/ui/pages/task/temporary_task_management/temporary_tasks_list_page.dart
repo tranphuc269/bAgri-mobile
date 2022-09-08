@@ -69,7 +69,9 @@ class _TemporaryTaskListPageState extends State<TemporaryTaskListPage> {
                 backgroundColor: AppColors.main,
                 onPressed: () async {
                   bool isAdd = await Application.router
-                      ?.navigateTo(context, Routes.addTemporaryTask);
+                      ?.navigateTo(context, Routes.addTemporaryTask,
+                      routeSettings: RouteSettings(
+                      arguments: widget.seasonEntity));
                   if (isAdd) {
                     _onRefreshData();
                     showSnackBar('Thêm mới thành công!');

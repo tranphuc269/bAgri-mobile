@@ -11,10 +11,10 @@ class EndSeasonCubit extends Cubit<EndSeasonState>{
   EndSeasonCubit({required this.seasonRepository})
       : super(EndSeasonState());
 
-  Future<void> endSeason(String seasonId, int turnover) async {
+  Future<void> endSeason(String seasonId, List<TurnoverEntity> turnovers) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      // var result = await seasonRepository.endSeason(seasonId, state.listTurnover);
+      var result = await seasonRepository.endSeason(seasonId, turnovers);
       emit(state.copyWith(
         loadStatus: LoadStatus.SUCCESS, /*season: result*/ /*.data!.season!*/
       ));

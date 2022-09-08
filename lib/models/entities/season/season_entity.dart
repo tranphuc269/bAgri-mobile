@@ -1,5 +1,6 @@
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/season/process_season.dart';
+import 'package:flutter_base/models/entities/turnover/turnover_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'season_entity.g.dart';
@@ -21,36 +22,40 @@ class SeasonEntity {
   int? treeQuantity;
   String? startUrl;
   String? endUrl;
-  int? turnover;
+  List<TurnoverEntity>? turnovers;
 
   factory SeasonEntity.fromJson(Map<String, dynamic> json) =>
       SeasonEntity(
-        seasonId: json['_id'] as String?,
-        name: json['name'] as String?,
-        gardenId: json['gardenId'] as String?,
-        gardenEntity: json['garden'] == null
-            ? null
-            :  GardenEntityResponseFromZoneId.fromJson(json['garden'] as Map<String, dynamic>),
-        process: json['process'] == null
-            ? null
-            : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
-        tree:json['tree'] as String?,
-        start_date: json['start'] as String?,
-        end_date: json['end'] as String?,
-        treeQuantity: json['treeQuantity'] as int?,
-        turnover: json['turnover'] as int?
+          seasonId: json['_id'] as String?,
+          name: json['name'] as String?,
+          gardenId: json['gardenId'] as String?,
+          gardenEntity: json['garden'] == null
+              ? null
+              : GardenEntityResponseFromZoneId.fromJson(
+              json['garden'] as Map<String, dynamic>),
+          process: json['process'] == null
+              ? null
+              : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
+          tree: json['tree'] as String?,
+          start_date: json['start'] as String?,
+          end_date: json['end'] as String?,
+          treeQuantity: json['treeQuantity'] as int?,
+          turnovers: (json['turnovers'] as List<dynamic>?)?.map((e) =>
+              TurnoverEntity.fromJson(e as Map <String,dynamic>)).toList()
       );
-  Map<String, dynamic> toJson() => <String, dynamic>{
-    if(this.seasonId != null) '_id': this.seasonId,
-    'name': this.name,
-    'gardenId': this.gardenId ?? this.gardenEntity?.garden_id,
-    'process': this.process,
-    'tree': this.tree,
-    'start': this.start_date,
-    'end': this.end_date,
-    'treeQuantity': this.treeQuantity,
-    if(this.turnover != null) 'turnover': this.turnover
-  };
+
+  Map<String, dynamic> toJson() =>
+      <String, dynamic>{
+        if(this.seasonId != null) '_id': this.seasonId,
+        'name': this.name,
+        'gardenId': this.gardenId ?? this.gardenEntity?.garden_id,
+        'process': this.process,
+        'tree': this.tree,
+        'start': this.start_date,
+        'end': this.end_date,
+        'treeQuantity': this.treeQuantity,
+        if(this.turnovers != null) 'turnover': this.turnovers
+      };
 
   SeasonEntity copyWith({
     String? seasonId,
@@ -62,19 +67,19 @@ class SeasonEntity {
     String? start_date,
     String? end_date,
     int? treeQuantity,
-    int? turnover,
+    List<TurnoverEntity>? turnovers,
   }) {
     return SeasonEntity(
-      seasonId: seasonId ?? this.seasonId,
-      name: name ?? this.name,
-      gardenEntity: gardenEntity ?? this.gardenEntity,
-      gardenId: gardenId ?? this.gardenId,
-      process: process ?? this.process,
-      tree: tree ?? this.tree,
-      start_date: start_date ?? this.start_date,
-      end_date: end_date ?? this.end_date,
-      treeQuantity: treeQuantity ?? this.treeQuantity,
-      turnover:turnover?? this.turnover
+        seasonId: seasonId ?? this.seasonId,
+        name: name ?? this.name,
+        gardenEntity: gardenEntity ?? this.gardenEntity,
+        gardenId: gardenId ?? this.gardenId,
+        process: process ?? this.process,
+        tree: tree ?? this.tree,
+        start_date: start_date ?? this.start_date,
+        end_date: end_date ?? this.end_date,
+        treeQuantity: treeQuantity ?? this.treeQuantity,
+        turnovers: turnovers ?? this.turnovers
     );
   }
 
@@ -88,9 +93,10 @@ class SeasonEntity {
     this.start_date,
     this.end_date,
     this.treeQuantity,
-    this.turnover
+    this.turnovers
   });
 }
+
 @JsonSerializable()
 class OtherSeasonEntity {
   @JsonKey(name: '_id')
@@ -106,7 +112,7 @@ class OtherSeasonEntity {
   int? treeQuantity;
   String? startUrl;
   String? endUrl;
-  int? turnover;
+  List<TurnoverEntity>? turnovers;
 
   factory OtherSeasonEntity.fromJson(Map<String, dynamic> json) =>
       OtherSeasonEntity(
@@ -116,23 +122,26 @@ class OtherSeasonEntity {
           process: json['process'] == null
               ? null
               : ProcessSeason.fromJson(json['process'] as Map<String, dynamic>),
-          tree:json['tree'] as String?,
+          tree: json['tree'] as String?,
           start_date: json['start'] as String?,
           end_date: json['end'] as String?,
           treeQuantity: json['treeQuantity'] as int?,
-          turnover: json['turnover'] as int?
+          turnovers: (json['turnovers'] as List<dynamic>?)?.map((e) =>
+              TurnoverEntity.fromJson(e as Map <String,dynamic>)).toList()
       );
-  Map<String, dynamic> toJson() => <String, dynamic>{
-    if(this.seasonId != null) '_id': this.seasonId,
-    'name': this.name,
-    'garden': this.garden ?? this.garden,
-    'process': this.process,
-    'tree': this.tree,
-    'start': this.start_date,
-    'end': this.end_date,
-    'treeQuantity': this.treeQuantity,
-    if(this.turnover != null) 'turnover': this.turnover
-  };
+
+  Map<String, dynamic> toJson() =>
+      <String, dynamic>{
+        if(this.seasonId != null) '_id': this.seasonId,
+        'name': this.name,
+        'garden': this.garden ?? this.garden,
+        'process': this.process,
+        'tree': this.tree,
+        'start': this.start_date,
+        'end': this.end_date,
+        'treeQuantity': this.treeQuantity,
+        if(this.turnovers != null) 'turnover': this.turnovers
+      };
 
   OtherSeasonEntity copyWith({
     String? seasonId,
@@ -143,7 +152,7 @@ class OtherSeasonEntity {
     String? start_date,
     String? end_date,
     int? treeQuantity,
-    int? turnover,
+    List<TurnoverEntity>? turnovers,
   }) {
     return OtherSeasonEntity(
         seasonId: seasonId ?? this.seasonId,
@@ -154,7 +163,7 @@ class OtherSeasonEntity {
         start_date: start_date ?? this.start_date,
         end_date: end_date ?? this.end_date,
         treeQuantity: treeQuantity ?? this.treeQuantity,
-        turnover:turnover?? this.turnover
+        turnovers: turnovers ?? this.turnovers
     );
   }
 
@@ -167,6 +176,6 @@ class OtherSeasonEntity {
     this.start_date,
     this.end_date,
     this.treeQuantity,
-    this.turnover
+    this.turnovers
   });
 }

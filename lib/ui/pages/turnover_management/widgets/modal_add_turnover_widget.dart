@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -186,6 +187,13 @@ class _ModalAddTurnoverWidgetState extends State<ModalAddTurnoverWidget> {
                           color: AppColors.mainDarker,
                           fontSize: 18,
                         ),
+                        suffixText: "VND",
+                        inputFormatters: [
+                          CurrencyTextInputFormatter(
+                            locale: 'vi',
+                            symbol: '',
+                          ),
+                        ],
                         validator: (value) {
                           if (Validator.validateNullOrEmpty(value!))
                             return "Chưa nhập đơn giá";
@@ -214,7 +222,7 @@ class _ModalAddTurnoverWidgetState extends State<ModalAddTurnoverWidget> {
                                       nameController.text,
                                       num.parse(quantityController.text),
                                       unitController.text,
-                                      int.parse(unitPriceController.text),
+                                      int.parse(unitPriceController.text.replaceAll(".","")),
                                     );
                                   }
                                 }),

@@ -94,8 +94,8 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 _buildTextLabel("Công việc: "),
                 _buildWorkPicker(),
                 SizedBox(height: 3),
-                _buildTextLabel("Chọn mùa:"),
-                _buildSeasonPicker(),
+                // _buildTextLabel("Chọn mùa:"),
+                // _buildSeasonPicker(),
                 SizedBox(height: 3),
                 _buildTextLabel("Số lượng: "),
                 _buildTreeQuantity(),
@@ -132,7 +132,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     await _cubit
-                        .createContractTask(treeQuantityController.text);
+                        .createContractTask(treeQuantityController.text, widget.seasonEntity!.seasonId);
                     Navigator.of(context).pop(true);
                   }
                 },

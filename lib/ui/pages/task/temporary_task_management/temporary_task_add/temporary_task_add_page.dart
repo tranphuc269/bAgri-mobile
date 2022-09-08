@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
+import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/daily_task_widget.dart';
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_add/temporary_task_add_cubit.dart';
@@ -16,6 +17,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TemporaryTaskAddPage extends StatefulWidget {
   String? garden;
+  final SeasonEntity? seasonEntity;
+
+  TemporaryTaskAddPage({Key? key, this.seasonEntity}) : super(key: key);
 
   @override
   _TemporaryTaskAddPageState createState() {
@@ -94,38 +98,6 @@ class _TemporaryTaskAddPageState extends State<TemporaryTaskAddPage> {
                   );
                 },
               ),
-              _buildTextLabel("Chọn mùa vụ:"),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-                child: AppPageSeasonPicker(
-                  controller: seasonPickerController,
-                  onChanged: (value) {},
-                )
-                // AppPageGardenPicker(
-                //   controller: gardenController,
-                //   onChanged: (value) {},
-                // ),
-              ),
-              // SizedBox(
-              //   height: 10,
-              // ),
-              // _buildTextLabel('Mô tả: '),
-              // SizedBox(height: 5),
-              // Container(
-              //   margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(25.0),
-              //   ),
-              //   child: AppTextAreaField(
-              //     hintText: 'Mô tả',
-              //     maxLines: 8,
-              //     enable: true,
-              //     controller: descriptionController,
-              //   ),
-              // ),
               _buildTextLabel("Danh sách việc:"),
               BlocBuilder<TemporaryTaskAddCubit, TemporaryTaskAddState>(
                 builder: (context, state) {
@@ -259,7 +231,7 @@ class _TemporaryTaskAddPageState extends State<TemporaryTaskAddPage> {
                   title: 'Xác nhận',
                   onPressed: () {
                     if (_formKey3.currentState!.validate()) {
-                      _cubit.createTemporaryTask();
+                      _cubit.createTemporaryTask(widget.seasonEntity!.seasonId);
                     }
                   },
                   isLoading: isLoading,

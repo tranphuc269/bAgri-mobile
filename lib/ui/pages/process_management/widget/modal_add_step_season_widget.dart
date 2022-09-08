@@ -237,6 +237,8 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                                       .dateDisplayFormat)!
                                   :*/ DateTime.now(),
                               lastDate: DateTime(2024));
+                          print("df"+ result.toString());
+                          print("starttime " + startTime) ;
                           if (result != null) {
                             // widget.start =
                             //     Util.DateUtils.toDateString(
@@ -244,8 +246,18 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
 
                             startTime = Util.DateUtils.toDateString(
                                 result, format: AppConfig.dateAPIFormatStrikethrough);
+                            print("sdf" + startTime);
                             setState(() {});
                           }
+                          else {
+                            DateTime time = Util.DateUtils.fromString(
+                                startTime,
+                                format: AppConfig
+                                    .dateAPIFormatStrikethrough)!;
+                            startTime = Util.DateUtils.toDateString(
+                                time, format: AppConfig.dateAPIFormatStrikethrough);
+                          }
+
                         },
                         child: SizedBox(
                           height: 26,
@@ -282,7 +294,7 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                       Expanded(
                         child: AppButton(
                           color: AppColors.redButton,
-                          title: 'Hủy',
+                          title: 'Hủy bỏ',
                           onPressed: () {
                             Navigator.of(context).pop(true);
                             // widget.onDelete!();
@@ -295,6 +307,14 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                             color: AppColors.main,
                             title: 'Xác nhận',
                             onPressed: () async{
+                              print("sdggse" +startTime);
+                              DateTime time = Util.DateUtils.fromString(
+                                  startTime,
+                                  format: AppConfig
+                                      .dateAPIFormatStrikethrough)!;
+                              String startTime1 = Util.DateUtils.toDateString(
+                                  time, format: AppConfig.dateDisplayFormat);
+                              print(startTime1);
                               if (_formKey.currentState!.validate()) {
                                 DateTime time = Util.DateUtils.fromString(
                                     startTime,
@@ -306,7 +326,7 @@ class _ModalAddStepWidgetSeasonState extends State<ModalAddStepSeasonWidget> {
                                     nameController.text,
                                     startDateController.text,
                                     endDateController.text,
-                                    startTime,
+                                    startTime1,
                                     descriptionController.text);
                                 // Navigator.of(context).pop(true);
                               }

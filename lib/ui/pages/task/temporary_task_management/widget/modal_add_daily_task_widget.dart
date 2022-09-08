@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -171,13 +172,21 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
                           height: 5,
                         ),
                         Text(
-                          'Chi phí:',
+                          'Tổng chi phí:',
                           style: AppTextStyle.greyS16,
                         ),
                         SizedBox(height: 5),
                         AppTextField(
                           autoValidateMode: AutovalidateMode.onUserInteraction,
-                          hintText: 'Chi phí',
+                          hintText: 'Tổng chi phí',
+                          suffixText: "VND",
+                          suffixTextStyle: TextStyle(color: AppColors.mainDarker, fontSize: 16),
+                          inputFormatters: [
+                            CurrencyTextInputFormatter(
+                              locale: 'vi',
+                              symbol: '',
+                            ),
+                          ],
                           controller: feeController,
                           keyboardType: TextInputType.number,
                           validator: (value) {
@@ -276,7 +285,7 @@ class _ModalAddDailyTaskWidgetState extends State<ModalAddDailyTaskWidget> {
                                               Navigator.of(context).pop();
                                               widget.onPressed(
                                                   nameController.text,
-                                                  feeController.text,
+                                                  int.parse(feeController.text.replaceAll(".","")).toString(),
                                                   workerQuantityController
                                                       .text, startTime);
                                             }

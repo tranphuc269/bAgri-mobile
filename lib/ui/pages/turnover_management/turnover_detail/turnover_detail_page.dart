@@ -313,9 +313,6 @@ class _TurnoverDetailState extends State<TurnoverDetailPage> {
                 SizedBox(
                   height: 15,
                 ),
-                _cubit.state.season!.end_date != null
-                    ? _buildUpdateRevenueButton()
-                    : Container(),
               ],
             ),
           ),
@@ -457,11 +454,11 @@ class _TurnoverDetailState extends State<TurnoverDetailPage> {
                             } else if (state.loadStatus == LoadStatus.FAILURE) {
                               return Container();
                             } else if (state.loadStatus == LoadStatus.SUCCESS) {
-                              return turnovers.length != 0
+                              return state.season!.turnovers!.length != 0
                                   ? Column(
                                 children: List.generate(
-                                    turnovers.length,
-                                        (index) => _buildTurnoverItem(turnovers[index])
+                                    state.season!.turnovers!.length,
+                                        (index) => _buildTurnoverItem(state.season!.turnovers![index])
                                 ),
                               )
                                   : Container();
@@ -471,27 +468,7 @@ class _TurnoverDetailState extends State<TurnoverDetailPage> {
                           },
                         ),
                       ),
-                      Divider(
-                        height: 1,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              addTurnover();
-                            },
-                            child: Text(
-                              "Thêm",
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .button!
-                                  .copyWith(color: AppColors.mainDarker),
-                            ),
-                          )
-                        ],
-                      ),
+
                     ],
                   )),
             );
@@ -529,8 +506,8 @@ class _TurnoverDetailState extends State<TurnoverDetailPage> {
   }
    caculateTotalTurnover(){
     num totalTurnover = 0;
-    for(int i = 0; i < turnovers.length; i++){
-      totalTurnover += num.parse(turnovers[i].quantity.toString()) * num.parse(turnovers[i].unitPrice.toString());
+    for(int i = 0; i < _cubit.state.season!.turnovers!.length; i++){
+      totalTurnover += num.parse(_cubit.state.season!.turnovers![i].quantity.toString()) * num.parse(_cubit.state.season!.turnovers![i].unitPrice.toString());
     }
     return totalTurnover;
   }

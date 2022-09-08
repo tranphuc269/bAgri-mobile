@@ -4,6 +4,7 @@ import 'package:flutter_base/models/entities/season/stage_season.dart';
 import 'package:flutter_base/models/entities/season/step_season.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/entities/tree/tree_delete_response.dart';
+import 'package:flutter_base/models/entities/turnover/turnover_entity.dart';
 import 'package:flutter_base/network/api_client_bagri.dart';
 
 abstract class SeasonRepository {
@@ -23,7 +24,7 @@ abstract class SeasonRepository {
   Future<OtherSeasonEntity> deleteStep(String stepId, String phaseId);
   Future<OtherSeasonEntity> endStep(String phaseId, String stepId);
   Future<OtherSeasonEntity> endPhase(String phaseId);
-  Future<dynamic> endSeason(String seasonId, int turnover);
+  Future<dynamic> endSeason(String seasonId, List<TurnoverEntity> turnovers);
   Future<GardenEntity> getGardenById(String gardenId);
   Future<TreeEntity> getTreeById(String treeId);
 
@@ -125,9 +126,9 @@ class SeasonRepositoryImpl extends SeasonRepository {
   }
 
   @override
-  Future endSeason(String seasonId, int turnover) async{
+  Future endSeason(String seasonId, List<TurnoverEntity> turnovers) async{
     final data = {
-      "turnover": turnover
+      "turnovers": turnovers
     };
     return await _apiClientBagri!.endSeason(seasonId, data);
   }

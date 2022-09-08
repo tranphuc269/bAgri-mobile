@@ -7,6 +7,7 @@ import 'package:flutter_base/ui/pages/task/contract_task_management/widgets/moda
 import 'package:flutter_base/ui/pages/task/temporary_task_management/temporary_task_update/temporary_task_update_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
+import 'package:intl/intl.dart';
 
 class DailyTaskWidget extends StatefulWidget {
   int? index;
@@ -33,6 +34,8 @@ class DailyTaskWidget extends StatefulWidget {
 }
 
 class _DailyTaskWidgetState extends State<DailyTaskWidget> {
+  final formatCurrency = new NumberFormat.currency(locale: 'vi');
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -146,7 +149,7 @@ class _DailyTaskWidgetState extends State<DailyTaskWidget> {
                               ),
                             ),
                             Text(
-                              'Chi phí:  ${widget.dailyTask?.fee.toString()}',
+                              'Tổng chi phí:  ${formatCurrency.format(widget.dailyTask?.fee)}',
                               style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: 16,
