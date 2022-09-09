@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
@@ -22,8 +24,6 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_circular_progress_indicator.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
-import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:intl/intl.dart';
@@ -46,21 +46,22 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  void dispose() {
-    _turnoverController.dispose();
-    _formKey.currentState?.dispose();
-    super.dispose();
-  }
-
-  @override
   void initState() {
     _cubit = BlocProvider.of<SeasonDetailCubit>(context);
     super.initState();
+
     _cubit.getSeasonDetail(widget.thisSeason.seasonId ?? "");
     if (widget.thisSeason.end_date != null) {
       _cubit.calculateFee(widget.thisSeason.seasonId ?? "");
     }
-    print(checkEndPharseAndStep());
+  }
+
+  @override
+  void dispose() {
+    _turnoverController.dispose();
+    _formKey.currentState?.dispose();
+
+    super.dispose();
   }
 
   Future<void> refreshData() async {
@@ -287,6 +288,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                   height: 40,
                                   width: 200,
                                   onPressed: () async {
+                                    print(await checkEndPharseAndStep());
                                     var endPharseStatus = await checkEndPharseAndStep();
                                     endPharseStatus ?
                                     Application.router!.navigateTo(
@@ -324,10 +326,12 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     ));
   }
   Future<bool> checkEndPharseAndStep() async {
-    for(var i = 0; i <  _cubit.state.season!.process!.stages!.length; i++){
-      if(_cubit.state.season!.process!.stages![i].end == null){
+    var result = false;
+    for (var i = 0; i < _cubit.state.season!.process!.stages!.length; i++) {
+      if (_cubit.state.season!.process!.stages![i].end == null) {
+        result = false;
         break;
-      }else{
+      } else {
         return true;
       }
     }
@@ -450,8 +454,9 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                 start: widget.startDate,
                                 end: widget.stageSeason!.end,
                                 onEnd: () async {
+                                  checkStepOfStageEnd(widget.stageSeason) ?
                                   await widget.cubit.endStage(widget.index!,
-                                      widget.stageSeason!.stage_id!);
+                                      widget.stageSeason!.stage_id!) : showSnackBar("Các bước chưa được kết thúc", "error");
                                 }));
                       },
                       child: Container(
@@ -594,22 +599,6 @@ class _PhaseProcessState extends State<PhaseProcess> {
                       ],
                     )
                   ]),
-              // GestureDetector(
-              //   onTap: widget.onRemove,
-              //   child: Align(
-              //     alignment: Alignment.topRight,
-              //     child: Container(
-              //       height: 30,
-              //       padding: EdgeInsets.only(top: 7, right: 5),
-              //       child: FittedBox(
-              //         child: Icon(
-              //           Icons.close,
-              //           color: Colors.white,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ]),
           ),
           // SizedBox(
@@ -619,6 +608,27 @@ class _PhaseProcessState extends State<PhaseProcess> {
       ),
     );
   }
+
+  checkStepOfStageEnd(StageSeason? stage) {
+    for (var stepIndex = 0; stepIndex < stage!.steps!.length; stepIndex++) {
+      if (stage.steps![stepIndex].end == null) {
+        break;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<void> showSnackBar(String message, String typeSnackBar) async {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
+      typeSnackBar: typeSnackBar,
+      message: message,
+    ));
+  }
+
+
 }
 
 class StepWidget extends StatefulWidget {

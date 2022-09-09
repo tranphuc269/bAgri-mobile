@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
@@ -12,7 +13,9 @@ import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/contract_task_responsitory.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
+import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'season_detail_state.dart';
 
@@ -27,12 +30,29 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
       required this.contractTaskRepository})
       : super(SeasonDetailState());
 
-  Future<void> endStage(int index, String? phaseId) async{
+  final showMessageController = PublishSubject<SnackBarMessage>();
+
+  @override
+  Future<void> close() {
+    showMessageController.close();
+    return super.close();
+  }
+
+
+  Future<void> endStage(int index, String? phaseId) async {
     // emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-      var result =await seasonRepository.endPhase(phaseId!);
+      var result = await seasonRepository.endPhase(phaseId!);
       getSeasonDetail(state.season!.seasonId!);
-    } catch (e) {
+    } catch (error) {
+      if (error is DioError) {
+        if (error.response!.statusCode == 400) {
+          showMessageController.sink.add(SnackBarMessage(
+            message: error.response!.data['message'],
+            type: SnackBarType.ERROR,
+          ));
+        }
+      }
       // emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
     }
   }
@@ -78,18 +98,6 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
     }
   }
 
-  // Future<void> endSeason(String seasonId, int turnover) async {
-  //   emit(state.copyWith(loadStatus: LoadStatus.LOADING));
-  //   try {
-  //     var result = await seasonRepository.endSeason(seasonId, turnover);
-  //     emit(state.copyWith(
-  //       loadStatus: LoadStatus.SUCCESS, /*season: result*/ /*.data!.season!*/
-  //     ));
-  //   } catch (e) {
-  //     emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
-  //   }
-  // }
-
   Future<void> getListContractTask(String seasonId) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
@@ -133,21 +141,21 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
           for (var dailyFee in item.dailyTasks!) {
             feeWorker += dailyFee.fee ?? 0;
             var i = listWork.indexOf(listWork.firstWhere(
-                    (element) => element.title == dailyFee.title,
-                orElse: () =>Work(
+                (element) => element.title == dailyFee.title,
+                orElse: () => Work(
                     title: dailyFee.title,
                     unit: "${dailyFee.workerQuantity.toString()} Người",
                     unitPrice: dailyFee.fee,
                     quantity: dailyFee.workerQuantity)));
-            if(i == -1){
+            if (i == -1) {
               listWork.add(Work(
                   title: dailyFee.title,
                   unit: "${dailyFee.workerQuantity.toString()} Người",
                   unitPrice: dailyFee.fee,
                   quantity: dailyFee.workerQuantity));
-            }
-            else {
-              listWork[i].quantity = ((listWork[i].quantity ?? 0) + (dailyFee.workerQuantity ?? 0));
+            } else {
+              listWork[i].quantity = ((listWork[i].quantity ?? 0) +
+                  (dailyFee.workerQuantity ?? 0));
             }
             if (dailyFee.materials != null && dailyFee.materials!.length != 0) {
               for (var materialFee in dailyFee.materials!) {
@@ -159,14 +167,15 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
                         name: materialFee.name,
                         unit: materialFee.unit,
                         quantity: materialFee.quantity)));
-                if(index == -1){
+                if (index == -1) {
                   listMaterial.add(MaterialUsedByTask(
                       name: materialFee.name,
                       unit: materialFee.unit,
                       quantity: materialFee.quantity));
-                }
-                else {
-                  listMaterial[index].quantity = (listMaterial[index].quantity?? 0) + (materialFee.quantity ?? 0);
+                } else {
+                  listMaterial[index].quantity =
+                      (listMaterial[index].quantity ?? 0) +
+                          (materialFee.quantity ?? 0);
                 }
               }
             }
@@ -177,21 +186,21 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
         if (item.work != null) {
           fee += (item.quantity ?? 0) * (item.work!.unitPrice ?? 0);
           var i = listWork.indexOf(listWork.firstWhere(
-                  (element) => element.title == item,
-              orElse: () =>Work(
+              (element) => element.title == item,
+              orElse: () => Work(
                   title: item.work?.title,
                   unit: item.work?.unit,
                   unitPrice: item.work?.unitPrice,
                   quantity: item.quantity)));
-          if(i == -1){
+          if (i == -1) {
             listWork.add(Work(
                 title: item.work?.title,
                 unit: item.work?.unit,
                 unitPrice: item.work?.unitPrice,
                 quantity: item.quantity));
-          }
-          else {
-            listWork[i].quantity = ((listWork[i].quantity ?? 0) + (item.quantity ?? 0));
+          } else {
+            listWork[i].quantity =
+                ((listWork[i].quantity ?? 0) + (item.quantity ?? 0));
           }
         }
         if (item.materials != null && item.materials!.length != 0) {
@@ -199,19 +208,20 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
             feeMaterial +=
                 ((materialFee.quantity ?? 0) * (materialFee.unitPrice ?? 0));
             var index = listMaterial.indexOf(listMaterial.firstWhere(
-                    (element) => element.name == materialFee.name,
+                (element) => element.name == materialFee.name,
                 orElse: () => MaterialUsedByTask(
                     name: materialFee.name,
                     unit: materialFee.unit,
                     quantity: materialFee.quantity)));
-            if(index == -1){
-              listMaterial.add( MaterialUsedByTask(
+            if (index == -1) {
+              listMaterial.add(MaterialUsedByTask(
                   name: materialFee.name,
                   unit: materialFee.unit,
                   quantity: materialFee.quantity));
-            }
-            else {
-              listMaterial[index].quantity = (listMaterial[index].quantity?? 0) + (materialFee.quantity ?? 0);
+            } else {
+              listMaterial[index].quantity =
+                  (listMaterial[index].quantity ?? 0) +
+                      (materialFee.quantity ?? 0);
             }
           }
         }
@@ -221,9 +231,8 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
           fee: fee,
           feeWorker: feeWorker,
           feeMaterial: feeMaterial,
-        listMaterial: listMaterial,
-        listWork: listWork
-      ));
+          listMaterial: listMaterial,
+          listWork: listWork));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
     }

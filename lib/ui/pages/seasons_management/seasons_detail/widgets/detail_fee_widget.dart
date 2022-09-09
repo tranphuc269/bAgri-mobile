@@ -34,7 +34,7 @@ class DetailFeeWidget extends StatelessWidget {
               padding: EdgeInsets.all(10),
             ),
             Divider(),
-            Expanded(
+          listMaterial != null ?  Expanded(
               child: ListView.separated(
                 padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
                 physics: AlwaysScrollableScrollPhysics(),
@@ -53,7 +53,7 @@ class DetailFeeWidget extends StatelessWidget {
                   );
                 },
               ),
-            ),
+            ) : Container(),
           ],
         ));
   }

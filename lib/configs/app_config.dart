@@ -8,7 +8,7 @@ class AppConfig {
 
   // static const baseUrl = "http://167.71.196.194:7000";
   // static const baseUrl = "http://10.0.2.2:8000";
-  static const baseUrl = "https://12c8-222-252-10-226.ap.ngrok.io";
+  static const baseUrl = "https://8102-222-252-10-226.ap.ngrok.io";
   static const weatherUrl = "https://api.openweathermap.org/data/2.5";
   static const apiKey = "6ce1aec7e60fff1aedf3891c3354007c";
   static const fileUrl = "http://143.198.84.186:8081";
