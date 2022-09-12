@@ -247,29 +247,6 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                           ),
                         ),
                       ),
-                      // Expanded(
-                      //   child: Navigator(
-                      //     key: careProcessNavigationKey,
-                      //     initialRoute: '/',
-                      //     onGenerateRoute: (RouteSettings settings) {
-                      //       late Widget page;
-                      //       switch (settings.name) {
-                      //         case "/":
-                      //           page = CareProcessDetail(
-                      //             seasonId: widget.thisSeason.seasonId!,
-                      //           );
-                      //
-                      //           break;
-                      //       }
-                      //       return MaterialPageRoute<dynamic>(
-                      //         builder: (context) {
-                      //           return page;
-                      //         },
-                      //         settings: settings,
-                      //       );
-                      //     },
-                      //   ),
-                      // ),
                       buildProcess(),
                       SizedBox(
                         height: 20,
@@ -326,26 +303,28 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     ));
   }
   Future<bool> checkEndPharseAndStep() async {
-    var result = false;
+    var result = true;
     for (var i = 0; i < _cubit.state.season!.process!.stages!.length; i++) {
       if (_cubit.state.season!.process!.stages![i].end == null) {
         result = false;
         break;
-      } else {
-        return true;
       }
     }
-    return false;
+    return result;
   }
 
   Widget buildProcess() {
     return BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
       builder: (context, state) {
         if (state.loadStatus == LoadStatus.LOADING) {
-          return Center(
-              child: CircularProgressIndicator(
-            color: AppColors.main,
-          ));
+          return Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(
+                child: CircularProgressIndicator(
+              color: AppColors.main,
+            )),
+          );
         } else if (state.loadStatus == LoadStatus.FAILURE) {
           return Container();
         } else if (state.loadStatus == LoadStatus.SUCCESS) {
@@ -610,14 +589,14 @@ class _PhaseProcessState extends State<PhaseProcess> {
   }
 
   checkStepOfStageEnd(StageSeason? stage) {
+    var result = true;
     for (var stepIndex = 0; stepIndex < stage!.steps!.length; stepIndex++) {
       if (stage.steps![stepIndex].end == null) {
+        result = false;
         break;
-      } else {
-        return true;
       }
     }
-    return false;
+    return result;
   }
 
   Future<void> showSnackBar(String message, String typeSnackBar) async {

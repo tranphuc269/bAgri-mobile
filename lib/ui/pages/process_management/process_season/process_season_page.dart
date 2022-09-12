@@ -181,6 +181,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                                                       state.stages![index]
                                                           .stage_id);
                                                 }, seasonId: widget.seasonId!,
+                                            endDate: state.stages![index].end,
                                               )),
                                     )
                                   : Container();

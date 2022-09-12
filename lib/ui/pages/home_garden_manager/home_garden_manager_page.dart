@@ -71,11 +71,11 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
     _cubit!.fetchStepOfDay(_selectedDay);
 
     _fabAnimationController = AnimationController(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
     _borderRadiusAnimationController = AnimationController(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
     fabCurve = CurvedAnimation(
@@ -149,22 +149,24 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
         drawer: MainDrawer(),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            bool isAdd = await showDialog(
+            bool isAddTask = await showDialog(
                 context: context,
                 builder: (context) =>
                     selectTypeTask(contractTask: ()  async {
-                     bool isAdd = await Application.router
+                     final bool isAddContractTask = await Application.router
                           ?.navigateTo(context, Routes.addContractTask,
                         routeSettings: RouteSettings(
                         arguments: SeasonEntity()
                       ),);
-                     if (isAdd) {
+                     if (isAddContractTask) {
                        Navigator.pop(context, true);
                      }
                     }, temporaryTasks: () async {
-                      bool isAdd = await Application.router
-                          ?.navigateTo(context, Routes.addTemporaryTask);
-                      if (isAdd) {
+                      final bool isAddTemporaryTask = await Application.router
+                          ?.navigateTo(context, Routes.addTemporaryTask, routeSettings:  RouteSettings(
+                        arguments: SeasonEntity()
+                      ));
+                      if (isAddTemporaryTask) {
                         Navigator.pop(context, true);
                       }
                     },
@@ -172,7 +174,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
                     Navigator.pop(context, false);
                   }
                     ));
-            if (isAdd) {
+            if (isAddTask) {
               showSnackBar('Thêm công việc thành công!');
             }
           },
@@ -308,7 +310,7 @@ class _HomeGardenManagerPageState extends State<HomeGardenManagerPage>
                         primary: false,
                         controller: _scrollController,
                         itemBuilder: (context, index) {
-                          StepEntityResponseByDay step =
+                          final StepEntityResponseByDay step =
                               state.eventsOfDays![index];
                           return _buildEvent(
                               gardenName: step.garden,

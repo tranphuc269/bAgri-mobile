@@ -98,6 +98,8 @@ class _TemporaryTaskAddPageState extends State<TemporaryTaskAddPage> {
                   );
                 },
               ),
+              widget.seasonEntity!.name == null ?
+              _buildSeasonPicker() : Container(),
               _buildTextLabel("Danh sách việc:"),
               BlocBuilder<TemporaryTaskAddCubit, TemporaryTaskAddState>(
                 builder: (context, state) {
@@ -163,6 +165,27 @@ class _TemporaryTaskAddPageState extends State<TemporaryTaskAddPage> {
           ),
         ]),
       ),
+    );
+  }
+  Widget _buildSeasonPicker() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTextLabel("Chọn mùa:"),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: AppPageSeasonPicker(
+            controller: seasonPickerController,
+            onChanged: (value) {
+              setState(() {});
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -231,7 +254,8 @@ class _TemporaryTaskAddPageState extends State<TemporaryTaskAddPage> {
                   title: 'Xác nhận',
                   onPressed: () {
                     if (_formKey3.currentState!.validate()) {
-                      _cubit.createTemporaryTask(widget.seasonEntity!.seasonId);
+                      widget.seasonEntity!.name != null ?
+                      _cubit.createTemporaryTask(widget.seasonEntity!.seasonId) :_cubit.createTemporaryTask(seasonPickerController.seasonEntity!.seasonId) ;
                     }
                   },
                   isLoading: isLoading,

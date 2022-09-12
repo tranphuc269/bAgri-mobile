@@ -40,12 +40,13 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
 
 
   Future<void> endStage(int index, String? phaseId) async {
-    // emit(state.copyWith(loadStatus: LoadStatus.LOADING));
+    emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
       var result = await seasonRepository.endPhase(phaseId!);
-      getSeasonDetail(state.season!.seasonId!);
+      emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
     } catch (error) {
       if (error is DioError) {
+        emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
         if (error.response!.statusCode == 400) {
           showMessageController.sink.add(SnackBarMessage(
             message: error.response!.data['message'],

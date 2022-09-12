@@ -35,6 +35,7 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
   void initState() {
     _cubit = BlocProvider.of<ContractTaskAddingCubit>(context);
 
+    print(widget.seasonEntity!.name);
     seasonPickerController = SeasonPickerController();
     print(widget.seasonEntity);
     workPickerController = WorkPickerController();
@@ -94,8 +95,8 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 _buildTextLabel("Công việc: "),
                 _buildWorkPicker(),
                 SizedBox(height: 3),
-                // _buildTextLabel("Chọn mùa:"),
-                // _buildSeasonPicker(),
+                widget.seasonEntity!.name == null ?
+                _buildSeasonPicker() : Container(),
                 SizedBox(height: 3),
                 _buildTextLabel("Số lượng: "),
                 _buildTreeQuantity(),
@@ -131,8 +132,11 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
                 title: 'Xác nhận',
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
+
+                    widget.seasonEntity!.name != null ?
                     await _cubit
-                        .createContractTask(treeQuantityController.text, widget.seasonEntity!.seasonId);
+                        .createContractTask(treeQuantityController.text, widget.seasonEntity!.seasonId) :  await _cubit
+                        .createContractTask(treeQuantityController.text, seasonPickerController.seasonEntity!.seasonId);
                     Navigator.of(context).pop(true);
                   }
                 },
@@ -208,17 +212,22 @@ class _AddContractTaskState extends State<AddContractTaskPage> {
   }
 
   Widget _buildSeasonPicker() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child: AppPageSeasonPicker(
-        controller: seasonPickerController,
-        onChanged: (value) {
-          setState(() {});
-        },
-      ),
+    return Column(
+      children: [
+        _buildTextLabel("Chọn mùa:"),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: AppPageSeasonPicker(
+            controller: seasonPickerController,
+            onChanged: (value) {
+              setState(() {});
+            },
+          ),
+        ),
+      ],
     );
   }
 
