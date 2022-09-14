@@ -15,6 +15,9 @@ import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:intl/intl.dart';
+import 'package:rxdart/rxdart.dart';
+
+import '../../../widgets/app_snackbar.dart';
 
 part 'season_adding_state.dart';
 
@@ -26,9 +29,18 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
       {required this.seasonRepository, required this.processRepository})
       : super(SeasonAddingState());
 
+  final showMessageController = PublishSubject<SnackBarMessage>();
+
+  @override
+  Future<void> close() {
+    showMessageController.close();
+    return super.close();
+  }
+
   ProcessSeason calculateStartDay() {
     int afterDay = 0;
-    DateTime dateStart = DateTime.parse(state.startTime ?? DateTime.now().toString());
+    DateTime dateStart =
+        DateTime.parse(state.startTime ?? DateTime.now().toString());
     List<StageSeason> listStages = [];
     if (state.processEntity != null) {
       final pt = state.processEntity!;
@@ -48,8 +60,9 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
                 name: phase.steps![index].name,
                 description: phase.steps![index].description,
                 from_day: phase.steps![index].from_day,
-                to_day: phase.steps![index].to_day,
-                /*actual_day: phase.steps![index].actual_day*/);
+                to_day: phase.steps![index]
+                    .to_day, /*actual_day: phase.steps![index].actual_day*/
+              );
               afterDay += phase.steps![index].to_day ?? 7;
               listSteps.add(stepSeason);
             }
@@ -58,34 +71,36 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
               steps: listSteps,
               name: phase.name,
               description: phase.description,
-              start: listSteps.first.start
-          );
+              start: listSteps.first.start);
           listStages.add(stageSeason);
         }
-
       }
     }
-    ProcessSeason processSeason = ProcessSeason(
-        name: state.processEntity!.name,
-        stages: listStages
-    );
+    ProcessSeason processSeason =
+        ProcessSeason(name: state.processEntity!.name, stages: listStages);
     return processSeason;
   }
 
   Future<void> createSeason(int treeQuantity) async {
     emit(state.copyWith(loadStatus: LoadStatus.LOADING));
     try {
-     SeasonEntity param = SeasonEntity(
+      SeasonEntity param = SeasonEntity(
           name: state.seasonName,
-          gardenId: state.gardenEntity!.garden_id,
+          gardenId: state.gardenEntity!.gardenId,
           process: calculateStartDay(),
           tree: state.treeEntity?.name,
           start_date: state.startTime,
           // end_date: state.endTime ,
           treeQuantity: treeQuantity);
+
       var result = await seasonRepository.createSeason(param);
       emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
+      showMessageController.sink.add(SnackBarMessage(
+          message: 'Tạo mùa mới thành công', type: SnackBarType.SUCCESS));
+
     } catch (e) {
+      showMessageController.sink.add(SnackBarMessage(
+          message: 'Đã có lỗi xảy ra', type: SnackBarType.SUCCESS));
       emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
     }
   }
@@ -95,7 +110,7 @@ class SeasonAddingCubit extends Cubit<SeasonAddingState> {
     try {
       // ObjectResponse<ProcessDetailResponse> result =
       ProcessEntity processResult = /* result.data!.process!;*/
-      await processRepository.getProcessById(processId);
+          await processRepository.getProcessById(processId);
       int duration = 0;
       if (processResult.stages != null) {
         for (StageEntity stage in processResult.stages!) {

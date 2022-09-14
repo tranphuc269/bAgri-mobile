@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -13,7 +15,7 @@ import 'package:flutter_base/ui/widgets/b_agri/page_picker/process_picker/app_pr
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/tree_picker/app_single_tree_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
-import 'package:intl/intl.dart';
+import '../../../widgets/app_snackbar.dart';
 
 class SeasonAddingPage extends StatefulWidget {
   const SeasonAddingPage({Key? key}) : super(key: key);
@@ -29,8 +31,8 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
   late SingleTreePickerController treeController;
   late ProcessPickerController processController;
   late GardenPickerController gardenController;
-
-  DateFormat _dateFormat = DateFormat(AppConfig.dateAPIFormatStrikethrough);
+  late StreamSubscription _showMessageSubscription;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -58,6 +60,10 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
             .changeDuration(processController.processEntity!.process_id ?? "");
       }
     });
+    _showMessageSubscription =
+        _cubit.showMessageController.stream.listen((event) {
+          _showMessage(event);
+        });
   }
 
   @override
@@ -68,11 +74,17 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
     processController.dispose();
     gardenController.dispose();
     treeQuantityController.dispose();
+    _showMessageSubscription.cancel();
+  }
+  void _showMessage(SnackBarMessage message) {
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(message: message));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBarWidget(
         context: context,
         onBackPressed: (){
@@ -202,55 +214,6 @@ class _SeasonAddingPageState extends State<SeasonAddingPage> {
                           ],
                         ),
                         SizedBox(height: 15),
-                        // Row(
-                        //   children: [
-                        //     Text(
-                        //       'Ngày kết thúc (dự kiến):',
-                        //       style: AppTextStyle.greyS18,
-                        //     ),
-                        //     SizedBox(width: 15),
-                        //     Text(
-                        //       state.endTime ?? "yyyy/mm/dd",
-                        //       style: AppTextStyle.blackS16.copyWith(
-                        //           decoration: TextDecoration.underline),
-                        //     ),
-                        //     SizedBox(width: 10),
-                        //     GestureDetector(
-                        //       onTap: () async {
-                        //         final result = await showDatePicker(
-                        //             context: context,
-                        //             locale: Locale('vi'),
-                        //             initialEntryMode: DatePickerEntryMode.input,
-                        //             builder: (context, child) {
-                        //               return _buildCalendarTheme(child);
-                        //             },
-                        //             fieldHintText: "yyyy-MM-dd",
-                        //             initialDate: state.endTime != null
-                        //                 ? Util.DateUtils.fromString(
-                        //                 state.endTime!,
-                        //                 format:
-                        //                 AppConfig.dateDisplayFormat)!
-                        //                 : DateTime.now(),
-                        //             firstDate: DateTime.now(),
-                        //             lastDate: DateTime(2024));
-                        //         if (result != null) {
-                        //           _cubit.changeEndTime(
-                        //             Util.DateUtils.toDateString(result),
-                        //           );
-                        //         }
-                        //       },
-                        //       child: SizedBox(
-                        //         height: 26,
-                        //         width: 26,
-                        //         child: Image.asset(
-                        //           AppImages.icCalendar,
-                        //           fit: BoxFit.fill,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-
                       ],
                     );
                   },

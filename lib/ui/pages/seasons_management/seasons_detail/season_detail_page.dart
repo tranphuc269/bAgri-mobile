@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
@@ -23,15 +22,15 @@ import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_circular_progress_indicator.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_base/utils/date_utils.dart' as Util;
 import 'package:intl/intl.dart';
+import '../../../widgets/app_snackbar.dart';
 
 final careProcessNavigationKey = GlobalKey<NavigatorState>();
 
 class SeasonDetailPage extends StatefulWidget {
-  SeasonEntity thisSeason;
+ final SeasonEntity thisSeason;
 
   SeasonDetailPage({Key? key, required this.thisSeason}) : super(key: key);
 
@@ -44,6 +43,9 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
   DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
   TextEditingController _turnoverController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late StreamSubscription _showMessageSubscription;
 
   @override
   void initState() {
@@ -54,14 +56,24 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     if (widget.thisSeason.end_date != null) {
       _cubit.calculateFee(widget.thisSeason.seasonId ?? "");
     }
+
+    _showMessageSubscription =
+        _cubit.showMessageController.stream.listen((event) {
+      _showMessage(event);
+    });
   }
 
   @override
   void dispose() {
     _turnoverController.dispose();
     _formKey.currentState?.dispose();
-
+    _showMessageSubscription.cancel();
     super.dispose();
+  }
+
+  void _showMessage(SnackBarMessage message) {
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(message: message));
   }
 
   Future<void> refreshData() async {
@@ -77,34 +89,11 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     return "${different.inDays}";
   }
 
-  // String currentStageInProcess(ProcessSeason process) {
-  //   int currentStage = 0;
-  //   if (process.stages != null) {
-  //     stageLoop:
-  //     for (int i = 0; i < process.stages!.length; i++) {
-  //       StageSeason thisStage = process.stages![i];
-  //       if (thisStage.steps != null) {
-  //         stepLoop:
-  //         for (int j = 0; j < thisStage.steps!.length; j++) {
-  //           StepSeason thisStep = thisStage.steps![j];
-  //           if (thisStep.actual_day != null) {
-  //             currentStage = i;
-  //             continue;
-  //           } else {
-  //             break stageLoop;
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //   currentStage += 1;
-  //   return process.stages?[currentStage - 1].name ?? '$currentStage';
-  // }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBarWidget(
           context: context,
           // title: 'Mùa vụ',
@@ -115,8 +104,11 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
             child: BlocBuilder<SeasonDetailCubit, SeasonDetailState>(
               builder: (context, state) {
                 if (state.loadStatus == LoadStatus.LOADING) {
-                  return Center(
-                    child: AppCircularProgressIndicator(),
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: AppCircularProgressIndicator(),
+                    ),
                   );
                 } else if (state.loadStatus == LoadStatus.FAILURE) {
                   return AppErrorListWidget(onRefresh: () async {
@@ -188,12 +180,6 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                               arguments: widget.thisSeason,
                                             ),
                                           );
-                                          // showPopUpDetailFee(
-                                          //     listWork: state.listWork,
-                                          //     listMaterial: state.listMaterial,
-                                          //     feeWorker: state.feeWorker,
-                                          //     fee: state.fee,
-                                          //     feeMaterial: state.feeMaterial);
                                         },
                                       )),
                                 ],
@@ -265,16 +251,19 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                                   height: 40,
                                   width: 200,
                                   onPressed: () async {
-                                    print(await checkEndPharseAndStep());
                                     var endPharseStatus = await checkEndPharseAndStep();
-                                    endPharseStatus ?
-                                    Application.router!.navigateTo(
-                                      appNavigatorKey.currentContext!,
-                                      Routes.seasonEnding,
-                                      routeSettings: RouteSettings(
-                                        arguments: state.season?.seasonId,
-                                      ),
-                                    ) : showSnackBar("Vui lòng kết thúc các bước và các giai đoạn","error");
+                                    endPharseStatus
+                                        ? Application.router!.navigateTo(
+                                            appNavigatorKey.currentContext!,
+                                            Routes.seasonEnding,
+                                            routeSettings: RouteSettings(
+                                              arguments: state.season?.seasonId,
+                                            ),
+                                          )
+                                        : _cubit.showMessageController.sink.add(
+                                            SnackBarMessage(
+                                                message: 'Các bước và các giai đoạn chưa được kết thúc',
+                                                type: SnackBarType.ERROR));
                                   },
                                 )
                               : SizedBox(),
@@ -295,13 +284,6 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     );
   }
 
-  void showSnackBar(String message, String typeSnackBar) async {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: typeSnackBar,
-      message: message,
-    ));
-  }
   Future<bool> checkEndPharseAndStep() async {
     var result = true;
     for (var i = 0; i < _cubit.state.season!.process!.stages!.length; i++) {
@@ -376,12 +358,12 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
 }
 
 class PhaseProcess extends StatefulWidget {
-  int? index;
-  String? phase;
-  StageSeason? stageSeason;
-  String? startDate;
-  VoidCallback? onRemove;
-  SeasonDetailCubit cubit;
+  final int? index;
+  final String? phase;
+  final StageSeason? stageSeason;
+  final String? startDate;
+  final VoidCallback? onRemove;
+  final SeasonDetailCubit cubit;
 
   PhaseProcess(
       {Key? key,
@@ -433,9 +415,8 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                 start: widget.startDate,
                                 end: widget.stageSeason!.end,
                                 onEnd: () async {
-                                  checkStepOfStageEnd(widget.stageSeason) ?
                                   await widget.cubit.endStage(widget.index!,
-                                      widget.stageSeason!.stage_id!) : showSnackBar("Các bước chưa được kết thúc", "error");
+                                      widget.stageSeason!.stage_id!);
                                 }));
                       },
                       child: Container(
@@ -502,14 +483,8 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                             current.loadStatus,
                                         builder: (context, state) {
                                           return Text(
-                                            (state
-                                                        .season
-                                                        ?.process
-                                                        ?.stages![widget.index!]
-                                                        .end !=
-                                                    null)
-                                                ? '-${_dateFormat.format(DateTime.parse(state.season!.process!.stages![widget.index!].end!))}'
-                                                : '',
+                                            (state.season?.process?.stages![widget.index!].end != null)
+                                                ? '-${_dateFormat.format(DateTime.parse(state.season!.process!.stages![widget.index!].end!))}' : '',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 14,
@@ -561,7 +536,6 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                             index: index,
                                             indexStages: widget.index!,
                                             phase: widget.phase,
-                                            // cubitProcess: widget.cubitProcess,
                                             step: state
                                                 .season
                                                 ?.process
@@ -580,33 +554,10 @@ class _PhaseProcessState extends State<PhaseProcess> {
                   ]),
             ]),
           ),
-          // SizedBox(
-          //   height: 10,
-          // )
         ],
       ),
     );
   }
-
-  checkStepOfStageEnd(StageSeason? stage) {
-    var result = true;
-    for (var stepIndex = 0; stepIndex < stage!.steps!.length; stepIndex++) {
-      if (stage.steps![stepIndex].end == null) {
-        result = false;
-        break;
-      }
-    }
-    return result;
-  }
-
-  Future<void> showSnackBar(String message, String typeSnackBar) async {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: typeSnackBar,
-      message: message,
-    ));
-  }
-
 
 }
 

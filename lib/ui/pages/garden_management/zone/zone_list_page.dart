@@ -8,17 +8,16 @@ import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/main.dart';
 import 'package:flutter_base/models/entities/zone/zone_entity.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
-import 'package:flutter_base/network/api_client_bagri.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/garden_management/garden_list/garden_list_page.dart';
+import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_base/utils/validators.dart';
@@ -33,15 +32,12 @@ class ZoneListPage extends StatefulWidget {
 
 class _GardenListState extends State<ZoneListPage> {
   ZoneListCubit? _cubit;
-  bool isErrorMessage = false;
-  bool isAdd = false;
 
-  ApiClient? _apiClientBagri;
-  ZoneRepository? zoneRepository;
-  final accessToken = SharedPreferencesHelper.getToken().toString();
+  late StreamSubscription _showMessageSubscription;
 
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final _nameZoneController = TextEditingController(text: '');
   final _nameModifyController = TextEditingController(text: '');
 
@@ -54,12 +50,22 @@ class _GardenListState extends State<ZoneListPage> {
     _cubit = BlocProvider.of<ZoneListCubit>(context);
     _cubit!.fetchZoneList();
     _scrollController.addListener(_onScroll);
+    _showMessageSubscription =
+        _cubit!.showMessageController.stream.listen((event) {
+      _showMessage(event);
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+    _showMessageSubscription.cancel();
+  }
+
+  void _showMessage(SnackBarMessage message) {
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(message: message));
   }
 
   @override
@@ -67,6 +73,7 @@ class _GardenListState extends State<ZoneListPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBarWidget(
           title: "Danh sách khu vực",
           context: context,
@@ -126,8 +133,6 @@ class _GardenListState extends State<ZoneListPage> {
 
                                 if (isDelete) {
                                   _onRefreshData();
-                                  showSnackBar(
-                                      'Xóa khu vực thành công!', "success");
                                 }
                               },
                               onUpdate: () async {
@@ -166,9 +171,6 @@ class _GardenListState extends State<ZoneListPage> {
                                                         _nameModifyController
                                                             .clear(),
                                                         _onRefreshData(),
-                                                        showSnackBar(
-                                                            'Thay đổi tên thành công!',
-                                                            "success"),
                                                       }
                                                     else
                                                       {
@@ -176,9 +178,6 @@ class _GardenListState extends State<ZoneListPage> {
                                                             .clear(),
                                                         Navigator.pop(
                                                             context, false),
-                                                        showSnackBar(
-                                                            "Tên khu đã tồn tại",
-                                                            "error")
                                                       }
                                                   }
                                               }),
@@ -581,13 +580,10 @@ class _GardenListState extends State<ZoneListPage> {
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               await _cubit!.createZone(_nameZoneController.text);
-              print(state.createZoneStatus);
               if (_cubit!.state.createZoneStatus == LoadStatus.FAILURE) {
-                showSnackBar("Tên khu đã tồn tại", "error");
-                Navigator.pop(context, false);
+                Navigator.pop(context);
               } else {
-                Navigator.pop(context, true);
-                showSnackBar("Thêm khu thành công", "success");
+                Navigator.pop(context);
                 _onRefreshData();
                 editingController!.clear();
               }
@@ -601,15 +597,6 @@ class _GardenListState extends State<ZoneListPage> {
   Future<void> _onRefreshData() async {
     _cubit!.fetchZoneList();
   }
-
-  void showSnackBar(String message, String typeSnackBar) async {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: typeSnackBar,
-      message: message,
-    ));
-  }
-
 
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;

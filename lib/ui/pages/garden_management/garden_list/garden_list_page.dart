@@ -100,41 +100,31 @@ class _GardenListState extends State<GardenListPage> {
                               state.listGarden![index];
                           return _buildItem(
                               gardenName: garden.name ?? "",
-                              gardenId: garden.garden_id ?? "",
+                              gardenId: garden.gardenId ?? "",
                               areaUnit: garden.areaUnit ?? "",
                               area: garden.area,
                               onPressed: () async {
-                                print(garden.garden_id);
-                                // await showDialog(
-                                //     context: context,
-                                //     builder: (context) =>  GardenDetailDialog(
-                                //       gardenId: garden.garden_id,
-                                //       onConfirm: () async {
-                                //         Navigator.pop(context, true);
-                                //       },
-                                //     ));
                                 Application.router!.navigateTo(
                                   appNavigatorKey.currentContext!,
                                   Routes.gardenDetail,
                                   routeSettings: RouteSettings(
                                     arguments: GardenArgument(
                                       titleScreen: garden.name,
-                                      garden_id: garden.garden_id,
+                                      garden_id: garden.gardenId,
                                     ),
                                   ),
                                 );
                               },
                               onUpdate: () async {
                                 print(widget.titleScreen);
-                                print(garden.garden_id);
-
+                                print(garden.gardenId);
                                 bool isUpdate =
                                     await Application.router!.navigateTo(
                                   appNavigatorKey.currentContext!,
                                   Routes.gardenUpdate,
                                   routeSettings: RouteSettings(
                                     arguments: GardenUpdateArgument(
-                                      garden_Id: garden.garden_id,
+                                      garden_Id: garden.gardenId,
                                       gardenName: garden.name,
                                       zoneName: widget.titleScreen
                                     ),
@@ -150,7 +140,7 @@ class _GardenListState extends State<GardenListPage> {
                                     builder: (context) =>  AppDeleteDialog(
                                           onConfirm: () async {
                                             await _cubit!
-                                                .deleteGarden(garden.garden_id);
+                                                .deleteGarden(garden.gardenId);
                                             Navigator.pop(context, true);
                                           },
                                         ));
@@ -185,7 +175,7 @@ class _GardenListState extends State<GardenListPage> {
               await Application.router?.navigateTo(context, Routes.gardenCreate,
                   routeSettings: RouteSettings(
                       arguments: GardenCreateArgument(
-                    zone_id: widget.zone_id,
+                    zoneId: widget.zone_id,
                     zoneName: widget.titleScreen,
                   )));
           if (isAdd) {
@@ -205,7 +195,7 @@ class _GardenListState extends State<GardenListPage> {
       {required String gardenName,
       required String gardenId,
 
-      int? area,
+      num? area,
       String? avatarUrl,
       String? areaUnit,
       VoidCallback? onDelete,

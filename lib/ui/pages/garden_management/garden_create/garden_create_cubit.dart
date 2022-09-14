@@ -57,12 +57,20 @@ class GardenCreateCubit extends Cubit<GardenCreateState> {
 
       if (response != null) {
         emit(state.copyWith(createGardenStatus: LoadStatus.SUCCESS));
+        showMessageController.sink.add(SnackBarMessage(
+            message: 'Tạo vườn mới thành công',
+            type: SnackBarType.SUCCESS
+        ));
       } else {
         emit(state.copyWith(createGardenStatus: LoadStatus.FAILURE));
       }
     } catch (e) {
       logger.e(e);
       emit(state.copyWith(createGardenStatus: LoadStatus.FAILURE));
+      showMessageController.sink.add(SnackBarMessage(
+          message: 'Đã có lỗi xảy ra',
+          type: SnackBarType.ERROR
+      ));
       return;
     }
   }

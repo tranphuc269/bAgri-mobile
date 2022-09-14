@@ -40,13 +40,18 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
 
 
   Future<void> endStage(int index, String? phaseId) async {
-    emit(state.copyWith(loadStatus: LoadStatus.LOADING));
+    emit(state.copyWith(endStageStatus: LoadStatus.LOADING));
     try {
-      var result = await seasonRepository.endPhase(phaseId!);
-      emit(state.copyWith(loadStatus: LoadStatus.SUCCESS));
+      await seasonRepository.endPhase(phaseId!);
+      emit(state.copyWith(endStageStatus: LoadStatus.SUCCESS));
+      showMessageController.sink.add(SnackBarMessage(
+        message: "Kết thúc giai đoạn thành công",
+        type: SnackBarType.SUCCESS,
+      ));
+      getSeasonDetail(state.season!.seasonId!);
     } catch (error) {
       if (error is DioError) {
-        emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+        emit(state.copyWith(endStageStatus: LoadStatus.FAILURE));
         if (error.response!.statusCode == 400) {
           showMessageController.sink.add(SnackBarMessage(
             message: error.response!.data['message'],
@@ -54,18 +59,30 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
           ));
         }
       }
-      // emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
     }
   }
 
   void endStep(int index, int indexStage) async {
     List<StageSeason> stages = state.season!.process!.stages ?? [];
     try {
-      var result = await seasonRepository.endStep(stages[indexStage].stage_id!,
+      await seasonRepository.endStep(stages[indexStage].stage_id!,
           stages[indexStage].steps![index].step_id!);
+      emit(state.copyWith(endStepStatus: LoadStatus.SUCCESS));
       getSeasonDetail(state.season!.seasonId!);
-    } catch (e) {
-      // emit(state.copyWith(loadStatus: LoadStatus.FAILURE));
+      showMessageController.sink.add(SnackBarMessage(
+        message:"Kết thúc bước thành công",
+        type: SnackBarType.SUCCESS,
+      ));
+    } catch (error) {
+      if (error is DioError) {
+        emit(state.copyWith(endStepStatus: LoadStatus.FAILURE));
+        if (error.response!.statusCode == 400) {
+          showMessageController.sink.add(SnackBarMessage(
+            message: error.response!.data['message'],
+            type: SnackBarType.ERROR,
+          ));
+        }
+      }
     }
   }
 
@@ -85,14 +102,11 @@ class SeasonDetailCubit extends Cubit<SeasonDetailState> {
     try {
       SeasonEntity param = SeasonEntity(
         name: state.season!.name,
-        // garden_id: state.season!.garden!.id,
         process: state.season!.process!,
         tree: state.season!.tree!,
         start_date: state.season!.start_date,
         end_date: state.season!.end_date,
       );
-      // SeasonEntity result =
-      //     await seasonRepository.updateSeason(seasonId, param);
       return true;
     } catch (e) {
       return false;

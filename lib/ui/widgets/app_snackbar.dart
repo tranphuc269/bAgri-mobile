@@ -22,7 +22,7 @@ extension SnackBarTypeExtension on SnackBarType {
   Color get backgroundColor {
     switch (this) {
       case SnackBarType.SUCCESS:
-        return Color(0xFF9FC2FF);
+        return AppColors.main;
       case SnackBarType.ERROR:
         return Color(0xFFFFEDED);
       default:
@@ -33,7 +33,7 @@ extension SnackBarTypeExtension on SnackBarType {
   Color get messageColor {
     switch (this) {
       case SnackBarType.SUCCESS:
-        return AppColors.main;
+        return Colors.white;
       case SnackBarType.ERROR:
         return Color(0xFFFF0000);
       default:
@@ -75,7 +75,7 @@ class AppSnackBar extends SnackBar {
                     child: Container(
                       child: Text(message.message!,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 16,
                             color: message.type.messageColor,
                             fontWeight: FontWeight.w300,
                           )),

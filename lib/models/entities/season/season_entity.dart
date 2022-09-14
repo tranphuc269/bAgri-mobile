@@ -48,7 +48,7 @@ class SeasonEntity {
       <String, dynamic>{
         if(this.seasonId != null) '_id': this.seasonId,
         'name': this.name,
-        'gardenId': this.gardenId ?? this.gardenEntity?.garden_id,
+        'gardenId': this.gardenId ?? this.gardenEntity?.gardenId,
         'process': this.process,
         'tree': this.tree,
         'start': this.start_date,

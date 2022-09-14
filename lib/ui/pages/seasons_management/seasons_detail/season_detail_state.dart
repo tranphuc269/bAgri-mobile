@@ -1,7 +1,6 @@
 part of 'season_detail_cubit.dart';
 
 class SeasonDetailState extends Equatable {
-  LoadStatus? loadStatus;
   SeasonEntity? season;
   List<TemporaryTask>? listTemporaryTask;
   List<ContractTask>? listContractTask;
@@ -11,6 +10,9 @@ class SeasonDetailState extends Equatable {
   List<DailyTask>? listDailyTask;
   List<Work>? listWork;
   List<MaterialUsedByTask>? listMaterial;
+  LoadStatus? loadStatus;
+  LoadStatus? endStepStatus;
+  LoadStatus? endStageStatus;
 
   // String? linkQR;
   // String? linkUrl;
@@ -25,7 +27,9 @@ class SeasonDetailState extends Equatable {
         feeMaterial,
         listMaterial,
         listWork,
-        feeWorker
+        feeWorker,
+        endStepStatus,
+        endStageStatus
         // linkQR,
         // linkUrl,
       ];
@@ -40,25 +44,29 @@ class SeasonDetailState extends Equatable {
       this.feeMaterial,
       this.listDailyTask,
       this.listWork,
-      this.listMaterial
+      this.listMaterial,
+      this.endStageStatus,
+      this.endStepStatus
       // this.linkQR,
       // this.linkUrl,
       });
 
-  SeasonDetailState copyWith(
-      {LoadStatus? loadStatus,
-      SeasonEntity? season,
-      List<ContractTask>? listContractTask,
-      List<TemporaryTask>? listTemporaryTask,
-      int? fee,
-      List<DailyTask>? listDailyTask,
-      int? feeWorker,
-      int? feeMaterial,
-      List<MaterialUsedByTask>? listMaterial,
-      List<Work>? listWork
-      // String? linkQR,
-      // String? linkUrl,
-      }) {
+  SeasonDetailState copyWith({
+    LoadStatus? loadStatus,
+    SeasonEntity? season,
+    List<ContractTask>? listContractTask,
+    List<TemporaryTask>? listTemporaryTask,
+    int? fee,
+    List<DailyTask>? listDailyTask,
+    int? feeWorker,
+    int? feeMaterial,
+    List<MaterialUsedByTask>? listMaterial,
+    List<Work>? listWork,
+    LoadStatus? endStageStatus,
+    LoadStatus? endStepStatus,
+    // String? linkQR,
+    // String? linkUrl,
+  }) {
     return SeasonDetailState(
         loadStatus: loadStatus ?? this.loadStatus,
         season: season ?? this.season,
@@ -69,7 +77,9 @@ class SeasonDetailState extends Equatable {
         feeMaterial: feeMaterial ?? this.feeMaterial,
         feeWorker: feeWorker ?? this.feeWorker,
         listWork: listWork ?? this.listWork,
-        listMaterial: listMaterial ?? this.listMaterial
+        listMaterial: listMaterial ?? this.listMaterial,
+        endStageStatus: endStageStatus ?? this.endStageStatus,
+        endStepStatus: endStepStatus ?? this.endStepStatus
         // linkQR: linkQR ?? this.linkQR,
         // linkUrl: linkUrl ?? this.linkUrl,
         );

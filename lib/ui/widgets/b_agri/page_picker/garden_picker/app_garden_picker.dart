@@ -112,7 +112,7 @@ class AppPageGardenPicker extends StatelessWidget {
       MaterialPageRoute(
         builder: (_) {
           return AppGardenPickerPage(
-            selectedGardenId: controller.gardenEntity?.garden_id ?? "",
+            selectedGardenId: controller.gardenEntity?.gardenId ?? "",
 
           );
         },

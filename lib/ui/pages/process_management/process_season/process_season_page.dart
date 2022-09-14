@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
@@ -13,11 +15,12 @@ import 'package:flutter_base/ui/pages/process_management/widget/modal_edit_phase
 import 'package:flutter_base/ui/pages/process_management/widget/modal_edit_step_season_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/page_picker/multiple_tree_picker/app_tree_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+import '../../../widgets/app_snackbar.dart';
 
 class UpdateProcessSeasonPage extends StatefulWidget {
   final String? seasonId;
@@ -31,6 +34,9 @@ class UpdateProcessSeasonPage extends StatefulWidget {
 
 class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late StreamSubscription _showMessageSubscription;
   List<PhaseProcess> listPhase = [];
   TreePickerController treeController = TreePickerController();
   TextEditingController nameController = TextEditingController(text: '');
@@ -49,13 +55,24 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
     });
 
     _cubit!.getProcessDetail(widget.seasonId!);
+
+    _showMessageSubscription =
+        _cubit!.showMessageController.stream.listen((event) {
+          _showMessage(event);
+        });
   }
 
   @override
   void dispose() {
     _cubit!.close();
     nameController.dispose();
+    _showMessageSubscription.cancel();
     super.dispose();
+  }
+
+  void _showMessage(SnackBarMessage message) {
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(message: message));
   }
 
   @override
@@ -236,24 +253,7 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
   }
 
   Widget buildActionCreate(BuildContext context) {
-    return BlocConsumer<ProcessSeasonCubit, ProcessSeasonState>(
-      bloc: _cubit,
-      listenWhen: (prev, current) {
-        return prev.updateProcessSeasonStatus !=
-            current.updateProcessSeasonStatus;
-      },
-      listener: (context, state) {
-        if (state.updateProcessSeasonStatus == LoadStatus.SUCCESS) {
-          _showCreateSuccess();
-        }
-        if (state.updateProcessSeasonStatus == LoadStatus.FAILURE) {
-          showSnackBar('Có lỗi xảy ra!');
-        }
-      },
-      builder: (context, state) {
-        final isLoading =
-            (state.loadDetailStatus == LoadStatus.LOADING);
-        return Row(
+    return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
@@ -262,41 +262,24 @@ class _UpdateProcessSeasonPageState extends State<UpdateProcessSeasonPage> {
                 color: AppColors.main,
                 title: 'Hoàn tất chỉnh sửa',
                 onPressed: () {
-                  // _cubit?.updateProcess();
                   Navigator.of(context).pop(true);
                 },
-                isLoading: isLoading,
               ),
             ),
           ],
-        );
-      },
     );
-  }
-
-  void _showCreateSuccess() async {
-    showSnackBar('Cập nhật thành công!');
-    Navigator.of(context).pop(true);
-  }
-
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      message: message,
-      typeSnackBar: '',
-    ));
   }
 }
 
 class PhaseProcess extends StatefulWidget {
-  String seasonId;
-  int? index;
-  String? phase;
-  StageSeason? stage;
-  String? startDate;
-  String? endDate;
-  VoidCallback? onRemove;
-  ProcessSeasonCubit cubitProcess;
+  final String seasonId;
+  final int? index;
+  final String? phase;
+  final StageSeason? stage;
+  final String? startDate;
+  final String? endDate;
+  final VoidCallback? onRemove;
+  final ProcessSeasonCubit cubitProcess;
 
   PhaseProcess(
       {Key? key,
@@ -329,7 +312,6 @@ class _PhaseProcessState extends State<PhaseProcess> {
         sumEnd += a[i].to_day!;
       }
     }
-
     return Column(
       children: [
         Container(
@@ -515,9 +497,10 @@ class _PhaseProcessState extends State<PhaseProcess> {
                                                 from_day:
                                                     int.tryParse(fromDay),
                                                 to_day: int.tryParse(toDay));
-
                                             await widget.cubitProcess.createStep(
                                                 widget.index!, step);
+                                            await widget.cubitProcess.getProcessDetail(widget.seasonId);
+                                            Navigator.of(context).pop();
                                           },
                                         ),
                                       );
@@ -617,6 +600,7 @@ class _StepWidgetState extends State<StepWidget> {
               //
               await widget.cubitProcess
                   .editSteps(widget.index!, widget.indexStages!, step);
+
             },
             onDelete: () async{
               await widget.cubitProcess

@@ -4,8 +4,6 @@ import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/database/share_preferences_helper.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
-import 'package:flutter_base/models/entities/farmer/farmer.dart';
-import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
@@ -20,7 +18,6 @@ import 'package:flutter_base/repositories/garden_repository.dart';
 import 'package:flutter_base/repositories/material_repository.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
-import 'package:flutter_base/repositories/task_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';
@@ -34,7 +31,6 @@ class AppCubit extends Cubit<AppState> {
   GardenRepository gardenRepository;
   ProcessRepository processRepository;
   AuthRepository authRepository;
-  TaskRepository taskRepository;
   UserRepository userRepository;
   MaterialRepository materialRepository;
   ContractWorkRepositoy contractWorkRepository;
@@ -49,7 +45,6 @@ class AppCubit extends Cubit<AppState> {
     required this.authRepository,
     required this.processRepository,
     required this.gardenRepository,
-    required this.taskRepository,
     required this.userRepository,
     required this.weatherRepository,
     required this.zoneRepository,
@@ -71,16 +66,6 @@ class AppCubit extends Cubit<AppState> {
     getWeather();
   }
 
-  void fetchListTask() async {
-    emit(state.copyWith(taskStatus: LoadStatus.LOADING));
-    try {
-      final result = await taskRepository.getListTask();
-      emit(state.copyWith(
-          tasks: result.data!.tasks, taskStatus: LoadStatus.SUCCESS));
-    } catch (e) {
-      emit(state.copyWith(taskStatus: LoadStatus.FAILURE));
-    }
-  }
 
   Future<void> fetchListManager() async {
     emit(state.copyWith(getManagersStatus: LoadStatus.LOADING));
@@ -194,19 +179,6 @@ class AppCubit extends Cubit<AppState> {
     authRepository.removeToken();
     GlobalData.instance.token = null;
   }
-
-  // void getListFarmerByManager() async {
-  //   emit(state.copyWith(farmerStatus: LoadStatus.LOADING));
-  //   try {
-  //     final FarmerList result = await farmerRepository
-  //         .getListFarmerByManager(GlobalData.instance.userEntity!.id);
-  //     emit(state.copyWith(
-  //         farmers: result.data!.farmers, farmerStatus: LoadStatus.SUCCESS));
-  //   } catch (e) {
-  //     emit(state.copyWith(farmerStatus: LoadStatus.FAILURE));
-  //   }
-  // }
-
   void getWeather() async {
     String? longitude = await SharedPreferencesHelper.getLongitude();
     String? latitude = await SharedPreferencesHelper.getLatitude();

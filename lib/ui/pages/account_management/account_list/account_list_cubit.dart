@@ -17,6 +17,7 @@ part 'account_list_state.dart';
 class AccountListCubit extends Cubit<AccountListState>{
   AuthRepository? authRepository;
   AccountListCubit({this.authRepository}) : super(AccountListState());
+
   final showMessageController = PublishSubject<SnackBarMessage>();
   final accessToken = SharedPreferencesHelper.getToken().toString();
 
@@ -41,6 +42,10 @@ class AccountListCubit extends Cubit<AccountListState>{
       emit(state.copyWith(getListAccountStatus: LoginStatusBagri.SUCCESS));
     }catch(error){
       emit(state.copyWith(getListAccountStatus: LoginStatusBagri.FAILURE));
+      showMessageController.sink.add(SnackBarMessage(
+          message: 'Đã có lỗi xảy ra',
+          type: SnackBarType.ERROR
+      ));
     }
   }
 
@@ -56,6 +61,10 @@ class AccountListCubit extends Cubit<AccountListState>{
     try{
       final response = await authRepository!.setRole(accessToken: accessToken, id: id, role: role);
       emit(state.copyWith(setRoleStatus: LoadStatus.SUCCESS));
+      showMessageController.sink.add(SnackBarMessage(
+          message: 'Cấp quyền thành công',
+          type: SnackBarType.SUCCESS
+      ));
     }catch(e){
       emit(state.copyWith(setRoleStatus: LoadStatus.FAILURE));
       showMessageController.sink.add(SnackBarMessage(

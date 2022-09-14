@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -6,16 +8,19 @@ import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
 import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
-import 'package:flutter_base/router/application.dart';
-import 'package:flutter_base/router/routers.dart';
 import 'package:flutter_base/ui/pages/tree_management/tree_listing/tree_listing_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_input_dialog.dart';
+import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_base/ui/widgets/error_list_widget.dart';
+import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../../../widgets/app_snackbar.dart';
 
 class TabListTree extends StatelessWidget {
   const TabListTree({Key? key}) : super(key: key);
@@ -43,36 +48,51 @@ class _TreeListPageState extends State<TreeListPage>
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
 
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _nameTreeController = TextEditingController(text: '');
+
+  late StreamSubscription _showMessageSubscription;
+
   @override
   void initState() {
     super.initState();
     _cubit = BlocProvider.of<TreeListCubit>(context);
     _cubit!.fetchListTree();
     _scrollController.addListener(_onScroll);
+    _showMessageSubscription =
+        _cubit!.showMessageController.stream.listen((event) {
+          _showMessage(event);
+        });
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _showMessageSubscription.cancel();
     super.dispose();
   }
+
+  void _showMessage(SnackBarMessage message) {
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(message: message));
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: _buildBody(),
         floatingActionButton: FloatingActionButton(
           heroTag: "btn2",
           onPressed: () async {
-            bool isAdd = await Application.router
-                ?.navigateTo(context, Routes.treeCreate);
-            if (isAdd) {
-              _onRefreshData();
-            }
+            await showDialog(
+                context: context, builder: (context) => _dialogCreate());
           },
           backgroundColor: AppColors.main,
           child: Icon(
@@ -118,35 +138,6 @@ class _TreeListPageState extends State<TreeListPage>
                       TreeEntity tree = state.listData![index];
                       return _buildItem(
                         name: name,
-                        onPressed: () {
-                          // Application.router!.navigateTo(
-                          //   appNavigatorKey.currentContext!,
-                          //   Routes.treeDetail,
-                          //   routeSettings: RouteSettings(
-                          //     arguments: TreeDetailArgument(
-                          //       tree_id: tree.tree_id,
-                          //       name: tree.name,
-                          //       // description: tree.description,
-                          //     ),
-                          //   ),
-                          // );
-                        },
-                        // onUpdate: () async {
-                        //   bool isUpdate = await Application.router!.navigateTo(
-                        //     appNavigatorKey.currentContext!,
-                        //     Routes.treeUpdate,
-                        //     routeSettings: RouteSettings(
-                        //       arguments: TreeUpdateArgument(
-                        //         tree_id: tree.tree_id,
-                        //         name: tree.name,
-                        //         // description: tree.description,
-                        //       ),
-                        //     ),
-                        //   );
-                        //   if (isUpdate) {
-                        //     _onRefreshData();
-                        //   }
-                        // },
                         onDelete: () async {
                           bool isDelete = await showDialog(
                               context: context,
@@ -164,15 +155,16 @@ class _TreeListPageState extends State<TreeListPage>
                     },
                   ),
                 )
-              :/* Expanded(
-                  child:*/ Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: EmptyDataWidget(),
-                      ),
-                    ],
-                /*  ),*/
+              : /* Expanded(
+                  child:*/
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: EmptyDataWidget(),
+                    ),
+                  ],
+                  /*  ),*/
                 );
         } else {
           return Container();
@@ -200,29 +192,6 @@ class _TreeListPageState extends State<TreeListPage>
             extentRatio: 1 / 3,
             motion: BehindMotion(),
             children: [
-              // CustomSlidableAction(
-              //     backgroundColor: AppColors.blueSlideButton,
-              //     foregroundColor: Colors.white,
-              //     onPressed: (BuildContext context) {
-              //       onUpdate?.call();
-              //     },
-              //     child: Column(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         SizedBox(
-              //           height: 20,
-              //           width: 20,
-              //           child: Image.asset(AppImages.icSlideEdit),
-              //         ),
-              //         SizedBox(height: 4),
-              //         FittedBox(
-              //           child: Text(
-              //             'Sửa',
-              //             style: AppTextStyle.whiteS16,
-              //           ),
-              //         )
-              //       ],
-              //     )),
               CustomSlidable(
                   backgroundColor: AppColors.redSlideButton,
                   foregroundColor: Colors.white,
@@ -274,6 +243,62 @@ class _TreeListPageState extends State<TreeListPage>
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _dialogCreate() {
+    return AppInputDialog(
+      title: "Thêm cây trồng",
+      onConfirm: (() async =>  {
+        if (_formKey.currentState!.validate()){
+         await _cubit?.createTree(_nameTreeController.text),
+          if(_cubit!.state.createTreeStatus == LoadStatus.SUCCESS){
+            Navigator.of(context).pop(),
+            _nameTreeController.clear(),
+            _onRefreshData(),
+          }else{
+            Navigator.of(context).pop(),
+          }
+        }}),
+      actions: [
+        Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              _buildTextLabel("Tên cây trồng"),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                child: AppTextField(
+                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                  hintText: 'Nhập tên cây trồng' /*hintText.toString()*/,
+                  controller: _nameTreeController,
+                  validator: (value) {
+                    if (Validator.validateNullOrEmpty(value!))
+                      return "Chưa nhập tên cây";
+                    else
+                      return null;
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextLabel(String text) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.symmetric(horizontal: 28),
+      child: RichText(
+        text: TextSpan(children: [
+          TextSpan(
+            text: text,
+            style: AppTextStyle.blackS14,
+          ),
+        ]),
       ),
     );
   }

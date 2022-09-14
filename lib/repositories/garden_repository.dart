@@ -19,7 +19,7 @@ abstract class GardenRepository {
 
   Future<GardenDeleteResponse> deleteGarden({String? gardenId});
 
-  Future<ObjectResponse<GardenListResponse>> getGardensByManagerId(
+  Future<List<GardenEntity>> getGardensByManagerId(
       String managerId);
   Future<List<GardenEntity>> getListGardenByZone(String? accessToken, String? zoneId);
 
@@ -75,7 +75,7 @@ class GardenRepositoryImpl extends GardenRepository {
   }
 
   @override
-  Future<ObjectResponse<GardenListResponse>> getGardensByManagerId(
+  Future<List<GardenEntity>> getGardensByManagerId(
       String managerId) async {
     return await _apiClientBagri!.getGardensByManagerId(managerId);
   }

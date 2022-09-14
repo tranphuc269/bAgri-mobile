@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';

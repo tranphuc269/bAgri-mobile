@@ -158,7 +158,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     showSnackBar('Mã OTP đã được gửi đến email của bạn!');
     Application.router!.navigateTo(
       context,
-      Routes.OtpAuth,
+      Routes.otpAuth,
       routeSettings: RouteSettings(arguments: _emailController.text)
     );
   }

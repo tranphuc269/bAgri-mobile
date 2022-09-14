@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
@@ -6,9 +8,9 @@ import 'package:flutter_base/models/enums/load_status.dart';
 import 'package:flutter_base/ui/components/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_text_field.dart';
 import 'package:flutter_base/utils/validators.dart';
+import 'package:flutter_base/ui/widgets/app_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'garden_create_cubit.dart';
@@ -16,10 +18,10 @@ import 'garden_create_cubit.dart';
 
 enum AreaUnit { Hecta, m2}
 class CreateGardenPage extends StatefulWidget {
-  final String? zone_id;
+  final String? zoneId;
   final String? zoneName;
 
-  CreateGardenPage({this.zone_id, this.zoneName});
+  CreateGardenPage({this.zoneId, this.zoneName});
   @override
   _CreateGardenPageState createState() => _CreateGardenPageState();
 }
@@ -27,9 +29,9 @@ class CreateGardenPage extends StatefulWidget {
 class _CreateGardenPageState extends State<CreateGardenPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  late StreamSubscription _showMessageSubscription;
 
   AreaUnit areaUnit = AreaUnit.m2;
-
   final nameController = TextEditingController(text: "");
   final areaController = TextEditingController(text: "");
   final treeQuantityControler = TextEditingController(text: "");
@@ -59,6 +61,11 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
     areaController.addListener(() {
       _cubit!.changeArea(areaController.text);
     });
+
+    _showMessageSubscription =
+        _cubit!.showMessageController.stream.listen((event) {
+          _showMessage(event);
+        });
   }
 
   @override
@@ -66,8 +73,15 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
     _cubit!.close();
     nameController.dispose();
     areaController.dispose();
+    _showMessageSubscription.cancel();
     super.dispose();
   }
+
+  void _showMessage(SnackBarMessage message) {
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(message: message));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -300,10 +314,7 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
       },
       listener: (context, state) {
         if (state.createGardenStatus == LoadStatus.SUCCESS) {
-          _showCreateSuccess();
-        }
-        if (state.createGardenStatus == LoadStatus.FAILURE) {
-          showSnackBar('Tên vườn đã bị trùng!',"error");
+          Navigator.of(context).pop(true);
         }
       },
       builder: (context, state) {
@@ -318,11 +329,7 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
                   child: AppRedButton(
                       title: 'Hủy bỏ',
                       onPressed: () async {
-                        try {
-                          print(_cubit!.state.listManager);
-                        } catch (e) {
-                          throw e;
-                        }
+                        Navigator.of(context).pop(true);
                       })),
               SizedBox(
                 width: 30,
@@ -335,7 +342,6 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
                     if (_formKey.currentState!.validate()) {
                       _cubit!.createGarden(areaUnit.name, widget.zoneName.toString(), treeQuantityControler.text);
                     }
-                print(widget.zoneName);
                   },
                   isLoading: isLoading,
                 ),
@@ -346,27 +352,13 @@ class _CreateGardenPageState extends State<CreateGardenPage> {
       },
     );
   }
-
-  void _showCreateSuccess() async {
-    showSnackBar('Tạo mới vườn thành công!', "success");
-    Navigator.of(context).pop(true);
-  }
-
-  void showSnackBar(String message, String typeMessage) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: typeMessage,
-      message: message,
-    ));
-  }
-
   Future<void> _onRefreshData() async {
     _cubit!.getListManager();
   }
 }
 class GardenCreateArgument {
-  String? zone_id;
+  String? zoneId;
   String? zoneName;
 
-  GardenCreateArgument({this.zone_id, this.zoneName});
+  GardenCreateArgument({this.zoneId, this.zoneName});
 }

@@ -41,7 +41,7 @@ Handler gardenCreateHandler = new Handler(
       return GardenCreateCubit(gardenRepository: gardenRepository);
     },
     child: CreateGardenPage(
-      zone_id: args.zone_id,
+      zoneId: args.zoneId,
       zoneName: args.zoneName,
     ),
   );

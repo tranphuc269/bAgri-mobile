@@ -6,7 +6,7 @@ part 'create_contract_task_params.g.dart';
 class CreateContractTaskParam {
   ContractWorkEntity ? work;
   String? seasonId;
-  GardenEntityResponseFromZoneId? garden;
+  GardenEntity? garden;
   int? quantity;
   String? description;
 
@@ -21,7 +21,7 @@ class CreateContractTaskParam {
   CreateContractTaskParam copyWith({
     ContractWorkEntity? work,
     String? seasonId,
-    GardenEntityResponseFromZoneId? garden,
+    GardenEntity? garden,
     int? quantity,
     String? description
   }) {

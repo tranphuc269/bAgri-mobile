@@ -2,15 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_base/configs/app_config.dart';
 import 'package:flutter_base/global/global_data.dart';
 import 'package:flutter_base/models/entities/contract_work/contract_work.dart';
-import 'package:flutter_base/models/entities/file/file_entity.dart';
 import 'package:flutter_base/models/entities/garden/garden_delete.dart';
-
 import 'package:flutter_base/models/entities/garden/garden_detail.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
-import 'package:flutter_base/models/entities/garden_task/garden_task_detail.dart';
-import 'package:flutter_base/models/entities/garden_task/task_delete_entity.dart';
-import 'package:flutter_base/models/entities/manager/manager_entity.dart';
-import 'package:flutter_base/models/entities/garden_task/garden_task.dart';
 import 'package:flutter_base/models/entities/material/material.dart';
 import 'package:flutter_base/models/entities/notification/notification.dart';
 import 'package:flutter_base/models/entities/notification/notification_detail.dart';
@@ -20,7 +14,6 @@ import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:flutter_base/models/entities/season/qr_entity.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/task/contract_task.dart';
-import 'package:flutter_base/models/entities/task/task.dart';
 import 'package:flutter_base/models/entities/task/temporary_task.dart';
 import 'package:flutter_base/models/entities/token/login_model.dart';
 import 'package:flutter_base/models/entities/tree/list_tree_response.dart';
@@ -110,7 +103,7 @@ abstract class ApiClient {
   Future<List<GardenEntity>> getGardenData();
 
   @GET("/gardens")
-  Future<ObjectResponse<GardenListResponse>> getGardensByManagerId(
+  Future<List<GardenEntity>> getGardensByManagerId(
       @Query('manager_id') String managerId);
 
   @POST("/gardens")
@@ -237,27 +230,12 @@ abstract class ApiClient {
       @Path('phase_id') String phaseId, @Path('step_id') String stepId);
 
   ///Task
-  @GET("/tasks")
-  Future<ObjectResponse<TaskListData>> getListTask();
-
-  @GET("/tasks")
-  Future<ObjectResponse<GardenTaskList>> getGardenTask(
-      @Query('season_id') String seasonId, @Query('date') String date);
-
   @POST("/tasks")
   Future<dynamic> createTask(@Body() Map<String, dynamic> body);
 
   @PUT("/tasks/{task_id}")
   Future<dynamic> updateTask(
       @Path("task_id") String? taskId, @Body() Map<String, dynamic> body);
-
-  @GET("/tasks/{task_id}")
-  Future<ObjectResponse<GardenTaskDetailResponse>> getTaskById(
-      @Path('task_id') String taskId);
-
-  @DELETE("/tasks/{task_id}")
-  Future<ObjectResponse<TaskDeleteEntity>> deleteTask(
-      @Path("task_id") String taskId);
 
   ///get Step by day for garden manager
 
@@ -271,9 +249,6 @@ abstract class ApiClient {
   @GET("/me")
   Future<ObjectResponse<UserEntity>> getProfile();
 
-  ///Manager
-  @GET("/managers")
-  Future<ObjectResponse<ManagerListResponse>> getListManager();
 
   ///Contract Work
   @GET("/works")
@@ -346,9 +321,6 @@ abstract class ApiClient {
       @Header('Content-Type')String contentType,
       @Body() Map<String, dynamic> body);
 
-  /// Upload File
-  @POST("/files")
-  Future<ObjectResponse<FileEntity>> uploadFile(@Body() dynamic body);
 
   @POST("/seasons/{season_id}/qr_code")
   Future<ObjectResponse<QREntity>> generateQRCode(

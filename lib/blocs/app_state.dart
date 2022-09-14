@@ -13,7 +13,6 @@ class AppState extends Equatable {
   List<ProcessEntity>? processes;
   final LoadStatus? getProcessStatus;
 
-  List<TaskEntity>? tasks;
   final LoadStatus? taskStatus;
 
   List<MaterialEntity>? listMaterials;
@@ -22,7 +21,6 @@ class AppState extends Equatable {
   List<UserEntity>? managers;
   final LoadStatus? getManagersStatus;
 
-  List<FarmerEntity>? farmers;
   final LoadStatus? farmerStatus;
   List<ContractWorkEntity>? contractWorks;
   final LoadStatus? contractWorkStatus;
@@ -39,11 +37,9 @@ class AppState extends Equatable {
         this.getGardenStatus,
         this.processes,
         this.getProcessStatus,
-        this.tasks,
         this.taskStatus,
         this.managers,
         this.getManagersStatus,
-        this.farmers,
         this.farmerStatus,
         this.contractWorks,
         this.contractWorkStatus,
@@ -61,11 +57,9 @@ class AppState extends Equatable {
     this.getGardenStatus,
     this.processes,
     this.getProcessStatus,
-    this.tasks,
     this.taskStatus,
     this.managers,
     this.getManagersStatus,
-    this.farmers,
     this.farmerStatus,
     this.contractWorks,
     this.contractWorkStatus,
@@ -85,13 +79,11 @@ class AppState extends Equatable {
     LoadStatus? getSeasonStatus,
     List<ProcessEntity>? processes,
     LoadStatus? getProcessStatus,
-    List<TaskEntity>? tasks,
     LoadStatus? taskStatus,
     List<UserEntity>? managers,
     LoadStatus? getManagersStatus,
     UserEntity? user,
     LoadStatus? fetchUser,
-    List<FarmerEntity>? farmers,
     LoadStatus? farmerStatus,
     List<ContractWorkEntity>? contractWorks,
     LoadStatus? contractWorkStatus,
@@ -107,13 +99,11 @@ class AppState extends Equatable {
       getGardenStatus: getGardenStatus ?? this.getGardenStatus,
       processes: processes ?? this.processes,
       getProcessStatus: getProcessStatus ?? this.getProcessStatus,
-      tasks: tasks ?? this.tasks,
       taskStatus: taskStatus ?? this.taskStatus,
       managers: managers ?? this.managers,
       getManagersStatus: getManagersStatus ?? this.getManagersStatus,
       contractWorks: contractWorks ?? this.contractWorks,
       contractWorkStatus: contractWorkStatus ?? this.contractWorkStatus,
-      farmers: farmers ?? this.farmers,
       farmerStatus: farmerStatus ?? this.farmerStatus,
       weather: weather ?? this.weather,
       weatherStatus: weatherStatus ?? this.weatherStatus,

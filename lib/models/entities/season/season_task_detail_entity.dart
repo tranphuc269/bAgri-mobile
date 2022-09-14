@@ -1,4 +1,3 @@
-import 'package:flutter_base/models/entities/farmer/farmer.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -36,7 +35,6 @@ class SeasonTaskDetailEntity {
   String? start_time;
   String? end_time;
   String? task_id;
-  List<FarmerEntity>? farmers;
   String? items;
   List<String>? result;
 
@@ -54,7 +52,6 @@ class SeasonTaskDetailEntity {
     this.start_time,
     this.end_time,
     this.task_id,
-    this.farmers,
     this.items,
     this.result,
   });
@@ -69,7 +66,6 @@ class SeasonTaskDetailEntity {
     String? start_time,
     String? end_time,
     String? task_id,
-    List<FarmerEntity>? farmers,
     String? items,
     List<String>? result,
   }) {
@@ -83,7 +79,6 @@ class SeasonTaskDetailEntity {
       start_time: start_time ?? this.start_time,
       end_time: end_time ?? this.end_time,
       task_id: task_id ?? this.task_id,
-      farmers: farmers ?? this.farmers,
       items: items ?? this.items,
       result: result ?? this.result,
     );

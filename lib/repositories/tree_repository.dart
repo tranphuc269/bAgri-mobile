@@ -24,7 +24,6 @@ class TreeRepositoryImpl extends TreeRepository {
 
   @override
   Future<TreeDataEntity> getListTreeData() async {
-    // return await _apiClient!.getListTreeData();
     return await AppApi.instance.getListTreeData();
   }
 

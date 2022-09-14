@@ -18,9 +18,9 @@ import 'package:flutter_base/utils/validators.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateProcessPage extends StatefulWidget {
-  final String? process_id;
+  final String? processId;
 
-  UpdateProcessPage({Key? key, this.process_id}) : super(key: key);
+  UpdateProcessPage({Key? key, this.processId}) : super(key: key);
 
   @override
   _UpdateProcessPageState createState() => _UpdateProcessPageState();
@@ -45,7 +45,7 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
       _cubit!.changeName(nameController.text);
     });
 
-    _cubit!.getProcessDetail(widget.process_id!);
+    _cubit!.getProcessDetail(widget.processId!);
   }
 
   @override
@@ -279,7 +279,7 @@ class _UpdateProcessPageState extends State<UpdateProcessPage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _cubit?.changeName(nameController.text);
-                    _cubit?.updateProcess(widget.process_id);
+                    _cubit?.updateProcess(widget.processId);
                   }
                 },
                 isLoading: isLoading,

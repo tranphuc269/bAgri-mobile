@@ -10,10 +10,7 @@ import 'package:flutter_base/router/router_handlers/season_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/process_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/storage_manager_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/task_manage_router_handler.dart';
-import 'package:flutter_base/router/router_handlers/task_router_handler.dart';
 import 'package:flutter_base/router/router_handlers/temporary_task_router_handler.dart';
-import 'package:flutter_base/router/router_handlers/tree_router_handler.dart';
-
 import 'router_handlers/root_router_handler.dart';
 
 class Routes {
@@ -24,7 +21,7 @@ class Routes {
   static String changePassword = "/changePassword";
   static String forgotPassword = "/forgotPassword";
   static String registry = "/registry";
-  static String OtpAuth = "/OtpAuth";
+  static String otpAuth = "/OtpAuth";
 
   static String home = "/home";
 
@@ -134,7 +131,7 @@ class Routes {
       transitionType: TransitionType.fadeIn,
     );
     router.define(
-        OtpAuth,
+        otpAuth,
         handler: OtpAuthHandler,
       transitionType: TransitionType.fadeIn,
     );
@@ -213,45 +210,6 @@ class Routes {
       transitionType: TransitionType.fadeIn,
     );
 
-    /// Tree
-    router.define(
-      treeCreate,
-      handler: treeCreateHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    // router.define(
-    //   treeUpdate,
-    //   handler: treeUpdateHandler,
-    //   transitionType: TransitionType.fadeIn,
-    // );
-    // router.define(
-    //   treeDetail,
-    //   handler: treeDetailHandler,
-    //   transitionType: TransitionType.fadeIn,
-    // );
-
-    /// Employee
-    // router.define(
-    //   employeeManagement,
-    //   handler: employeeManagementHandler,
-    //   transitionType: TransitionType.fadeIn,
-    // );
-    // router.define(
-    //   employeeAdding,
-    //   handler: employeeAddingHandler,
-    //   transitionType: TransitionType.fadeIn,
-    // );
-    // router.define(
-    //   employeeUpdating,
-    //   handler: employeeUpdatingHandler,
-    //   transitionType: TransitionType.fadeIn,
-    // );
-    // router.define(
-    //   employeeDetail,
-    //   handler: employeeDetailHandler,
-    //   transitionType: TransitionType.fadeIn,
-    // );
-
     /// Season
     router.define(
       seasonManagement,
@@ -292,22 +250,6 @@ class Routes {
     );
 
     ///Task
-    router.define(
-      taskCreate,
-      handler: taskCreateHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      taskUpdate,
-      handler: taskUpdateHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      gardenTask,
-      handler: gardenTaskHandler,
-      transitionType: TransitionType.fadeIn,
-    );
-
     router.define(
       seasonListTask,
       handler: seasonListTaskHandler,

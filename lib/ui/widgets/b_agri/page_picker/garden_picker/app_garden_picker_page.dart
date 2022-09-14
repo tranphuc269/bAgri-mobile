@@ -74,7 +74,7 @@ class _AppGardenPickerPageState extends State<AppGardenPickerPage> {
               final garden = state.gardens![index];
               String title = garden.name!;
               bool isSelected = false;
-              if (widget.selectedGardenId != null) if (garden.garden_id ==
+              if (widget.selectedGardenId != null) if (garden.gardenId ==
                   widget.selectedGardenId) isSelected = true;
               return ItemWidget(
                   title: title,

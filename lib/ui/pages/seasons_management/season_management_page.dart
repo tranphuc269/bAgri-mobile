@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_images.dart';
@@ -12,13 +14,11 @@ import 'package:flutter_base/ui/widgets/b_agri/app_bar_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_delete_dialog.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 import 'package:flutter_base/ui/widgets/b_agri/custome_slidable_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
-
 import '../../../main.dart';
+import '../../widgets/app_snackbar.dart';
 
 class SeasonListPage extends StatefulWidget {
   @override
@@ -30,17 +30,36 @@ class SeasonListPage extends StatefulWidget {
 class _SeasonListPageState extends State<SeasonListPage> {
   SeasonManagementCubit? _cubit;
   final _scrollController = ScrollController();
-  DateFormat _dateFormat = DateFormat("dd-MM-yyyy");
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  late StreamSubscription _showMessageSubscription;
 
   @override
   void initState() {
     _cubit = BlocProvider.of<SeasonManagementCubit>(context);
     _cubit?.getListSeason();
+    _showMessageSubscription =
+        _cubit!.showMessageController.stream.listen((event) {
+      _showMessage(event);
+    });
     super.initState();
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _showMessageSubscription.cancel();
+  }
+
+  void _showMessage(SnackBarMessage message) {
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(message: message));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBarWidget(
         title: 'Danh sách mùa vụ',
         context: context,
@@ -63,8 +82,11 @@ class _SeasonListPageState extends State<SeasonListPage> {
 
                 if (isAdd) {
                   refreshData();
-                  // if (_cubit?.state.loadStatus == LoadStatus.SUCCESS)
-                  showSnackBar('Thêm mới mùa vụ thành công!');
+                  _cubit!.showMessageController.sink.add(SnackBarMessage(
+                      message: 'Thêm mùa vụ thành công',
+                      type: SnackBarType.SUCCESS
+                  ));
+                  // showSnackBar('Thêm mới mùa vụ thành công!');
                 }
               },
               backgroundColor: AppColors.main,
@@ -133,21 +155,16 @@ class _SeasonListPageState extends State<SeasonListPage> {
                               );
                             },
                             onDelete: () async {
-                              bool isDelete = await showDialog(
+                              await showDialog(
                                   context: context,
                                   builder: (context) => AppDeleteDialog(
                                         onConfirm: () async {
-                                          final result = await _cubit!
-                                              .deleteSeason(
-                                                  seasonEntity.seasonId!);
+                                          await _cubit!.deleteSeason(
+                                              seasonEntity.seasonId!);
                                           Navigator.pop(context, true);
+                                          refreshData();
                                         },
                                       ));
-
-                              if (isDelete) {
-                                refreshData();
-                                showSnackBar('Xóa mùa vụ thành công!');
-                              }
                             });
                       },
                     ),
@@ -169,14 +186,6 @@ class _SeasonListPageState extends State<SeasonListPage> {
         }
       },
     );
-  }
-
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: "success",
-      message: message,
-    ));
   }
 
   _buildItem(

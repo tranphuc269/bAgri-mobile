@@ -51,31 +51,6 @@ class GardenUpdateCubit extends Cubit<GardenUpdateState> {
   void changeManagerId(String value) {
     emit(state.copyWith(managerUsername: value));
   }
-
-  // void createGarden(String areaUnit, String zoneName, String treePlaceQuantity) async {
-  //   emit(state.copyWith(createGardenStatus: LoadStatus.LOADING));
-  //   try {
-  //     final param = CreateGardenParam(
-  //         name: state.name,
-  //         area: num.parse(state.area.toString()),
-  //         areaUnit: areaUnit,
-  //         treePlaceQuantity: num.parse(treePlaceQuantity),
-  //         managerUsername: state.managerUsername,
-  //         zoneName: zoneName
-  //     );
-  //     final response = await gardenRepository!.createGarden(param: param);
-  //
-  //     if (response != null) {
-  //       emit(state.copyWith(createGardenStatus: LoadStatus.SUCCESS));
-  //     } else {
-  //       emit(state.copyWith(createGardenStatus: LoadStatus.FAILURE));
-  //     }
-  //   } catch (e) {
-  //     logger.e(e);
-  //     emit(state.copyWith(createGardenStatus: LoadStatus.FAILURE));
-  //     return;
-  //   }
-  // }
   void updateGarden(String? gardenId, String? unit, String? gardenArea, String? treePlaceQuantity, String? zoneName ) async{
     emit(state.copyWith(updateGardenStatus: LoadStatus.LOADING));
     final param = UpdateGardenParam(
@@ -104,8 +79,7 @@ class GardenUpdateCubit extends Cubit<GardenUpdateState> {
     try {
       final response = await gardenRepository!.getGardenDataById(
           gardenId: gardenId);
-      print(response);
-      if(response !=  null ){
+      if(response != null ){
        print(response);
         emit(state.copyWith(getGardenDataStatus: LoadStatus.SUCCESS,
             gardenData: response));

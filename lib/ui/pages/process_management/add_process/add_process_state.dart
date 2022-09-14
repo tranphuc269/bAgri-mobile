@@ -4,7 +4,6 @@ class AddProcessState extends Equatable {
   final String? name;
   final LoadStatus? addProcessStatus;
   final List<TreeEntity>? trees;
-  final List<TaskEntity>? listTask;
 
   final List<StageEntity>? stages;
   int actionWithStepStatus;
@@ -12,7 +11,6 @@ class AddProcessState extends Equatable {
     this.name,
     this.addProcessStatus,
     this.trees,
-    this.listTask,
     this.stages,
     required this.actionWithStepStatus,
   });
@@ -21,7 +19,6 @@ class AddProcessState extends Equatable {
     String? name,
     LoadStatus? addProcessStatus,
     List<TreeEntity>? trees,
-    List<TaskEntity>? listTask,
     List<StageEntity>? stages,
     int? actionWithStepStatus,
   }) {
@@ -29,7 +26,6 @@ class AddProcessState extends Equatable {
         name: name ?? this.name,
         addProcessStatus: addProcessStatus ?? this.addProcessStatus,
         trees: trees ?? this.trees,
-        listTask: listTask ?? this.listTask,
         stages: stages ?? this.stages,
         actionWithStepStatus:
             actionWithStepStatus ?? this.actionWithStepStatus);
@@ -40,7 +36,6 @@ class AddProcessState extends Equatable {
         this.name,
         this.trees,
         this.addProcessStatus,
-        this.listTask,
         this.stages,
         actionWithStepStatus,
       ];

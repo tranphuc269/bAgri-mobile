@@ -200,7 +200,7 @@ class _AppGardenPickerState extends State<AppGardenPicker> {
   Widget build(BuildContext context) {
     if (widget.gardenId != null) {
       value = _gardenList
-          .firstWhere((element) => element.garden_id == widget.gardenId);
+          .firstWhere((element) => element.gardenId == widget.gardenId);
     }
     return Stack(
       children: [

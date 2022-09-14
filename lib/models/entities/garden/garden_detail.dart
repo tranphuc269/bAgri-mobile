@@ -1,34 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 part 'garden_detail.g.dart';
-
-// @JsonSerializable()
-// class GardenDetailResponse {
-//   @JsonKey()
-//   String? status;
-//   @JsonKey()
-//   GardenDetailEntity? data;
-//
-//   GardenDetailResponse({
-//     this.status,
-//     this.data,
-//   });
-//
-//   GardenDetailResponse copyWith({
-//     String? status,
-//     GardenDetailEntity? data,
-//   }) {
-//     return GardenDetailResponse(
-//       status: status ?? this.status,
-//       data: data ?? this.data,
-//     );
-//   }
-//
-//   factory GardenDetailResponse.fromJson(Map<String, dynamic> json) =>
-//       _$GardenDetailResponseFromJson(json);
-//   Map<String, dynamic> toJson() => _$GardenDetailResponseToJson(this);
-// }
-
 @JsonSerializable()
 class GardenDetailEntity {
   @JsonKey()
@@ -54,7 +26,7 @@ class GardenDetailEntity {
 @JsonSerializable()
 class GardenItemEntity {
   @JsonKey()
-  String? garden_id;
+  String? gardenId;
   @JsonKey()
   String? name;
   @JsonKey()
@@ -65,7 +37,7 @@ class GardenItemEntity {
   List<SeasonWithGardenEntity>? seasons;
 
   GardenItemEntity({
-    this.garden_id,
+    this.gardenId,
     this.name,
     this.area,
     this.manager,
@@ -73,14 +45,14 @@ class GardenItemEntity {
   });
 
   GardenItemEntity copyWith({
-    String? garden_id,
+    String? gardenId,
     String? name,
     int? area,
     ManagerEntity? manager,
     List<SeasonWithGardenEntity>? seasons,
   }) {
     return GardenItemEntity(
-      garden_id: garden_id ?? this.garden_id,
+      gardenId: gardenId ?? this.gardenId,
       name: name ?? this.name,
       area: area ?? this.area,
       seasons: seasons ?? this.seasons,

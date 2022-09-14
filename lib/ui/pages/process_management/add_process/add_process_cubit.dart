@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_base/generated/l10n.dart';
-import 'package:flutter_base/models/entities/farmer/farmer_detail_entity.dart';
 import 'package:flutter_base/models/entities/process/list_process.dart';
 import 'package:flutter_base/models/entities/process/stage_entity.dart';
 import 'package:flutter_base/models/entities/process/step_entity.dart';
@@ -100,32 +99,6 @@ class AddProcessCubit extends Cubit<AddProcessState> {
   void createProcess() async {
     emit(state.copyWith(addProcessStatus: LoadStatus.LOADING));
     try {
-      // List<String> listTree = [];
-      // if (state.trees != null) {
-      //   state.trees!.forEach((element) {
-      //     listTree.add(element.tree_id!);
-      //   });
-      // }
-      //
-      // List<StagesParamsEntity> listStages = [];
-      // if (state.stages != null) {
-      //   for (int i = 0; i < state.stages!.length; i++) {
-      //     List<StepEntity> steps = [];
-      //     state.stages![i].steps!.forEach((ele) {
-      //       steps.add(ele);
-      //     });
-      //     listStages.add(StagesParamsEntity(
-      //         name: 'Giai đoạn ${i + 1}',
-      //         // duration: item.duration,
-      //         steps: steps));
-      //   }
-      // }
-
-      // final param = CreateProcessParam(
-        // name: state.name,
-        // tree_ids: listTree,
-        // stages: listStages,
-      // );
       final param = ProcessEntity(
         name: state.name,
         trees: state.trees,

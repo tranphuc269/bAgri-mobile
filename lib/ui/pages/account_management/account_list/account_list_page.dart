@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_base/commons/app_colors.dart';
 import 'package:flutter_base/commons/app_text_styles.dart';
@@ -11,9 +13,10 @@ import 'package:flutter_base/ui/widgets/b_agri/app_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_dropdown_button.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_error_list_widget.dart';
-import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../widgets/app_snackbar.dart';
 
 class AccountListPage extends StatefulWidget {
   @override
@@ -23,9 +26,11 @@ class AccountListPage extends StatefulWidget {
 class _AccountListState extends State<AccountListPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _nameZoneController = TextEditingController(text: "");
+  late StreamSubscription _showMessageSubscription;
+
 
   late List<RoleEntity> _roleList;
+
   AccountListCubit? _cubit;
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
@@ -39,13 +44,26 @@ class _AccountListState extends State<AccountListPage> {
     _cubit!.changeRole(RoleEntity(role_id: "NO_ROLE", name: "No Role"));
     _cubit!.fetchAccountList();
     _scrollController.addListener(_onScroll);
+
+    _showMessageSubscription =
+        _cubit!.showMessageController.stream.listen((event) {
+          _showMessage(event);
+        });
   }
 
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+    _showMessageSubscription.cancel();
   }
+
+  void _showMessage(SnackBarMessage message) {
+    _scaffoldKey.currentState!.removeCurrentSnackBar();
+    _scaffoldKey.currentState!.showSnackBar(AppSnackBar(message: message));
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -97,19 +115,9 @@ class _AccountListState extends State<AccountListPage> {
                                           : "NO_ROLE"))),
                           phoneNumber: user.phone ?? "",
                           onPressed: () async {
-                            bool isAddSuccess = await showDialog(
+                            await showDialog(
                                 context: context,
                                 builder: (context) => _dialog(user: user));
-                            if (isAddSuccess) {
-                              _onRefreshData();
-                              showSnackBar(
-                                "Thêm khu thành công",
-                              );
-                            } else {
-                              showSnackBar(
-                                "Tên khu đã tồn tại",
-                              );
-                            }
                           },
                         );
                       },
@@ -288,10 +296,8 @@ class _AccountListState extends State<AccountListPage> {
                   },
                   listener: (context, state) {
                     if (state.setRoleStatus == LoadStatus.SUCCESS) {
-                      _showCreateSuccess();
-                    }
-                    if (state.setRoleStatus == LoadStatus.FAILURE) {
-                      showSnackBar('Đã có lỗi xảy ra ');
+                      Navigator.of(context).pop();
+                      _onRefreshData();
                     }
                   },
                   builder: (context, state) {
@@ -309,12 +315,13 @@ class _AccountListState extends State<AccountListPage> {
                             ? null
                             : () async {
                                 if (_value.role_id == "NO_ROLE") {
-                                  showSnackBar("Vui lòng chọn vai trò!");
+                                  SnackBarMessage(
+                                      message: 'Vui lòng chọn vai trò',
+                                      type: SnackBarType.ERROR
+                                  );
                                 } else {
                                   await _cubit!.setRole(user.id.toString(),
                                       _value.role_id.toString());
-                                  Navigator.of(context).pop();
-                                  _onRefreshData();
                                 }
                               });
                   })
@@ -325,25 +332,6 @@ class _AccountListState extends State<AccountListPage> {
 
   Future<void> _onRefreshData() async {
     _cubit!.fetchAccountList();
-  }
-
-  void _showCreateSuccess() async {
-    showSnackBar('Cấp quyền thành công!');
-  }
-
-  void showSnackBar(String message) async {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(AppSnackBar(
-      typeSnackBar: "success",
-      message: message,
-    ));
-    setState(() {
-      isErrorMessage = true;
-    });
-    await Future.delayed(Duration(milliseconds: 2200));
-    setState(() {
-      isErrorMessage = false;
-    });
   }
 
   void _onScroll() {

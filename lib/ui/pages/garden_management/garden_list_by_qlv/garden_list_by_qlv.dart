@@ -6,20 +6,15 @@ import 'package:flutter_base/commons/app_text_styles.dart';
 import 'package:flutter_base/generated/l10n.dart';
 import 'package:flutter_base/main.dart';
 import 'package:flutter_base/models/entities/garden/garden_entity.dart';
-
 import 'package:flutter_base/models/enums/load_status.dart';
-
 import 'package:flutter_base/router/application.dart';
 import 'package:flutter_base/router/routers.dart';
-import 'package:flutter_base/ui/pages/garden_management/garden_task/garden_task_page.dart';
 import 'package:flutter_base/ui/pages/home/home_page.dart';
 import 'package:flutter_base/ui/pages/notification_management/notification_management_cubit.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_emty_data_widget.dart';
 import 'package:flutter_base/ui/widgets/b_agri/app_snackbar.dart';
-
 import 'package:flutter_base/ui/widgets/error_list_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'garden_list_by_qlv_cubit.dart';
 
 class GardenListByQVLPage extends StatefulWidget {
@@ -43,7 +38,6 @@ class _GardenListByQVLState extends State<GardenListByQVLPage> {
     _notificationCubit = BlocProvider.of<NotificationManagementCubit>(context);
 
    // _appCubit!.getData();
-    _cubit!.fetchGardensByManagerId();
     _notificationCubit.getListNotification();
     _scrollController.addListener(_onScroll);
   }
@@ -233,9 +227,9 @@ class _GardenListByQVLState extends State<GardenListByQVLPage> {
   }
 
   Widget _gardenItemView(GardenEntity data) {
-    String gardenId = data.garden_id ?? '';
+    String gardenId = data.gardenId ?? '';
     String name = data.name ?? '';
-    int area = data.area ?? 0;
+    num area = data.area ?? 0;
 
 
     return GestureDetector(
@@ -291,19 +285,6 @@ class _GardenListByQVLState extends State<GardenListByQVLPage> {
       typeSnackBar: "success",
       message: message,
     ));
-  }
-
-  void _handleRouteGardenDetail(GardenEntity garden) {
-    Application.router!.navigateTo(
-      appNavigatorKey.currentContext!,
-      Routes.gardenTask,
-      routeSettings: RouteSettings(
-        arguments: GardenTaskArgument(
-          garden_id: garden.garden_id,
-          name: garden.name,
-        ),
-      ),
-    );
   }
 
   void _onScroll() {

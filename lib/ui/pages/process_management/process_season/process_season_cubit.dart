@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_base/models/entities/season/process_season.dart';
 import 'package:flutter_base/models/entities/season/season_entity.dart';
 import 'package:flutter_base/models/entities/season/stage_season.dart';
@@ -36,14 +37,10 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
       } else {
         emit(
             state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING_MORE));
-        // List<StageSeason> stages = state.stages!;
-        // stages.add(result.process?.stages?.firstWhere((element) => element.name == value.name) ?? value) ;
-        // List<StageSeason> newList = stages;
         emit(state.copyWith(
             stages: result.process?.stages,
             updateProcessSeasonStatus: LoadStatus.FORMAT_EXTENSION_FILE));
       }
-      // emit(state.copyWith(loadDetailStatus: LoadStatus.SUCCESS));
     } catch (e) {
       emit(state.copyWith(loadDetailStatus: LoadStatus.FAILURE));
     }
@@ -53,9 +50,6 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
     try {
       var result = await seasonRepository?.endPhase(phaseId!);
       if (result != null) {
-        // List<StageSeason> stages = state.stages!;
-        // stages[index].end = DateTime.now().toString();
-        // List<StageSeason> newList = stages;
         emit(state.copyWith(
             stages: result.process?.stages,
             actionWithStepStatus: state.actionWithStepStatus++));
@@ -82,15 +76,6 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
           emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
         }
       });
-      // if(result == null){
-      //   emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
-      // }
-      // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS));
-    // } catch (e) {
-    //   emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
-    // }
-
-    // emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
   }
 
   void changeName(String name) {
@@ -105,34 +90,41 @@ class ProcessSeasonCubit extends Cubit<ProcessSeasonState> {
     List<StageSeason> stages = state.stages!;
     emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.LOADING));
     var result = await seasonRepository!.putStep(value.step_id!, stages[indexStages].stage_id!, value);
-    // stages[indexStages].steps![index] = value;
-    // List<StageSeason> newList = stages;
     emit(state.copyWith(
         stages: result.process?.stages, actionWithStepStatus: state.actionWithStepStatus++));
     emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.SUCCESS, actionWithStepStatus: state.actionWithStepStatus++));
   }
 
   Future<void> createStep(int index, StepSeason value) async{
-    print("Create step");
     List<StageSeason> stages = state.stages!;
-    // try {
-      var result =await seasonRepository?.addStep(stages[index].stage_id!, value);
-      if(result != null){
-        emit(state.copyWith(stages: result.process?.stages, updateProcessSeasonStatus: LoadStatus.SUCCESS, /*actionWithStepStatus: state.actionWithStepStatus++*/));
-      } else{
-        print("error");
-        emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE, /*actionWithStepStatus: state.actionWithStepStatus++*/));
+    try {
+      var result = await seasonRepository?.addStep(
+          stages[index].stage_id!, value);
+      if (result != null) {
+        emit(state.copyWith(stages: result.process?.stages,
+          updateProcessSeasonStatus: LoadStatus.SUCCESS,));
+        showMessageController.sink.add(SnackBarMessage(
+            message: 'Thêm bước thành công',
+            type: SnackBarType.SUCCESS
+        ));
+      } else {
+        emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE,));
+        showMessageController.sink.add(SnackBarMessage(
+          message: "Đã có lỗi xảy ra",
+          type: SnackBarType.ERROR,
+        ));
       }
-      // if (stages[index].steps == null) {
-      //   stages[index].steps = [];
-      // }
-      // stages[index].steps!.add(result!.process!.stages![index].steps!.firstWhere((element) => element.name == value.name));
-      // List<StageSeason> newList = stages;
-      // emit(state.copyWith(
-      //     stages: newList, actionWithStepStatus: state.actionWithStepStatus++));
-    // } catch (e) {
-    //   emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE, /*actionWithStepStatus: state.actionWithStepStatus++*/));
-    // }
+    } catch(error){
+      if (error is DioError) {
+        emit(state.copyWith(updateProcessSeasonStatus: LoadStatus.FAILURE));
+        if (error.response!.statusCode == 400) {
+          showMessageController.sink.add(SnackBarMessage(
+            message: error.response!.data['message'],
+            type: SnackBarType.ERROR,
+          ));
+        }
+      }
+    }
 
   }
 

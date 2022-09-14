@@ -20,10 +20,8 @@ import 'package:flutter_base/repositories/material_repository.dart';
 import 'package:flutter_base/repositories/notification_repository.dart';
 import 'package:flutter_base/repositories/process_repository.dart';
 import 'package:flutter_base/repositories/season_repository.dart';
-import 'package:flutter_base/repositories/task_repository.dart';
 import 'package:flutter_base/repositories/temporary_task_repository.dart';
 import 'package:flutter_base/repositories/tree_repository.dart';
-import 'package:flutter_base/repositories/upload_repository.dart';
 import 'package:flutter_base/repositories/user_repository.dart';
 import 'package:flutter_base/repositories/weather_repository.dart';
 import 'package:flutter_base/repositories/zone_repository.dart';
@@ -162,17 +160,11 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<SeasonRepository>(create: (context) {
           return SeasonRepositoryImpl(_apiClient);
         }),
-        RepositoryProvider<TaskRepository>(create: (context) {
-          return TaskRepositoryImpl(_apiClient);
-        }),
         RepositoryProvider<UserRepository>(create: (context) {
           return UserRepositoryImpl(_apiClient);
         }),
         RepositoryProvider<WeatherRepository>(create: (context) {
           return WeatherRepositoryImpl(_apiWeather);
-        }),
-        RepositoryProvider<UploadRepository>(create: (context) {
-          return UploadRepositoryImpl(_apiClient);
         }),
         RepositoryProvider<TemporaryTaskRepository>(create: (context) {
           return TemporaryTaskRepositoryImpl(_apiClient);
@@ -201,8 +193,6 @@ class _MyAppState extends State<MyApp> {
                 RepositoryProvider.of<GardenRepository>(context);
             final _authRepository =
                 RepositoryProvider.of<AuthRepository>(context);
-            final _taskRepository =
-                RepositoryProvider.of<TaskRepository>(context);
             final _userRepository =
                 RepositoryProvider.of<UserRepository>(context);
             final _weatherRepository =
@@ -225,7 +215,6 @@ class _MyAppState extends State<MyApp> {
                 treeRepository: _treeRepository,
                 authRepository: _authRepository,
                 gardenRepository: _gardenRepository,
-                taskRepository: _taskRepository,
                 processRepository: _processRepository,
                 userRepository: _userRepository,
                 weatherRepository: _weatherRepository,

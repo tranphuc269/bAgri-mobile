@@ -30,7 +30,7 @@ class GardenListByQlvCubit extends Cubit<GardenListByQlvState> {
       if (response != null) {
         emit(state.copyWith(
           getGardenStatus: LoadStatus.SUCCESS,
-          listGardenData: response.data!.gardens,
+          listGardenData: response,
         ));
       } else {
         emit(state.copyWith(getGardenStatus: LoadStatus.FAILURE));

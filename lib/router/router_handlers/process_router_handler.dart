@@ -47,7 +47,7 @@ Handler processUpdateHandler = new Handler(
       return UpdateProcessCubit(processRepository: processRepository);
     },
     child: UpdateProcessPage(
-      process_id: args.process_id,
+      processId: args.process_id,
     ),
   );
 });
